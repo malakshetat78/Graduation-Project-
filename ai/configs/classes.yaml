@@ -1,0 +1,59 @@
+# Unified class scheme for the ICVSP road-hazard detector.
+# Every source dataset is remapped onto these IDs by scripts/merge_datasets.py.
+classes:
+  0: pothole
+  1: speed_bump
+
+# Source class names are matched case-insensitively against these regexes.
+# A source class that matches nothing is dropped (its boxes are removed, the image is kept).
+mapping:
+  pothole: 'pothole|pot[_ -]?hole|d40'
+  speed_bump: 'speed[_ -]?(bump|breaker|hump)|^bump|hump|breaker|speedbump'
+
+# Classes that must never be mapped even if a regex above matches them.
+exclude: 'rumble|crack|d00|d10|d20|manhole'
+
+# Class names for sources that ship without a data.yaml, keyed by folder name under data/raw/.
+sources:
+  # SBP-YOLO has no data.yaml. Roboflow exports number classes alphabetically, so 0 = pothole,
+  # 1 = speed bump is the likely order. VERIFY with the "check class IDs" cell in the notebook.
+  sbp_yolo:
+    names: [pothole, speed_bump]
+
+  # extra public datasets (Kaggle), added in v4. Single-class pothole sets; capped to keep training within
+  # Kaggle's 12-hour limit (images with speed bumps are kept first).
+  # Indian Roads ships no class names; 0 / 1 / 2 checked against its file names (UnMarkedBump, SB_ -> 0;
+  # PotHoles -> 1; UnPavedRoad -> 2). Unpaved road is not a hazard class here, so its boxes are dropped.
+  pub_indian_roads:
+    names: [speed_bump, pothole, unpaved_road]
+    max_images: 3000
+  # PotHoleNet: class 1 is manhole covers (checked on crops). Excluded, so those images teach the model
+  # that a manhole is not a pothole.
+  pub_potholenet:
+    names: [pothole, manhole]
+    max_images: 1500
+  pub_bharatpothole:
+    names: [pothole]
+    max_images: 1500
+
+# Named sets of per-source overrides, chosen with merge_datasets.py --profile NAME.
+# v5 (15 Oct): checked per source, the public sets disagree on what a pothole is. Indian Roads potholes are
+# ground-level photos of rough patches (not a vehicle camera's view) and BharatPothole labels many tiny, shallow
+# marks (below the warning scope, FR-27), so v5 keeps only Indian Roads images with speed bumps and no pothole
+# boxes, and leaves BharatPothole out (not attached). PotHoleNet (dashcam, consistent) stays as in v4.
+profiles:
+  v5:
+    pub_indian_roads:
+      only_images_with: [speed_bump]
+      skip_images_with: [pothole]
+
+# Only these sources keep their own test split; every other source goes to train/val, so the public test set
+# is identical for every experiment.
+test_sources: '^sbp_yolo$'
+
+# Sources made of video frames are split by video, never by frame (see merge_datasets.py).
+# background_* folders hold hazard-free images (e.g. night reflections) and need no labels.
+video_sources: '^(egypt|youtube|background)'
+# Share of those videos used for validation (chosen by video name). 0 while there are only a few
+# videos, so none of the scarce Egyptian labels is lost; raise to 0.15 with 10+ videos.
+video_val_share: 0

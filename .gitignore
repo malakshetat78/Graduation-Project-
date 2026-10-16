@@ -1,0 +1,47 @@
+# datasets and team recordings (large, licensed separately, or personal: faces / plates)
+ai/data/raw/
+ai/data/merged/
+ai/data/egypt_test/clips/
+ai/data/egypt_test/frames/
+ai/data/egypt_test/test/
+
+# raw training outputs; curated copies live in ai/results/ and ai/models/
+ai/runs*/
+*.zip
+
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+
+# private driving videos (YouTube, team) and frames waiting to be labelled
+ai/data/videos/
+ai/data/label_queue*/
+ai/data/tags/
+ai/data/egypt_test/external/
+ai/data/reviewed/
+ai/data/egypt_test/prelabels*/
+ai/data/review.csv
+ai/data/review*.csv
+ai/data/tag_frames_after.txt
+ai/data/batch3_hand_drawn.txt
+# trained partly on private YouTube frames: kept local, not redistributed
+ai/models/v3_egypt_night.pt
+ai/models/v3b_egypt_night.pt
+ai/models/v4_*.pt
+ai/models/v5_*.pt
+ai/models/v3c_kerbs.pt
+
+# third-party model code fetched by scripts/espdet_support.py (AGPL-3.0, Espressif)
+ai/third_party/
+ai/models/espdet_pico_224.pt
+ai/models/espdet_pico_224_v5*
+
+# PlatformIO build output
+firmware/.pio/
+ai/models/*.espdl
+ai/models/*_esp32s3.info
+ai/models/*_esp32s3.json
+
+# backend database files (local runs)
+*.sqlite3
