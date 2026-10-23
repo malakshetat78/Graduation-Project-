@@ -97,7 +97,7 @@ def create_app(store: Store | None = None, clock: Callable[[], float] = time.tim
 
     @app.get("/dashboard", response_class=HTMLResponse, include_in_schema=False)
     def dashboard():
-        return DASHBOARD.read_text()
+        return DASHBOARD.read_text(encoding="utf-8")
 
     @app.post("/admin/settle")
     def settle(x_admin_token: str | None = Header(default=None)):
