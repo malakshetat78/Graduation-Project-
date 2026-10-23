@@ -1,0 +1,14 @@
+menu "ICVSP secure storage"
+    config ICVSP_ENABLE_SECURE_NVS
+        bool "Enable pre-provisioned HMAC-backed encrypted key storage (hardware only)"
+        default n
+        help
+            Do NOT enable until the selected eFuse key block is verified and
+            provisioned with HMAC_UP. No eFuse key generation is performed.
+    config ICVSP_HMAC_KEY_ID
+        int "Pre-provisioned HMAC eFuse key index (0-5)"
+        range -1 5
+        default -1
+        help
+            Leave at -1 until physical board key slot is verified.
+endmenu
