@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -eo pipefail {0}
+
 jobs:
   tests:
     name: Unit + integration tests, traceability
@@ -37,6 +41,9 @@ jobs:
       - name: Backend API tests (signature, registry, replay, schema, hazards, reputation)
         working-directory: backend
         run: python -m unittest -v 2>&1 | tee ../backend.log
+
+      - name: ESP-IDF persistent anti-replay tests (native C, reboot and storage failures)
+        run: python firmware/espidf_security/tools/run_replay_identity_tests.py | tee replay_identity.log
 
       - name: Device firmware unit tests (PlatformIO native)
         working-directory: firmware
@@ -66,6 +73,7 @@ jobs:
             sil.log
             firmware.log
             integration.log
+            replay_identity.log
             traceability_report.md
 
   static-analysis:
