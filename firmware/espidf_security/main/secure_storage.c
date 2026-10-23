@@ -98,3 +98,50 @@ icvsp_store_result_t secure_storage_load_key(uint8_t *key, size_t length)
     return ICVSP_STORE_ERROR;
 #endif
 }
+
+/* Separate NVS namespace from device key material. The partition is encrypted
+ * only when explicit pre-provisioned HMAC NVS mode is active.
+ * ESP-IDF nvs_commit is the durability boundary; a failed commit is fatal.
+ */
+bool secure_storage_read_boot_counter(uint32_t *previous, bool *found)
+{
+#if CONFIG_ICVSP_ENABLE_SECURE_NVS
+    if (!initialized || !previous || !found) return false;
+    *previous = 0;
+    *found = false;
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open_from_partition(STORAGE_PARTITION, "anti_replay",
+                                            NVS_READONLY, &handle);
+    if (err == ESP_ERR_NVS_NOT_FOUND) return true;
+    if (err != ESP_OK) return false;
+    uint32_t value = 0;
+    err = nvs_get_u32(handle, "last_boot", &value);
+    nvs_close(handle);
+    if (err == ESP_ERR_NVS_NOT_FOUND) return true;
+    if (err != ESP_OK) return false;
+    *previous = value;
+    *found = true;
+    return true;
+#else
+    (void)previous; (void)found;
+    return false;
+#endif
+}
+
+bool secure_storage_write_boot_counter(uint32_t new_boot)
+{
+#if CONFIG_ICVSP_ENABLE_SECURE_NVS
+    if (!initialized || new_boot == 0) return false;
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open_from_partition(STORAGE_PARTITION, "anti_replay",
+                                            NVS_READWRITE, &handle);
+    if (err != ESP_OK) return false;
+    err = nvs_set_u32(handle, "last_boot", new_boot);
+    if (err == ESP_OK) err = nvs_commit(handle);
+    nvs_close(handle);
+    return err == ESP_OK;
+#else
+    (void)new_boot;
+    return false;
+#endif
+}
