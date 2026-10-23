@@ -6,6 +6,7 @@
 #include "monocypher-ed25519.h"
 #include "key_storage.h"
 #include "report_signer.h"
+#include "replay_identity.h"
 
 void app_main(void)
 {
@@ -21,6 +22,19 @@ void app_main(void)
         puts("FAIL: Device key initialization failed (fail closed).");
         return;
     }
+    /* This is a historical demo: never sign a live hazard unless its
+     * boot ID has been committed in secure storage. In default RAM-only
+     * development mode this deliberately fails closed. */
+    icvsp_replay_identity_t identity = {0};
+    if (icvsp_replay_begin_on_device(&identity)) {
+        uint32_t boot_id = 0, sequence = 0;
+        if (icvsp_replay_next(&identity, &boot_id, &sequence))
+            printf("ICVSP: reserved boot_id=%lu, sequence=%lu (live event builder required).\\n",
+                   (unsigned long)boot_id, (unsigned long)sequence);
+    } else {
+        puts("ICVSP: Persistent anti-replay unavailable; LIVE signing disabled.");
+    }
+
     crypto_ed25519_sign(signature, keys.secret_key, message, sizeof(message) - 1);
     if (crypto_ed25519_check(signature, keys.public_key, message, sizeof(message) - 1) != 0) {
         puts("FAIL: Valid Ed25519 signature rejected.");
