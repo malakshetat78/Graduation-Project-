@@ -29,7 +29,7 @@ void app_main(void)
     if (icvsp_replay_begin_on_device(&identity)) {
         uint32_t boot_id = 0, sequence = 0;
         if (icvsp_replay_next(&identity, &boot_id, &sequence))
-            printf("ICVSP: reserved boot_id=%lu, sequence=%lu (live event builder required).\\n",
+            printf("ICVSP: reserved boot_id=%lu, sequence=%lu (live event builder required).\n",
                    (unsigned long)boot_id, (unsigned long)sequence);
     } else {
         puts("ICVSP: Persistent anti-replay unavailable; LIVE signing disabled.");
