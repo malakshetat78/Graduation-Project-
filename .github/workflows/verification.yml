@@ -54,7 +54,7 @@ jobs:
         run: python tools/check_with_engine.py | tee ../integration.log
 
       - name: System test (whole chain in simulation, with attackers)
-        run: python -m unittest sil/test_sil.py -v 2>&1 | tee sil.log
+        run: python -m unittest sil/test_sil.py sil/test_ble_link.py -v 2>&1 | tee sil.log
 
       - name: Requirement traceability
         run: |
