@@ -1,0 +1,19 @@
+# Local Supabase stack (supabase start). On the hosted project the same Auth settings are set in the dashboard.
+project_id = "icvsp"
+
+[db]
+major_version = 17
+
+[auth]
+enabled = true
+site_url = "icvsp://auth-callback"       # deep link of the Flutter app; agree the final value with mobile/
+additional_redirect_urls = ["icvsp://auth-callback"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true              # sign-in only after the e-mail address is confirmed
+double_confirm_changes = true
+secure_password_change = true

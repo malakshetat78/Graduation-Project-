@@ -18,6 +18,16 @@ jobs:
   tests:
     name: Unit + integration tests, traceability
     runs-on: ubuntu-latest
+    services:
+      supabase-db:   # throwaway database with PostGIS and the Supabase roles; migrations are applied by the tests
+        image: supabase/postgres:17.11.0.003
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 54329:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -h 127.0.0.1"
+          --health-interval 5s --health-timeout 5s --health-retries 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,7 +38,7 @@ jobs:
           path: ~/.platformio
           key: platformio-${{ runner.os }}-${{ hashFiles('firmware/platformio.ini') }}
       - name: Install tools
-        run: pip install platformio cryptography coverage fastapi httpx
+        run: pip install platformio coverage -r backend/requirements.txt
 
       - name: Trust engine tests (unit, integration, system scenarios)
         working-directory: engine
@@ -38,8 +48,10 @@ jobs:
         working-directory: engine
         run: coverage report -m --include="icvsp/*" | tee -a "$GITHUB_STEP_SUMMARY"
 
-      - name: Backend API tests (signature, registry, replay, schema, hazards, reputation)
+      - name: Backend API tests (SQLite and Supabase PostgreSQL + PostGIS, RLS, concurrency, restarts)
         working-directory: backend
+        env:
+          ICVSP_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54329/postgres
         run: python -m unittest -v 2>&1 | tee ../backend.log
 
       - name: ESP-IDF persistent anti-replay tests (native C, reboot and storage failures)

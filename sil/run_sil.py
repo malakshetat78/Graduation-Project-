@@ -372,7 +372,7 @@ def apply(client, run: Run, t_rel: float, kind: str, payload, results: dict, que
 def simulate(scn: Scenario, seed: int, camera: str = "assumed") -> dict:
     clock = [UTC0]
     store = Store()
-    client = TestClient(create_app(store, lambda: clock[0], admin_token="sil"))
+    client = TestClient(create_app(store, lambda: clock[0], admin_token="sil", allow_anonymous=True))
     run = prepare(scn, seed, camera=camera)
     results, queries = new_results(), []
     for t_rel, kind, payload in run.events:

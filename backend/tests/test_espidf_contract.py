@@ -52,7 +52,7 @@ class EspIdfToBackend(unittest.TestCase):
 
     def setUp(self):
         self.store = Store()
-        self.client = TestClient(create_app(self.store, lambda: T + 60, admin_token="test-admin"))
+        self.client = TestClient(create_app(self.store, lambda: T + 60, admin_token="test-admin", allow_anonymous=True))
 
     def tearDown(self):
         self.client.close()

@@ -166,3 +166,80 @@ E-07,System,sil/run_sil.py,"Whole-chain simulation, 40 cars, 4 scenarios (new de
 B-22,Integration,backend/tests/test_espidf_contract.py,EspIdfToBackend.test_c_generated_signature_is_accepted_and_identical_retry_is_duplicate,FR-SEC-07 FR-SEC-10
 B-23,Integration,backend/tests/test_espidf_contract.py,EspIdfToBackend.test_tampered_c_report_is_rejected,FR-SEC-07
 B-24,Integration,backend/tests/test_espidf_contract.py,EspIdfToBackend.test_conflicting_signed_boot_sequence_is_rejected,FR-SEC-09 FR-SEC-10
+B-25,Integration,backend/tests/test_backend.py,Delivery.test_sent_report_is_stored_and_read_back,FR-06 NFR-10
+B-26,Integration,backend/tests/test_backend.py,Delivery.test_ack_means_stored_not_that_the_hazard_is_confirmed,FR-06
+B-27,Integration,backend/tests/test_backend.py,Delivery.test_lost_ack_retry_gets_the_earlier_ack_and_stores_nothing,FR-06 FR-SEC-10
+B-28,Integration,backend/tests/test_backend.py,Delivery.test_retry_long_after_the_freshness_window_still_gets_its_ack,FR-06 FR-SEC-10
+B-29,Integration,backend/tests/test_backend.py,Delivery.test_same_id_with_other_content_is_refused_as_final,FR-SEC-10
+B-30,Integration,backend/tests/test_backend.py,Delivery.test_rejections_are_logged_with_code_and_reason,FR-SEC-21
+B-31,Integration,backend/tests/test_backend.py,Delivery.test_storage_failure_says_retry_and_the_same_line_then_succeeds,FR-06
+B-32,Integration,backend/tests/test_backend.py,Delivery.test_rejection_answer_survives_a_failing_rejection_log,FR-SEC-21
+B-33,Integration,backend/tests/test_backend.py,Delivery.test_delayed_report_within_its_window_is_accepted,FR-SEC-10
+B-34,Integration,backend/tests/test_backend.py,Delivery.test_too_old_and_future_reports_are_refused,FR-SEC-10
+B-35,Integration,backend/tests/test_backend.py,Delivery.test_freshness_window_follows_the_hazard_type,FR-SEC-10
+B-36,Integration,backend/tests/test_backend.py,Delivery.test_device_restart_and_out_of_order_delivery_are_accepted,FR-SEC-09 FR-SEC-10
+B-37,Integration,backend/tests/test_backend.py,Delivery.test_replay_after_cleanup_is_refused_as_too_old,FR-SEC-10 NFR-SEC-06
+B-38,Integration,backend/tests/test_backend.py,Delivery.test_cleanup_keeps_reports_inside_the_longest_window,FR-SEC-10 NFR-SEC-06
+B-39,Integration,backend/tests/test_backend.py,Delivery.test_hostile_bodies_get_a_clear_refusal_not_a_server_error,FR-SEC-13
+B-40,Integration,backend/tests/test_backend.py,Delivery.test_signed_counter_too_large_for_the_database_is_refused,FR-SEC-13
+B-41,Integration,backend/tests/test_backend.py,Evaluation.test_crash_after_saving_leaves_everything_pending_then_finishes_counting_once,FR-06 NFR-07
+B-42,Integration,backend/tests/test_backend.py,Evaluation.test_retried_report_adds_no_evidence,FR-SEC-10
+B-43,Integration,backend/tests/test_backend.py,Evaluation.test_two_cars_reporting_one_hole_are_two_pieces_of_evidence,FR-SEC-11
+B-44,Integration,backend/tests/test_backend.py,Evaluation.test_hazard_keeps_its_id_as_evidence_grows,NFR-07 NFR-08
+B-45,Integration,backend/tests/test_backend.py,Evaluation.test_same_device_cannot_farm_reputation_from_one_hazard,NFR-05
+B-46,Integration,backend/tests/test_backend.py,Evaluation.test_implausible_report_records_why_the_engine_refused_it,NFR-08
+B-47,Integration,backend/tests/test_backend.py,Evaluation.test_every_run_records_the_configuration_used,NFR-08
+B-48,Integration,backend/tests/test_backend.py,Ahead.test_hazard_ahead_on_the_road_alerts_at_the_set_distance,FR-16
+B-49,Integration,backend/tests/test_backend.py,Ahead.test_fast_car_is_alerted_earlier,FR-16
+B-50,Integration,backend/tests/test_backend.py,Ahead.test_alert_is_not_repeated_until_the_cooldown_passes,FR-16
+B-51,Integration,backend/tests/test_backend.py,Ahead.test_hazard_behind_the_user_does_not_alert,FR-16
+B-52,Integration,backend/tests/test_backend.py,Ahead.test_opposite_direction_does_not_alert,FR-16
+B-53,Integration,backend/tests/test_backend.py,Ahead.test_hazard_on_a_parallel_street_does_not_alert,FR-16
+B-54,Integration,backend/tests/test_backend.py,Ahead.test_expired_hazard_does_not_alert,FR-16
+B-55,Integration,backend/tests/test_backend.py,Ahead.test_route_distance_is_along_the_road_not_straight_line,FR-16
+B-56,Integration,backend/tests/test_backend.py,Ahead.test_route_turning_off_before_the_hazard_does_not_alert,FR-16
+B-57,Integration,backend/tests/test_backend.py,Ahead.test_hazard_in_the_other_lane_of_the_route_does_not_alert,FR-16
+B-58,Integration,backend/tests/test_backend.py,Ahead.test_far_from_the_route_falls_back_to_the_current_heading,FR-16
+B-59,Integration,backend/tests/test_backend.py,Ahead.test_unconfirmed_hazard_is_not_an_alert,FR-16
+B-60,Integration,backend/tests/test_backend.py,Ahead.test_asking_does_not_store_the_position,FR-16
+B-61,Integration,backend/tests/test_backend.py,Ahead.test_direction_is_required,FR-16
+B-62,Integration,backend/tests/test_backend.py,Ahead.test_get_hazards_excludes_a_parallel_street_when_heading_is_known,FR-16
+B-63,Integration,backend/tests/test_backend.py,Access.test_personal_endpoints_need_a_valid_sign_in,FR-SEC-01 FR-SEC-19
+B-64,Integration,backend/tests/test_backend.py,Access.test_server_will_not_start_open_by_accident,FR-SEC-01 NFR-SEC-02
+B-65,Integration,backend/tests/test_backend.py,Access.test_user_cannot_read_another_users_device_or_reports,FR-SEC-02 NFR-SEC-06
+B-66,Integration,backend/tests/test_backend.py,Access.test_user_cannot_send_positions_for_another_users_device,FR-SEC-02
+B-67,Integration,backend/tests/test_backend.py,Access.test_pairing_code_works_once_and_only_for_its_device,FR-SEC-03 FR-SEC-04
+B-68,Integration,backend/tests/test_backend.py,Access.test_driver_cannot_use_operator_endpoints,FR-SEC-02
+B-69,Integration,backend/tests/test_backend.py,Access.test_administrator_role_comes_from_the_database_and_takes_effect_at_once,FR-SEC-02
+B-70,Integration,backend/tests/test_backend.py,Access.test_driver_sees_published_hazards_only_and_never_the_evidence,FR-SEC-02 FR-SEC-19
+B-71,Integration,backend/tests/test_backend.py,Access.test_reports_are_authenticated_by_the_device_not_a_user,FR-SEC-05 FR-SEC-07
+B-72,Integration,backend/tests/test_backend.py,Tokens.test_valid_supabase_token_is_accepted,FR-SEC-01
+B-73,Integration,backend/tests/test_backend.py,Tokens.test_expired_wrong_audience_wrong_issuer_and_wrong_key_are_refused,FR-SEC-01
+B-74,Integration,backend/tests/test_backend.py,Tokens.test_token_without_expiry_is_refused,FR-SEC-01
+B-75,Integration,backend/tests/test_backend.py,Tokens.test_asymmetric_project_key_works_and_a_shared_secret_token_cannot_replace_it,FR-SEC-01
+B-76,Integration,backend/tests/test_backend.py,Tokens.test_unreachable_key_server_is_not_reported_as_a_bad_token,FR-SEC-01
+B-77,Integration,backend/tests/test_backend.py,Contract.test_golden_device_lines_still_pass_the_whole_path,FR-02 FR-SEC-05
+B-78,Integration,backend/tests/test_postgres.py,Concurrency.test_simultaneous_copies_make_one_record_and_one_pending_evaluation,FR-06 FR-SEC-10
+B-79,Integration,backend/tests/test_postgres.py,Concurrency.test_simultaneous_different_content_with_one_id_has_one_winner,FR-06 FR-SEC-10
+B-80,Integration,backend/tests/test_postgres.py,Concurrency.test_two_evaluators_at_once_do_not_double_count,FR-06 FR-SEC-10
+B-81,Integration,backend/tests/test_postgres.py,Concurrency.test_second_evaluator_steps_aside_while_the_first_holds_the_lock,FR-06 FR-SEC-10
+B-82,Integration,backend/tests/test_postgres.py,Restart.test_duplicate_protection_and_counters_survive_a_server_restart,FR-06 FR-SEC-10
+B-83,Integration,backend/tests/test_postgres.py,Restart.test_pending_reports_are_finished_after_a_restart,FR-06 FR-SEC-10
+B-84,Integration,backend/tests/test_postgres.py,Restart.test_database_down_gives_retryable_answer_then_the_retry_is_stored,FR-06 FR-SEC-10
+B-85,Integration,backend/tests/test_postgres.py,Restart.test_closed_store_raises_the_retryable_error,FR-06 FR-SEC-10
+B-86,Integration,backend/tests/test_postgres.py,Constraints.test_database_itself_refuses_repeats_and_bad_values,FR-SEC-13 NFR-SEC-01
+B-87,Integration,backend/tests/test_postgres.py,Constraints.test_device_with_reports_cannot_be_deleted,FR-SEC-13 NFR-SEC-01
+B-88,Integration,backend/tests/test_postgres.py,Constraints.test_same_evidence_cannot_be_stored_twice,FR-SEC-10
+B-89,Integration,backend/tests/test_postgres.py,Constraints.test_backend_role_cannot_rewrite_history_or_the_schema,FR-SEC-13 NFR-SEC-01
+B-90,Integration,backend/tests/test_postgres.py,Constraints.test_evaluation_run_records_the_configuration_hash,NFR-08
+B-91,Integration,backend/tests/test_postgres.py,Geo.test_postgis_search_finds_by_radius_and_state_and_validity,FR-16
+B-92,Integration,backend/tests/test_postgres.py,Geo.test_search_uses_the_geographic_index,FR-16
+B-93,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_user_reads_only_their_own_rows,FR-SEC-02 NFR-SEC-01
+B-94,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_user_cannot_change_trust_results_reputation_or_their_own_role,FR-SEC-02 NFR-SEC-01
+B-95,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_private_columns_and_tables_are_closed_to_users,FR-SEC-02 NFR-SEC-01
+B-96,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_anonymous_client_sees_nothing_at_all,FR-SEC-02 NFR-SEC-01
+B-97,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_driver_gets_only_published_valid_hazards_through_the_search_function,FR-SEC-02 NFR-SEC-01
+B-98,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_administrator_policy_opens_evidence_for_reading_only,FR-SEC-02 NFR-SEC-01
+B-99,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_new_supabase_user_gets_a_driver_profile_automatically,FR-SEC-02 NFR-SEC-01
+B-100,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_supabase_client_roles_cannot_call_the_trigger_function,FR-SEC-02 NFR-SEC-01
+B-101,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_pairing_a_device_needs_the_code_even_through_the_backend,FR-SEC-02 NFR-SEC-01
