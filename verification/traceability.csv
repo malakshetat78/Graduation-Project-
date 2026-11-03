@@ -253,5 +253,6 @@ B-108,Integration,backend/tests/test_backend.py,Ahead.test_hazard_behind_the_dri
 B-109,Integration,backend/tests/test_backend.py,Ahead.test_hazard_just_past_the_end_of_the_route_does_not_alert,FR-16
 B-110,Integration,backend/tests/test_backend.py,Ahead.test_route_passing_the_spot_again_later_still_alerts,FR-16
 B-111,Unit,backend/tests/test_backend.py,OldDatabaseFile.test_file_from_before_this_schema_stops_with_a_clear_message,NFR-SEC-06
+B-112,Unit,backend/tests/test_backend.py,Tokens.test_key_server_certificates_do_not_depend_on_the_python_install,FR-SEC-01
 T-53,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_two_devices_is_not_a_duplicate,FR-SEC-10 FR-11
 T-54,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_one_device_is_a_duplicate,FR-06 FR-SEC-10

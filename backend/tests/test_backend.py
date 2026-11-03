@@ -3,6 +3,7 @@ ahead of the user, and who may see what. Every class also runs on real Supabase 
 Run:  cd backend && python3 -m unittest -v"""
 import json
 import sqlite3
+import ssl
 import tempfile
 import time
 import unittest
@@ -667,6 +668,11 @@ class Tokens(unittest.TestCase):
                                side_effect=jwt.PyJWKClientConnectionError("no route")):
             with self.assertRaises(AuthUnavailable):
                 v.verify("whatever")
+
+    def test_key_server_certificates_do_not_depend_on_the_python_install(self):
+        context = SupabaseVerifier(self.URL).jwks.ssl_context
+        self.assertTrue(context.get_ca_certs())
+        self.assertEqual(context.verify_mode, ssl.CERT_REQUIRED)
 
 
 class Contract(Case):

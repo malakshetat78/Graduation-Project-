@@ -3,8 +3,10 @@ and Supabase; the backend only checks the token the app sends with each call. Th
 on every call, never from the token, so a role change or a revoked admin takes effect at once."""
 from __future__ import annotations
 
+import ssl
 from dataclasses import dataclass
 
+import certifi
 import jwt
 
 
@@ -30,7 +32,9 @@ class SupabaseVerifier:
     def __init__(self, supabase_url: str, jwt_secret: str | None = None, audience: str = "authenticated"):
         base = supabase_url.rstrip("/")
         self.issuer, self.audience, self.secret = f"{base}/auth/v1", audience, jwt_secret
-        self.jwks = None if jwt_secret else jwt.PyJWKClient(f"{self.issuer}/.well-known/jwks.json", timeout=5)
+        self.jwks = None if jwt_secret else jwt.PyJWKClient(f"{self.issuer}/.well-known/jwks.json", timeout=5,
+                                                          # Python on macOS has no system certificates of its own
+                                                          ssl_context=ssl.create_default_context(cafile=certifi.where()))
 
     def verify(self, token: str) -> str:
         """Returns the user's ID."""
