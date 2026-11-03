@@ -6,6 +6,7 @@
 | `traceability.csv` | Every test, integration check, experiment and inspection, its V-level and the requirements it covers (T- engine, F- firmware, B- backend, S- system simulation, IT- integration, E- experiment, I- inspection) |
 | `golden/device_reports_v2.jsonl` | Signed reports produced by the device code: the contract between device, phone app and backend (the backend must accept them unchanged) |
 | `e2e_supabase.py` | Manual end-to-end check on a local Supabase stack: sign-up, tokens, a crash right after an ACK, alerts, attacks on the public API. Not run by CI |
+| `measure_evaluator.py` | Manual timing of one evaluator run and one cleanup at three traffic levels, on a throwaway database. Not run by CI |
 | `check_traceability.py` | Reads the test logs, fails if a test is missing from the list, a listed test is gone or failed, or a requirement ID is unknown; writes the requirement → test → result report |
 
 GitHub Actions (`.github/workflows/verification.yml`) runs all tests and this check on every push and puts the
