@@ -13,7 +13,7 @@ Run:
     pip install -r backend/requirements.txt
     python verification/e2e_hosted.py
 """
-import json, os, secrets, signal, subprocess, sys, time
+import os, secrets, signal, subprocess, sys, time
 from pathlib import Path
 
 import httpx, psycopg
