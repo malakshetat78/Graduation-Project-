@@ -313,10 +313,15 @@ class PgStore:
                        (user_id, hazard_id, now, now - cooldown_s)).rowcount == 1
 
     # retention
-    def purge(self, beacons_before: float, reports_before: float, rejections_before: float,
-              hazards_before: float) -> None:
+    def purge(self, beacons_before: float, keep_near: dict[str, float], near_deg: float, lead_s: float,
+              reports_before: float, rejections_before: float, hazards_before: float) -> None:
+        counted = " or ".join("(r.type = %s and r.detected_at >= to_timestamp(%s))" for _ in keep_near)
         with self.transaction():
-            self._x("delete from public.beacons where t < to_timestamp(%s)", (beacons_before,))
+            self._x(f"""delete from public.beacons b where b.t < to_timestamp(%s) and not exists (
+                            select 1 from public.reports r
+                            where abs(r.latitude - b.lat) <= %s and abs(r.longitude - b.lon) <= %s
+                              and b.t >= r.detected_at - make_interval(secs => %s) and ({counted}))""",
+                    (beacons_before, near_deg, near_deg, lead_s, *[v for item in keep_near.items() for v in item]))
             self._x("delete from public.reports where detected_at < to_timestamp(%s)", (reports_before,))
             self._x("delete from public.rejections where received_at < to_timestamp(%s)", (rejections_before,))
             self._x("delete from public.hazards where state = 'expired' and updated_at < to_timestamp(%s)",

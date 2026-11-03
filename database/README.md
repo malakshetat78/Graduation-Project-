@@ -9,7 +9,7 @@
 | `devices`, `user_devices` | Registered devices and their keys, status, reputation; which user owns which device | Owner, admins (never `pairing_code_hash`) |
 | `device_counters` | Highest boot and sequence seen per device, across restarts | Backend |
 | `reports` | Signed reports exactly as received, the fields extracted from them, evaluation status | Owner, admins |
-| `beacons` | Positions for negative evidence, 2 hours only | Backend |
+| `beacons` | Positions for plausibility and negative evidence: 2 hours, then only those near a report still counted (48 h for a pothole, 14 days for a speed bump) | Backend |
 | `hazards` | Current state of each hazard, `location` with a GiST index | Published and unexpired: any signed-in user. All: admins |
 | `hazard_evidence`, `hazard_passes` | Which reports support a hazard, which vehicles drove past | Admins |
 | `reputation_events` | Ledger that makes each reputation change happen once | Backend |

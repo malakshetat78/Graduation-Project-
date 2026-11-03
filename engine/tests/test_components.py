@@ -130,6 +130,22 @@ class Plausibility(unittest.TestCase):
         self.assertIn("duplicate", rep.rejected[0].reasons[0])
 
 
+class ReplayIds(unittest.TestCase):
+    def test_same_event_id_from_two_devices_is_not_a_duplicate(self):
+        eng = Engine(CFG)
+        eng.ingest_event(event(source="A"))
+        eng.ingest_event(event(source="B"))
+        self.assertEqual(eng.decide(BASE_T + 1).rejected, [])
+
+    def test_same_event_id_from_one_device_is_a_duplicate(self):
+        eng = Engine(CFG)
+        eng.ingest_event(event(source="A", sequence=1))
+        eng.ingest_event(event(source="A", sequence=2))
+        rejected = eng.decide(BASE_T + 1).rejected
+        self.assertEqual(len(rejected), 1)
+        self.assertIn("duplicate event_id", rejected[0].reasons[0])
+
+
 class TrustMath(unittest.TestCase):
     def test_beta_reputation(self):
         rep = Reputation(1, 3)

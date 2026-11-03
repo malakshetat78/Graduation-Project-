@@ -30,10 +30,15 @@ def bearing(x0: float, y0: float, x1: float, y1: float) -> float:
 
 def _project(px: float, py: float, a: tuple[float, float], b: tuple[float, float]) -> tuple[float, float]:
     """(fraction along segment ab, distance from the point to it)."""
+    u = max(0.0, min(1.0, _fraction(px, py, a, b)))
+    return u, math.hypot(px - (a[0] + u * (b[0] - a[0])), py - (a[1] + u * (b[1] - a[1])))
+
+
+def _fraction(px: float, py: float, a: tuple[float, float], b: tuple[float, float]) -> float:
+    """How far along the line through ab the point lies: below 0 before a, above 1 past b."""
     dx, dy = b[0] - a[0], b[1] - a[1]
     length2 = dx * dx + dy * dy
-    u = 0.0 if length2 == 0 else max(0.0, min(1.0, ((px - a[0]) * dx + (py - a[1]) * dy) / length2))
-    return u, math.hypot(px - (a[0] + u * dx), py - (a[1] + u * dy))
+    return 0.0 if length2 == 0 else ((px - a[0]) * dx + (py - a[1]) * dy) / length2
 
 
 class Route:
@@ -45,22 +50,25 @@ class Route:
         best = min(range(len(xy) - 1), key=lambda i: _project(0.0, 0.0, xy[i], xy[i + 1])[1])
         u, self.offset_m = _project(0.0, 0.0, xy[best], xy[best + 1])
         start = (xy[best][0] + u * (xy[best + 1][0] - xy[best][0]), xy[best][1] + u * (xy[best + 1][1] - xy[best][1]))
-        self.line = [start, *xy[best + 1:]]
+        line = [start, *xy[best + 1:]]
+        self.line = [p for i, p in enumerate(line) if i == 0 or p != line[i - 1]]
 
     @property
     def usable(self) -> bool:
         return self.offset_m <= self.cfg.off_route_m and math.dist(self.line[0], self.line[-1]) > 0
 
     def distance_to(self, h_lat: float, h_lon: float, h_heading: float, tol_deg: float) -> float | None:
-        """Metres along the route to the first passage over the hazard in its direction; None if it is not on it."""
+        """Metres along the route to the first passage over the hazard in its direction; None if it is not on it.
+        The corridor is measured sideways only: a hazard before the user or past the route's end is not on the route."""
         px, py = local_xy(h_lat, h_lon, self.lat, self.lon)
         walked = 0.0
-        for a, b in zip(self.line, self.line[1:]):
+        stretches = list(zip(self.line, self.line[1:]))
+        for i, (a, b) in enumerate(stretches):
             seg = math.dist(a, b)
-            if seg == 0:
-                continue
+            along = _fraction(px, py, a, b)
             u, off = _project(px, py, a, b)
-            if off <= self.cfg.route_corridor_m and heading_diff(bearing(*a, *b), h_heading) <= tol_deg:
+            if (off <= self.cfg.route_corridor_m and heading_diff(bearing(*a, *b), h_heading) <= tol_deg
+                    and not (i == 0 and along < 0) and not (i == len(stretches) - 1 and along > 1)):
                 return walked + u * seg
             walked += seg
         return None

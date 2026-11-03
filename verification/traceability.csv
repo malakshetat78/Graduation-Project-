@@ -243,3 +243,15 @@ B-98,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_administra
 B-99,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_new_supabase_user_gets_a_driver_profile_automatically,FR-SEC-02 NFR-SEC-01
 B-100,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_supabase_client_roles_cannot_call_the_trigger_function,FR-SEC-02 NFR-SEC-01
 B-101,Integration,backend/tests/test_postgres.py,RowLevelSecurity.test_pairing_a_device_needs_the_code_even_through_the_backend,FR-SEC-02 NFR-SEC-01
+B-102,Integration,backend/tests/test_backend.py,Evaluation.test_copied_traces_stay_one_source_after_the_raw_position_window,FR-11
+B-103,Integration,backend/tests/test_backend.py,Evaluation.test_drive_past_evidence_survives_the_raw_position_window,FR-12
+B-104,Integration,backend/tests/test_backend.py,Evaluation.test_cleanup_keeps_only_positions_near_reports_still_counted,NFR-SEC-06
+B-105,Integration,backend/tests/test_backend.py,Evaluation.test_positions_near_a_speed_bump_report_are_kept_for_its_longer_window,NFR-SEC-06
+B-106,Integration,backend/tests/test_backend.py,Evaluation.test_same_event_id_on_two_devices_counts_for_both,FR-SEC-10 FR-11
+B-107,Integration,backend/tests/test_backend.py,Ahead.test_hazard_just_behind_the_start_of_the_route_does_not_alert,FR-16
+B-108,Integration,backend/tests/test_backend.py,Ahead.test_hazard_behind_the_driver_on_a_route_already_under_way_does_not_alert,FR-16
+B-109,Integration,backend/tests/test_backend.py,Ahead.test_hazard_just_past_the_end_of_the_route_does_not_alert,FR-16
+B-110,Integration,backend/tests/test_backend.py,Ahead.test_route_passing_the_spot_again_later_still_alerts,FR-16
+B-111,Unit,backend/tests/test_backend.py,OldDatabaseFile.test_file_from_before_this_schema_stops_with_a_clear_message,NFR-SEC-06
+T-53,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_two_devices_is_not_a_duplicate,FR-SEC-10 FR-11
+T-54,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_one_device_is_a_duplicate,FR-06 FR-SEC-10

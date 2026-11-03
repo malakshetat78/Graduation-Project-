@@ -27,7 +27,11 @@ from .verify import MAX_INT64, Envelope, Rejected, parse, verify_signature
 
 log = logging.getLogger("icvsp.service")
 
-BEACON_WINDOW_S = 2 * 3600   # position history kept in the decision (plausibility and "drove past")
+BEACON_WINDOW_S = 2 * 3600   # every position is kept this long
+# After that, only positions near a report still counted: they prove plausibility, "moves as one" and "drove past" for
+# as long as the report is in the decision, so waiting cannot turn a rejected claim into an accepted one.
+KEEP_NEAR_REPORT_DEG = 0.003 # latitude and longitude, about 330 m and 290 m in Egypt
+KEEP_BEFORE_REPORT_S = 120.0 # the drive up to the report; earlier passes do not count against it
 FUTURE_TOLERANCE_S = 30.0    # device clocks are GNSS time, so a little more than the delivery and clock skew
 # Reports are kept longer than the longest freshness window: a replay is then always either found as already
 # seen or refused as too old, so the "seen" record can never forget something that would still be accepted.
@@ -153,7 +157,7 @@ class Service:
         for vid, (good, bad) in self.store.reputations().items():
             rep.seed(vid, good, bad)
         eng = Engine(self.cfg, rep)
-        for b in self.store.beacons_since(now - BEACON_WINDOW_S):
+        for b in self.store.beacons_since(self._oldest(now)):
             eng.ingest_beacon(Beacon(b["vehicle_id"], b["t"], b["lat"], b["lon"], b["speed_mps"],
                                      b["heading_deg"], bool(b["detector_on"])))
         rows = self.store.reports_since(self._oldest(now))
@@ -263,7 +267,9 @@ class Service:
 
     def purge(self, now: float) -> None:
         """Retention (NFR-SEC-06): positions go first, reports only after replay protection no longer needs them."""
-        self.store.purge(now - BEACON_WINDOW_S, self._oldest(now) - REPORT_RETENTION_MARGIN_S,
+        keep_near = {hazard_type: now - age for hazard_type, age in self.cfg.max_age_s.items()}
+        self.store.purge(now - BEACON_WINDOW_S, keep_near, KEEP_NEAR_REPORT_DEG, KEEP_BEFORE_REPORT_S,
+                         self._oldest(now) - REPORT_RETENTION_MARGIN_S,
                          now - REJECTION_RETENTION_S, now - HAZARD_RETENTION_S)
 
     # ---------- hazard queries ----------

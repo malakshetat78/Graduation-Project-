@@ -93,6 +93,11 @@ class Store:
         self.db.row_factory = sqlite3.Row
         self.lock = threading.RLock()
         self.depth = 0
+        columns = {c["name"] for c in self.db.execute("PRAGMA table_info(reports)")}
+        if columns and "evaluation_status" not in columns:
+            self.db.close()
+            raise RuntimeError(f"{path} was made by an older version of the backend: delete it, or set ICVSP_DB to a "
+                               "new file. It only holds local development data.")
         with self.lock:
             self.db.executescript(SCHEMA)
 
@@ -351,10 +356,18 @@ class Store:
                           WHERE last_alerted_at <= ?""", (user_id, hazard_id, now, now - cooldown_s)).rowcount == 1
 
     # retention
-    def purge(self, beacons_before: float, reports_before: float, rejections_before: float,
-              hazards_before: float) -> None:
+    def purge(self, beacons_before: float, keep_near: dict[str, float], near_deg: float, lead_s: float,
+              reports_before: float, rejections_before: float, hazards_before: float) -> None:
+        """Positions older than `beacons_before` stay only if near a report still counted (`keep_near`: its type -> the
+        oldest report of that type still counted)."""
+        counted = " OR ".join("(json_extract(r.line, '$.event.type') = ? AND r.detected_at >= ?)" for _ in keep_near)
         with self.transaction():
-            self._x("DELETE FROM beacons WHERE t < ?", (beacons_before,))
+            self._x(f"""DELETE FROM beacons WHERE t < ? AND NOT EXISTS (
+                            SELECT 1 FROM reports r
+                            WHERE abs(json_extract(r.line, '$.event.latitude') - beacons.lat) <= ?
+                              AND abs(json_extract(r.line, '$.event.longitude') - beacons.lon) <= ?
+                              AND beacons.t >= r.detected_at - ? AND ({counted}))""",
+                    (beacons_before, near_deg, near_deg, lead_s, *[v for item in keep_near.items() for v in item]))
             self._x("DELETE FROM hazard_evidence WHERE (device_id, event_id) IN "
                     "(SELECT device_id, event_id FROM reports WHERE detected_at < ?)", (reports_before,))
             self._x("DELETE FROM reports WHERE detected_at < ?", (reports_before,))

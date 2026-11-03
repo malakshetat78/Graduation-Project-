@@ -91,7 +91,7 @@ create index reports_time on public.reports (detected_at);
 create index reports_pending on public.reports (received_at) where evaluation_status = 'pending';
 create index reports_location on public.reports using gist (location);
 
--- ---------- positions (needed for "drove past and saw nothing"; short retention, see Store.purge) ----------
+-- ---------- positions (needed for "drove past and saw nothing"; short retention, see Service.purge) ----------
 create table public.beacons (
     vehicle_id  text not null references public.devices (device_id) on delete cascade,
     t           timestamptz not null,

@@ -118,17 +118,17 @@ class Engine:
         report = Report(now=now, rejected=list(self.malformed))
 
         accepted: list[Scored] = []
-        seen_ids: set[str] = set()
+        seen_ids: set[tuple[str, str]] = set()     # per device: one device cannot use up another's IDs
         seen_seq: set[tuple[str, int, int]] = set()
         for ev in sorted(self.inbox, key=lambda e: e.t):
-            if ev.event_id in seen_ids:
+            if (ev.source, ev.event_id) in seen_ids:
                 report.rejected.append(Rejected(ev.event_id, ev.source, ["duplicate event_id (replay protection)"]))
                 continue
             if (ev.source, ev.boot_id, ev.sequence) in seen_seq:
                 report.rejected.append(Rejected(ev.event_id, ev.source,
                                                 [f"repeated boot {ev.boot_id} / sequence {ev.sequence} from this device"]))
                 continue
-            seen_ids.add(ev.event_id)
+            seen_ids.add((ev.source, ev.event_id))
             seen_seq.add((ev.source, ev.boot_id, ev.sequence))
             chk = plausibility(ev, self.traces.get(ev.source, []), now, cfg)
             if chk.verdict == "reject":

@@ -2,6 +2,8 @@
 ahead of the user, and who may see what. Every class also runs on real Supabase PostgreSQL (test_postgres.py).
 Run:  cd backend && python3 -m unittest -v"""
 import json
+import sqlite3
+import tempfile
 import time
 import unittest
 import uuid
@@ -14,6 +16,7 @@ from fastapi.testclient import TestClient
 from icvsp_backend.app import create_app
 from icvsp.geo import offset
 from icvsp_backend.auth import AuthUnavailable, InvalidToken, SupabaseVerifier
+from icvsp_backend.store import Store
 from icvsp_backend.store_errors import StoreUnavailable
 
 from tests.test_api import ADMIN, GOLDEN, T0, Base, Car
@@ -234,6 +237,75 @@ class Delivery(Case):
 
 
 class Evaluation(Case):
+    def test_copied_traces_stay_one_source_after_the_raw_position_window(self):
+        """Three identities moving as one must not become three sources just because time passed."""
+        for i, name in enumerate(("car-a", "car-b", "car-c")):
+            c = self.car(name)
+            self.drive(name, T0 - 10)
+            self.post(c.report(T0 + i, LAT, LON))
+        self.clock.t = T0 + 60
+        before = self.svc.decide(self.clock.t)[0]
+        self.assertTrue(before.sybil_suspected)
+        self.assertEqual((before.state.value, before.independent_sources), ("unconfirmed", 1))
+        self.clock.t = T0 + 2 * HOUR + 100
+        self.svc.purge(self.clock.t)
+        after = self.svc.decide(self.clock.t)[0]
+        self.assertTrue(after.sybil_suspected)
+        self.assertEqual((after.state.value, after.independent_sources), ("unconfirmed", 1))
+
+    def test_drive_past_evidence_survives_the_raw_position_window(self):
+        """A hazard that drivers disproved does not come back when the raw positions are cleaned up."""
+        for i, name in enumerate(("car-a", "car-b", "car-c", "car-d", "car-e", "car-f")):
+            c = self.car(name)
+            self.drive(name, T0 + 100 * i)
+            if i < 2:
+                self.clock.t = T0 + 100 * i + 20
+                self.assertEqual(self.post(c.report(T0 + 100 * i + 10, LAT, LON)).status_code, 201)
+        self.clock.t = T0 + 700
+        before = self.svc.decide(self.clock.t)[0]
+        self.assertEqual((before.state.value, len(before.contra)), ("suppressed", 4))
+        self.clock.t = T0 + 2 * HOUR + 700
+        self.svc.purge(self.clock.t)
+        after = self.svc.decide(self.clock.t)[0]
+        self.assertEqual((after.state.value, len(after.contra)), ("suppressed", 4))
+
+    def test_cleanup_keeps_only_positions_near_reports_still_counted(self):
+        c = self.car("car-a")
+        self.post(c.report(T0, LAT, LON))
+        rows = {"near": (T0 + 5, *at(0, 50)), "far": (T0 + 6, *at(5000, 0)), "before": (T0 - HOUR, *at(0, 50))}
+        self.svc.add_beacons([{"vehicle_id": "car-a", "t": t, "lat": lat, "lon": lon, "speed_mps": 11.0,
+                               "heading_deg": 90.0} for t, lat, lon in rows.values()])
+        self.clock.t = T0 + 3 * HOUR
+        self.svc.purge(self.clock.t)
+        self.assertEqual([round(b["t"]) for b in self.store.beacons_since(0)], [round(T0 + 5)])
+        self.clock.t = T0 + 2 * DAY + HOUR                 # a pothole report counts for 48 h
+        self.svc.purge(self.clock.t)
+        self.assertEqual(self.store.count("beacons"), 0)
+
+    def test_positions_near_a_speed_bump_report_are_kept_for_its_longer_window(self):
+        c = self.car("car-a")
+        self.post(c.report(T0, LAT, LON, type_="speed_bump"))
+        self.drive("car-a", T0 - 5, seconds=10)
+        self.clock.t = T0 + 13 * DAY
+        self.svc.purge(self.clock.t)
+        self.assertEqual(self.store.count("beacons"), 10)
+        self.clock.t = T0 + 15 * DAY
+        self.svc.purge(self.clock.t)
+        self.assertEqual(self.store.count("beacons"), 0)
+
+    def test_same_event_id_on_two_devices_counts_for_both(self):
+        """One device choosing another's event ID cannot get that device's real report thrown out."""
+        a, b = self.car("car-a"), self.car("car-b")
+        self.drive("car-a", T0 + 20)
+        self.drive("car-b", T0 - 10)
+        self.post(b.report(T0, LAT, LON, event_id="car-a-1-1"))
+        self.post(a.report(T0 + 30, LAT, LON))
+        self.clock.t = T0 + 60
+        self.svc.evaluate(self.clock.t)
+        for device in ("car-a", "car-b"):
+            self.assertEqual(self.store.report(device, "car-a-1-1")["evaluation_status"], "evaluated", device)
+        self.assertEqual(self.svc.decide(self.clock.t)[0].independent_sources, 2)
+
     def test_crash_after_saving_leaves_everything_pending_then_finishes_counting_once(self):
         """Processing stops after the report is stored: nothing half written, and the rerun counts each once."""
         self.hazard(("car-a", "car-b", "car-c"))
@@ -376,6 +448,30 @@ class Ahead(Case):
         self.clock.t += 3 * DAY                         # past expires_at, the worker has not even run yet
         self.assertEqual(self.ask(0, -300)["hazards"], [])
 
+    def test_hazard_just_behind_the_start_of_the_route_does_not_alert(self):
+        self.hazard()
+        for start in (1, 10, 20):
+            route = self.route((0, start), (0, 500))
+            self.assertEqual(self.ask(0, start, route=route)["hazards"], [], start)
+
+    def test_hazard_behind_the_driver_on_a_route_already_under_way_does_not_alert(self):
+        self.hazard()
+        route = self.route((0, -300), (0, 500))
+        self.assertEqual(self.ask(0, 10, route=route)["hazards"], [])
+
+    def test_hazard_just_past_the_end_of_the_route_does_not_alert(self):
+        self.hazard()
+        route = self.route((0, -300), (0, -10))
+        self.assertEqual(self.ask(0, -300, route=route)["hazards"], [])
+
+    def test_route_passing_the_spot_again_later_still_alerts(self):
+        """Behind the user on the first stretch, but the route comes back over it in the same direction."""
+        self.hazard()
+        route = self.route((0, 10), (0, 300), (100, 300), (100, -100), (0, -100), (0, 100))
+        hazards = self.ask(0, 10, route=route)["hazards"]
+        self.assertEqual(len(hazards), 1)
+        self.assertGreater(hazards[0]["distance_m"], 500)
+
     def test_route_distance_is_along_the_road_not_straight_line(self):
         self.hazard()
         route = self.route((-100, -300), (0, -300), (0, 200))     # north to the corner, then east over the hazard
@@ -513,6 +609,17 @@ class Access(Case):
         """The phone that relays a report may have no sign-in at that moment; the signature proves the source."""
         c = self.car("car-a")
         self.assertEqual(self.post(c.report(T0, LAT, LON)).status_code, 201)
+
+
+class OldDatabaseFile(unittest.TestCase):
+    def test_file_from_before_this_schema_stops_with_a_clear_message(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = f"{d}/old.sqlite3"
+            db = sqlite3.connect(path)
+            db.execute("CREATE TABLE reports (event_id TEXT PRIMARY KEY, line TEXT)")
+            db.close()
+            with self.assertRaisesRegex(RuntimeError, "delete it"):
+                Store(path)
 
 
 class Tokens(unittest.TestCase):
