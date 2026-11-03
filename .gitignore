@@ -45,3 +45,9 @@ ai/models/*_esp32s3.json
 
 # backend database files (local runs)
 *.sqlite3
+
+# local environments and secrets: never commit (HANDOFF.md)
+.venv/
+.env
+.env.*
+!.env.example

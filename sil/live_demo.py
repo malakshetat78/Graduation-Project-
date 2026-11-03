@@ -123,7 +123,7 @@ class Demo:
         self.injected = 0
         self.lock = threading.Lock()
         self.store = Store()
-        self.app = create_app(self.store, self.clock, admin_token=self.token)
+        self.app = create_app(self.store, self.clock, admin_token=self.token, allow_anonymous=True)
         self._routes()
 
     # ---------- demo-only routes, added to the normal backend app ----------

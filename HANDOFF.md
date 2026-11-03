@@ -14,13 +14,14 @@ system simulation, AI models and the V-cycle checks). `README.md` explains the p
 | `firmware/` | Device code (ESP32-S3): IMU detector, camera decision logic, signed reports | Shahesta, Malak |
 | `ai/` | Camera detectors, training notebooks, labelling policy (`ai/LABELLING_POLICY.md`) | Shahesta, Rana |
 | `mobile/` (new) | Flutter app, BLE protocol, GPS features | Mariam |
-| `database/` (new) | Supabase schema and migrations | Rana, Mariam |
+| `database/` | Supabase schema and migrations | Rana, Mariam |
 | `cloud/` (new) | Deployment, hosting, monitoring | Ahmed, Malak |
-| `docs/` (new) | Requirements, reports, design guides | everyone |
+| `docs/` | Requirements, reports, design guides | everyone |
 
 For the mobile app: the device sends the signed report in `verification/golden/device_reports_v2.jsonl`; the app
-forwards it unchanged to `POST /reports`, sends positions to `POST /beacons` and asks `GET /hazards`.
-For the database: the current tables are in `backend/icvsp_backend/store.py`.
+forwards it unchanged to `POST /reports`, sends positions to `POST /beacons` and asks `POST /hazards/ahead`. What each
+answer means for the phone's queue is in `docs/backend-mobile-contract.md`.
+For the database: the migrations are in `database/supabase/migrations`, see `database/README.md`.
 
 ## How to contribute
 

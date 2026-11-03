@@ -62,8 +62,11 @@ def east(lat: float, lon: float, metres: float) -> tuple[float, float]:
 class Base(unittest.TestCase):
     def setUp(self):
         self.clock = Clock(T0 + 60)
-        self.store = Store()
-        self.client = TestClient(create_app(self.store, self.clock, admin_token="test-admin"))
+        self.store = self.make_store()
+        self.client = TestClient(create_app(self.store, self.clock, admin_token="test-admin", allow_anonymous=True))
+
+    def make_store(self):
+        return Store()
 
     def tearDown(self):
         self.store.close()

@@ -26,7 +26,7 @@ This repository holds the working prototypes:
 | Egyptian road tests | 🟡 Potholes detected above chance by day and night; many unpainted bumps are barely visible on camera, so the IMU becomes the main bump sensor. Own recordings needed for a larger test set |
 | Device firmware (IMU detector, camera decision logic, camera + IMU fusion, signed reports, replay window) | ✅ 52 unit tests on a laptop (PlatformIO native); logic scored on held-out video; thresholds still to be tuned on real recordings |
 | Camera detector, Lite unit (ESPDet-Pico on ESP32-S3) | 🟡 8-bit model 486 KB, speed-bump mAP50 0.72 in ESP-PPQ simulation; builds and runs in the ESP32-S3 emulator, on-chip accuracy needs a board |
-| Backend API (device registry, signed-report checks, replay defence, hazard query, reputation, operator dashboard) | ✅ Prototype, 21 API tests; SQLite for now, Supabase next. Sign-in / roles, rate limits and signed alerts to phones still to do |
+| Backend API (device registry, signed-report checks, replay defence, durable storage, background evaluation, hazards ahead, user sign-in and roles, reputation, operator dashboard) | ✅ FastAPI on Supabase (PostgreSQL, PostGIS, Auth, RLS), tested on a local Supabase stack; not yet deployed. `backend/README.md` |
 | System simulation (real device code → backend → trust engine → warnings), with faults and attacks | ✅ 4 scenarios, 0 % false warnings; live demo with the dashboard |
 | Detector v4 (adds three public Kaggle pothole / road datasets) | 🟡 Training on Kaggle; compared with v3c when done |
 | V2V radio, cloud deployment, in-vehicle hardware | ⏳ Planned (see roadmap) |
@@ -137,7 +137,7 @@ Sensor hit rates and network behaviour are assumptions, so these numbers describ
 performance: [`sil/results/summary.md`](sil/results/summary.md).
 
 ```bash
-cd backend && python3 -m unittest -v           # 21 API tests
+cd backend && python3 -m unittest -v           # API tests (see backend/README.md for the PostgreSQL run)
 python3 sil/run_sil.py                         # whole-chain simulation, 4 scenarios
 python3 sil/live_demo.py                       # live demo: simulation against the real backend, in the dashboard
 ```
@@ -186,8 +186,8 @@ firmware/
 ├── tools/              end-to-end check with the engine
 └── espdet_qemu/        ESPDet-Pico on the ESP32-S3 (ESP-IDF + ESP-DL), run in QEMU
 backend/
-├── icvsp_backend/      API, report checks, storage (SQLite), operator dashboard
-└── tests/              21 API tests
+├── icvsp_backend/      API, report checks, storage (Supabase, SQLite), evaluator, operator dashboard
+└── tests/              API tests
 sil/                    whole-chain simulation, live demo, results
 verification/           requirements, traceability list, golden device reports, CI check
 ```
@@ -198,7 +198,7 @@ verification/           requirements, traceability list, golden device reports, 
 2. Tune the IMU detector on those recordings; camera + IMU fusion
 3. First boards: ESP32-S3 (IMU unit, ESPDet-Pico on-chip test) and Raspberry Pi 5 + Hailo vs Jetson Orin Nano benchmark
 4. Engine: low-density (1–2 user) and insider-attack improvements; burst packet loss
-5. Backend: sign-in and roles, rate limits, signed alerts to phones; move to Supabase and deploy to the cloud
+5. Backend: rate limits, signed alerts to phones; deploy to the cloud
 6. Vehicle-to-vehicle messaging over ESP32 (ESP-NOW)
 7. Field test: one unit on a fixed bus route, one rotating between volunteer cars
 
