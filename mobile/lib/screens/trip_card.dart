@@ -2,32 +2,51 @@ import 'package:flutter/material.dart';
 
 import '../core/app_colors.dart';
 import '../services/beacon_service.dart';
+import '../services/hazard_alert_service.dart';
 
 class TripCard extends StatelessWidget {
   const TripCard({super.key});
 
-  String _message(BeaconService service) {
-    switch (service.status) {
+  /// Road alerts do not need a linked device, so a trip can start without one.
+  String _message(HazardAlertService alerts, BeaconService beacons) {
+    if (alerts.status == AlertStatus.noLocation) {
+      return 'Location is unavailable.';
+    }
+    if (alerts.status == AlertStatus.starting) return 'Starting...';
+    if (!alerts.isActive) return 'Start a trip to get road alerts.';
+    if (alerts.problem != null) return alerts.problem!;
+
+    switch (beacons.status) {
       case TripStatus.active:
-        return service.lastProblem ??
-            'Sent ${service.sentCount} · Waiting ${service.waitingCount}';
-      case TripStatus.starting:
-        return 'Starting...';
+        return beacons.lastProblem ??
+            'Road alerts on · Sent ${beacons.sentCount} · '
+                'Waiting ${beacons.waitingCount}';
       case TripStatus.noDevice:
-        return 'Link a device before starting a trip.';
+        return 'Road alerts on. Link a device to share your position.';
       case TripStatus.noLocation:
-        return 'Location is unavailable.';
+      case TripStatus.starting:
       case TripStatus.stopped:
-        return 'Start a trip to share your position.';
+        return 'Road alerts on.';
+    }
+  }
+
+  void _toggle(HazardAlertService alerts, BeaconService beacons) {
+    if (alerts.isActive) {
+      alerts.stop();
+      beacons.stop();
+    } else {
+      alerts.start();
+      beacons.start();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final service = BeaconService.instance;
+    final alerts = HazardAlertService.instance;
+    final beacons = BeaconService.instance;
 
     return ListenableBuilder(
-      listenable: service,
+      listenable: Listenable.merge([alerts, beacons]),
       builder: (context, _) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
@@ -35,24 +54,22 @@ class TripCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  _message(service),
+                  _message(alerts, beacons),
                   style: const TextStyle(color: AppColors.navy),
                 ),
               ),
               const SizedBox(width: 12),
               FilledButton(
-                onPressed: service.status == TripStatus.starting
+                onPressed: alerts.status == AlertStatus.starting
                     ? null
-                    : service.isActive
-                    ? service.stop
-                    : service.start,
+                    : () => _toggle(alerts, beacons),
                 style: FilledButton.styleFrom(
-                  backgroundColor: service.isActive
+                  backgroundColor: alerts.isActive
                       ? AppColors.coral
                       : AppColors.turquoise,
                   foregroundColor: AppColors.navy,
                 ),
-                child: Text(service.isActive ? 'End trip' : 'Start trip'),
+                child: Text(alerts.isActive ? 'End trip' : 'Start trip'),
               ),
             ],
           ),

@@ -1,186 +1,174 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../core/app_colors.dart';
+import '../services/driver_location.dart';
+import '../services/hazard_alert_service.dart';
 
+/// The road ahead as seen from the car: straight up is the direction of travel,
+/// and the rings are 500 m and 1 km. It is not a street map.
 class MapPreview extends StatelessWidget {
-  final VoidCallback onHazardTap;
+  const MapPreview({
+    super.key,
+    required this.fix,
+    required this.headingDeg,
+    required this.hazards,
+    required this.onHazardTap,
+  });
 
-  const MapPreview({super.key, required this.onHazardTap});
+  static const _rangeM = 1000.0;
+  static const _markerSize = 44.0;
+
+  final DriverFix? fix;
+  final double? headingDeg;
+  final List<HazardAhead> hazards;
+  final ValueChanged<HazardAhead> onHazardTap;
+
+  /// Where a hazard sits on the view, from (0, 0) the car to (0, -1) straight
+  /// ahead at the edge of the range. Null when the direction is not known yet.
+  Offset? _place(HazardAhead hazard) {
+    final fix = this.fix;
+    final heading = headingDeg;
+
+    if (fix == null || heading == null) return null;
+
+    final metres = Geolocator.distanceBetween(
+      fix.lat,
+      fix.lon,
+      hazard.lat,
+      hazard.lon,
+    );
+    final bearing = Geolocator.bearingBetween(
+      fix.lat,
+      fix.lon,
+      hazard.lat,
+      hazard.lon,
+    );
+    final angle = (bearing - heading) * pi / 180;
+    final reach = min(metres / _rangeM, 1.0);
+
+    return Offset(sin(angle) * reach, -cos(angle) * reach);
+  }
+
+  Widget _marker(HazardAhead hazard, Offset place, Offset car, double radius) {
+    final Color colour;
+
+    if (hazard.isAdvisory) {
+      colour = const Color(0xFFB8C2CF);
+    } else {
+      colour = hazard.inAlertRange ? AppColors.coral : const Color(0xFFFFB199);
+    }
+
+    return Positioned(
+      left: car.dx + place.dx * radius - _markerSize / 2,
+      top: car.dy + place.dy * radius - _markerSize / 2,
+      width: _markerSize,
+      height: _markerSize,
+      child: IconButton.filled(
+        tooltip: hazard.title,
+        onPressed: () => onHazardTap(hazard),
+        style: IconButton.styleFrom(
+          backgroundColor: colour,
+          foregroundColor: AppColors.navy,
+        ),
+        icon: Icon(
+          hazard.isAdvisory ? Icons.help_outline : Icons.warning_amber_rounded,
+          size: 24,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          const CustomPaint(painter: _MapPainter()),
+      child: LayoutBuilder(
+        builder: (context, box) {
+          final car = Offset(box.maxWidth / 2, box.maxHeight * 0.85);
+          final radius = min(box.maxWidth / 2, box.maxHeight * 0.85) - 24;
 
-          const Align(
-            alignment: Alignment(-0.65, -0.45),
-            child: Text(
-              'ZAMALEK',
-              style: TextStyle(
-                color: AppColors.navy,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              CustomPaint(painter: _RingsPainter(car, radius)),
 
-          const Align(
-            alignment: Alignment(0.05, -0.05),
-            child: Text(
-              'CAIRO',
-              style: TextStyle(
-                color: AppColors.navy,
-                fontSize: 19,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+              for (final hazard in hazards)
+                if (_place(hazard) case final place?)
+                  _marker(hazard, place, car, radius),
 
-          const Align(
-            alignment: Alignment(0.6, 0.65),
-            child: Text(
-              'MAADI',
-              style: TextStyle(
-                color: AppColors.navy,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
+              Positioned(
+                left: car.dx - 24,
+                top: car.dy - 24,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF008D91),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                  ),
+                  child: const Icon(
+                    Icons.navigation_rounded,
+                    color: Colors.white,
+                    size: 26,
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          Align(
-            alignment: const Alignment(0.05, 0.4),
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color(0xFF008D91),
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 3),
+              Positioned(
+                top: 14,
+                left: 14,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    fix == null ? 'Start a trip' : 'Road ahead · 1 km',
+                    style: const TextStyle(color: AppColors.navy, fontSize: 12),
+                  ),
+                ),
               ),
-              child: const Icon(
-                Icons.navigation_rounded,
-                color: Colors.white,
-                size: 28,
-              ),
-            ),
-          ),
-
-          Align(
-            alignment: const Alignment(0.4, -0.35),
-            child: IconButton.filled(
-              tooltip: 'Preview pothole alert',
-              onPressed: onHazardTap,
-              style: IconButton.styleFrom(
-                backgroundColor: AppColors.coral,
-                foregroundColor: AppColors.navy,
-              ),
-              icon: const Icon(Icons.warning_amber_rounded, size: 30),
-            ),
-          ),
-
-          Positioned(
-            top: 14,
-            left: 14,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'Illustrative map',
-                style: TextStyle(color: AppColors.navy, fontSize: 12),
-              ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-class _MapPainter extends CustomPainter {
-  const _MapPainter();
+class _RingsPainter extends CustomPainter {
+  const _RingsPainter(this.car, this.radius);
+
+  final Offset car;
+  final double radius;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-
     canvas.drawRect(
       Offset.zero & size,
       Paint()..color = const Color(0xFFE8EDE4),
     );
 
-    final parkPaint = Paint()..color = const Color(0xFFCEE3C8);
-
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(w * 0.62, h * 0.52, w * 0.3, h * 0.25),
-        const Radius.circular(18),
-      ),
-      parkPaint,
-    );
-
-    final streetPaint = Paint()
+    final ring = Paint()
       ..color = Colors.white
-      ..strokeWidth = 6;
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
 
-    for (int i = -2; i < 12; i++) {
-      canvas.drawLine(
-        Offset(i * w / 7, 0),
-        Offset(i * w / 7 + w * 0.25, h),
-        streetPaint,
-      );
-
-      canvas.drawLine(
-        Offset(0, i * h / 8),
-        Offset(w, i * h / 8 - h * 0.2),
-        streetPaint,
-      );
-    }
-
-    final river = Path()
-      ..moveTo(w * 0.3, -20)
-      ..cubicTo(w * 0.55, h * 0.25, w * 0.05, h * 0.55, w * 0.25, h + 20);
-
-    canvas.drawPath(
-      river,
-      Paint()
-        ..color = const Color(0xFFA6D8E8)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = w * 0.13,
-    );
-
-    final route = Path()
-      ..moveTo(w * 0.525, h * 0.7)
-      ..lineTo(w * 0.525, h * 0.52)
-      ..lineTo(w * 0.7, h * 0.43)
-      ..lineTo(w * 0.7, h * 0.325);
-
-    canvas.drawPath(
-      route,
-      Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 10
-        ..strokeJoin = StrokeJoin.round,
-    );
-
-    canvas.drawPath(
-      route,
-      Paint()
-        ..color = const Color(0xFF00B6A5)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 5
-        ..strokeJoin = StrokeJoin.round,
-    );
+    canvas.drawCircle(car, radius / 2, ring);
+    canvas.drawCircle(car, radius, ring);
+    canvas.drawLine(car, Offset(car.dx, car.dy - radius), ring);
   }
 
   @override
-  bool shouldRepaint(covariant _MapPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _RingsPainter oldDelegate) {
+    return oldDelegate.car != car || oldDelegate.radius != radius;
+  }
 }

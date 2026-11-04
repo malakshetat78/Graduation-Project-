@@ -1,12 +1,46 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../core/app_colors.dart';
+import '../services/hazard_alert_service.dart';
 
-class AlertScreen extends StatelessWidget {
-  const AlertScreen({super.key});
+class AlertScreen extends StatefulWidget {
+  const AlertScreen({super.key, required this.hazard});
+
+  final HazardAhead hazard;
+
+  @override
+  State<AlertScreen> createState() => _AlertScreenState();
+}
+
+class _AlertScreenState extends State<AlertScreen> {
+  /// The driver should not have to touch the phone to clear a warning.
+  static const _closeAfter = Duration(seconds: 10);
+
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(SystemSound.play(SystemSoundType.alert));
+    unawaited(HapticFeedback.heavyImpact());
+    _timer = Timer(_closeAfter, () {
+      if (mounted) Navigator.maybePop(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final hazard = widget.hazard;
+
     return Scaffold(
       backgroundColor: AppColors.navy,
       body: SafeArea(
@@ -37,10 +71,10 @@ class AlertScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  const Text(
-                    'Pothole ahead',
+                  Text(
+                    hazard.title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.cream,
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -49,9 +83,9 @@ class AlertScreen extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  const Text(
-                    '250 m',
-                    style: TextStyle(
+                  Text(
+                    hazard.aheadLabel,
+                    style: const TextStyle(
                       color: AppColors.coral,
                       fontSize: 68,
                       fontWeight: FontWeight.w900,
@@ -77,21 +111,13 @@ class AlertScreen extends StatelessWidget {
                       color: AppColors.cream,
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    child: const Text(
-                      'Verified by 3 vehicles',
-                      style: TextStyle(
+                    child: Text(
+                      hazard.evidenceLabel,
+                      style: const TextStyle(
                         color: AppColors.navy,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  const Text(
-                    'Sample alert · Demonstration only',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.cream, fontSize: 12),
                   ),
 
                   const SizedBox(height: 36),
