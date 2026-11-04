@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
+import '../services/beacon_service.dart';
 import 'welcome_screen.dart';
 import 'alerts_history_screen.dart';
 
@@ -40,7 +42,7 @@ class _AccountScreenState extends State<AccountScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.cream,
-          title: const Text('Leave preview?'),
+          title: const Text('Sign out?'),
           content: const Text('You will return to the welcome screen.'),
           actions: [
             TextButton(
@@ -49,7 +51,7 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Leave'),
+              child: const Text('Sign out'),
             ),
           ],
         );
@@ -57,6 +59,14 @@ class _AccountScreenState extends State<AccountScreen> {
     );
 
     if (!mounted || confirmed != true) return;
+
+    if (BeaconService.instance.isActive) {
+      await BeaconService.instance.stop();
+    }
+
+    await Supabase.instance.client.auth.signOut(scope: SignOutScope.local);
+
+    if (!mounted) return;
 
     Navigator.pushAndRemoveUntil(
       context,
@@ -67,6 +77,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final email = Supabase.instance.client.auth.currentUser?.email ?? '';
+    final initial = email.isEmpty ? 'R' : email[0].toUpperCase();
+
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
@@ -82,39 +95,39 @@ class _AccountScreenState extends State<AccountScreen> {
         const SizedBox(height: 26),
 
         _card(
-          child: const Padding(
-            padding: EdgeInsets.all(20),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
             child: Row(
               children: [
                 CircleAvatar(
                   radius: 28,
                   backgroundColor: AppColors.navy,
                   child: Text(
-                    'U',
-                    style: TextStyle(
+                    initial,
+                    style: const TextStyle(
                       color: AppColors.cream,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'User',
+                      const Text(
+                        'Signed in',
                         style: TextStyle(
                           color: AppColors.navy,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
-                        'user@example.com',
-                        style: TextStyle(
+                        email,
+                        style: const TextStyle(
                           color: Color(0xFF65758A),
                           fontSize: 13,
                         ),
@@ -171,10 +184,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 title: const Text('Language'),
                 trailing: const Text('English'),
                 onTap: () {
-                  _showInfo(
-                    'Language',
-                    'English is available in this preview.',
-                  );
+                  _showInfo('Language', 'English is available now.');
                 },
               ),
 
@@ -188,8 +198,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 onTap: () {
                   _showInfo(
                     'Location permissions',
-                    'This preview uses sample positions and '
-                        'does not access your location.',
+                    'ROVO uses your location during a trip '
+                        'to share vehicle positions.',
                   );
                 },
               ),
@@ -218,8 +228,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 onTap: () {
                   _showInfo(
                     'About ROVO',
-                    'ROVO helps drivers stay aware of road hazards.\n\n'
-                        'This version is a UI preview using sample data.',
+                    'ROVO helps drivers stay aware of road hazards.',
                   );
                 },
               ),
@@ -232,7 +241,7 @@ class _AccountScreenState extends State<AccountScreen> {
         OutlinedButton.icon(
           onPressed: _signOut,
           icon: const Icon(Icons.logout_rounded),
-          label: const Text('Leave preview'),
+          label: const Text('Sign out'),
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColors.navy,
             minimumSize: const Size(double.infinity, 54),
@@ -241,14 +250,6 @@ class _AccountScreenState extends State<AccountScreen> {
               borderRadius: BorderRadius.circular(16),
             ),
           ),
-        ),
-
-        const SizedBox(height: 18),
-
-        const Text(
-          'UI preview · Preferences reset when you leave',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Color(0xFF65758A), fontSize: 12),
         ),
       ],
     );

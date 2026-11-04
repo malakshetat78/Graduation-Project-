@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
 import 'login_screen.dart';
@@ -13,26 +14,73 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   bool _hidePassword = true;
+  bool _loading = false;
+  String? _error;
+  String? _notice;
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _previewCreateAccount() {
-    if (!_formKey.currentState!.validate()) return;
+  Future<void> _createAccount() async {
+    if (_loading || !_formKey.currentState!.validate()) return;
 
     FocusScope.of(context).unfocus();
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-      (route) => false,
-    );
+    setState(() {
+      _loading = true;
+      _error = null;
+      _notice = null;
+    });
+
+    try {
+      final response = await Supabase.instance.client.auth.signUp(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        data: {'full_name': _nameController.text.trim()},
+      );
+
+      if (!mounted) return;
+
+      if (response.session != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
+      } else {
+        setState(() {
+          _notice = 'Check your email to confirm your account, then sign in.';
+        });
+      }
+    } on AuthException catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        _error = error.message;
+      });
+    } on Exception {
+      if (!mounted) return;
+
+      setState(() {
+        _error = 'Could not create your account. Try again.';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -91,6 +139,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     const SizedBox(height: 30),
 
                     TextFormField(
+                      controller: _nameController,
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.next,
                       decoration: _inputStyle(
@@ -109,6 +158,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     const SizedBox(height: 16),
 
                     TextFormField(
+                      controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       autocorrect: false,
@@ -183,7 +233,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       autocorrect: false,
                       enableSuggestions: false,
                       textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) => _previewCreateAccount(),
+                      onFieldSubmitted: (_) => _createAccount(),
                       decoration: _inputStyle(
                         label: 'Confirm password',
                         icon: Icons.lock_outline_rounded,
@@ -201,13 +251,33 @@ class _SignupScreenState extends State<SignupScreen> {
                       },
                     ),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 24),
+
+                    if (_error != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          _error!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: AppColors.coral),
+                        ),
+                      ),
+
+                    if (_notice != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          _notice!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: AppColors.navy),
+                        ),
+                      ),
 
                     SizedBox(
                       width: double.infinity,
                       height: 54,
                       child: ElevatedButton(
-                        onPressed: _previewCreateAccount,
+                        onPressed: _loading ? null : _createAccount,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.turquoise,
                           foregroundColor: AppColors.navy,
@@ -216,13 +286,22 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: const Text(
-                          'Create account',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: _loading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.navy,
+                                ),
+                              )
+                            : const Text(
+                                'Create account',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
 
@@ -241,19 +320,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         'Already have an account? Sign in',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: AppColors.navy),
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    const Text(
-                      'UI preview · Use sample credentials.\n'
-                      'No real account will be created.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF65758A),
-                        fontSize: 12,
-                        height: 1.5,
                       ),
                     ),
                   ],

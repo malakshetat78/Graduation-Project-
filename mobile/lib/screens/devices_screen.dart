@@ -65,94 +65,99 @@ class _DevicesScreenState extends State<DevicesScreen> {
         const SizedBox(height: 28),
 
         if (_hasDemoDevice)
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
+          Material(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: const Color(0xFFE1E5EA)),
+              side: const BorderSide(color: Color(0xFFE1E5EA)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 140,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.navy,
-                    borderRadius: BorderRadius.circular(18),
+            clipBehavior: Clip.antiAlias,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 140,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.navy,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: const Icon(
+                      Icons.sensors,
+                      color: AppColors.turquoise,
+                      size: 76,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.sensors,
-                    color: AppColors.turquoise,
-                    size: 76,
+
+                  const SizedBox(height: 22),
+
+                  const Text(
+                    'ROVO Unit 01',
+                    style: TextStyle(
+                      color: AppColors.navy,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 22),
+                  const SizedBox(height: 12),
 
-                const Text(
-                  'ROVO Unit 01',
-                  style: TextStyle(
-                    color: AppColors.navy,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 7,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEDF0F4),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      'Demo device',
+                      style: TextStyle(color: AppColors.navy, fontSize: 12),
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 12),
+                  const SizedBox(height: 16),
 
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 7,
+                  const ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(
+                      Icons.bluetooth_disabled,
+                      color: AppColors.navy,
+                    ),
+                    title: Text('Not connected'),
+                    subtitle: Text('Hardware pairing is not active yet'),
                   ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEDF0F4),
-                    borderRadius: BorderRadius.circular(20),
+
+                  const Divider(),
+
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(
+                      Icons.settings_outlined,
+                      color: AppColors.navy,
+                    ),
+                    title: const Text('Connection settings'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: _showConnectionInfo,
                   ),
-                  child: const Text(
-                    'Demo device',
-                    style: TextStyle(color: AppColors.navy, fontSize: 12),
+
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        _hasDemoDevice = false;
+                      });
+                    },
+                    icon: const Icon(Icons.link_off),
+                    label: const Text('Remove demo device'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.navy,
+                    ),
                   ),
-                ),
-
-                const SizedBox(height: 16),
-
-                const ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: Icon(
-                    Icons.bluetooth_disabled,
-                    color: AppColors.navy,
-                  ),
-                  title: Text('Not connected'),
-                  subtitle: Text('Hardware pairing is not active yet'),
-                ),
-
-                const Divider(),
-
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.settings_outlined,
-                    color: AppColors.navy,
-                  ),
-                  title: const Text('Connection settings'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: _showConnectionInfo,
-                ),
-
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      _hasDemoDevice = false;
-                    });
-                  },
-                  icon: const Icon(Icons.link_off),
-                  label: const Text('Remove demo device'),
-                  style: TextButton.styleFrom(foregroundColor: AppColors.navy),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         else
@@ -211,15 +216,18 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
         const SizedBox(height: 16),
 
-        ListTile(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+        Material(
+          color: Colors.transparent,
+          child: ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            tileColor: Colors.white,
+            leading: const Icon(Icons.help_outline, color: AppColors.navy),
+            title: const Text('How to connect'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: _showConnectionInfo,
           ),
-          tileColor: Colors.white,
-          leading: const Icon(Icons.help_outline, color: AppColors.navy),
-          title: const Text('How to connect'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: _showConnectionInfo,
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
 import 'home_screen.dart';
@@ -14,18 +15,62 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool _hidePassword = true;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  void _previewSignIn() {
-    if (!_formKey.currentState!.validate()) return;
+  bool _hidePassword = true;
+  bool _loading = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signIn() async {
+    if (_loading || !_formKey.currentState!.validate()) return;
 
     FocusScope.of(context).unfocus();
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-      (route) => false,
-    );
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+
+    try {
+      await Supabase.instance.client.auth.signInWithPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      if (!mounted) return;
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        (route) => false,
+      );
+    } on AuthException catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        _error = error.message;
+      });
+    } on Exception {
+      if (!mounted) return;
+
+      setState(() {
+        _error = 'Could not sign in. Check your connection and try again.';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -80,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 30),
 
                     TextFormField(
+                      controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       autocorrect: false,
@@ -106,11 +152,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 18),
 
                     TextFormField(
+                      controller: _passwordController,
                       obscureText: _hidePassword,
                       autocorrect: false,
                       enableSuggestions: false,
                       textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) => _previewSignIn(),
+                      onFieldSubmitted: (_) => _signIn(),
                       decoration:
                           _inputStyle(
                             label: 'Password',
@@ -165,11 +212,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     const SizedBox(height: 20),
 
+                    if (_error != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          _error!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: AppColors.coral),
+                        ),
+                      ),
+
                     SizedBox(
                       width: double.infinity,
                       height: 54,
                       child: ElevatedButton(
-                        onPressed: _previewSignIn,
+                        onPressed: _loading ? null : _signIn,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.turquoise,
                           foregroundColor: AppColors.navy,
@@ -178,13 +235,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: const Text(
-                          'Sign in',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: _loading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.navy,
+                                ),
+                              )
+                            : const Text(
+                                'Sign in',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
 
@@ -202,19 +268,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text(
                         'New to ROVO? Create account',
                         style: TextStyle(color: AppColors.navy),
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    const Text(
-                      'UI preview · Use sample credentials.\n'
-                      'No real authentication is performed.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF65758A),
-                        fontSize: 12,
-                        height: 1.5,
                       ),
                     ),
                   ],

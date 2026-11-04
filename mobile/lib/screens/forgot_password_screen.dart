@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
 
@@ -11,16 +12,57 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool _showConfirmation = false;
+  final _emailController = TextEditingController();
 
-  void _previewReset() {
-    if (!_formKey.currentState!.validate()) return;
+  bool _loading = false;
+  bool _showConfirmation = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _sendReset() async {
+    if (_loading || !_formKey.currentState!.validate()) return;
 
     FocusScope.of(context).unfocus();
 
     setState(() {
-      _showConfirmation = true;
+      _loading = true;
+      _error = null;
     });
+
+    try {
+      await Supabase.instance.client.auth.resetPasswordForEmail(
+        _emailController.text.trim(),
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        _showConfirmation = true;
+      });
+    } on AuthException catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        _error = error.message;
+      });
+    } on Exception {
+      if (!mounted) return;
+
+      setState(() {
+        _error = 'Could not send the email. Try again.';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -76,6 +118,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     const SizedBox(height: 30),
 
                     TextFormField(
+                      controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
                       onChanged: (_) {
@@ -113,11 +156,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                     const SizedBox(height: 24),
 
+                    if (_error != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          _error!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: AppColors.coral),
+                        ),
+                      ),
+
                     SizedBox(
                       width: double.infinity,
                       height: 54,
                       child: ElevatedButton(
-                        onPressed: _previewReset,
+                        onPressed: _loading ? null : _sendReset,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.turquoise,
                           foregroundColor: AppColors.navy,
@@ -126,13 +179,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: const Text(
-                          'Preview reset request',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: _loading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.navy,
+                                ),
+                              )
+                            : const Text(
+                                'Send reset email',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
 
@@ -145,8 +207,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                       const SizedBox(height: 10),
                       const Text(
-                        'Email format accepted.\n'
-                        'This is a preview. No reset email has been sent.',
+                        'If this email has an account, '
+                        'a reset link is on its way.',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: AppColors.navy, height: 1.5),
                       ),
