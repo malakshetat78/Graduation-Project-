@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-import 'ble_report_assembler.dart';
+import 'ble_delivery_processor.dart';
 import 'report_queue.dart';
 import 'report_uploader.dart';
 
@@ -18,8 +18,17 @@ class BleService extends ChangeNotifier {
   static final Guid dataId = Guid('7b100002-6a34-4c82-9b51-2f048e9a6300');
   static final Guid ackId = Guid('7b100003-6a34-4c82-9b51-2f048e9a6300');
 
-  final BleReportAssembler _assembler = BleReportAssembler();
-  final ReportQueue _queue = ReportQueue.instance;
+  late final BleDeliveryProcessor _processor = BleDeliveryProcessor(
+    persist: ReportQueue.instance.store,
+    ack: (id) async {
+      final characteristic = _ack;
+      if (!connected || characteristic == null) {
+        throw StateError('BLE disconnected before ACK');
+      }
+      await characteristic.write([(id >> 8) & 255, id & 255], withoutResponse: false);
+      ReportUploader.instance.kick();
+    },
+  );
   StreamSubscription<List<ScanResult>>? _scanSubscription;
   StreamSubscription<List<int>>? _dataSubscription;
   StreamSubscription<BluetoothConnectionState>? _connectionSubscription;
@@ -67,7 +76,7 @@ class BleService extends ChangeNotifier {
         if (state == BluetoothConnectionState.disconnected) {
           connected = false;
           _ack = null;
-          _assembler.reset();
+          _processor.reset();
           notifyListeners();
         }
       });
@@ -82,7 +91,7 @@ class BleService extends ChangeNotifier {
       if (!data.properties.notify || !_ack!.properties.write) {
         throw StateError('Device BLE characteristics do not match protocol');
       }
-      _assembler.reset();
+      _processor.reset();
       _dataSubscription = data.onValueReceived.listen((value) {
         // Serialize SQLite commits and ACK writes: never ACK out of order.
         _serial = _serial.then((_) => _handleFragment(Uint8List.fromList(value)))
@@ -103,30 +112,13 @@ class BleService extends ChangeNotifier {
   }
 
   Future<void> _handleFragment(Uint8List frame) async {
-    final complete = _assembler.add(frame);
-    if (complete == null) return;
-    // BLE ACK is a durable local receipt, NOT a backend ACK.
-    StoreOutcome outcome;
     try {
-      outcome = await _queue.store(complete.bytes);
+      await _processor.accept(frame);
     } on Object catch (error) {
-      lastProblem = 'Cannot save BLE report: $error';
+      // Never ACK invalid fragments, conflicted IDs or failed SQLite writes.
+      lastProblem = 'BLE report was not acknowledged: $error';
       notifyListeners();
-      return; // Never ACK unpersisted or malformed messages.
     }
-    if (outcome != StoreOutcome.stored &&
-        outcome != StoreOutcome.alreadyStored) {
-      lastProblem = outcome == StoreOutcome.full
-          ? 'Local report queue full; device will retry'
-          : 'Conflicting report ID; cannot acknowledge';
-      notifyListeners();
-      return;
-    }
-    final ack = _ack;
-    if (!connected || ack == null) return;
-    final id = complete.transportId;
-    await ack.write([(id >> 8) & 0xff, id & 0xff], withoutResponse: false);
-    ReportUploader.instance.kick();
   }
 
   Future<void> disconnect() async {
@@ -141,7 +133,7 @@ class BleService extends ChangeNotifier {
     _dataSubscription = null;
     await _connectionSubscription?.cancel();
     _connectionSubscription = null;
-    _assembler.reset();
+    _processor.reset();
     final device = _device;
     _device = null;
     _ack = null;
