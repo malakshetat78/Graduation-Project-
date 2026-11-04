@@ -41,7 +41,7 @@ esp_err_t report_storage_open(transport_t *t) {
         uint16_t id = ((uint16_t)buffer[0] << 8) | buffer[1];
         uint16_t bytes_len = ((uint16_t)buffer[2] << 8) | buffer[3];
         if (!id || !bytes_len || bytes_len > REPORT_MAX ||
-            length != HEADER_SIZE + bytes_len || t->count >= REPORT_QUEUE)
+            length != (size_t)HEADER_SIZE + (size_t)bytes_len || t->count >= REPORT_QUEUE)
             return ESP_ERR_INVALID_SIZE;
 
         unsigned insertion = t->count;
