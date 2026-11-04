@@ -68,11 +68,19 @@ static void advertise(void) {
 }
 static void tick_cb(struct ble_npl_event *ev) {
     (void)ev;
-    while (xQueueReceive(ingress,&incoming,0)==pdTRUE) {
-        uint32_t old=transport.overflow_count;
-        if (!transport_enqueue(&transport,incoming.data,incoming.len))
-            ESP_LOGE(TAG,"report rejected: size or transport ID space exhausted; reboot required for IDs");
-        if (old!=transport.overflow_count) ESP_LOGW(TAG,"queue full: dropped oldest");
+    /* Peek first: a full transport queue must not consume ingress reports. */
+    static bool backpressure_logged=false;
+    while (xQueuePeek(ingress,&incoming,0)==pdTRUE) {
+        if (!transport_enqueue(&transport,incoming.data,incoming.len)) {
+            if (!backpressure_logged) {
+                ESP_LOGW(TAG,"transport full or ID exhausted; retaining ingress report (producer must retry if ingress fills)");
+                backpressure_logged=true;
+            }
+            break;
+        }
+        /* Only remove after the transport queue accepted its own copy. */
+        xQueueReceive(ingress,&incoming,0);
+        backpressure_logged=false;
     }
     uint8_t frame[FRAME_MAX];
     bool was_stalled=transport.stalled;
