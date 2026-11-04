@@ -46,12 +46,16 @@ A transient notify enqueue failure does not advance the fragment cursor; the hos
 tries that fragment again on the next tick. It has no independent retry limit;
 a disconnect or queue overflow can end that wait.
 
-Eight retained reports in RAM, including in flight. A full transport queue now
-rejects new admission without evicting unacknowledged reports; the ingress task
-retains its head until transport space opens. The separate four-entry FreeRTOS
-ingress queue rejects new producer submissions with ESP_ERR_TIMEOUT when full;
-the producer MUST retain/retry on that return code. Neither queue survives power
-loss. These changes prevent silent RAM-queue eviction, NOT power-loss data loss. Transport IDs never wrap in a boot: after 65535 reports
+Up to eight unacknowledged reports are persisted in the dedicated report_q NVS
+partition (partitions.csv). icvsp_ble_enqueue only succeeds after NVS commit.
+On boot, the transport FIFO is reconstructed in ID order; on matching ACK, the
+NVS entry is durably removed before accepting the ATT write. Full queue returns
+ESP_ERR_TIMEOUT without deleting old reports. Storage failures are returned to
+the producer; it MUST keep its signed bytes and retry. An ACK write failure
+means the peripheral may still have the report; Flutter must safely repeat its
+ACK or wait for BLE redelivery. A firmware restart begins a new BLE session
+and resets framing; backend deduplication always uses signed report identity.
+A changed partition table requires migration planning and backup before flashing. Transport IDs never wrap in a boot: after 65535 reports
 new admission is rejected and logged. A new boot is a new session. Do not reuse
 transport IDs as signed report IDs; backend idempotency uses the signed identity.
 
