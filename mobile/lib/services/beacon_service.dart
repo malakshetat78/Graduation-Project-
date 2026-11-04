@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'api_service.dart';
 
@@ -16,6 +17,11 @@ class BeaconService extends ChangeNotifier {
   static final BeaconService instance = BeaconService._();
 
   static const _vehicleId = String.fromEnvironment('BEACON_DEVICE_ID');
+  // Only for the local anonymous server, which refuses any token.
+  static const _sendToken = bool.fromEnvironment(
+    'BEACON_SEND_TOKEN',
+    defaultValue: true,
+  );
   static const _sendEvery = Duration(seconds: 10);
   static const _requestTimeout = Duration(seconds: 10);
   static const _maxBuffered = 3600;
@@ -31,6 +37,9 @@ class BeaconService extends ChangeNotifier {
   TripStatus status = TripStatus.stopped;
   int sentCount = 0;
   String? lastProblem;
+
+  /// True only while the ROVO device is connected and detecting.
+  bool detectorOn = false;
 
   bool get isActive => status == TripStatus.active;
   int get waitingCount => _buffer.length;
@@ -103,7 +112,7 @@ class BeaconService extends ChangeNotifier {
       'lon': position.longitude,
       'speed_mps': max(position.speed, 0.0),
       'heading_deg': position.heading % 360,
-      'detector_on': true,
+      'detector_on': detectorOn,
     });
 
     if (_buffer.length > _maxBuffered) {
@@ -111,6 +120,17 @@ class BeaconService extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Map<String, String> _headers() {
+    final headers = {'Content-Type': 'application/json'};
+    final token = Supabase.instance.client.auth.currentSession?.accessToken;
+
+    if (_sendToken && token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
   }
 
   Future<void> _flush() async {
@@ -123,7 +143,7 @@ class BeaconService extends ChangeNotifier {
       final response = await _client
           .post(
             Uri.parse('${ApiService.baseUrl}/beacons'),
-            headers: {'Content-Type': 'application/json'},
+            headers: _headers(),
             body: jsonEncode(batch),
           )
           .timeout(_requestTimeout);
@@ -132,6 +152,9 @@ class BeaconService extends ChangeNotifier {
         _buffer.removeRange(0, min(batch.length, _buffer.length));
         sentCount += batch.length;
         lastProblem = null;
+      } else if (response.statusCode == 401) {
+        // Keep the positions: they can be sent after signing in again.
+        lastProblem = 'Sign in again to share your position.';
       } else if (_finalStatuses.contains(response.statusCode)) {
         _buffer.removeRange(0, min(batch.length, _buffer.length));
         lastProblem = 'Server refused positions: ${response.statusCode}';
