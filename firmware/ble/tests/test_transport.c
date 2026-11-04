@@ -37,12 +37,21 @@ int main(void) {
     assert(transport_frame(&t,6000,out)==0 && t.stalled && t.count==1);
     assert(transport_ack(&t,1)); // late ACK remains useful
     transport_init(&t);
-    for(unsigned i=0;i<REPORT_QUEUE+1;++i) assert(transport_enqueue(&t,payload,1));
-    assert(t.count==REPORT_QUEUE && t.items[0].id==2 && t.overflow_count==1);
+    for(unsigned i=0;i<REPORT_QUEUE;++i) assert(transport_enqueue(&t,payload,1));
+    uint32_t next_id_before_full=t.next_id;
+    assert(!transport_enqueue(&t,payload,1)); // full queue rejects newest
+    assert(t.count==REPORT_QUEUE && t.items[0].id==1);
+    assert(t.next_id==next_id_before_full && t.overflow_count==0); // no eviction or ID burn
+    transport_link(&t,true,247);
+    assert(transport_frame(&t,0,out)>0); transport_sent(&t,0);
+    assert(transport_ack(&t,1)); // persisted by receiver, space becomes available
+    assert(transport_enqueue(&t,payload,1));
+    assert(t.count==REPORT_QUEUE && t.items[0].id==2);
+    assert(t.items[t.count-1].id==next_id_before_full);
     transport_link(&t,true,247);
     transport_frame(&t,0,out); transport_sent(&t,0);
     transport_link(&t,false,23); assert(t.count==REPORT_QUEUE);
     transport_link(&t,true,23); assert(t.pos==0 && t.attempts==0);
     t.next_id=65536; assert(!transport_enqueue(&t,payload,1));
-    puts("PASS: byte roundtrip/MTU, ACK, retries, stalls, disconnect, overflow, ID exhaustion");
+    puts("PASS: byte roundtrip/MTU, ACK, retries, stalls, disconnect, full-queue backpressure, ID exhaustion");
 }
