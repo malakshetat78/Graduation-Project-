@@ -104,8 +104,27 @@ gcc -std=c11 -Wall -Wextra -Werror -I main main/transport.c tests/test_transport
 راجع TEST_RESULTS.md لما تم اختباره، وPROTOCOL.md للعقد الكامل وحدود الطوابير.
 عند امتلاء طابور النقل تُحتفظ الرسائل في ingress حتى تمتلئ هي الأخرى؛ وعندها
 icvsp_ble_enqueue ترجع ESP_ERR_TIMEOUT وعلى مصدر البلاغ الاحتفاظ به وإعادة المحاولة.
-إعادة تشغيل البورد تمسح طوابير RAM؛ التخزين الدائم والربط بمستخدم آمن خطوات
-لاحقة. ACK غير محمي بهوية مالك في هذه النسخة؛ ليست جاهزة للاستخدام الميداني.
+الآن تقارير BLE غير المؤكدة محفوظة في NVS مخصص ("report_q") قبل نجاح
+icvsp_ble_enqueue؛ تُستعاد عند بدء البورد. عند وصول ACK مطابق، يُحذف السجل من NVS
+ويُؤكَّد حذفُه قبل قبول BLE ACK. عند فشل التخزين لا يُعتبر البلاغ مستلمًا.
+الطابور الدائم محدد بثمانية بلاغات؛ عند الامتلاء ترجع ESP_ERR_TIMEOUT
+ولازم المنتج يحتفظ بالتقرير ويجرب تاني.
+
+**تنبيه تحديث الفلاش:** partitions.csv جديد؛ ده تغيير في partition table،
+مش مجرد تحديث ملف البرنامج. خدي نسخة احتياطية من أي NVS/مفاتيح/هوية موجودة
+على البورد، وراجعي تعارض تقسيم الذاكرة قبل التفليش. متستخدميش erase-flash
+كحل تلقائي. إعداد التقرير هنا مخصص لنموذج الاختبار، مش نشر إنتاجي.
+
+اختبار التخزين الدائم مع NVS Mock على الكمبيوتر (من firmware/ble):
+
+```powershell
+gcc -std=c11 -Wall -Wextra -Werror -I tests/nvs_mock -I main main/report_storage.c tests/test_storage.c -o storage_test.exe
+.\\storage_test.exe
+```
+
+شغلي idf.py build من بيئة ESP-IDF واختبري restart/فصل الكهرباء على البورد،
+لأن اختبار Mock مش بيثبت نجاح الكتابة في الفلاش الحقيقي.
+الربط بمستخدم آمن وتأمين BLE لسه مطلوبين. ACK غير محمي بهوية مالك في هذه النسخة؛ ليست جاهزة للاستخدام الميداني.
 
 ## Sources used during implementation
 - https://github.com/espressif/esp-idf/tree/master/examples/bluetooth/nimble/bleprph
