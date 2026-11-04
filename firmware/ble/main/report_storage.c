@@ -103,3 +103,9 @@ esp_err_t report_storage_remove(uint16_t id) {
     }
     return ESP_ERR_NOT_FOUND;
 }
+
+void report_storage_close(void) {
+    if (!opened) return;
+    nvs_close(handle);
+    opened = false;
+}
