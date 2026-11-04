@@ -6,6 +6,10 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>ROVO connects to your road-hazard detection device to receive signed reports.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>ROVO uses Bluetooth to receive reports from your detection device.</string>
 	<key>CFBundleDisplayName</key>
 	<string>Rovo Mobile</string>
 	<key>CFBundleExecutable</key>
