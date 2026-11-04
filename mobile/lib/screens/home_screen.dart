@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
-import 'map_preview.dart';
+import 'live_map.dart';
 import 'hazards_screen.dart';
 import 'devices_screen.dart';
 import 'reports_screen.dart';
@@ -128,10 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                MapPreview(onHazardTap: _openAlert),
+                const LiveMap(),
                 Positioned(
                   right: 16,
-                  bottom: 16,
+                  bottom: 64,
                   child: FloatingActionButton.small(
                     tooltip: 'Preview road alert',
                     backgroundColor: AppColors.turquoise,
