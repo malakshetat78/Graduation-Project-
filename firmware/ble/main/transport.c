@@ -13,7 +13,8 @@ void transport_init(transport_t *t) {
 }
 bool transport_enqueue(transport_t *t, const uint8_t *data, size_t len) {
     if (!data || !len || len>REPORT_MAX || t->next_id>65535) return false;
-    if (t->count==REPORT_QUEUE) { pop(t); ++t->overflow_count; }
+    /* Never evict an unacknowledged report. Backpressure the producer. */
+    if (t->count==REPORT_QUEUE) return false;
     report_t *r=&t->items[t->count++];
     r->id=(uint16_t)t->next_id++; r->len=(uint16_t)len;
     memcpy(r->data,data,len); return true;
