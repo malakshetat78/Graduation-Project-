@@ -131,6 +131,13 @@ class ReportQueue extends ChangeNotifier {
     return Duration(milliseconds: remaining > 0 ? remaining : 0);
   }
 
+  Future<void> makeQueuedDueNow() async {
+    final db = await _db;
+    await db.update('reports', {'retry_at': 0},
+      where: 'state = ?', whereArgs: [stateQueued]);
+    notifyListeners();
+  }
+
   Future<void> markSent(int id, String result) =>
       _finish(id, stateSent, result);
 
