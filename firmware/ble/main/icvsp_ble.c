@@ -1,7 +1,8 @@
 #include <assert.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
-#include "freertos/queue.h"
+#include "freertos/semphr.h"
+#include "report_storage.h"
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "nimble/nimble_port.h"
@@ -19,11 +20,10 @@ static const ble_uuid128_t service_uuid=BLE_UUID128_INIT(UUID_BYTES(0x01));
 static const ble_uuid128_t report_uuid=BLE_UUID128_INIT(UUID_BYTES(0x02));
 static const ble_uuid128_t ack_uuid=BLE_UUID128_INIT(UUID_BYTES(0x03));
 static transport_t transport;
-static QueueHandle_t ingress;
+static SemaphoreHandle_t queue_mutex;
 static uint16_t connection=BLE_HS_CONN_HANDLE_NONE, report_handle;
 static uint8_t address_type;
 static struct ble_npl_callout tick;
-static report_t incoming;
 static int gap_event(struct ble_gap_event *event, void *arg);
 
 static int access_report(uint16_t conn, uint16_t attr,
@@ -35,9 +35,23 @@ static int access_report(uint16_t conn, uint16_t attr,
     if (OS_MBUF_PKTLEN(ctxt->om)!=2 || os_mbuf_copydata(ctxt->om,0,2,ack)!=0)
         return BLE_ATT_ERR_INVALID_ATTR_VALUE_LEN;
     uint16_t id=((uint16_t)ack[0]<<8)|ack[1];
-    if (!transport_ack(&transport,id)) return BLE_ATT_ERR_UNLIKELY;
+    xSemaphoreTake(queue_mutex,portMAX_DELAY);
+    /* Persist removal first. On storage failure, reject ACK and retry later. */
+    if (!transport.up || !transport.waiting || !transport.count ||
+        transport.items[0].id!=id) {
+        xSemaphoreGive(queue_mutex);
+        return BLE_ATT_ERR_UNLIKELY;
+    }
+    esp_err_t err=report_storage_remove(id);
+    if (err!=ESP_OK) {
+        ESP_LOGE(TAG,"ACK persistence failed for %u: %s",id,esp_err_to_name(err));
+        xSemaphoreGive(queue_mutex);
+        return BLE_ATT_ERR_UNLIKELY;
+    }
+    bool ok=transport_ack(&transport,id);
     ESP_LOGI(TAG,"ACK report=%u remaining=%u",id,transport.count);
-    return 0;
+    xSemaphoreGive(queue_mutex);
+    return ok ? 0 : BLE_ATT_ERR_UNLIKELY;
 }
 static int notify_access(uint16_t c,uint16_t a,struct ble_gatt_access_ctxt *x,void *v) {
     (void)c;(void)a;(void)x;(void)v; return BLE_ATT_ERR_READ_NOT_PERMITTED;
@@ -68,20 +82,7 @@ static void advertise(void) {
 }
 static void tick_cb(struct ble_npl_event *ev) {
     (void)ev;
-    /* Peek first: a full transport queue must not consume ingress reports. */
-    static bool backpressure_logged=false;
-    while (xQueuePeek(ingress,&incoming,0)==pdTRUE) {
-        if (!transport_enqueue(&transport,incoming.data,incoming.len)) {
-            if (!backpressure_logged) {
-                ESP_LOGW(TAG,"transport full or ID exhausted; retaining ingress report (producer must retry if ingress fills)");
-                backpressure_logged=true;
-            }
-            break;
-        }
-        /* Only remove after the transport queue accepted its own copy. */
-        xQueueReceive(ingress,&incoming,0);
-        backpressure_logged=false;
-    }
+    xSemaphoreTake(queue_mutex,portMAX_DELAY);
     uint8_t frame[FRAME_MAX];
     bool was_stalled=transport.stalled;
     uint64_t now=(uint64_t)(esp_timer_get_time()/1000);
@@ -97,6 +98,7 @@ static void tick_cb(struct ble_npl_event *ev) {
     }
     if (!was_stalled && transport.stalled)
         ESP_LOGW(TAG,"ACK retries exhausted: head retained until resubscribe/reconnect or overflow");
+    xSemaphoreGive(queue_mutex);
     ble_npl_callout_reset(&tick,ble_npl_time_ms_to_ticks32(30));
 }
 static int gap_event(struct ble_gap_event *ev,void *arg) {
@@ -110,11 +112,16 @@ static int gap_event(struct ble_gap_event *ev,void *arg) {
         break;
     case BLE_GAP_EVENT_DISCONNECT:
         connection=BLE_HS_CONN_HANDLE_NONE;
-        transport_link(&transport,false,23); advertise(); break;
+        xSemaphoreTake(queue_mutex,portMAX_DELAY);
+        transport_link(&transport,false,23);
+        xSemaphoreGive(queue_mutex);
+        advertise(); break;
     case BLE_GAP_EVENT_SUBSCRIBE:
         if(ev->subscribe.conn_handle==connection && ev->subscribe.attr_handle==report_handle) {
+            xSemaphoreTake(queue_mutex,portMAX_DELAY);
             transport_link(&transport,ev->subscribe.cur_notify,ble_att_mtu(connection));
             ESP_LOGI(TAG,"Notifications=%d payload/fragment=%u",ev->subscribe.cur_notify,transport.room);
+            xSemaphoreGive(queue_mutex);
         }
         break;
     case BLE_GAP_EVENT_MTU:
@@ -127,7 +134,10 @@ static int gap_event(struct ble_gap_event *ev,void *arg) {
     return 0;
 }
 static void on_reset(int reason) {
-    connection=BLE_HS_CONN_HANDLE_NONE; transport_link(&transport,false,23);
+    connection=BLE_HS_CONN_HANDLE_NONE;
+    xSemaphoreTake(queue_mutex,portMAX_DELAY);
+    transport_link(&transport,false,23);
+    xSemaphoreGive(queue_mutex);
     ESP_LOGE(TAG,"host reset=%d",reason);
 }
 static void on_sync(void) {
@@ -140,12 +150,20 @@ static void host_task(void *arg) {
     (void)arg; nimble_port_run(); nimble_port_freertos_deinit();
 }
 esp_err_t icvsp_ble_start(void) {
-    if (ingress) return ESP_ERR_INVALID_STATE;
-    ingress=xQueueCreate(4,sizeof(report_t));
-    if (!ingress) return ESP_ERR_NO_MEM;
+    if (queue_mutex) return ESP_ERR_INVALID_STATE;
+    queue_mutex=xSemaphoreCreateMutex();
+    if (!queue_mutex) return ESP_ERR_NO_MEM;
     transport_init(&transport);
-    esp_err_t err=nimble_port_init();
-    if(err!=ESP_OK) { vQueueDelete(ingress); ingress=NULL; return err; }
+    esp_err_t err=report_storage_open(&transport);
+    if (err!=ESP_OK) {
+        ESP_LOGE(TAG,"persistent queue initialization failed: %s",esp_err_to_name(err));
+        vSemaphoreDelete(queue_mutex);
+        queue_mutex=NULL;
+        return err;  /* Fail closed; never start with an empty RAM queue. */
+    }
+    ESP_LOGI(TAG,"Recovered %u unacknowledged report(s) from NVS",transport.count);
+    err=nimble_port_init();
+    if(err!=ESP_OK) return err;
     ble_hs_cfg.sync_cb=on_sync; ble_hs_cfg.reset_cb=on_reset;
     ble_svc_gap_init(); ble_svc_gatt_init();
     int rc=ble_gatts_count_cfg(services); assert(rc==0);
@@ -157,8 +175,30 @@ esp_err_t icvsp_ble_start(void) {
     return ESP_OK;
 }
 esp_err_t icvsp_ble_enqueue(const uint8_t *bytes,size_t length) {
-    if (!ingress) return ESP_ERR_INVALID_STATE;
+    if (!queue_mutex) return ESP_ERR_INVALID_STATE;
     if (!bytes || !length || length>REPORT_MAX) return ESP_ERR_INVALID_ARG;
-    report_t item={.len=(uint16_t)length}; memcpy(item.data,bytes,length);
-    return xQueueSend(ingress,&item,0)==pdTRUE ? ESP_OK : ESP_ERR_TIMEOUT;
+    xSemaphoreTake(queue_mutex,portMAX_DELAY);
+    /* Producer retry of the same still-pending signed bytes is idempotent. */
+    for (unsigned i=0; i<transport.count; ++i) {
+        report_t *item=&transport.items[i];
+        if (item->len==length && memcmp(item->data,bytes,length)==0) {
+            xSemaphoreGive(queue_mutex);
+            return ESP_OK;
+        }
+    }
+    if (transport.count>=REPORT_QUEUE || transport.next_id>65535) {
+        xSemaphoreGive(queue_mutex);
+        return ESP_ERR_TIMEOUT; /* Producer MUST retain and retry. */
+    }
+    uint16_t id=(uint16_t)transport.next_id;
+    esp_err_t err=report_storage_append(id,bytes,length);
+    if (err==ESP_OK) {
+        /* Same mutex keeps the NVS record and transport state in lockstep. */
+        bool added=transport_enqueue(&transport,bytes,length);
+        assert(added);
+    } else {
+        ESP_LOGE(TAG,"cannot persist report %u: %s",id,esp_err_to_name(err));
+    }
+    xSemaphoreGive(queue_mutex);
+    return err;
 }
