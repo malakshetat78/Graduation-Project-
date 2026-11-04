@@ -1,0 +1,7 @@
+menu "ICVSP BLE"
+config ICVSP_TRANSPORT_DEMO
+    bool "Queue one UNSIGNED 706-byte transport test at boot"
+    default n
+    help
+        Diagnostic only; contains no signature and must never be accepted as a hazard.
+endmenu
