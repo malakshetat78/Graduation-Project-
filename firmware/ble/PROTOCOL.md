@@ -46,10 +46,12 @@ A transient notify enqueue failure does not advance the fragment cursor; the hos
 tries that fragment again on the next tick. It has no independent retry limit;
 a disconnect or queue overflow can end that wait.
 
-Eight retained reports in RAM, including in flight. Overflow drops oldest with a
-warning. Separate four-entry FreeRTOS ingress queue rejects newest with
-ESP_ERR_TIMEOUT if full; producer must retain/retry on that return code. Neither
-queue survives power loss. Transport IDs never wrap in a boot: after 65535 reports
+Eight retained reports in RAM, including in flight. A full transport queue now
+rejects new admission without evicting unacknowledged reports; the ingress task
+retains its head until transport space opens. The separate four-entry FreeRTOS
+ingress queue rejects new producer submissions with ESP_ERR_TIMEOUT when full;
+the producer MUST retain/retry on that return code. Neither queue survives power
+loss. These changes prevent silent RAM-queue eviction, NOT power-loss data loss. Transport IDs never wrap in a boot: after 65535 reports
 new admission is rejected and logged. A new boot is a new session. Do not reuse
 transport IDs as signed report IDs; backend idempotency uses the signed identity.
 
