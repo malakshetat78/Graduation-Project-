@@ -23,6 +23,8 @@ class ReportSummary {
 
 class ReportQueue extends ChangeNotifier {
   ReportQueue._();
+  @visibleForTesting
+  ReportQueue.withDatabaseForTesting(Database db) { _database = Future.value(db); }
   static final ReportQueue instance = ReportQueue._();
 
   static const stateQueued = 'queued';
