@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
 import 'map_preview.dart';
@@ -24,6 +25,17 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(builder: (context) => const AlertScreen()),
     );
+  }
+
+  String get _firstName {
+    final name =
+        Supabase.instance.client.auth.currentUser?.userMetadata?['full_name'];
+
+    if (name is String && name.trim().isNotEmpty) {
+      return name.trim().split(' ').first;
+    }
+
+    return 'Driver';
   }
 
   @override
@@ -88,21 +100,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(24, 24, 24, 18),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hi, User',
-                style: TextStyle(
+                'Hi, $_firstName',
+                style: const TextStyle(
                   color: AppColors.navy,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 6),
-              Text(
+              const SizedBox(height: 6),
+              const Text(
                 'Your road. A little safer.',
                 style: TextStyle(color: AppColors.navy, fontSize: 15),
               ),
