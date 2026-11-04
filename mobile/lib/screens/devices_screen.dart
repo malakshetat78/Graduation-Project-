@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/app_colors.dart';
 import '../services/device_service.dart';
+import '../services/ble_service.dart';
 
 class DevicesScreen extends StatefulWidget {
   const DevicesScreen({super.key});
@@ -15,6 +16,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
   final _deviceIdController = TextEditingController();
   final _codeController = TextEditingController();
   final DeviceService _service = DeviceService.instance;
+  final BleService _ble = BleService.instance;
 
   bool _linking = false;
   String? _error;
@@ -190,10 +192,30 @@ class _DevicesScreenState extends State<DevicesScreen> {
               ),
             ),
             const SizedBox(height: 14),
-            const Text(
-              'Bluetooth connection is not active yet.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFF65758A), fontSize: 12),
+            const SizedBox(height: 12),
+            ListenableBuilder(
+              listenable: _ble,
+              builder: (context, _) => Column(
+                children: [
+                  Text(_ble.connected ? 'BLE device connected'
+                      : _ble.connecting ? 'Searching for ESP32…'
+                      : 'BLE device not connected'),
+                  if (_ble.lastProblem != null)
+                    Text(_ble.lastProblem!,
+                        style: const TextStyle(color: AppColors.coral)),
+                  const SizedBox(height: 8),
+                  OutlinedButton(
+                    onPressed: _ble.connecting
+                        ? null
+                        : _ble.connected ? _ble.disconnect : _ble.connect,
+                    child: Text(_ble.connected ? 'Disconnect BLE'
+                        : _ble.connecting ? 'Connecting…' : 'Connect ESP32 BLE'),
+                  ),
+                  const Text('BLE demo transport is not yet paired or owner-authenticated.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Color(0xFF65758A), fontSize: 12)),
+                ],
+              ),
             ),
           ],
         );
