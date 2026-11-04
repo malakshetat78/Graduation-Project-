@@ -49,6 +49,37 @@ void main() {
     await db.close();
   });
 
+  test('backoff persists and manual retry restores eligibility', () async {
+    final db = await databaseFactoryFfi.openDatabase(inMemoryDatabasePath,
+      options: OpenDatabaseOptions(version: 2, onCreate: (db, _) async {
+        await db.execute('''
+          CREATE TABLE reports (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            device_id TEXT NOT NULL, event_id TEXT NOT NULL,
+            type TEXT NOT NULL, line BLOB NOT NULL,
+            state TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0,
+            last_result TEXT, created_at INTEGER NOT NULL,
+            expires_at INTEGER NOT NULL, retry_at INTEGER NOT NULL DEFAULT 0,
+            UNIQUE (device_id, event_id)
+          )
+        ''');
+      }));
+    final queue = ReportQueue.withDatabaseForTesting(db);
+    expect(await queue.store(signedFixture('backoff')), StoreOutcome.stored);
+    final pending = await queue.nextQueued();
+    expect(pending, isNotNull);
+    await queue.recordFailure(pending!.id, 'offline', const Duration(minutes: 5));
+    expect(await queue.nextQueued(), isNull);
+    expect((await queue.nextWait())!.inSeconds, greaterThan(200));
+    await queue.makeQueuedDueNow();
+    expect((await queue.nextQueued())!.id, pending.id);
+    await queue.markRejected(pending.id, 'bad_signature');
+    final history = await db.query('reports', columns: ['line', 'state']);
+    expect(history.single['line'], isNotEmpty);
+    expect(history.single['state'], ReportQueue.stateRejected);
+    await db.close();
+  });
+
   test('full queue never evicts an unsent report', () async {
     final db = await databaseFactoryFfi.openDatabase(inMemoryDatabasePath,
       options: OpenDatabaseOptions(version: 2, onCreate: (db, _) async {
