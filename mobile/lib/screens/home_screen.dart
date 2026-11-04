@@ -7,6 +7,7 @@ import 'devices_screen.dart';
 import 'reports_screen.dart';
 import 'account_screen.dart';
 import 'alert_screen.dart';
+import 'trip_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -131,6 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+
+        const TripCard(),
 
         Padding(
           padding: const EdgeInsets.all(20),
