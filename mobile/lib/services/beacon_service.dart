@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'api_service.dart';
+import 'device_service.dart';
 
 enum TripStatus { stopped, starting, active, noDevice, noLocation }
 
@@ -16,7 +17,6 @@ class BeaconService extends ChangeNotifier {
 
   static final BeaconService instance = BeaconService._();
 
-  static const _vehicleId = String.fromEnvironment('BEACON_DEVICE_ID');
   // Only for the local anonymous server, which refuses any token.
   static const _sendToken = bool.fromEnvironment(
     'BEACON_SEND_TOKEN',
@@ -33,6 +33,7 @@ class BeaconService extends ChangeNotifier {
   StreamSubscription<Position>? _positions;
   Timer? _timer;
   bool _sending = false;
+  String _vehicleId = '';
 
   TripStatus status = TripStatus.stopped;
   int sentCount = 0;
@@ -52,12 +53,18 @@ class BeaconService extends ChangeNotifier {
   Future<void> start() async {
     if (isActive || status == TripStatus.starting) return;
 
+    _setStatus(TripStatus.starting);
+
+    if (DeviceService.instance.devices.isEmpty) {
+      await DeviceService.instance.load();
+    }
+
+    _vehicleId = DeviceService.instance.vehicleId;
+
     if (_vehicleId.isEmpty) {
       _setStatus(TripStatus.noDevice);
       return;
     }
-
-    _setStatus(TripStatus.starting);
 
     if (!await _locationAllowed()) {
       _setStatus(TripStatus.noLocation);
