@@ -25,14 +25,19 @@ class ReportUploader {
   int _failures = 0;
 
   void kick() {
-    // A new BLE delivery can be processed even if older items are delayed.
-    if (_timer?.isActive ?? false) return;
+    // New deliveries may be due immediately, even when old rows are delayed.
+    _timer?.cancel();
+    _timer = null;
     unawaited(_run());
   }
 
   void retryNow() {
     _timer?.cancel();
-    unawaited(_run());
+    _timer = null;
+    unawaited(() async {
+      await _queue.makeQueuedDueNow();
+      await _run();
+    }());
   }
 
   Future<void> _run() async {
