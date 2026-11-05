@@ -8,27 +8,38 @@ import 'api_service.dart';
 import 'report_queue.dart';
 
 class ReportUploader {
-  ReportUploader._();
-  static final ReportUploader instance = ReportUploader._();
+  ReportUploader({ReportQueue? queue, http.Client? client, Random? random})
+      : _queue = queue ?? ReportQueue.instance,
+        _client = client ?? http.Client(),
+        _random = random ?? Random();
+  static final ReportUploader instance = ReportUploader();
 
   static const _requestTimeout = Duration(seconds: 10);
   static const _firstDelayMs = 2000;
   static const _maxDelayMs = 300000;
   static const _finalStatuses = {400, 401, 403, 409, 413, 422};
 
-  final ReportQueue _queue = ReportQueue.instance;
-  final http.Client _client = http.Client();
-  final Random _random = Random();
+  final ReportQueue _queue;
+  final http.Client _client;
+  final Random _random;
   Timer? _timer;
   bool _running = false;
   bool _runAgain = false;
   int _failures = 0;
 
+  static Duration retryDelay(int failures, double randomUnit) {
+    final base = min(_firstDelayMs * (1 << min(failures, 8)), _maxDelayMs);
+    return Duration(milliseconds: (base * (0.8 + randomUnit * 0.4)).round());
+  }
+
+  void dispose() => _timer?.cancel();
+  Duration? lastWait;
+
   void kick() {
     // New deliveries may be due immediately, even when old rows are delayed.
     _timer?.cancel();
     _timer = null;
-    unawaited(_run());
+    unawaited(run());
   }
 
   void retryNow() {
@@ -36,11 +47,11 @@ class ReportUploader {
     _timer = null;
     unawaited(() async {
       await _queue.makeQueuedDueNow();
-      await _run();
+      await run();
     }());
   }
 
-  Future<void> _run() async {
+  Future<void> run() async {
     if (_running) {
       _runAgain = true;
       return;
@@ -63,7 +74,7 @@ class ReportUploader {
     }
     if (_runAgain) {
       _runAgain = false;
-      unawaited(_run());
+      unawaited(run());
       return;
     }
     final next = await _queue.nextWait();
@@ -71,9 +82,9 @@ class ReportUploader {
   }
 
   Duration _backoff() {
-    final base = min(_firstDelayMs * (1 << min(_failures, 8)), _maxDelayMs);
+    final delay = retryDelay(_failures, _random.nextDouble());
     _failures++;
-    return Duration(milliseconds: (base * (0.8 + _random.nextDouble() * 0.4)).round());
+    return delay;
   }
 
   Future<Duration?> _send(QueuedReport report) async {
@@ -146,9 +157,10 @@ class ReportUploader {
     // No busy-loop when persisted deadline is nearly due.
     final effective = delay < const Duration(milliseconds: 100)
         ? const Duration(milliseconds: 100) : delay;
+    lastWait = effective;
     _timer = Timer(effective, () {
       _timer = null;
-      unawaited(_run());
+      unawaited(run());
     });
   }
 }

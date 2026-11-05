@@ -79,6 +79,8 @@ class BeaconService extends ChangeNotifier {
         accuracy: LocationAccuracy.high,
         distanceFilter: 0,
         intervalDuration: const Duration(seconds: 1),
+        // Keeps working if the user declines Google Location Accuracy.
+        forceLocationManager: true,
       ),
     ).listen(_addPosition, onError: (_) => _setStatus(TripStatus.noLocation));
 
