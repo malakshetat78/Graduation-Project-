@@ -37,13 +37,22 @@ class DriverLocation {
       locationSettings: AndroidSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 0,
+        // Works when the driver declines Google's Location Accuracy prompt.
+        forceLocationManager: true,
         intervalDuration: const Duration(seconds: 1),
       ),
     ).map(_fix);
   }
 
   static Future<DriverFix> current() async {
-    return _fix(await Geolocator.getCurrentPosition());
+    return _fix(
+      await Geolocator.getCurrentPosition(
+        locationSettings: AndroidSettings(
+          accuracy: LocationAccuracy.high,
+          forceLocationManager: true,
+        ),
+      ),
+    );
   }
 
   static DriverFix _fix(Position position) {
