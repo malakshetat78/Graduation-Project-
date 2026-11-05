@@ -28,9 +28,9 @@ class ReportSummary {
 }
 
 class ReportQueue extends ChangeNotifier {
-  ReportQueue._();
+  ReportQueue({String? databasePath}) : _databasePath = databasePath;
 
-  static final ReportQueue instance = ReportQueue._();
+  static final ReportQueue instance = ReportQueue();
 
   static const stateQueued = 'queued';
   static const stateSent = 'sent';
@@ -41,12 +41,15 @@ class ReportQueue extends ChangeNotifier {
   static const _speedBumpLifetime = Duration(days: 13);
   static const _historyLifetime = Duration(days: 7);
 
+  final String? _databasePath;
+
   Future<Database>? _database;
 
   Future<Database> get _db => _database ??= _open();
 
   Future<Database> _open() async {
-    final path = p.join(await getDatabasesPath(), 'rovo_reports.db');
+    final path =
+        _databasePath ?? p.join(await getDatabasesPath(), 'rovo_reports.db');
 
     return openDatabase(
       path,
