@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite/sqflite.dart' show Sqflite;
 import 'package:rovo_mobile/services/report_queue.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
