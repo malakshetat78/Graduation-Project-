@@ -9,12 +9,11 @@ class CompleteBleReport {
 }
 
 class BleReportAssembler {
-  BleReportAssembler({Duration timeout = const Duration(seconds: 15)})
-      : _timeout = timeout;
+  BleReportAssembler({this.timeout = const Duration(seconds: 15)});
 
   static const maxReportBytes = 2048;
   static const maxFragments = 128; // 2048 / 16 at MTU 23
-  final Duration _timeout;
+  final Duration timeout;
   int? _transportId;
   int? _total;
   final Map<int, Uint8List> _pieces = {};
@@ -39,7 +38,7 @@ class BleReportAssembler {
     if (part.isEmpty || part.length > 240) {
       throw const FormatException('Invalid fragment payload');
     }
-    if (_started != null && now.difference(_started!) > _timeout) reset();
+    if (_started != null && now.difference(_started!) > timeout) reset();
     if (_transportId != id) {
       // Stop-and-wait peripheral: only one report in flight. A new ID
       // invalidates any incomplete report, without acknowledging it.
