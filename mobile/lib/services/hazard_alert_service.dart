@@ -234,6 +234,9 @@ class HazardAlertService extends ChangeNotifier {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $token',
+              // Asking every 5 s can reuse a connection just as the server
+              // closes it after 5 s idle, which fails the request.
+              'Connection': 'close',
             },
             body: jsonEncode({
               'lat': fix.lat,

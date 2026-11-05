@@ -83,6 +83,7 @@ void main() {
     final request = requests.single;
     expect(request.url.path, '/hazards/ahead');
     expect(request.headers['Authorization'], 'Bearer user-token');
+    expect(request.headers['Connection'], 'close');
     expect(jsonDecode(request.body), {
       'lat': 30.0,
       'lon': 31.0,
