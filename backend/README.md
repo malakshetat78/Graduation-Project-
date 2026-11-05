@@ -32,7 +32,10 @@ uvicorn --factory icvsp_backend.app:create_app
 | `GET /admin/overview`, `POST /admin/evaluate`, `POST /admin/settle` | admin | Operator view used by `/dashboard`; run the evaluator now |
 | `GET /health`, `GET /ready` | anyone | Process alive; database reachable |
 
-"admin" is `X-Admin-Token` (provisioning) or a signed-in administrator.
+"admin" is `X-Admin-Token` (provisioning) or a signed-in administrator. A signed-in user who is not an administrator gets
+`403`; `401` is only for missing or invalid credentials (the app signs the user out on a 401). Failed sign-ins and refusals
+by role are logged on the `icvsp.security` logger (time, reason, endpoint, client address, never the token).
+`ICVSP_ALLOW_ANONYMOUS=1` together with `SUPABASE_URL` stops the server at start: anonymous mode is for a machine without sign-in.
 
 ## Rate limits (FR-SEC-20)
 

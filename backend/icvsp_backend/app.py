@@ -38,6 +38,7 @@ PUBLIC_RULES = {("POST", "/reports"): "reports", ("GET", "/health"): "health", (
                 ("GET", "/openapi.json"): "pages"}
 MAX_BEACONS = 3600
 log = logging.getLogger("icvsp.api")
+security_log = logging.getLogger("icvsp.security")      # failed sign-ins and refusals (FR-SEC-21); never tokens or passwords
 
 Latitude = Field(ge=-90, le=90, allow_inf_nan=False)
 Longitude = Field(ge=-180, le=180, allow_inf_nan=False)
@@ -117,6 +118,10 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
         verifier = SupabaseVerifier(os.environ["SUPABASE_URL"], os.environ.get("SUPABASE_JWT_SECRET"))
     if verifier is None and not allow_anonymous:
         raise RuntimeError("set SUPABASE_URL for user sign-in (or ICVSP_ALLOW_ANONYMOUS=1 on a development machine)")
+    if verifier is not None and allow_anonymous:
+        # the anonymous switch would let every request without a token through, and treat it as an administrator's
+        raise RuntimeError("ICVSP_ALLOW_ANONYMOUS=1 and user sign-in (SUPABASE_URL) are both set: the API would be open "
+                           "to anyone without a token. Unset ICVSP_ALLOW_ANONYMOUS, or SUPABASE_URL on a development machine")
     if worker_interval is None:
         worker_interval = float(os.environ.get("ICVSP_WORKER_INTERVAL_S", "10")) if store is None else 0.0
     # a development run without sign-in (the simulation, a laptop demo) plays requests as fast as it can: no limits
@@ -169,16 +174,24 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
         return JSONResponse({"detail": "storage unavailable, retry later", "code": "storage_unavailable",
                              "retryable": True}, 503, headers={"Retry-After": str(RETRY_AFTER_S)})
 
+    def deny(request: Request, status: int, reason: str, detail: str | None = None) -> HTTPException:
+        """Records the failed attempt (time, reason, endpoint, client address; never the token) and returns the answer."""
+        security_log.warning("auth_failure ts=%.0f status=%d reason=%s method=%s path=%s client=%s", clock(), status,
+                             reason, request.method, request.url.path, limits.client_ip(request))
+        return HTTPException(status, detail or reason, headers={"WWW-Authenticate": "Bearer"} if status == 401 else None)
+
     def current_user(request: Request, authorization: str | None = Header(default=None)) -> User | None:
         """None only in anonymous (development) mode with no token sent."""
         if authorization is None and allow_anonymous:
             return None
         scheme, _, credentials = (authorization or "").partition(" ")
         if scheme.lower() != "bearer" or not credentials or verifier is None:
-            raise HTTPException(401, "sign-in required", headers={"WWW-Authenticate": "Bearer"})
+            raise deny(request, 401, "malformed credentials" if authorization else "missing credentials",
+                       "sign-in required")
         try:
             user_id = verifier.verify(credentials.strip())
         except InvalidToken:
+            deny(request, 401, "invalid or expired token")
             # over the limit the 401 becomes a 429; a valid token is never refused because of other people's bad ones
             if retry_after := limits.failure("bad_token", f"ip:{limits.client_ip(request)}"):
                 raise RateLimited(retry_after) from None
@@ -189,7 +202,7 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
         limits.check("user", f"user:{user_id}")     # before the database lookup, so a flood does not reach it
         profile = svc.store.profile(user_id)
         if profile is None:
-            raise HTTPException(403, "no profile for this account")
+            raise deny(request, 403, "no profile for this account")
         return User(user_id, profile["role"])
 
     def require_signed_in(user: User | None = Depends(current_user)) -> User:
@@ -205,11 +218,16 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
             limits.peek("bad_admin_token", ip)      # guessing the token: over the limit it is not even compared
             if token and hmac.compare_digest(x_admin_token.encode(), token.encode()):
                 return
+            deny(request, 401, "invalid admin token")
             if retry_after := limits.failure("bad_admin_token", ip):
                 raise RateLimited(retry_after)
-        if authorization is not None and current_user(request, authorization).role == "admin":
-            return
-        raise HTTPException(401, "admin token required")
+        if authorization is not None:
+            if current_user(request, authorization).role == "admin":
+                return
+            raise deny(request, 403, "role not allowed", "administrator role required")   # signed in, but not an admin
+        if x_admin_token is not None:       # the wrong token was logged above
+            raise HTTPException(401, "admin token required", headers={"WWW-Authenticate": "Bearer"})
+        raise deny(request, 401, "missing credentials", "admin token required")
 
     def check_device_access(user: User | None, device_id: str) -> None:
         """Same answer for someone else's device and for one that does not exist."""
