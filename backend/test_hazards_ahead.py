@@ -3,7 +3,8 @@
 Run the FastAPI server separately, then:
     python test_hazards_ahead.py
 or:
-    python test_hazards_ahead.py --lat 30.0444 --lon 31.2357\n    python test_hazards_ahead.py --lat 30.0444 --lon 31.2357 --heading 90 --speed 12
+    python test_hazards_ahead.py --lat 30.0444 --lon 31.2357 
+    python test_hazards_ahead.py --lat 30.0444 --lon 31.2357 --heading 90 --speed 12
 
 This sends only location/direction to FastAPI; FastAPI queries its configured
 store (Supabase PostgreSQL when DATABASE_URL is set). No DB credentials here.
@@ -12,10 +13,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode\nfrom urllib.request import Request, urlopen
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 
 def number_or_prompt(value: float | None, label: str, *, minimum: float,
@@ -38,6 +41,8 @@ def main() -> int:
     parser.add_argument("--heading", type=float, help="Optional: direction 0=N, 90=E, 180=S, 270=W. Without it, search nearby.")
     parser.add_argument("--speed", type=float, default=0, help="Speed in meters/second (default: 0)")
     parser.add_argument("--include-advisories", action="store_true", help="Also include unconfirmed hazards")
+    parser.add_argument("--token-env", default="ICVSP_ACCESS_TOKEN",
+                        help="Environment variable containing a Supabase user access token (optional)")
     parser.add_argument("--url", default=os.getenv("ICVSP_API_URL", "http://127.0.0.1:8000"),
                         help="FastAPI base URL (default: http://127.0.0.1:8000)")
     args = parser.parse_args()
@@ -66,6 +71,9 @@ def main() -> int:
         endpoint = args.url.rstrip("/") + "/hazards/ahead"
         request = Request(endpoint, data=json.dumps(payload, allow_nan=False).encode("utf-8"),
                           headers={"Content-Type": "application/json"}, method="POST")
+    token = os.getenv(args.token_env)
+    if token:
+        request.add_header("Authorization", "Bearer " + token)
     print(f"Querying {endpoint} ...")
     try:
         with urlopen(request, timeout=15) as response:
@@ -79,7 +87,8 @@ def main() -> int:
         if error.code == 503:
             print("Check /ready and the server's DATABASE_URL / PostgreSQL credentials.", file=sys.stderr)
         if error.code == 401:
-            print("For local-only testing, set ICVSP_ALLOW_ANONYMOUS=1 before starting FastAPI.",
+            print("Remote APIs require a valid Supabase user access token; provide it via "
+                  "the ICVSP_ACCESS_TOKEN environment variable. Anonymous mode is local-only.",
                   file=sys.stderr)
         return 1
     except (URLError, TimeoutError, ValueError) as error:
