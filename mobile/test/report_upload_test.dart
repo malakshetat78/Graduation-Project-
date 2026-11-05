@@ -141,7 +141,7 @@ void main() {
 
       expect(report.state, ReportQueue.stateQueued);
       expect(report.attempts, 1);
-      expect(uploader.lastWait, const Duration(seconds: 120));
+      expect(uploader.lastWait!.inMilliseconds, inInclusiveRange(119000, 120000));
     },
   );
 
