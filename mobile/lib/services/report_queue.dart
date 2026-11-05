@@ -28,7 +28,7 @@ class ReportSummary {
 }
 
 class ReportQueue extends ChangeNotifier {
-  ReportQueue({String? databasePath}) : _databasePath = databasePath;
+  ReportQueue({this._databasePath});
 
   static final ReportQueue instance = ReportQueue();
 

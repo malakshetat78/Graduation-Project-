@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -164,5 +165,68 @@ void main() {
     expect(ReportUploader.retryDelay(0, 0).inMilliseconds, 1600);
     expect(ReportUploader.retryDelay(0, 1).inMilliseconds, 2400);
     expect(ReportUploader.retryDelay(20, 0.5).inMilliseconds, 300000);
+  });
+
+  test('resends the same bytes when the server stored it but the reply was lost', () async {
+    final line = reportLine('e1');
+    final received = <Uint8List>[];
+    final storedOnServer = <String>{};
+
+    final uploader = ReportUploader(
+      queue: queue,
+      client: MockClient((request) async {
+        received.add(request.bodyBytes);
+
+        final body = jsonDecode(utf8.decode(request.bodyBytes)) as Map;
+        final eventId = body['event']['event_id'] as String;
+
+        // First delivery: the server keeps the report, the reply never arrives.
+        if (storedOnServer.add(eventId)) {
+          throw TimeoutException('reply lost');
+        }
+
+        return http.Response('{"status":"duplicate"}', 201);
+      }),
+    );
+
+    await queue.enqueue(line);
+    await uploader.run();
+
+    expect((await queue.recent()).single.state, ReportQueue.stateQueued);
+
+    await uploader.run();
+    uploader.dispose();
+
+    final report = (await queue.recent()).single;
+
+    expect(received, hasLength(2));
+    expect(received[0], line);
+    expect(received[1], line);
+    expect(storedOnServer, {'e1'});
+    expect(report.state, ReportQueue.stateSent);
+    expect(report.lastResult, 'duplicate');
+    expect(await queue.nextQueued(), isNull);
+  });
+
+  test('stops sending once the server answers duplicate', () async {
+    var requests = 0;
+
+    final uploader = ReportUploader(
+      queue: queue,
+      client: MockClient((request) async {
+        requests++;
+        return http.Response('{"status":"duplicate"}', 201);
+      }),
+    );
+
+    await queue.enqueue(reportLine('e1'));
+    await uploader.run();
+    await uploader.run();
+
+    final report = (await queue.recent()).single;
+
+    expect(requests, 1);
+    expect(report.state, ReportQueue.stateSent);
+    expect(report.lastResult, 'duplicate');
   });
 }
