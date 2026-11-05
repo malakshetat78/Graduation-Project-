@@ -22,7 +22,7 @@ Uint8List reportLine(
   return Uint8List.fromList(
     utf8.encode(
       '{"event":  {"event_id":"$eventId","device_id":"car-1",'
-      '"type":"$type","detected_at":"$time"},"signature":"abc"}',
+      '"type":"$type","detected_at":"$time"},"sender":"car-1","signature":"abc"}',
     ),
   );
 }
@@ -50,8 +50,9 @@ void main() {
   });
 
   test('ignores a report that is already stored', () async {
-    expect(await queue.enqueue(reportLine('e1')), isTrue);
-    expect(await queue.enqueue(reportLine('e1')), isFalse);
+    final line = reportLine('e1');
+    expect(await queue.enqueue(line), isTrue);
+    expect(await queue.enqueue(line), isFalse);
   });
 
   test('expires an old pothole', () async {
@@ -68,13 +69,14 @@ void main() {
     expect((await queue.recent()).single.lastResult, 'expired');
   });
 
-  test('drops the oldest pothole first when full', () async {
+  test('does not evict an unacknowledged report when full', () async {
     await queue.enqueue(reportLine('bump', type: 'speed_bump'));
 
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < 999; i++) {
       await queue.enqueue(reportLine('pothole-$i'));
     }
 
+    expect(await queue.enqueue(reportLine('overflow')), isFalse);
     final first = jsonDecode(utf8.decode((await queue.nextQueued())!.line));
 
     expect((first as Map)['event']['event_id'], 'bump');
@@ -107,7 +109,7 @@ void main() {
       queue: queue,
       client: MockClient((request) async {
         requests++;
-        return http.Response('{"code":"bad_signature"}', 401);
+        return http.Response('{"code":"bad_signature","retryable":false}', 401);
       }),
     );
 
@@ -139,7 +141,7 @@ void main() {
 
       expect(report.state, ReportQueue.stateQueued);
       expect(report.attempts, 1);
-      expect(uploader.lastWait, const Duration(seconds: 120));
+      expect(uploader.lastWait!.inMilliseconds, inInclusiveRange(119000, 120000));
     },
   );
 
@@ -156,7 +158,7 @@ void main() {
     uploader.dispose();
 
     expect((await queue.recent()).single.lastResult, 'no connection');
-    expect(await queue.nextQueued(), isNotNull);
+    expect((await queue.recent()).single.state, ReportQueue.stateQueued);
   });
 
   test('doubles the delay from 2 seconds up to 5 minutes with jitter', () {
@@ -194,6 +196,7 @@ void main() {
 
     expect((await queue.recent()).single.state, ReportQueue.stateQueued);
 
+    await queue.makeQueuedDueNow();
     await uploader.run();
     uploader.dispose();
 

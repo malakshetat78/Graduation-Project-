@@ -9,10 +9,9 @@ import 'report_queue.dart';
 
 class ReportUploader {
   ReportUploader({ReportQueue? queue, http.Client? client, Random? random})
-    : _queue = queue ?? ReportQueue.instance,
-      _client = client ?? http.Client(),
-      _random = random ?? Random();
-
+      : _queue = queue ?? ReportQueue.instance,
+        _client = client ?? http.Client(),
+        _random = random ?? Random();
   static final ReportUploader instance = ReportUploader();
 
   static const _requestTimeout = Duration(seconds: 10);
@@ -23,134 +22,144 @@ class ReportUploader {
   final ReportQueue _queue;
   final http.Client _client;
   final Random _random;
-
   Timer? _timer;
   bool _running = false;
   bool _runAgain = false;
   int _failures = 0;
 
-  /// The wait before the next attempt, between 80% and 120% of the base.
   static Duration retryDelay(int failures, double randomUnit) {
-    final doubledMs = _firstDelayMs * (1 << min(failures, 8));
-    final baseMs = min(doubledMs, _maxDelayMs);
-
-    return Duration(milliseconds: (baseMs * (0.8 + randomUnit * 0.4)).round());
+    final base = min(_firstDelayMs * (1 << min(failures, 8)), _maxDelayMs);
+    return Duration(milliseconds: (base * (0.8 + randomUnit * 0.4)).round());
   }
 
-  /// Starts sending unless a retry delay is already being respected.
+  void dispose() => _timer?.cancel();
+  Duration? lastWait;
+
   void kick() {
-    if (_timer?.isActive ?? false) return;
+    // New deliveries may be due immediately, even when old rows are delayed.
+    _timer?.cancel();
+    _timer = null;
     unawaited(run());
   }
 
   void retryNow() {
     _timer?.cancel();
-    unawaited(run());
+    _timer = null;
+    unawaited(() async {
+      await _queue.makeQueuedDueNow();
+      await run();
+    }());
   }
-
-  void dispose() {
-    _timer?.cancel();
-  }
-
-  Duration? lastWait;
 
   Future<void> run() async {
     if (_running) {
       _runAgain = true;
       return;
     }
-
     _running = true;
-    Duration? wait;
-
     try {
       await _queue.cleanUp();
-
-      while (wait == null) {
+      while (true) {
         final report = await _queue.nextQueued();
-
         if (report == null) break;
-
-        wait = await _send(report);
+        final wait = await _send(report);
+        if (wait != null) {
+          // On retryable failure this report has a durable retry_at.
+          // Continue any other due reports instead of blocking the queue.
+          continue;
+        }
       }
     } finally {
       _running = false;
     }
-
-    if (wait != null) {
-      _scheduleRetry(wait);
-    } else if (_runAgain) {
+    if (_runAgain) {
       _runAgain = false;
-      await run();
+      unawaited(run());
+      return;
     }
+    final next = await _queue.nextWait();
+    if (next != null) _schedule(next);
   }
 
-  /// Returns null when this report is finished, or the server's minimum
-  /// wait when it stays in the queue.
+  Duration _backoff() {
+    final delay = retryDelay(_failures, _random.nextDouble());
+    _failures++;
+    return delay;
+  }
+
   Future<Duration?> _send(QueuedReport report) async {
-    final http.Response response;
-
+    http.Response response;
     try {
-      response = await _client
-          .post(
-            Uri.parse('${ApiService.baseUrl}/reports'),
-            headers: {'Content-Type': 'application/json'},
-            body: report.line,
-          )
-          .timeout(_requestTimeout);
+      response = await _client.post(
+        Uri.parse('${ApiService.baseUrl}/reports'),
+        headers: {'Content-Type': 'application/json'}, body: report.line,
+      ).timeout(_requestTimeout);
     } on Exception {
-      await _queue.recordFailure(report.id, 'no connection');
-      return Duration.zero;
+      final delay = _backoff();
+      await _queue.recordFailure(report.id, 'no connection', delay);
+      return delay;
     }
-
-    final status = response.statusCode;
-
-    if (status == 201) {
+    if (response.statusCode == 201) {
+      final status = _bodyField(response, 'status');
+      if (status == 'accepted' || status == 'duplicate') {
+        _failures = 0;
+        await _queue.markSent(report.id, status!);
+        return null;
+      }
+      // Malformed ACK is not proof of a durable store.
+      final delay = _backoff();
+      await _queue.recordFailure(report.id, 'invalid 201 ACK', delay);
+      return delay;
+    }
+    if (_finalStatuses.contains(response.statusCode) &&
+        _bodyBool(response, 'retryable') == false) {
       _failures = 0;
-      await _queue.markSent(
-        report.id,
-        _bodyField(response, 'status') ?? 'accepted',
-      );
+      await _queue.markRejected(report.id,
+        _bodyField(response, 'code') ?? 'HTTP ${response.statusCode}');
       return null;
     }
-
-    if (_finalStatuses.contains(status)) {
-      _failures = 0;
-      await _queue.markRejected(
-        report.id,
-        _bodyField(response, 'code') ?? 'HTTP $status',
-      );
-      return null;
+    var delay = _backoff();
+    final retrySeconds = int.tryParse(response.headers['retry-after'] ?? '');
+    if (retrySeconds != null && retrySeconds > 0) {
+      final requested = Duration(seconds: retrySeconds);
+      if (requested > delay) delay = requested;
     }
-
-    await _queue.recordFailure(report.id, 'HTTP $status');
-
-    final seconds = int.tryParse(response.headers['retry-after'] ?? '');
-    return Duration(seconds: seconds ?? 0);
+    await _queue.recordFailure(report.id, 'HTTP ${response.statusCode}', delay);
+    return delay;
   }
 
   String? _bodyField(http.Response response, String field) {
     try {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-
       if (body is Map<String, dynamic> && body[field] is String) {
         return body[field] as String;
       }
     } on FormatException {
       return null;
     }
-
     return null;
   }
 
-  void _scheduleRetry(Duration serverWait) {
-    final delay = retryDelay(_failures, _random.nextDouble());
-    final wait = serverWait > delay ? serverWait : delay;
+  bool? _bodyBool(http.Response response, String field) {
+    try {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      if (body is Map<String, dynamic> && body[field] is bool) {
+        return body[field] as bool;
+      }
+    } on FormatException {
+      return null;
+    }
+    return null;
+  }
 
-    _failures++;
-    lastWait = wait;
+  void _schedule(Duration delay) {
     _timer?.cancel();
-    _timer = Timer(wait, () {
+    // No busy-loop when persisted deadline is nearly due.
+    final effective = delay < const Duration(milliseconds: 100)
+        ? const Duration(milliseconds: 100) : delay;
+    lastWait = effective;
+    _timer = Timer(effective, () {
+      _timer = null;
       unawaited(run());
     });
   }
