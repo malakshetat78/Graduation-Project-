@@ -1,9 +1,8 @@
+
 """Rate limit tests (FR-SEC-20): who is counted, what a refused request gets (429 with Retry-After), and that normal use
 is left alone. Time is a fake clock, so nothing waits. Run:  cd backend && python3 -m unittest -v"""
-import json
-import logging
+
 import unittest
-import uuid
 from unittest import mock
 
 from fastapi.testclient import TestClient
@@ -11,7 +10,6 @@ from starlette.requests import Request
 
 from icvsp_backend.app import create_app
 from icvsp_backend.ratelimit import DEFAULTS, Limiter, RateLimits
-
 from tests.test_api import ADMIN, T0, Clock
 from tests.test_backend import LAT, LON, Case, FakeVerifier, at
 
@@ -171,7 +169,7 @@ class UserLimits(LimitCase):
 
     def test_pairing_code_guessing_is_limited_per_user(self):
         self.limited(claim=(3, 60))
-        c = self.car("car-z", vetted=False)
+        self.car("car-z", vetted=False)
         code = self.client.post("/devices/car-z/pairing-code", headers=ADMIN).json()["pairing_code"]
         alice = self.new_user()
         guess = {"device_id": "car-z", "pairing_code": "wrong"}
