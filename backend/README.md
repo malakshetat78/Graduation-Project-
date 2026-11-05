@@ -34,6 +34,39 @@ uvicorn --factory icvsp_backend.app:create_app
 
 "admin" is `X-Admin-Token` (provisioning) or a signed-in administrator.
 
+## Rate limits (FR-SEC-20)
+
+A refused request gets `429` with `Retry-After` (seconds) and `{"code": "rate_limited", "retryable": true}`; nothing was
+done with it, so the app waits and sends the same request again (`docs/backend-mobile-contract.md`). Counted per:
+
+| Who | Counted by | Default (requests per seconds) |
+|---|---|---|
+| `POST /reports` (no token) | client IP | 600 / 60. Wide, because many phones can share one mobile-network IP |
+| `GET /health` | client IP | 120 / 60 |
+| `GET /ready` (queries the database) | client IP | 30 / 60 |
+| `/dashboard`, `/docs`, `/redoc`, `/openapi.json` | client IP | 60 / 60 |
+| Every call with a token | user ID, not IP | 300 / 60 |
+| `POST /me/devices` (pairing-code guesses) | user ID | 10 / 60 |
+| Wrong `X-Admin-Token` | client IP | 10 / 60; over it the token is not even compared |
+| Invalid bearer token | client IP | 30 / 60; over it the `401` becomes `429`. A valid token is never refused for this |
+
+Nothing is counted by device ID before the signature is checked, so nobody can use up another device's limit by
+sending reports in its name. A refusal is logged once per rule and key and window on the `icvsp.security` logger
+(rule, limit, IP or user ID, wait; never a token). Settings (`.env.example`):
+
+* **Client IP.** Behind Railway or Render every request comes from the platform's proxy, so set
+  `ICVSP_TRUST_PROXY_HEADERS=1`: the address is then taken from `X-Forwarded-For`, from the right
+  (`ICVSP_TRUSTED_PROXY_HOPS`, default 1), because the proxy adds the address it saw there and everything further left
+  is what the client wrote. **It is off by default.** Then the header is ignored, so nobody can pick their own "IP" by
+  sending it, but behind a proxy all clients look like one. Turn it on only when the server cannot be reached without
+  the proxy. With it on and no header (a laptop demo) the connection's own address is used, so the same code runs both ways.
+* **Numbers.** `ICVSP_RATE_<NAME>=requests/seconds`, e.g. `ICVSP_RATE_REPORTS=300/60`; a wrong value stops the server at start.
+* **Off.** `ICVSP_RATE_LIMIT_ENABLED=0`. In an `ICVSP_ALLOW_ANONYMOUS=1` development run (simulation, laptop demo) the
+  limits are off unless `ICVSP_RATE_LIMIT_ENABLED=1`.
+* **One process only.** The counters are in memory (`ratelimit.py`), per process. With more than one server process
+  each counts alone, so the limits become several times larger: replace them with a shared counter (Redis, or a table)
+  before scaling out.
+
 **The evaluator** (`worker.py`) runs in the API process every `ICVSP_WORKER_INTERVAL_S` seconds, or on its own with
 `python -m icvsp_backend.worker`. One run is one database transaction: hazards, evidence, report results and reputation
 are saved together or not at all, so a crash leaves reports `pending` and the next run finishes them with nothing

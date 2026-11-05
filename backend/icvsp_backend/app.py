@@ -23,6 +23,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from .ahead import AheadConfig
 from .auth import AuthUnavailable, InvalidToken, SupabaseVerifier, User
+from .ratelimit import RateLimited, RateLimits
 from .service import Service, hash_code
 from .store import Store
 from .store_errors import StoreUnavailable
@@ -31,6 +32,10 @@ from .worker import Worker
 
 DASHBOARD = Path(__file__).with_name("dashboard.html")
 RETRY_AFTER_S = 30
+# endpoints without a token, counted per client IP (ratelimit.py)
+PUBLIC_RULES = {("POST", "/reports"): "reports", ("GET", "/health"): "health", ("GET", "/ready"): "ready",
+                ("GET", "/dashboard"): "pages", ("GET", "/docs"): "pages", ("GET", "/redoc"): "pages",
+                ("GET", "/openapi.json"): "pages"}
 MAX_BEACONS = 3600
 log = logging.getLogger("icvsp.api")
 
@@ -103,7 +108,7 @@ async def read_limited(request: Request, limit: int) -> bytes:
 
 def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: str | None = None,
                verifier=None, allow_anonymous: bool | None = None, worker_interval: float | None = None,
-               ahead: AheadConfig | None = None) -> FastAPI:
+               ahead: AheadConfig | None = None, rate_limits: RateLimits | None = None) -> FastAPI:
     """`allow_anonymous` skips user sign-in, for local runs and the simulation only. Without it and without a
     configured verifier the server refuses to start, rather than running open by accident."""
     if allow_anonymous is None:
@@ -114,6 +119,9 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
         raise RuntimeError("set SUPABASE_URL for user sign-in (or ICVSP_ALLOW_ANONYMOUS=1 on a development machine)")
     if worker_interval is None:
         worker_interval = float(os.environ.get("ICVSP_WORKER_INTERVAL_S", "10")) if store is None else 0.0
+    # a development run without sign-in (the simulation, a laptop demo) plays requests as fast as it can: no limits
+    # there unless ICVSP_RATE_LIMIT_ENABLED=1 asks for them
+    limits = rate_limits or RateLimits.from_env(default_enabled=not allow_anonymous)
     svc = Service(store or store_from_env(), ahead=ahead)
     token = admin_token if admin_token is not None else os.environ.get("ICVSP_ADMIN_TOKEN", "")
 
@@ -134,6 +142,26 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
         """A final answer: the phone stops retrying this report."""
         return JSONResponse({"detail": r.reason, "code": r.code, "retryable": False}, r.status)
 
+    def too_many(retry_after: int) -> JSONResponse:
+        """Nothing was done with the request: the app waits, then sends the same request again (FR-SEC-20)."""
+        return JSONResponse({"detail": "too many requests, retry later", "code": "rate_limited", "retryable": True},
+                            429, headers={"Retry-After": str(retry_after)})
+
+    @app.exception_handler(RateLimited)
+    def rate_limited(_: Request, e: RateLimited):
+        return too_many(e.retry_after)
+
+    @app.middleware("http")
+    async def public_limits(request: Request, call_next):
+        """Before anything is read from the request, so a flood costs as little as possible."""
+        rule = PUBLIC_RULES.get((request.method, request.url.path))
+        if rule:
+            try:
+                limits.check(rule, f"ip:{limits.client_ip(request)}")
+            except RateLimited as e:
+                return too_many(e.retry_after)
+        return await call_next(request)
+
     @app.exception_handler(StoreUnavailable)
     def unavailable(_: Request, e: StoreUnavailable):
         """Nothing was stored: the phone keeps the report and sends the same line again later."""
@@ -141,7 +169,7 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
         return JSONResponse({"detail": "storage unavailable, retry later", "code": "storage_unavailable",
                              "retryable": True}, 503, headers={"Retry-After": str(RETRY_AFTER_S)})
 
-    def current_user(authorization: str | None = Header(default=None)) -> User | None:
+    def current_user(request: Request, authorization: str | None = Header(default=None)) -> User | None:
         """None only in anonymous (development) mode with no token sent."""
         if authorization is None and allow_anonymous:
             return None
@@ -151,10 +179,14 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
         try:
             user_id = verifier.verify(credentials.strip())
         except InvalidToken:
+            # over the limit the 401 becomes a 429; a valid token is never refused because of other people's bad ones
+            if retry_after := limits.failure("bad_token", f"ip:{limits.client_ip(request)}"):
+                raise RateLimited(retry_after) from None
             raise HTTPException(401, "invalid or expired token", headers={"WWW-Authenticate": "Bearer"}) from None
         except AuthUnavailable:
             raise HTTPException(503, "sign-in service unavailable, retry later",
                                 headers={"Retry-After": str(RETRY_AFTER_S)}) from None
+        limits.check("user", f"user:{user_id}")     # before the database lookup, so a flood does not reach it
         profile = svc.store.profile(user_id)
         if profile is None:
             raise HTTPException(403, "no profile for this account")
@@ -165,12 +197,17 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
             raise HTTPException(401, "sign-in required")
         return user
 
-    def require_admin(x_admin_token: str | None = Header(default=None),
+    def require_admin(request: Request, x_admin_token: str | None = Header(default=None),
                       authorization: str | None = Header(default=None)) -> None:
         """The provisioning token, or a signed-in administrator (FR-SEC-02)."""
-        if token and hmac.compare_digest((x_admin_token or "").encode(), token.encode()):
-            return
-        if authorization is not None and current_user(authorization).role == "admin":
+        if x_admin_token is not None:
+            ip = f"ip:{limits.client_ip(request)}"
+            limits.peek("bad_admin_token", ip)      # guessing the token: over the limit it is not even compared
+            if token and hmac.compare_digest(x_admin_token.encode(), token.encode()):
+                return
+            if retry_after := limits.failure("bad_admin_token", ip):
+                raise RateLimited(retry_after)
+        if authorization is not None and current_user(request, authorization).role == "admin":
             return
         raise HTTPException(401, "admin token required")
 
@@ -229,6 +266,7 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
     @app.post("/me/devices", status_code=201)
     def claim(c: ClaimIn, user: User = Depends(require_signed_in)):
         """Links a device to this account with the one-time code from provisioning."""
+        limits.check("claim", f"user:{user.id}")
         if not svc.store.claim_device(user.id, c.device_id, hash_code(c.pairing_code), clock()):
             raise HTTPException(403, "wrong device or pairing code")
         return {"device_id": c.device_id}

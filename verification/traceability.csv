@@ -256,3 +256,31 @@ B-111,Unit,backend/tests/test_backend.py,OldDatabaseFile.test_file_from_before_t
 B-112,Unit,backend/tests/test_backend.py,Tokens.test_key_server_certificates_do_not_depend_on_the_python_install,FR-SEC-01
 T-53,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_two_devices_is_not_a_duplicate,FR-SEC-10 FR-11
 T-54,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_one_device_is_a_duplicate,FR-06 FR-SEC-10
+B-113,Unit,backend/tests/test_ratelimit.py,Window.test_blocks_after_the_limit_and_allows_again_after_the_window,FR-SEC-20
+B-114,Unit,backend/tests/test_ratelimit.py,Window.test_keys_are_counted_separately,FR-SEC-20
+B-115,Unit,backend/tests/test_ratelimit.py,Window.test_refused_requests_are_not_counted_so_waiting_is_enough,FR-SEC-20
+B-116,Unit,backend/tests/test_ratelimit.py,Window.test_memory_stays_bounded_with_many_keys,FR-SEC-20
+B-117,Unit,backend/tests/test_ratelimit.py,ClientIp.test_forwarded_header_is_ignored_unless_trusted,FR-SEC-20
+B-118,Unit,backend/tests/test_ratelimit.py,ClientIp.test_trusted_header_uses_the_entry_the_proxy_added_not_the_one_the_client_wrote,FR-SEC-20
+B-119,Unit,backend/tests/test_ratelimit.py,ClientIp.test_without_a_usable_header_the_connection_address_is_used,FR-SEC-20
+B-120,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_reports_over_the_limit_get_429_with_retry_after_and_cost_nothing,FR-SEC-20
+B-121,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_the_same_report_is_accepted_when_the_phone_retries_after_the_wait,FR-SEC-20
+B-122,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_limit_is_per_ip_when_proxy_headers_are_trusted,FR-SEC-20
+B-123,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_an_invented_forwarded_header_does_not_help_when_proxy_headers_are_not_trusted,FR-SEC-20
+B-124,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_an_invented_leftmost_entry_does_not_help_when_proxy_headers_are_trusted,FR-SEC-20
+B-125,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_forged_reports_in_a_device_name_do_not_use_up_that_devices_limit,FR-SEC-20
+B-126,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_health_ready_and_the_pages_are_limited_each_on_its_own,FR-SEC-20
+B-127,Integration,backend/tests/test_ratelimit.py,UserLimits.test_limit_is_per_user_and_not_per_ip,FR-SEC-20
+B-128,Integration,backend/tests/test_ratelimit.py,UserLimits.test_a_refused_user_request_says_when_to_retry,FR-SEC-20
+B-129,Integration,backend/tests/test_ratelimit.py,UserLimits.test_pairing_code_guessing_is_limited_per_user,FR-SEC-20 FR-SEC-01
+B-130,Integration,backend/tests/test_ratelimit.py,UserLimits.test_a_signed_in_admin_is_counted_like_any_user,FR-SEC-20 FR-SEC-02
+B-131,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_guessing_the_admin_token_is_stopped_but_the_right_token_works_from_elsewhere,FR-SEC-20 FR-SEC-01
+B-132,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_a_signed_in_admin_still_works_while_the_ip_is_guessing_the_token,FR-SEC-20 FR-SEC-01 FR-SEC-02
+B-133,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_a_flood_of_invalid_tokens_becomes_429_but_a_valid_token_is_never_refused,FR-SEC-20 FR-SEC-01
+B-134,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_requests_without_any_token_are_not_counted_as_failures,FR-SEC-20 FR-SEC-01
+B-135,Integration,backend/tests/test_ratelimit.py,Settings.test_limits_can_be_switched_off,FR-SEC-20
+B-136,Integration,backend/tests/test_ratelimit.py,Settings.test_development_mode_without_sign_in_has_no_limits_unless_asked,FR-SEC-20
+B-137,Unit,backend/tests/test_ratelimit.py,Settings.test_numbers_and_proxy_setting_come_from_the_environment,FR-SEC-20
+B-138,Unit,backend/tests/test_ratelimit.py,Settings.test_a_wrong_setting_stops_the_server_at_start,FR-SEC-20
+B-139,Integration,backend/tests/test_ratelimit.py,Settings.test_normal_use_of_one_phone_stays_under_the_default_limits,FR-SEC-20
+B-140,Integration,backend/tests/test_ratelimit.py,Settings.test_a_refusal_is_logged_once_per_window_without_tokens_or_secrets,FR-SEC-20 FR-SEC-21
