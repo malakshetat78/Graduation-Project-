@@ -21,7 +21,9 @@ class BleDeliveryProcessor {
     if (report == null) return false;
     final outcome = await persist(report.bytes);
     if (outcome != StoreOutcome.stored &&
-        outcome != StoreOutcome.alreadyStored) return false;
+        outcome != StoreOutcome.alreadyStored) {
+      return false;
+    }
     await ack(report.transportId);
     return true;
   }
