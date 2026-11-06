@@ -53,9 +53,14 @@ done with it, so the app waits and sends the same request again (`docs/backend-m
 | Wrong `X-Admin-Token` | client IP | 10 / 60; over it the token is not even compared |
 | Invalid bearer token | client IP | 30 / 60; over it the `401` becomes `429`. A valid token is never refused for this |
 
+IPv6 addresses are counted per /64, because one device owns a whole /64 and can change its address inside it at will.
+The counters hold at most 50,000 keys; the least recently used one is forgotten (a constant-time step, and never the key being counted).
 Nothing is counted by device ID before the signature is checked, so nobody can use up another device's limit by
-sending reports in its name. A refusal is logged once per rule and key and window on the `icvsp.security` logger
-(rule, limit, IP or user ID, wait; never a token). Settings (`.env.example`):
+sending reports in its name. A refusal is logged on the `icvsp.security` logger, once per rule and key in every window
+(rule, limit, IP or user ID, wait; never a token).
+The log has a budget too, so nobody can fill it by failing on purpose: failed sign-in lines are limited to 20 a minute per IP and 300
+a minute over all IPs (`ICVSP_RATE_LOG_IP`, `ICVSP_RATE_LOG_ALL`); the lines left out are counted and the next line written
+starts with `auth_failure_suppressed count=N`. Settings (`.env.example`):
 
 * **Client IP.** Behind Railway or Render every request comes from the platform's proxy, so set
   `ICVSP_TRUST_PROXY_HEADERS=1`: the address is then taken from `X-Forwarded-For`, from the right

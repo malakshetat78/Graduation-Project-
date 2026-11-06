@@ -20,11 +20,13 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import random
 import subprocess
 import sys
 import zlib
 from dataclasses import dataclass, field
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -369,10 +371,20 @@ def apply(client, run: Run, t_rel: float, kind: str, payload, results: dict, que
     return None
 
 
+def dev_app(*args, **kwargs):
+    """The backend app without user sign-in, for the simulation and the live demo. A shell that also has SUPABASE_URL
+    set (real project, local work) must not stop it: create_app refuses sign-in together with anonymous mode, so the
+    sign-in settings are left out of the environment while the app is built."""
+    with mock.patch.dict(os.environ):
+        for name in ("SUPABASE_URL", "SUPABASE_JWT_SECRET"):
+            os.environ.pop(name, None)
+        return create_app(*args, allow_anonymous=True, **kwargs)
+
+
 def simulate(scn: Scenario, seed: int, camera: str = "assumed") -> dict:
     clock = [UTC0]
     store = Store()
-    client = TestClient(create_app(store, lambda: clock[0], admin_token="sil", allow_anonymous=True))
+    client = TestClient(dev_app(store, lambda: clock[0], admin_token="sil"))
     run = prepare(scn, seed, camera=camera)
     results, queries = new_results(), []
     for t_rel, kind, payload in run.events:

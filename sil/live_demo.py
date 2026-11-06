@@ -38,7 +38,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import run_sil  # noqa: E402
 from run_sil import HAZARDS, ROAD_M, SCENARIOS, WARN_CHECK_M, position  # noqa: E402
 
-from icvsp_backend.app import create_app  # noqa: E402
 from icvsp_backend.store import Store  # noqa: E402
 from icvsp.model import to_iso  # noqa: E402
 
@@ -123,7 +122,7 @@ class Demo:
         self.injected = 0
         self.lock = threading.Lock()
         self.store = Store()
-        self.app = create_app(self.store, self.clock, admin_token=self.token, allow_anonymous=True)
+        self.app = run_sil.dev_app(self.store, self.clock, admin_token=self.token)
         self._routes()
 
     # ---------- demo-only routes, added to the normal backend app ----------

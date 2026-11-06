@@ -176,8 +176,12 @@ def create_app(store=None, clock: Callable[[], float] = time.time, admin_token: 
 
     def deny(request: Request, status: int, reason: str, detail: str | None = None) -> HTTPException:
         """Records the failed attempt (time, reason, endpoint, client address; never the token) and returns the answer."""
-        security_log.warning("auth_failure ts=%.0f status=%d reason=%s method=%s path=%s client=%s", clock(), status,
-                             reason, request.method, request.url.path, limits.client_ip(request))
+        ip = limits.client_ip(request)
+        if (summary := limits.may_log(f"ip:{ip}")) is not None:       # a budget per IP and overall, see ratelimit.py
+            if summary:
+                security_log.warning(summary)
+            security_log.warning("auth_failure ts=%.0f status=%d reason=%s method=%s path=%s client=%s", clock(), status,
+                                 reason, request.method, request.url.path, ip)
         return HTTPException(status, detail or reason, headers={"WWW-Authenticate": "Bearer"} if status == 401 else None)
 
     def current_user(request: Request, authorization: str | None = Header(default=None)) -> User | None:

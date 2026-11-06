@@ -2,7 +2,12 @@
 """Rate limit tests (FR-SEC-20): who is counted, what a refused request gets (429 with Retry-After), and that normal use
 is left alone. Time is a fake clock, so nothing waits. Run:  cd backend && python3 -m unittest -v"""
 
+import os
+import subprocess
+import sys
+import time
 import unittest
+from pathlib import Path
 from unittest import mock
 
 from fastapi.testclient import TestClient
@@ -56,7 +61,54 @@ class Window(unittest.TestCase):
         self.assertLessEqual(len(lim._hits), 100)
 
 
+    def test_a_new_key_is_counted_when_the_table_is_full(self):
+        lim = Limiter(2, 60, Clock(0.0), max_keys=3)
+        for k in "abc":
+            lim.hit(k)
+        self.assertEqual([lim.hit("new").allowed for _ in range(3)], [True, True, False])
+        self.assertLessEqual(len(lim._hits), 3)
+
+    def test_the_least_recently_used_key_is_the_one_forgotten(self):
+        lim = Limiter(1, 60, Clock(0.0), max_keys=3)
+        for k in "abc":
+            lim.hit(k)
+        lim.hit("a")                                    # a is in use again
+        lim.hit("d")                                    # full: b, the least recently used, goes
+        self.assertFalse(lim.hit("a").allowed)          # a kept its count
+        self.assertTrue(lim.hit("b").allowed)           # b starts again
+
+    def test_a_full_table_does_not_slow_new_keys_down(self):
+        lim = Limiter(5, 60, Clock(0.0), max_keys=50_000)
+        for i in range(50_000):
+            lim.hit(f"k{i}")
+        start = time.perf_counter()
+        for i in range(2_000):
+            lim.hit(f"new{i}")
+        self.assertLess(time.perf_counter() - start, 1.0)      # scanning the whole table took about 8 ms per new key
+
+    def test_an_attack_that_goes_on_is_logged_once_in_every_window(self):
+        t = Clock(0.0)
+        lim = Limiter(1, 10, t)
+        logged = 0
+        for second in range(50):                        # one request a second for five windows
+            t.t = float(second)
+            d = lim.hit("attacker")
+            logged += (not d.allowed) and d.log
+        self.assertEqual(logged, 5)
+
+
 class ClientIp(unittest.TestCase):
+    def test_ipv6_is_counted_per_64_so_one_device_cannot_dodge_by_changing_address(self):
+        rl = RateLimits()
+        a = rl.client_ip(request("2001:db8:1:2:aaaa:bbbb:cccc:dddd"))
+        b = rl.client_ip(request("2001:db8:1:2:1111:2222:3333:4444"))
+        self.assertEqual((a, b), ("2001:db8:1:2::/64", "2001:db8:1:2::/64"))
+        self.assertNotEqual(a, rl.client_ip(request("2001:db8:1:3::1")))
+        self.assertEqual(rl.client_ip(request("::ffff:192.0.2.7")), "192.0.2.7")
+        self.assertEqual(rl.client_ip(request("192.0.2.7")), "192.0.2.7")
+        trusted = RateLimits(trust_proxy=True)
+        self.assertEqual(trusted.client_ip(request("10.0.0.1", "6.6.6.6, 2001:db8:1:2:9:9:9:9")), "2001:db8:1:2::/64")
+
     def test_forwarded_header_is_ignored_unless_trusted(self):
         rl = RateLimits(trust_proxy=False)
         self.assertEqual(rl.client_ip(request("10.0.0.1", "203.0.113.9")), "10.0.0.1")
@@ -216,7 +268,48 @@ class FailedSignIns(LimitCase):
         self.assertEqual([self.client.get("/admin/overview").status_code for _ in range(5)], [401] * 5)
 
 
+class LogBudget(LimitCase):
+    def failing(self, count, headers=None):
+        for _ in range(count):
+            self.client.get("/me", headers=headers)             # no credentials: a failure, but not a guess
+
+    def written(self, calls):
+        with self.assertLogs("icvsp.security", level="WARNING") as cm:
+            calls()
+        return [line.split(":", 2)[2] for line in cm.output]
+
+    def test_failed_sign_in_lines_are_capped_per_ip_and_the_rest_is_counted(self):
+        self.limited(log_ip=(3, 60))
+        lines = self.written(lambda: self.failing(10))
+        self.assertEqual(len([line for line in lines if line.startswith("auth_failure ")]), 3)
+        self.rt.t += 60
+        lines = self.written(lambda: self.failing(1))
+        self.assertEqual(lines[0], "auth_failure_suppressed count=7")
+        self.assertTrue(lines[1].startswith("auth_failure "))
+
+    def test_each_ip_has_its_own_budget(self):
+        self.limited(trust_proxy=True, log_ip=(1, 60))
+        a, b = {"X-Forwarded-For": "203.0.113.1"}, {"X-Forwarded-For": "203.0.113.2"}
+        lines = self.written(lambda: (self.failing(3, a), self.failing(1, b)))
+        self.assertEqual([l.split()[0] for l in lines], ["auth_failure", "auth_failure_suppressed", "auth_failure"])
+        self.assertIn("client=203.0.113.1", lines[0])
+        self.assertIn("client=203.0.113.2", lines[2])           # b was not held back by a's budget
+
+    def test_the_log_has_a_budget_over_all_ips_together(self):
+        self.limited(trust_proxy=True, log_ip=(5, 60), log_all=(4, 60))
+        lines = self.written(lambda: [self.failing(1, {"X-Forwarded-For": f"203.0.113.{i}"}) for i in range(10)])
+        self.assertEqual(len(lines), 4)
+
+
 class Settings(LimitCase):
+    def test_tests_do_not_depend_on_the_sign_in_settings_of_the_shell(self):
+        env = {**os.environ, "SUPABASE_URL": "https://x.supabase.co", "SUPABASE_JWT_SECRET": "s",
+               "ICVSP_ALLOW_ANONYMOUS": "1", "ICVSP_TRUST_PROXY_HEADERS": "1", "ICVSP_RATE_REPORTS": "1/60"}
+        r = subprocess.run([sys.executable, "-m", "unittest", "tests.test_api", "tests.test_espidf_contract"],
+                           cwd=Path(__file__).resolve().parent.parent, env=env, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr[-1000:])
+
+
     def test_limits_can_be_switched_off(self):
         rl = self.limited(reports=(1, 60))
         rl.enabled = False

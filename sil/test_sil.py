@@ -1,11 +1,21 @@
 """System test (V-cycle SYS.4/SYS.5) on a small simulation: the whole chain, with attackers.
 Run:  python3 -m unittest sil/test_sil.py -v   (about a minute)"""
+import os
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import run_sil  # noqa: E402
+
+
+class DevApp(unittest.TestCase):
+    def test_the_simulation_app_ignores_the_sign_in_settings_of_the_shell(self):
+        from icvsp_backend.store import Store
+        with mock.patch.dict(os.environ, {"SUPABASE_URL": "https://x.supabase.co", "ICVSP_ALLOW_ANONYMOUS": "1"}):
+            run_sil.dev_app(Store(), lambda: 0.0, admin_token="x")
+            self.assertEqual(os.environ["SUPABASE_URL"], "https://x.supabase.co")      # put back afterwards
 
 
 class WholeChain(unittest.TestCase):

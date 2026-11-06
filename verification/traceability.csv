@@ -291,3 +291,13 @@ B-144,Integration,backend/tests/test_security_fixes.py,WrongRole.test_signed_in_
 B-145,Integration,backend/tests/test_security_fixes.py,WrongRole.test_a_wrong_admin_token_does_not_hide_a_valid_administrator_sign_in,FR-SEC-02 FR-SEC-01
 B-146,Integration,backend/tests/test_security_fixes.py,FailedSignInLog.test_failed_sign_ins_are_logged_with_time_and_reason_but_never_the_token,FR-SEC-21 FR-SEC-01
 B-147,Integration,backend/tests/test_security_fixes.py,FailedSignInLog.test_successful_sign_ins_are_not_logged_as_failures,FR-SEC-21 FR-SEC-01
+B-148,Unit,backend/tests/test_ratelimit.py,Window.test_a_new_key_is_counted_when_the_table_is_full,FR-SEC-20
+B-149,Unit,backend/tests/test_ratelimit.py,Window.test_the_least_recently_used_key_is_the_one_forgotten,FR-SEC-20
+B-150,Unit,backend/tests/test_ratelimit.py,Window.test_a_full_table_does_not_slow_new_keys_down,FR-SEC-20
+B-151,Unit,backend/tests/test_ratelimit.py,Window.test_an_attack_that_goes_on_is_logged_once_in_every_window,FR-SEC-20
+B-152,Unit,backend/tests/test_ratelimit.py,ClientIp.test_ipv6_is_counted_per_64_so_one_device_cannot_dodge_by_changing_address,FR-SEC-20
+B-153,Integration,backend/tests/test_ratelimit.py,LogBudget.test_failed_sign_in_lines_are_capped_per_ip_and_the_rest_is_counted,FR-SEC-21 FR-SEC-20
+B-154,Integration,backend/tests/test_ratelimit.py,LogBudget.test_each_ip_has_its_own_budget,FR-SEC-21 FR-SEC-20
+B-155,Integration,backend/tests/test_ratelimit.py,LogBudget.test_the_log_has_a_budget_over_all_ips_together,FR-SEC-21 FR-SEC-20
+B-156,Integration,backend/tests/test_ratelimit.py,Settings.test_tests_do_not_depend_on_the_sign_in_settings_of_the_shell,FR-SEC-20
+S-26,System,sil/test_sil.py,DevApp.test_the_simulation_app_ignores_the_sign_in_settings_of_the_shell,FR-SEC-01

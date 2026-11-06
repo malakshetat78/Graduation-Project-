@@ -38,6 +38,8 @@ DEFAULTS: dict[str, tuple[int, int]] = {
     "claim": (10, 60),           # POST /me/devices per user: guesses of a pairing code
     "bad_token": (30, 60),       # invalid bearer tokens per IP; over this, the 401 becomes a 429
     "bad_admin_token": (10, 60), # wrong X-Admin-Token per IP; over this, the token is not even compared
+    "log_ip": (20, 60),          # log lines about failed sign-ins per IP; the rest are counted, not written
+    "log_all": (300, 60),        # the same over all IPs together
 }
 MAX_KEYS = 50_000
 
@@ -46,7 +48,7 @@ MAX_KEYS = 50_000
 class Decision:
     allowed: bool
     retry_after: int = 0
-    first_block: bool = False     # the first refusal in this window: the only one worth a log line
+    log: bool = False             # worth a log line: the first refusal of this key, then at most one per window
 
 
 class RateLimited(Exception):
@@ -56,56 +58,49 @@ class RateLimited(Exception):
 
 
 class Limiter:
-    """Sliding window: at most `limit` hits in any `window` seconds, counted per key."""
+    """Sliding window: at most `limit` hits in any `window` seconds, counted per key. Memory is bounded: with more
+    than `max_keys` keys the least recently used one is forgotten (an O(1) step, never the key being counted)."""
 
     def __init__(self, limit: int, window: float, clock: Callable[[], float] = time.monotonic, max_keys: int = MAX_KEYS):
-        self.limit, self.window, self.clock, self.max_keys = limit, window, clock, max_keys
-        self._hits: OrderedDict[str, deque] = OrderedDict()
-        self._blocked: set[str] = set()
+        self.limit, self.window, self.clock, self.max_keys = limit, window, clock, max(1, max_keys)
+        self._hits: OrderedDict[str, deque] = OrderedDict()      # least recently used first
+        self._logged: dict[str, float] = {}                      # key -> when its last refusal was logged
         self._lock = threading.Lock()
 
-    def _trim(self, key: str, now: float) -> deque:
+    def _queue(self, key: str, now: float) -> deque:
         q = self._hits.get(key)
         if q is None:
             q = self._hits[key] = deque()
-            if len(self._hits) > self.max_keys:
-                self._purge(now)
+            while len(self._hits) > self.max_keys:
+                old, _ = self._hits.popitem(last=False)
+                self._logged.pop(old, None)
+        else:
+            self._hits.move_to_end(key)
         while q and q[0] <= now - self.window:
             q.popleft()
-        if not q:
-            self._blocked.discard(key)
         return q
 
-    def _purge(self, now: float) -> None:
-        for k in [k for k, q in self._hits.items() if not q or q[-1] <= now - self.window]:
-            del self._hits[k]
-            self._blocked.discard(k)
-        while len(self._hits) > self.max_keys:          # still full: forget the least recently added keys
-            k, _ = self._hits.popitem(last=False)
-            self._blocked.discard(k)
+    def _decide(self, key: str, count: bool) -> Decision:
+        with self._lock:
+            now = self.clock()
+            q = self._queue(key, now)
+            if len(q) < self.limit:
+                if count:
+                    q.append(now)
+                return Decision(True)
+            last = self._logged.get(key)
+            log = last is None or now - last >= self.window      # again in every window an attack goes on
+            if log:
+                self._logged[key] = now
+            return Decision(False, max(1, math.ceil(q[0] + self.window - now)), log)
 
     def hit(self, key: str) -> Decision:
         """Counts one request if it is allowed. A refused request is not counted, so waiting is enough."""
-        with self._lock:
-            now = self.clock()
-            q = self._trim(key, now)
-            if len(q) >= self.limit:
-                first = key not in self._blocked
-                self._blocked.add(key)
-                return Decision(False, max(1, math.ceil(q[0] + self.window - now)), first)
-            q.append(now)
-            return Decision(True)
+        return self._decide(key, True)
 
     def blocked(self, key: str) -> Decision:
         """Like hit(), without counting."""
-        with self._lock:
-            now = self.clock()
-            q = self._trim(key, now)
-            if len(q) >= self.limit:
-                first = key not in self._blocked
-                self._blocked.add(key)
-                return Decision(False, max(1, math.ceil(q[0] + self.window - now)), first)
-            return Decision(True)
+        return self._decide(key, False)
 
 
 class RateLimits:
@@ -114,6 +109,8 @@ class RateLimits:
         self.enabled, self.trust_proxy, self.proxy_hops = enabled, trust_proxy, max(1, proxy_hops)
         self.rules = {**DEFAULTS, **(rules or {})}
         self.limiters = {name: Limiter(n, w, clock) for name, (n, w) in self.rules.items()}
+        self._suppressed = 0
+        self._suppressed_lock = threading.Lock()
 
     @classmethod
     def from_env(cls, clock: Callable[[], float] = time.monotonic, default_enabled: bool = True) -> "RateLimits":
@@ -136,17 +133,47 @@ class RateLimits:
         return cls(enabled=env.get("ICVSP_RATE_LIMIT_ENABLED", "1" if default_enabled else "0") != "0",
                    trust_proxy=env.get("ICVSP_TRUST_PROXY_HEADERS") == "1", proxy_hops=hops, rules=rules, clock=clock)
 
+    @staticmethod
+    def _address(host: str) -> str:
+        """IPv6: one device owns a whole /64 and can change its address inside it at will, so a /64 is one client."""
+        try:
+            ip = ipaddress.ip_address(host)
+        except ValueError:
+            return host
+        if ip.version == 6:
+            if ip.ipv4_mapped:
+                return str(ip.ipv4_mapped)
+            return f"{ipaddress.ip_network((ip, 64), strict=False)}"
+        return str(ip)
+
     def client_ip(self, request: Request) -> str:
-        peer = request.client.host if request.client else "unknown"
+        peer = self._address(request.client.host) if request.client else "unknown"
         if not self.trust_proxy:
             return peer                                     # a forwarded header is ignored, whatever it says
         parts = [p.strip() for p in request.headers.get("x-forwarded-for", "").split(",") if p.strip()]
         if len(parts) < self.proxy_hops:
             return peer                                     # no proxy in front (e.g. a laptop demo)
         try:
-            return str(ipaddress.ip_address(parts[-self.proxy_hops]))
+            ipaddress.ip_address(parts[-self.proxy_hops])
         except ValueError:
             return peer
+        return self._address(parts[-self.proxy_hops])
+
+    def may_log(self, ip_key: str | None = None) -> str | None:
+        """Budget for security log lines, so nobody can fill the log by failing on purpose: per IP and over all IPs.
+        Returns None when the line must not be written, else "" or a summary line to write first. Always on."""
+        if ip_key is not None and not self.limiters["log_ip"].hit(ip_key).allowed:
+            return self._suppress()
+        if not self.limiters["log_all"].hit("all").allowed:
+            return self._suppress()
+        with self._suppressed_lock:
+            n, self._suppressed = self._suppressed, 0
+        return f"auth_failure_suppressed count={n}" if n else ""
+
+    def _suppress(self) -> None:
+        with self._suppressed_lock:
+            self._suppressed += 1
+        return None
 
     def check(self, rule: str, key: str) -> None:
         """Raises RateLimited when `key` is over the limit of `rule`."""
@@ -179,6 +206,6 @@ class RateLimits:
         raise RateLimited(d.retry_after)
 
     def _log(self, rule: str, key: str, d: Decision) -> None:
-        if d.first_block:       # one line per key and window, so an attack cannot flood the log as well
+        if d.log and self.may_log() is not None:     # one line per key and window; and the log has a budget too
             n, w = self.rules[rule]
             log.warning("rate_limited rule=%s limit=%d/%ds key=%s retry_after=%ds", rule, n, w, key, d.retry_after)
