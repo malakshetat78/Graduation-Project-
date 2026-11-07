@@ -256,3 +256,48 @@ B-111,Unit,backend/tests/test_backend.py,OldDatabaseFile.test_file_from_before_t
 B-112,Unit,backend/tests/test_backend.py,Tokens.test_key_server_certificates_do_not_depend_on_the_python_install,FR-SEC-01
 T-53,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_two_devices_is_not_a_duplicate,FR-SEC-10 FR-11
 T-54,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_one_device_is_a_duplicate,FR-06 FR-SEC-10
+B-113,Unit,backend/tests/test_ratelimit.py,Window.test_blocks_after_the_limit_and_allows_again_after_the_window,FR-SEC-20
+B-114,Unit,backend/tests/test_ratelimit.py,Window.test_keys_are_counted_separately,FR-SEC-20
+B-115,Unit,backend/tests/test_ratelimit.py,Window.test_refused_requests_are_not_counted_so_waiting_is_enough,FR-SEC-20
+B-116,Unit,backend/tests/test_ratelimit.py,Window.test_memory_stays_bounded_with_many_keys,FR-SEC-20
+B-117,Unit,backend/tests/test_ratelimit.py,ClientIp.test_forwarded_header_is_ignored_unless_trusted,FR-SEC-20
+B-118,Unit,backend/tests/test_ratelimit.py,ClientIp.test_trusted_header_uses_the_entry_the_proxy_added_not_the_one_the_client_wrote,FR-SEC-20
+B-119,Unit,backend/tests/test_ratelimit.py,ClientIp.test_without_a_usable_header_the_connection_address_is_used,FR-SEC-20
+B-120,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_reports_over_the_limit_get_429_with_retry_after_and_cost_nothing,FR-SEC-20
+B-121,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_the_same_report_is_accepted_when_the_phone_retries_after_the_wait,FR-SEC-20
+B-122,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_limit_is_per_ip_when_proxy_headers_are_trusted,FR-SEC-20
+B-123,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_an_invented_forwarded_header_does_not_help_when_proxy_headers_are_not_trusted,FR-SEC-20
+B-124,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_an_invented_leftmost_entry_does_not_help_when_proxy_headers_are_trusted,FR-SEC-20
+B-125,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_forged_reports_in_a_device_name_do_not_use_up_that_devices_limit,FR-SEC-20
+B-126,Integration,backend/tests/test_ratelimit.py,PublicLimits.test_health_ready_and_the_pages_are_limited_each_on_its_own,FR-SEC-20
+B-127,Integration,backend/tests/test_ratelimit.py,UserLimits.test_limit_is_per_user_and_not_per_ip,FR-SEC-20
+B-128,Integration,backend/tests/test_ratelimit.py,UserLimits.test_a_refused_user_request_says_when_to_retry,FR-SEC-20
+B-129,Integration,backend/tests/test_ratelimit.py,UserLimits.test_pairing_code_guessing_is_limited_per_user,FR-SEC-20 FR-SEC-01
+B-130,Integration,backend/tests/test_ratelimit.py,UserLimits.test_a_signed_in_admin_is_counted_like_any_user,FR-SEC-20 FR-SEC-02
+B-131,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_guessing_the_admin_token_is_stopped_but_the_right_token_works_from_elsewhere,FR-SEC-20 FR-SEC-01
+B-132,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_a_signed_in_admin_still_works_while_the_ip_is_guessing_the_token,FR-SEC-20 FR-SEC-01 FR-SEC-02
+B-133,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_a_flood_of_invalid_tokens_becomes_429_but_a_valid_token_is_never_refused,FR-SEC-20 FR-SEC-01
+B-134,Integration,backend/tests/test_ratelimit.py,FailedSignIns.test_requests_without_any_token_are_not_counted_as_failures,FR-SEC-20 FR-SEC-01
+B-135,Integration,backend/tests/test_ratelimit.py,Settings.test_limits_can_be_switched_off,FR-SEC-20
+B-136,Integration,backend/tests/test_ratelimit.py,Settings.test_development_mode_without_sign_in_has_no_limits_unless_asked,FR-SEC-20
+B-137,Unit,backend/tests/test_ratelimit.py,Settings.test_numbers_and_proxy_setting_come_from_the_environment,FR-SEC-20
+B-138,Unit,backend/tests/test_ratelimit.py,Settings.test_a_wrong_setting_stops_the_server_at_start,FR-SEC-20
+B-139,Integration,backend/tests/test_ratelimit.py,Settings.test_normal_use_of_one_phone_stays_under_the_default_limits,FR-SEC-20
+B-140,Integration,backend/tests/test_ratelimit.py,Settings.test_a_refusal_is_logged_once_per_window_without_tokens_or_secrets,FR-SEC-20 FR-SEC-21
+B-141,Integration,backend/tests/test_security_fixes.py,AnonymousMode.test_anonymous_switch_together_with_sign_in_stops_the_server_at_start,FR-SEC-01 FR-SEC-19
+B-142,Integration,backend/tests/test_security_fixes.py,AnonymousMode.test_with_sign_in_and_no_switch_a_request_without_a_token_is_refused,FR-SEC-01 FR-SEC-19
+B-143,Integration,backend/tests/test_security_fixes.py,AnonymousMode.test_development_run_without_sign_in_still_works,FR-SEC-01 FR-SEC-19
+B-144,Integration,backend/tests/test_security_fixes.py,WrongRole.test_signed_in_user_without_the_role_gets_403_and_without_credentials_401,FR-SEC-02 FR-SEC-01
+B-145,Integration,backend/tests/test_security_fixes.py,WrongRole.test_a_wrong_admin_token_does_not_hide_a_valid_administrator_sign_in,FR-SEC-02 FR-SEC-01
+B-146,Integration,backend/tests/test_security_fixes.py,FailedSignInLog.test_failed_sign_ins_are_logged_with_time_and_reason_but_never_the_token,FR-SEC-21 FR-SEC-01
+B-147,Integration,backend/tests/test_security_fixes.py,FailedSignInLog.test_successful_sign_ins_are_not_logged_as_failures,FR-SEC-21 FR-SEC-01
+B-148,Unit,backend/tests/test_ratelimit.py,Window.test_a_new_key_is_counted_when_the_table_is_full,FR-SEC-20
+B-149,Unit,backend/tests/test_ratelimit.py,Window.test_the_least_recently_used_key_is_the_one_forgotten,FR-SEC-20
+B-150,Unit,backend/tests/test_ratelimit.py,Window.test_a_full_table_does_not_slow_new_keys_down,FR-SEC-20
+B-151,Unit,backend/tests/test_ratelimit.py,Window.test_an_attack_that_goes_on_is_logged_once_in_every_window,FR-SEC-20
+B-152,Unit,backend/tests/test_ratelimit.py,ClientIp.test_ipv6_is_counted_per_64_so_one_device_cannot_dodge_by_changing_address,FR-SEC-20
+B-153,Integration,backend/tests/test_ratelimit.py,LogBudget.test_failed_sign_in_lines_are_capped_per_ip_and_the_rest_is_counted,FR-SEC-21 FR-SEC-20
+B-154,Integration,backend/tests/test_ratelimit.py,LogBudget.test_each_ip_has_its_own_budget,FR-SEC-21 FR-SEC-20
+B-155,Integration,backend/tests/test_ratelimit.py,LogBudget.test_the_log_has_a_budget_over_all_ips_together,FR-SEC-21 FR-SEC-20
+B-156,Integration,backend/tests/test_ratelimit.py,Settings.test_tests_do_not_depend_on_the_sign_in_settings_of_the_shell,FR-SEC-20
+S-26,System,sil/test_sil.py,DevApp.test_the_simulation_app_ignores_the_sign_in_settings_of_the_shell,FR-SEC-01

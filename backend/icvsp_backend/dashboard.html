@@ -159,11 +159,12 @@ const hashTok = new URLSearchParams(location.hash.slice(1)).get("token");
 try { if (hashTok) sessionStorage.setItem("icvsp_token", hashTok); token = sessionStorage.getItem("icvsp_token") || ""; } catch { token = hashTok || ""; }
 if (hashTok) history.replaceState(null, "", location.pathname);
 
-let demo = false, lastSeq = 0, feedItems = [], selected = null, overview = null, state = null, attackers = new Set();
+let pausedUntil = 0, demo = false, lastSeq = 0, feedItems = [], selected = null, overview = null, state = null, attackers = new Set();
 
 async function api(path, opts = {}) {
   const r = await fetch(path, { ...opts, headers: { "X-Admin-Token": token, "Content-Type": "application/json", ...(opts.headers || {}) } });
   if (r.status === 401) throw Object.assign(new Error("unauthorised"), { auth: true });
+  if (r.status === 429) throw Object.assign(new Error("too many requests"), { wait: parseInt(r.headers.get("Retry-After"), 10) || 30 });
   if (!r.ok) throw Object.assign(new Error(r.status), { status: r.status });
   return r.json();
 }
@@ -176,12 +177,16 @@ $("loginform").onsubmit = (e) => { e.preventDefault(); token = $("tok").value.tr
 async function tick() {
   try {
     overview = await api("/admin/overview?recent=40");
-    try { state = await api(`/demo/state?after=${lastSeq}`); demo = true; } catch (e) { if (e.auth) throw e; demo = false; state = null; }
+    try { state = await api(`/demo/state?after=${lastSeq}`); demo = true; } catch (e) { if (e.auth || e.wait) throw e; demo = false; state = null; }
     $("conn").className = "dot on"; $("connlbl").textContent = demo ? "live demo" : "connected";
     $("app").classList.remove("hidden");
     render();
   } catch (e) {
     if (e.auth) { showLogin(); return; }
+    if (e.wait) {                                   // 429: the backend is fine, it asks us to slow down
+      pausedUntil = Date.now() + 1000 * e.wait;
+      $("conn").className = "dot off"; $("connlbl").textContent = `too many requests, retry in ${e.wait} s`; return;
+    }
     $("conn").className = "dot off"; $("connlbl").textContent = "backend unreachable";
   }
 }
@@ -342,7 +347,7 @@ $("speed").onchange = (e) => api("/demo/control", { method: "POST", body: JSON.s
 document.querySelectorAll("[data-a]").forEach((b) => b.onclick = () => api("/demo/inject", { method: "POST", body: JSON.stringify({ kind: b.dataset.a }) }).then(() => setTimeout(tick, 400)));
 
 if (!token) showLogin(); else tick();
-setInterval(() => { if (token && $("login").classList.contains("hidden")) tick(); }, 1000);
+setInterval(() => { if (token && $("login").classList.contains("hidden") && Date.now() >= pausedUntil) tick(); }, 1000);
 </script>
 </body>
 </html>

@@ -579,21 +579,21 @@ class Access(Case):
     def test_driver_cannot_use_operator_endpoints(self):
         driver = self.new_user()
         self.car("car-a")
-        self.assertEqual(self.client.post("/admin/settle", headers=driver).status_code, 401)
-        self.assertEqual(self.client.post("/admin/evaluate", headers=driver).status_code, 401)
-        self.assertEqual(self.client.get("/admin/overview", headers=driver).status_code, 401)
-        self.assertEqual(self.client.post("/devices/car-a/revoke", headers=driver).status_code, 401)
+        self.assertEqual(self.client.post("/admin/settle", headers=driver).status_code, 403)
+        self.assertEqual(self.client.post("/admin/evaluate", headers=driver).status_code, 403)
+        self.assertEqual(self.client.get("/admin/overview", headers=driver).status_code, 403)
+        self.assertEqual(self.client.post("/devices/car-a/revoke", headers=driver).status_code, 403)
         self.assertEqual(self.client.put(f"/admin/users/{self.uid(driver)}/role", json={"role": "admin"},
-                                         headers=driver).status_code, 401)
+                                         headers=driver).status_code, 403)
 
     def test_administrator_role_comes_from_the_database_and_takes_effect_at_once(self):
         driver = self.new_user()
-        self.assertEqual(self.client.get("/admin/overview", headers=driver).status_code, 401)
+        self.assertEqual(self.client.get("/admin/overview", headers=driver).status_code, 403)
         r = self.client.put(f"/admin/users/{self.uid(driver)}/role", json={"role": "admin"}, headers=ADMIN)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(self.client.get("/admin/overview", headers=driver).status_code, 200)
         self.client.put(f"/admin/users/{self.uid(driver)}/role", json={"role": "driver"}, headers=ADMIN)
-        self.assertEqual(self.client.get("/admin/overview", headers=driver).status_code, 401)
+        self.assertEqual(self.client.get("/admin/overview", headers=driver).status_code, 403)
 
     def test_driver_sees_published_hazards_only_and_never_the_evidence(self):
         self.hazard()
