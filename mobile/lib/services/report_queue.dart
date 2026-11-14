@@ -110,14 +110,33 @@ class ReportQueue extends ChangeNotifier {
     final insertedId = await db.transaction<int>((txn) async {
       final stored = await txn.query(
         'reports',
-        columns: ['id'],
+        columns: ['id', 'line', 'state'],
         where: 'device_id = ? AND event_id = ?',
         whereArgs: [deviceId, eventId],
         limit: 1,
       );
 
       // A duplicate must never push an older report out of a full queue.
-      if (stored.isNotEmpty) return 0;
+      if (stored.isNotEmpty) {
+        final row = stored.first;
+        final state = row['state'] as String;
+        final storedLine = row['line'] as Uint8List;
+
+        // Only a still-queued report keeps its original bytes (a
+        // finished report's line is cleared), so content can only be
+        // compared while it's still queued. Same event_id but different
+        // content is logged on the existing row instead of being
+        // silently dropped.
+        if (state == stateQueued && !_bytesEqual(storedLine, line)) {
+          await txn.rawUpdate(
+            'UPDATE reports SET attempts = attempts + 1, last_result = ? '
+            'WHERE id = ?',
+            ['event_id_conflict', row['id'] as int],
+          );
+        }
+
+        return 0;
+      }
 
       final queued =
           Sqflite.firstIntValue(
@@ -154,6 +173,17 @@ class ReportQueue extends ChangeNotifier {
 
     notifyListeners();
     return insertedId > 0;
+  }
+
+  bool _bytesEqual(Uint8List a, Uint8List b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+
+    return true;
   }
 
   Future<QueuedReport?> nextQueued() async {
@@ -249,5 +279,31 @@ class ReportQueue extends ChangeNotifier {
         lastResult: row['last_result'] as String?,
       );
     }).toList();
+  }
+
+  /// Counts over the whole table, not just the most recent rows `recent()`
+  /// returns, so the Reports screen's totals are always accurate.
+  Future<Map<String, int>> counts() async {
+    final db = await _db;
+    final rows = await db.rawQuery(
+      'SELECT state, COUNT(*) AS count FROM reports GROUP BY state',
+    );
+
+    final result = <String, int>{
+      stateQueued: 0,
+      stateSent: 0,
+      stateRejected: 0,
+    };
+
+    for (final row in rows) {
+      final state = row['state'] as String?;
+      final count = row['count'] as int?;
+
+      if (state != null && count != null) {
+        result[state] = count;
+      }
+    }
+
+    return result;
   }
 }

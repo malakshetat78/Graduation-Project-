@@ -247,4 +247,62 @@ void main() {
     expect(report.state, ReportQueue.stateSent);
     expect(report.lastResult, 'duplicate');
   });
+
+  test(
+    'logs a conflict when the same event_id arrives with different content',
+    () async {
+      await queue.enqueue(reportLine('e1'));
+
+      // Same device_id/event_id, different detected_at makes the bytes
+      // different from what's already stored.
+      final conflicting = reportLine(
+        'e1',
+        detectedAt: DateTime.now().toUtc().add(const Duration(minutes: 1)),
+      );
+
+      expect(await queue.enqueue(conflicting), isFalse);
+
+      final report = (await queue.recent()).single;
+
+      expect(report.state, ReportQueue.stateQueued);
+      expect(report.lastResult, 'event_id_conflict');
+    },
+  );
+
+  test(
+    'does not flag a resend of an already-sent report as a conflict',
+    () async {
+      final line = reportLine('e1');
+
+      await queue.enqueue(line);
+
+      final uploader = ReportUploader(
+        queue: queue,
+        client: MockClient(
+          (request) async => http.Response('{"status":"accepted"}', 201),
+        ),
+      );
+
+      await uploader.run();
+
+      // The device resends because it never saw the server's reply.
+      expect(await queue.enqueue(line), isFalse);
+
+      final report = (await queue.recent()).single;
+
+      expect(report.state, ReportQueue.stateSent);
+      expect(report.lastResult, 'accepted');
+    },
+  );
+
+  test('counts the whole table, not just the most recent 200 rows', () async {
+    for (var i = 0; i < 205; i++) {
+      await queue.enqueue(reportLine('pothole-$i'));
+    }
+
+    final counts = await queue.counts();
+
+    expect(counts[ReportQueue.stateQueued], 205);
+    expect((await queue.recent()).length, 200);
+  });
 }

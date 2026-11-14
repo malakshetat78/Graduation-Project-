@@ -19,6 +19,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
   final ReportQueue _queue = ReportQueue.instance;
 
   List<ReportSummary> _reports = [];
+  Map<String, int> _counts = const {
+    ReportQueue.stateQueued: 0,
+    ReportQueue.stateSent: 0,
+    ReportQueue.stateRejected: 0,
+  };
   bool _adding = false;
 
   @override
@@ -36,11 +41,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   Future<void> _load() async {
     final reports = await _queue.recent();
+    final counts = await _queue.counts();
 
     if (!mounted) return;
 
     setState(() {
       _reports = reports;
+      _counts = counts;
     });
   }
 
@@ -99,7 +106,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   int _count(String state) {
-    return _reports.where((report) => report.state == state).length;
+    return _counts[state] ?? 0;
   }
 
   Widget _countTile(String label, int value) {
