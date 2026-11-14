@@ -80,6 +80,24 @@ void main() {
     expect((first as Map)['event']['event_id'], 'bump');
   }, timeout: const Timeout(Duration(minutes: 3)));
 
+  test(
+    'keeps a full queue unchanged when a stored report arrives again',
+    () async {
+      await queue.enqueue(reportLine('first'));
+
+      for (var i = 0; i < 999; i++) {
+        await queue.enqueue(reportLine('pothole-$i'));
+      }
+
+      expect(await queue.enqueue(reportLine('first')), isFalse);
+
+      final oldest = jsonDecode(utf8.decode((await queue.nextQueued())!.line));
+
+      expect((oldest as Map)['event']['event_id'], 'first');
+    },
+    timeout: const Timeout(Duration(minutes: 3)),
+  );
+
   test('marks a report sent after 201 and sends its exact bytes', () async {
     final line = reportLine('e1');
     late Uint8List sentBytes;

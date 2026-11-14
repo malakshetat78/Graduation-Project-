@@ -53,6 +53,7 @@ class BeaconService extends ChangeNotifier {
   Future<void> start() async {
     if (isActive || status == TripStatus.starting) return;
 
+    lastProblem = null;
     _setStatus(TripStatus.starting);
 
     if (DeviceService.instance.devices.isEmpty) {
@@ -62,6 +63,8 @@ class BeaconService extends ChangeNotifier {
     _vehicleId = DeviceService.instance.vehicleId;
 
     if (_vehicleId.isEmpty) {
+      // A failed load is not the same as having no linked device.
+      lastProblem = DeviceService.instance.lastProblem;
       _setStatus(TripStatus.noDevice);
       return;
     }
@@ -72,7 +75,6 @@ class BeaconService extends ChangeNotifier {
     }
 
     sentCount = 0;
-    lastProblem = null;
 
     _positions = Geolocator.getPositionStream(
       locationSettings: AndroidSettings(
@@ -94,6 +96,19 @@ class BeaconService extends ChangeNotifier {
     await _positions?.cancel();
     _positions = null;
     await _flush();
+    _setStatus(TripStatus.stopped);
+  }
+
+  /// Drops everything from the signed-out user, so nothing reaches the next.
+  Future<void> clear() async {
+    _timer?.cancel();
+    _timer = null;
+    await _positions?.cancel();
+    _positions = null;
+    _buffer.clear();
+    _vehicleId = '';
+    sentCount = 0;
+    lastProblem = null;
     _setStatus(TripStatus.stopped);
   }
 

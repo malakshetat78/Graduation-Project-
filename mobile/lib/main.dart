@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/app_colors.dart';
+import 'screens/forgot_password_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/new_password_screen.dart';
 import 'screens/welcome_screen.dart';
+import 'services/beacon_service.dart';
+import 'services/device_service.dart';
 import 'services/report_queue.dart';
 import 'services/report_uploader.dart';
+import 'services/reset_link.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -26,11 +32,24 @@ Future<void> main() async {
       debugPrint('Auth event: ${data.event}');
 
       if (data.event == AuthChangeEvent.passwordRecovery) {
-        _openNewPassword();
+        _open(const NewPasswordScreen());
+      }
+
+      if (data.event == AuthChangeEvent.signedOut) {
+        unawaited(BeaconService.instance.clear());
+        DeviceService.instance.clear();
       }
     },
     onError: (Object error) {
       debugPrint('Auth link error: $error');
+
+      if (isResetLinkError(error)) {
+        _open(
+          const ForgotPasswordScreen(
+            notice: 'This reset link has expired. Request a new one.',
+          ),
+        );
+      }
     },
   );
 
@@ -38,10 +57,17 @@ Future<void> main() async {
   runApp(RovoApp(signedIn: signedIn));
 }
 
-void _openNewPassword() {
-  navigatorKey.currentState?.push(
-    MaterialPageRoute<void>(builder: (context) => const NewPasswordScreen()),
-  );
+/// Opens a screen now, or as soon as the app has its first frame.
+void _open(Widget screen) {
+  final navigator = navigatorKey.currentState;
+
+  if (navigator != null) {
+    navigator.push(MaterialPageRoute<void>(builder: (context) => screen));
+    return;
+  }
+
+  WidgetsBinding.instance.addPostFrameCallback((_) => _open(screen));
+  WidgetsBinding.instance.ensureVisualUpdate();
 }
 
 class RovoApp extends StatelessWidget {

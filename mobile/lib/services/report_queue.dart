@@ -108,6 +108,17 @@ class ReportQueue extends ChangeNotifier {
     final db = await _db;
 
     final insertedId = await db.transaction<int>((txn) async {
+      final stored = await txn.query(
+        'reports',
+        columns: ['id'],
+        where: 'device_id = ? AND event_id = ?',
+        whereArgs: [deviceId, eventId],
+        limit: 1,
+      );
+
+      // A duplicate must never push an older report out of a full queue.
+      if (stored.isNotEmpty) return 0;
+
       final queued =
           Sqflite.firstIntValue(
             await txn.rawQuery('SELECT COUNT(*) FROM reports WHERE state = ?', [

@@ -7,7 +7,6 @@ import 'hazards_screen.dart';
 import 'devices_screen.dart';
 import 'reports_screen.dart';
 import 'account_screen.dart';
-import 'alert_screen.dart';
 import 'trip_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,13 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
-  void _openAlert() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const AlertScreen()),
-    );
-  }
 
   String get _firstName {
     final name =
@@ -122,80 +114,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
 
-        Expanded(
+        const Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                const LiveMap(),
-                Positioned(
-                  right: 16,
-                  bottom: 64,
-                  child: FloatingActionButton.small(
-                    tooltip: 'Preview road alert',
-                    backgroundColor: AppColors.turquoise,
-                    foregroundColor: AppColors.navy,
-                    onPressed: _openAlert,
-                    child: const Icon(Icons.notifications_active_outlined),
-                  ),
-                ),
-              ],
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: LiveMap(),
           ),
         ),
 
         const TripCard(),
 
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE1E5EA)),
-            ),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.warning_amber_rounded,
-                  color: AppColors.coral,
-                  size: 42,
-                ),
-                SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Pothole ahead',
-                        style: TextStyle(
-                          color: AppColors.navy,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        '250 m · Your direction',
-                        style: TextStyle(color: AppColors.navy, fontSize: 14),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        'Sample alert',
-                        style: TextStyle(
-                          color: Color(0xFF65758A),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        const SizedBox(height: 20),
       ],
     );
   }

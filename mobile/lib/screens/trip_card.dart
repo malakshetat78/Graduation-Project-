@@ -14,7 +14,7 @@ class TripCard extends StatelessWidget {
       case TripStatus.starting:
         return 'Starting...';
       case TripStatus.noDevice:
-        return 'Link a device before starting a trip.';
+        return service.lastProblem ?? 'Link a device before starting a trip.';
       case TripStatus.noLocation:
         return 'Location is unavailable.';
       case TripStatus.stopped:

@@ -34,6 +34,14 @@ class DeviceService extends ChangeNotifier {
     return headers;
   }
 
+  /// Forgets the signed-out user's devices.
+  void clear() {
+    devices = [];
+    loading = false;
+    lastProblem = null;
+    notifyListeners();
+  }
+
   Future<void> load() async {
     loading = true;
     lastProblem = null;
