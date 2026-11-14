@@ -5,8 +5,10 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'api_service.dart';
+import 'device_service.dart';
 
 enum TripStatus { stopped, starting, active, noDevice, noLocation }
 
@@ -15,7 +17,11 @@ class BeaconService extends ChangeNotifier {
 
   static final BeaconService instance = BeaconService._();
 
-  static const _vehicleId = String.fromEnvironment('BEACON_DEVICE_ID');
+  // Only for the local anonymous server, which refuses any token.
+  static const _sendToken = bool.fromEnvironment(
+    'BEACON_SEND_TOKEN',
+    defaultValue: true,
+  );
   static const _sendEvery = Duration(seconds: 10);
   static const _requestTimeout = Duration(seconds: 10);
   static const _maxBuffered = 3600;
@@ -27,10 +33,14 @@ class BeaconService extends ChangeNotifier {
   StreamSubscription<Position>? _positions;
   Timer? _timer;
   bool _sending = false;
+  String _vehicleId = '';
 
   TripStatus status = TripStatus.stopped;
   int sentCount = 0;
   String? lastProblem;
+
+  /// True only while the ROVO device is connected and detecting.
+  bool detectorOn = false;
 
   bool get isActive => status == TripStatus.active;
   int get waitingCount => _buffer.length;
@@ -43,12 +53,21 @@ class BeaconService extends ChangeNotifier {
   Future<void> start() async {
     if (isActive || status == TripStatus.starting) return;
 
+    lastProblem = null;
+    _setStatus(TripStatus.starting);
+
+    if (DeviceService.instance.devices.isEmpty) {
+      await DeviceService.instance.load();
+    }
+
+    _vehicleId = DeviceService.instance.vehicleId;
+
     if (_vehicleId.isEmpty) {
+      // A failed load is not the same as having no linked device.
+      lastProblem = DeviceService.instance.lastProblem;
       _setStatus(TripStatus.noDevice);
       return;
     }
-
-    _setStatus(TripStatus.starting);
 
     if (!await _locationAllowed()) {
       _setStatus(TripStatus.noLocation);
@@ -56,13 +75,14 @@ class BeaconService extends ChangeNotifier {
     }
 
     sentCount = 0;
-    lastProblem = null;
 
     _positions = Geolocator.getPositionStream(
       locationSettings: AndroidSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 0,
         intervalDuration: const Duration(seconds: 1),
+        // Keeps working if the user declines Google Location Accuracy.
+        forceLocationManager: true,
       ),
     ).listen(_addPosition, onError: (_) => _setStatus(TripStatus.noLocation));
 
@@ -76,6 +96,19 @@ class BeaconService extends ChangeNotifier {
     await _positions?.cancel();
     _positions = null;
     await _flush();
+    _setStatus(TripStatus.stopped);
+  }
+
+  /// Drops everything from the signed-out user, so nothing reaches the next.
+  Future<void> clear() async {
+    _timer?.cancel();
+    _timer = null;
+    await _positions?.cancel();
+    _positions = null;
+    _buffer.clear();
+    _vehicleId = '';
+    sentCount = 0;
+    lastProblem = null;
     _setStatus(TripStatus.stopped);
   }
 
@@ -103,7 +136,7 @@ class BeaconService extends ChangeNotifier {
       'lon': position.longitude,
       'speed_mps': max(position.speed, 0.0),
       'heading_deg': position.heading % 360,
-      'detector_on': true,
+      'detector_on': detectorOn,
     });
 
     if (_buffer.length > _maxBuffered) {
@@ -111,6 +144,17 @@ class BeaconService extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Map<String, String> _headers() {
+    final headers = {'Content-Type': 'application/json'};
+    final token = Supabase.instance.client.auth.currentSession?.accessToken;
+
+    if (_sendToken && token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
   }
 
   Future<void> _flush() async {
@@ -123,7 +167,7 @@ class BeaconService extends ChangeNotifier {
       final response = await _client
           .post(
             Uri.parse('${ApiService.baseUrl}/beacons'),
-            headers: {'Content-Type': 'application/json'},
+            headers: _headers(),
             body: jsonEncode(batch),
           )
           .timeout(_requestTimeout);
@@ -132,6 +176,9 @@ class BeaconService extends ChangeNotifier {
         _buffer.removeRange(0, min(batch.length, _buffer.length));
         sentCount += batch.length;
         lastProblem = null;
+      } else if (response.statusCode == 401) {
+        // Keep the positions: they can be sent after signing in again.
+        lastProblem = 'Sign in again to share your position.';
       } else if (_finalStatuses.contains(response.statusCode)) {
         _buffer.removeRange(0, min(batch.length, _buffer.length));
         lastProblem = 'Server refused positions: ${response.statusCode}';

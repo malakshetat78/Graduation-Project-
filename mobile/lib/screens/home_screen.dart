@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
 import '../services/beacon_service.dart';
 import '../services/hazard_alert_service.dart';
-import 'map_preview.dart';
+import 'live_map.dart';
 import 'hazards_screen.dart';
 import 'devices_screen.dart';
 import 'reports_screen.dart';
@@ -89,6 +90,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  String get _firstName {
+    final name =
+        Supabase.instance.client.auth.currentUser?.userMetadata?['full_name'];
+
+    if (name is String && name.trim().isNotEmpty) {
+      return name.trim().split(' ').first;
+    }
+
+    return 'Driver';
+  }
+
   @override
   Widget build(BuildContext context) {
     final pages = [
@@ -151,21 +163,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(24, 24, 24, 18),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hi, User',
-                style: TextStyle(
+                'Hi, $_firstName',
+                style: const TextStyle(
                   color: AppColors.navy,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 6),
-              Text(
+              const SizedBox(height: 6),
+              const Text(
                 'Your road. A little safer.',
                 style: TextStyle(color: AppColors.navy, fontSize: 15),
               ),
@@ -179,9 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ListenableBuilder(
               listenable: _alerts,
               builder: (context, _) {
-                return MapPreview(
-                  fix: _alerts.lastFix,
-                  headingDeg: _alerts.headingDeg,
+                return LiveMap(
                   hazards: _alerts.hazards,
                   onHazardTap: _showHazard,
                 );

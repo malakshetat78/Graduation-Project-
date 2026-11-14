@@ -28,9 +28,9 @@ class ReportSummary {
 }
 
 class ReportQueue extends ChangeNotifier {
-  ReportQueue._();
+  ReportQueue({this._databasePath});
 
-  static final ReportQueue instance = ReportQueue._();
+  static final ReportQueue instance = ReportQueue();
 
   static const stateQueued = 'queued';
   static const stateSent = 'sent';
@@ -41,12 +41,15 @@ class ReportQueue extends ChangeNotifier {
   static const _speedBumpLifetime = Duration(days: 13);
   static const _historyLifetime = Duration(days: 7);
 
+  final String? _databasePath;
+
   Future<Database>? _database;
 
   Future<Database> get _db => _database ??= _open();
 
   Future<Database> _open() async {
-    final path = p.join(await getDatabasesPath(), 'rovo_reports.db');
+    final path =
+        _databasePath ?? p.join(await getDatabasesPath(), 'rovo_reports.db');
 
     return openDatabase(
       path,
@@ -105,6 +108,17 @@ class ReportQueue extends ChangeNotifier {
     final db = await _db;
 
     final insertedId = await db.transaction<int>((txn) async {
+      final stored = await txn.query(
+        'reports',
+        columns: ['id'],
+        where: 'device_id = ? AND event_id = ?',
+        whereArgs: [deviceId, eventId],
+        limit: 1,
+      );
+
+      // A duplicate must never push an older report out of a full queue.
+      if (stored.isNotEmpty) return 0;
+
       final queued =
           Sqflite.firstIntValue(
             await txn.rawQuery('SELECT COUNT(*) FROM reports WHERE state = ?', [

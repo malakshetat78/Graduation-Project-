@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_colors.dart';
+import '../services/device_service.dart';
 
 class DevicesScreen extends StatefulWidget {
   const DevicesScreen({super.key});
@@ -10,226 +11,193 @@ class DevicesScreen extends StatefulWidget {
 }
 
 class _DevicesScreenState extends State<DevicesScreen> {
-  bool _hasDemoDevice = true;
+  final _formKey = GlobalKey<FormState>();
+  final _deviceIdController = TextEditingController();
+  final _codeController = TextEditingController();
+  final DeviceService _service = DeviceService.instance;
 
-  void _showConnectionInfo() {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppColors.cream,
-          title: const Text('Connect your ROVO unit'),
-          content: const Text(
-            'Device pairing will be added after the UI is complete. '
-            'This preview does not connect to real hardware.',
+  bool _linking = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _service.load();
+  }
+
+  @override
+  void dispose() {
+    _deviceIdController.dispose();
+    _codeController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _link() async {
+    if (_linking || !_formKey.currentState!.validate()) return;
+
+    FocusScope.of(context).unfocus();
+
+    setState(() {
+      _linking = true;
+      _error = null;
+    });
+
+    final problem = await _service.link(
+      _deviceIdController.text.trim(),
+      _codeController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _linking = false;
+      _error = problem;
+    });
+
+    if (problem == null) {
+      _deviceIdController.clear();
+      _codeController.clear();
+    }
+  }
+
+  InputDecoration _inputStyle(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon, color: AppColors.navy),
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+    );
+  }
+
+  Widget _deviceCard(String deviceId) {
+    return Card(
+      color: Colors.white,
+      elevation: 0,
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: const Icon(Icons.sensors, color: AppColors.navy),
+        title: Text(
+          deviceId,
+          style: const TextStyle(
+            color: AppColors.navy,
+            fontWeight: FontWeight.bold,
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Got it'),
-            ),
-          ],
-        );
-      },
+        ),
+        subtitle: const Text('Linked to your account'),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(24),
-      children: [
-        const Text(
-          'My devices',
-          style: TextStyle(
-            color: AppColors.navy,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        const Text(
-          'Your vehicle, connected.',
-          style: TextStyle(color: AppColors.navy, fontSize: 15),
-        ),
-
-        const SizedBox(height: 8),
-
-        const Text(
-          'UI preview · No real device connection',
-          style: TextStyle(color: Color(0xFF65758A), fontSize: 12),
-        ),
-
-        const SizedBox(height: 28),
-
-        if (_hasDemoDevice)
-          Material(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-              side: const BorderSide(color: Color(0xFFE1E5EA)),
+    return ListenableBuilder(
+      listenable: _service,
+      builder: (context, _) {
+        return ListView(
+          padding: const EdgeInsets.all(24),
+          children: [
+            const Text(
+              'My devices',
+              style: TextStyle(
+                color: AppColors.navy,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            clipBehavior: Clip.antiAlias,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
+            const SizedBox(height: 8),
+            const Text(
+              'Your vehicle, connected.',
+              style: TextStyle(color: AppColors.navy, fontSize: 15),
+            ),
+            const SizedBox(height: 24),
+            if (_service.loading)
+              const Center(
+                child: CircularProgressIndicator(color: AppColors.navy),
+              )
+            else if (_service.devices.isEmpty)
+              Text(
+                _service.lastProblem ?? 'No devices linked yet.',
+                style: const TextStyle(color: AppColors.navy),
+              )
+            else
+              ..._service.devices.map(_deviceCard),
+            const SizedBox(height: 28),
+            const Text(
+              'Link a device',
+              style: TextStyle(
+                color: AppColors.navy,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Form(
+              key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 140,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.navy,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: const Icon(
-                      Icons.sensors,
-                      color: AppColors.turquoise,
-                      size: 76,
-                    ),
-                  ),
-
-                  const SizedBox(height: 22),
-
-                  const Text(
-                    'ROVO Unit 01',
-                    style: TextStyle(
-                      color: AppColors.navy,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 7,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEDF0F4),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      'Demo device',
-                      style: TextStyle(color: AppColors.navy, fontSize: 12),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  const ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.bluetooth_disabled,
-                      color: AppColors.navy,
-                    ),
-                    title: Text('Not connected'),
-                    subtitle: Text('Hardware pairing is not active yet'),
-                  ),
-
-                  const Divider(),
-
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(
-                      Icons.settings_outlined,
-                      color: AppColors.navy,
-                    ),
-                    title: const Text('Connection settings'),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: _showConnectionInfo,
-                  ),
-
-                  TextButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        _hasDemoDevice = false;
-                      });
+                  TextFormField(
+                    controller: _deviceIdController,
+                    autocorrect: false,
+                    textInputAction: TextInputAction.next,
+                    decoration: _inputStyle('Device ID', Icons.sensors),
+                    validator: (value) {
+                      return (value ?? '').trim().isEmpty
+                          ? 'Enter the device ID'
+                          : null;
                     },
-                    icon: const Icon(Icons.link_off),
-                    label: const Text('Remove demo device'),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.navy,
-                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  TextFormField(
+                    controller: _codeController,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _link(),
+                    decoration: _inputStyle('Pairing code', Icons.pin_outlined),
+                    validator: (value) {
+                      return (value ?? '').trim().isEmpty
+                          ? 'Enter the pairing code'
+                          : null;
+                    },
                   ),
                 ],
               ),
             ),
-          )
-        else
-          Container(
-            padding: const EdgeInsets.all(28),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: const Color(0xFFE1E5EA)),
-            ),
-            child: const Column(
-              children: [
-                Icon(Icons.sensors_off, size: 64, color: AppColors.navy),
-                SizedBox(height: 18),
-                Text(
-                  'No devices yet',
-                  style: TextStyle(
-                    color: AppColors.navy,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Add a demo device to preview its card.',
+            const SizedBox(height: 16),
+            if (_error != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  _error!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF65758A), height: 1.5),
-                ),
-              ],
-            ),
-          ),
-
-        const SizedBox(height: 20),
-
-        if (!_hasDemoDevice)
-          SizedBox(
-            height: 54,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  _hasDemoDevice = true;
-                });
-              },
-              icon: const Icon(Icons.add),
-              label: const Text('Add demo device'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.turquoise,
-                foregroundColor: AppColors.navy,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  style: const TextStyle(color: AppColors.coral),
                 ),
               ),
+            SizedBox(
+              height: 54,
+              child: ElevatedButton(
+                onPressed: _linking ? null : _link,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.turquoise,
+                  foregroundColor: AppColors.navy,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text(_linking ? 'Linking...' : 'Link device'),
+              ),
             ),
-          ),
-
-        const SizedBox(height: 16),
-
-        Material(
-          color: Colors.transparent,
-          child: ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+            const SizedBox(height: 14),
+            const Text(
+              'Bluetooth connection is not active yet.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Color(0xFF65758A), fontSize: 12),
             ),
-            tileColor: Colors.white,
-            leading: const Icon(Icons.help_outline, color: AppColors.navy),
-            title: const Text('How to connect'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: _showConnectionInfo,
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }

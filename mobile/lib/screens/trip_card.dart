@@ -22,7 +22,8 @@ class TripCard extends StatelessWidget {
             'Road alerts on · Sent ${beacons.sentCount} · '
                 'Waiting ${beacons.waitingCount}';
       case TripStatus.noDevice:
-        return 'Road alerts on. Link a device to share your position.';
+        return beacons.lastProblem ??
+            'Road alerts on. Link a device to share your position.';
       case TripStatus.noLocation:
       case TripStatus.starting:
       case TripStatus.stopped:

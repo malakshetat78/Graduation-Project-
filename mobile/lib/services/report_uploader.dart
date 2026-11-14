@@ -8,36 +8,53 @@ import 'api_service.dart';
 import 'report_queue.dart';
 
 class ReportUploader {
-  ReportUploader._();
+  ReportUploader({ReportQueue? queue, http.Client? client, Random? random})
+    : _queue = queue ?? ReportQueue.instance,
+      _client = client ?? http.Client(),
+      _random = random ?? Random();
 
-  static final ReportUploader instance = ReportUploader._();
+  static final ReportUploader instance = ReportUploader();
 
   static const _requestTimeout = Duration(seconds: 10);
   static const _firstDelayMs = 2000;
   static const _maxDelayMs = 300000;
   static const _finalStatuses = {400, 401, 403, 409, 413, 422};
 
-  final ReportQueue _queue = ReportQueue.instance;
-  final http.Client _client = http.Client();
-  final Random _random = Random();
+  final ReportQueue _queue;
+  final http.Client _client;
+  final Random _random;
 
   Timer? _timer;
   bool _running = false;
   bool _runAgain = false;
   int _failures = 0;
 
+  /// The wait before the next attempt, between 80% and 120% of the base.
+  static Duration retryDelay(int failures, double randomUnit) {
+    final doubledMs = _firstDelayMs * (1 << min(failures, 8));
+    final baseMs = min(doubledMs, _maxDelayMs);
+
+    return Duration(milliseconds: (baseMs * (0.8 + randomUnit * 0.4)).round());
+  }
+
   /// Starts sending unless a retry delay is already being respected.
   void kick() {
     if (_timer?.isActive ?? false) return;
-    unawaited(_run());
+    unawaited(run());
   }
 
   void retryNow() {
     _timer?.cancel();
-    unawaited(_run());
+    unawaited(run());
   }
 
-  Future<void> _run() async {
+  void dispose() {
+    _timer?.cancel();
+  }
+
+  Duration? lastWait;
+
+  Future<void> run() async {
     if (_running) {
       _runAgain = true;
       return;
@@ -64,7 +81,7 @@ class ReportUploader {
       _scheduleRetry(wait);
     } else if (_runAgain) {
       _runAgain = false;
-      await _run();
+      await run();
     }
   }
 
@@ -127,15 +144,14 @@ class ReportUploader {
   }
 
   void _scheduleRetry(Duration serverWait) {
-    final doubledMs = _firstDelayMs * (1 << min(_failures, 8));
-    final baseMs = min(doubledMs, _maxDelayMs);
-    final delayMs = (baseMs * (0.8 + _random.nextDouble() * 0.4)).round();
-    final delay = Duration(milliseconds: delayMs);
+    final delay = retryDelay(_failures, _random.nextDouble());
+    final wait = serverWait > delay ? serverWait : delay;
 
     _failures++;
+    lastWait = wait;
     _timer?.cancel();
-    _timer = Timer(serverWait > delay ? serverWait : delay, () {
-      unawaited(_run());
+    _timer = Timer(wait, () {
+      unawaited(run());
     });
   }
 }
