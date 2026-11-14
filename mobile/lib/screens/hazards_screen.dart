@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/app_colors.dart';
 import '../services/api_service.dart';
+import '../services/driver_location.dart';
+import '../services/hazard_alert_service.dart';
 
 class HazardsScreen extends StatefulWidget {
   const HazardsScreen({super.key});
@@ -16,7 +19,7 @@ class _HazardsScreenState extends State<HazardsScreen> {
   String _selectedFilter = 'All';
   bool _loading = true;
   String? _error;
-  List<Map<String, String>> _hazards = [];
+  List<HazardAhead> _hazards = [];
 
   @override
   void initState() {
@@ -31,7 +34,25 @@ class _HazardsScreenState extends State<HazardsScreen> {
     });
 
     try {
-      final hazards = await _apiService.getHazards();
+      final token = Supabase.instance.client.auth.currentSession?.accessToken;
+
+      if (token == null) {
+        throw StateError('Not signed in');
+      }
+
+      if (!await DriverLocation.allowed()) {
+        if (!mounted) return;
+
+        setState(() {
+          _error = 'Allow location access to see hazards near you.';
+        });
+        return;
+      }
+
+      final hazards = await _apiService.getNearbyHazards(
+        await DriverLocation.current(),
+        token,
+      );
 
       if (!mounted) return;
 
@@ -53,8 +74,8 @@ class _HazardsScreenState extends State<HazardsScreen> {
     }
   }
 
-  Widget _statusBadge(String status) {
-    final underReview = status == 'Under review';
+  Widget _statusBadge(HazardAhead hazard) {
+    final underReview = hazard.isAdvisory;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
@@ -63,13 +84,13 @@ class _HazardsScreenState extends State<HazardsScreen> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        status,
+        hazard.evidenceLabel,
         style: const TextStyle(color: AppColors.navy, fontSize: 12),
       ),
     );
   }
 
-  void _showDetails(Map<String, String> hazard) {
+  void _showDetails(HazardAhead hazard) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -90,7 +111,7 @@ class _HazardsScreenState extends State<HazardsScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  hazard['title']!,
+                  hazard.typeName,
                   style: const TextStyle(
                     color: AppColors.navy,
                     fontSize: 26,
@@ -99,17 +120,11 @@ class _HazardsScreenState extends State<HazardsScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Example distance: ${hazard['distance']}',
+                  '${formatDistance(hazard.distanceM)} away, in a straight line',
                   style: const TextStyle(color: AppColors.navy, fontSize: 16),
                 ),
                 const SizedBox(height: 12),
-                _statusBadge(hazard['status']!),
-                const SizedBox(height: 20),
-                const Text(
-                  'Demo data received from FastAPI. '
-                  'Distances and verification statuses are examples.',
-                  style: TextStyle(color: Color(0xFF65758A), height: 1.5),
-                ),
+                _statusBadge(hazard),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
@@ -163,7 +178,7 @@ class _HazardsScreenState extends State<HazardsScreen> {
     );
   }
 
-  Widget _hazardCard(Map<String, String> hazard) {
+  Widget _hazardCard(HazardAhead hazard) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Material(
@@ -191,7 +206,7 @@ class _HazardsScreenState extends State<HazardsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        hazard['title']!,
+                        hazard.typeName,
                         style: const TextStyle(
                           color: AppColors.navy,
                           fontSize: 18,
@@ -200,11 +215,11 @@ class _HazardsScreenState extends State<HazardsScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        '${hazard['distance']} · Demo distance',
+                        '${formatDistance(hazard.distanceM)} away',
                         style: const TextStyle(color: AppColors.navy),
                       ),
                       const SizedBox(height: 12),
-                      _statusBadge(hazard['status']!),
+                      _statusBadge(hazard),
                     ],
                   ),
                 ),
@@ -220,7 +235,7 @@ class _HazardsScreenState extends State<HazardsScreen> {
   @override
   Widget build(BuildContext context) {
     final visibleHazards = _hazards.where((hazard) {
-      return _selectedFilter == 'All' || hazard['type'] == _selectedFilter;
+      return _selectedFilter == 'All' || hazard.typeName == _selectedFilter;
     }).toList();
 
     return RefreshIndicator(
@@ -255,16 +270,11 @@ class _HazardsScreenState extends State<HazardsScreen> {
             'Stay aware of the road ahead.',
             style: TextStyle(color: AppColors.navy),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Demo mode · Sample data from FastAPI',
-            style: TextStyle(color: Color(0xFF65758A), fontSize: 12),
-          ),
           const SizedBox(height: 22),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: ['All', 'Potholes', 'Obstacles'].map((filter) {
+            children: ['All', 'Pothole', 'Speed bump'].map((filter) {
               return ChoiceChip(
                 label: Text(filter),
                 selected: _selectedFilter == filter,
@@ -299,7 +309,7 @@ class _HazardsScreenState extends State<HazardsScreen> {
             _messageCard(
               icon: Icons.map_outlined,
               message: _hazards.isEmpty
-                  ? 'No hazards returned by the server.'
+                  ? 'No hazards within 1 km of you.'
                   : 'No hazards match this filter.',
             )
           else

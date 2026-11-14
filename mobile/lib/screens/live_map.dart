@@ -6,9 +6,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../core/app_colors.dart';
+import '../services/hazard_alert_service.dart';
 
+/// The driver's position on a street map, with the hazards ahead as tappable
+/// markers. While following, the camera keeps the car and the nearest hazard
+/// ahead on screen together.
 class LiveMap extends StatefulWidget {
-  const LiveMap({super.key});
+  const LiveMap({super.key, this.hazards = const [], this.onHazardTap});
+
+  final List<HazardAhead> hazards;
+  final ValueChanged<HazardAhead>? onHazardTap;
 
   @override
   State<LiveMap> createState() => _LiveMapState();
@@ -17,6 +24,8 @@ class LiveMap extends StatefulWidget {
 class _LiveMapState extends State<LiveMap> {
   static final LatLng _cairo = LatLng(30.0444, 31.2357);
   static const double _zoom = 16;
+  static const double _maxFitZoom = 17;
+  static const EdgeInsets _fitPadding = EdgeInsets.fromLTRB(56, 72, 56, 72);
 
   final MapController _mapController = MapController();
 
@@ -30,6 +39,15 @@ class _LiveMapState extends State<LiveMap> {
   void initState() {
     super.initState();
     _startLocation();
+  }
+
+  @override
+  void didUpdateWidget(LiveMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (_nearest(oldWidget.hazards)?.id != _nearest(widget.hazards)?.id) {
+      _follow();
+    }
   }
 
   @override
@@ -93,9 +111,75 @@ class _LiveMapState extends State<LiveMap> {
       _problem = null;
     });
 
-    if (_following && _mapReady) {
-      _mapController.move(point, _mapController.camera.zoom);
+    _follow();
+  }
+
+  static HazardAhead? _nearest(List<HazardAhead> hazards) {
+    HazardAhead? nearest;
+
+    for (final hazard in hazards) {
+      if (nearest == null || hazard.distanceM < nearest.distanceM) {
+        nearest = hazard;
+      }
     }
+
+    return nearest;
+  }
+
+  /// Keeps the car, and the nearest hazard ahead if there is one, on screen.
+  void _follow({bool resetZoom = false}) {
+    final point = _current;
+
+    if (point == null || !_mapReady || !_following) return;
+
+    final hazard = _nearest(widget.hazards);
+
+    if (hazard == null) {
+      _mapController.move(
+        point,
+        resetZoom ? _zoom : _mapController.camera.zoom,
+      );
+      return;
+    }
+
+    _mapController.fitCamera(
+      CameraFit.coordinates(
+        coordinates: [point, LatLng(hazard.lat, hazard.lon)],
+        padding: _fitPadding,
+        maxZoom: _maxFitZoom,
+      ),
+    );
+  }
+
+  Marker _hazardMarker(HazardAhead hazard) {
+    final Color colour;
+
+    if (hazard.isAdvisory) {
+      colour = const Color(0xFFB8C2CF);
+    } else {
+      colour = hazard.inAlertRange ? AppColors.coral : const Color(0xFFFFB199);
+    }
+
+    return Marker(
+      key: ValueKey('hazard-${hazard.id}'),
+      point: LatLng(hazard.lat, hazard.lon),
+      width: 44,
+      height: 44,
+      child: IconButton.filled(
+        tooltip: hazard.title,
+        onPressed: widget.onHazardTap == null
+            ? null
+            : () => widget.onHazardTap!(hazard),
+        style: IconButton.styleFrom(
+          backgroundColor: colour,
+          foregroundColor: AppColors.navy,
+        ),
+        icon: Icon(
+          hazard.isAdvisory ? Icons.help_outline : Icons.warning_amber_rounded,
+          size: 24,
+        ),
+      ),
+    );
   }
 
   void _centerOnMe() {
@@ -107,7 +191,7 @@ class _LiveMapState extends State<LiveMap> {
       _following = true;
     });
 
-    _mapController.move(point, _zoom);
+    _follow(resetZoom: true);
   }
 
   @override
@@ -126,10 +210,7 @@ class _LiveMapState extends State<LiveMap> {
               initialZoom: _zoom,
               onMapReady: () {
                 _mapReady = true;
-
-                if (_current != null) {
-                  _mapController.move(_current!, _zoom);
-                }
+                _follow(resetZoom: true);
               },
               onPositionChanged: (camera, hasGesture) {
                 if (hasGesture && _following) {
@@ -144,6 +225,10 @@ class _LiveMapState extends State<LiveMap> {
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.example.rovo_mobile',
               ),
+              if (widget.hazards.isNotEmpty)
+                MarkerLayer(
+                  markers: [for (final h in widget.hazards) _hazardMarker(h)],
+                ),
               if (point != null)
                 MarkerLayer(
                   markers: [
