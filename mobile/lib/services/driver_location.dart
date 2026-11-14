@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 class DriverFix {
@@ -18,6 +19,11 @@ class DriverFix {
 
 class DriverLocation {
   DriverLocation._();
+
+  /// Below this speed the GPS direction is noise. Android reports 0 (north)
+  /// when it has no bearing, so a car stopped at a light would otherwise seem
+  /// to turn north and lose the hazards ahead of it.
+  static const minHeadingSpeedMps = 1.0;
 
   static Future<bool> allowed() async {
     if (!await Geolocator.isLocationServiceEnabled()) return false;
@@ -41,11 +47,11 @@ class DriverLocation {
         forceLocationManager: true,
         intervalDuration: const Duration(seconds: 1),
       ),
-    ).map(_fix);
+    ).map(fixFrom);
   }
 
   static Future<DriverFix> current() async {
-    return _fix(
+    return fixFrom(
       await Geolocator.getCurrentPosition(
         locationSettings: AndroidSettings(
           accuracy: LocationAccuracy.high,
@@ -55,12 +61,18 @@ class DriverLocation {
     );
   }
 
-  static DriverFix _fix(Position position) {
+  @visibleForTesting
+  static DriverFix fixFrom(Position position) {
+    final speed = position.speed < 0 ? 0.0 : position.speed;
+    final moving = speed >= minHeadingSpeedMps;
+
     return DriverFix(
       lat: position.latitude,
       lon: position.longitude,
-      speedMps: position.speed < 0 ? 0 : position.speed,
-      headingDeg: position.heading < 0 ? null : position.heading % 360,
+      speedMps: speed,
+      headingDeg: moving && position.heading >= 0
+          ? position.heading % 360
+          : null,
     );
   }
 }

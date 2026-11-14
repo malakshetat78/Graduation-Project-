@@ -61,6 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       showDragHandle: true,
       backgroundColor: AppColors.cream,
+      // Full width: otherwise the sheet shrinks to its text.
+      constraints: const BoxConstraints(minWidth: double.infinity),
       builder: (context) {
         return SafeArea(
           child: Padding(
