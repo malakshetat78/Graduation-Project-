@@ -10,23 +10,23 @@ Every result below says where it ran: **HOST** (laptop, native tests), **EMULATO
 
 | What | Where | Result | Evidence |
 |---|---|---|---|
-| Device logic unit tests (detection, fusion, events, signing, NMEA, queue, uplink, app loop) | HOST | **93/93 pass** (at `3e704d3`) | `logs/native_tests.log` |
+| Device logic unit tests (detection, fusion, events, signing, NMEA, queue, uplink, app loop) | HOST | **94/94 pass** (at `51bba23`) | `logs/native_tests.log` |
 | Malak's firmware builds for the chip (`espidf_security`, `ble`) | cross-compile | **Built**; `ble` needs the 8 MB flash setting | `STEP1_BUILD.md`, `step1_build_logs/` |
 | `espidf_security` signing demo runs on the chip's CPU | EMULATOR | Signs and verifies; then **stack overflow and reboot loop** (54 reboots in 25 s). Fixed by an 8 KB main stack (no reboots) | `logs/qemu_espidf_security.log`, `logs/qemu_espidf_security_stack8k.log` |
 | `firmware/ecu` smoke test builds for the board | cross-compile | **Built, 0 warnings**, 76% of app partition free | `logs/ecu_build_board.log` |
 | `firmware/ecu` smoke test boots | EMULATOR | **chip PASS, signing PASS**, gps/imu/camera SKIP (not emulated), no reboots in a 60 s run | `logs/qemu_ecu_smoke.log` |
 | Flash, boot, GPS, IMU, camera on the board | BOARD | **NOT RUN**: board not delivered yet | - (fill in below) |
 | Report demo firmware builds for the board (Wi-Fi) and the emulator | cross-compile | **Built, 0 warnings**, 37% of app partition free (board) | `logs/ecu_report_build_board.log`, `logs/ecu_report_build_qemu.log` |
-| ECU app on the chip signs a pothole report and sends it to `POST /reports` | EMULATOR + laptop backend | **PASS**: network up, SNTP time, report signed, backend answered **201 accepted**, no reboots. QEMU Ethernet stands in for Wi-Fi; HTTP only (TLS not exercised); IMU drive and GNSS sentences simulated; demo key | `logs/qemu_report_demo.log`, `logs/backend_report_demo.log`, screenshot 5 |
-| Backend checks on that report | HOST | Stored as a pothole, severity high; the same line again = duplicate (safe retry); one field changed = **401 bad signature** | `logs/backend_report_checks.log`, screenshot 6 |
+| ECU app on the chip signs a pothole report and sends it to `POST /reports` | EMULATOR + laptop backend | **PASS**: network up, SNTP time, report signed, backend answered **201 accepted**, no reboots. QEMU Ethernet stands in for Wi-Fi; HTTP only (TLS not exercised); IMU drive and GNSS sentences simulated; demo key | `logs/qemu_report_demo.log`, `logs/backend_report_demo.log`, screenshot 5. The run before registering the key was refused (403 unknown device), as it must be: `logs/qemu_report_demo_unregistered.log` |
+| Backend checks on that report | HOST | Stored as a pothole, severity high; the same line again = duplicate (safe retry); one field changed = **401 bad signature** | `logs/backend_report_checks.log` (made by `backend_report_checks.py`), screenshot 6 |
 | Wi-Fi join, signed report to the backend | BOARD | **NOT RUN**: board not delivered yet (same firmware, `sdkconfig.report` without the QEMU overlay) | - |
 
 Provenance: the smoke-test builds and emulator run were made from commit `ad1ac37` with a clean tree (the
-firmware reports its version as `ad1ac37`); the report demo builds, the report emulator run and the latest native
-test run from commit `3e704d3`, also clean (the firmware reports `3e704d3`). Logs were committed after each.
-Report demo image hashes: board `1a90dad96d47ce98f3dcbe35c346127cac40e5a9b1a8bfae90fd232a3693ecec`, emulator
-`be527d8481cf52c2d06f58b0599107d94d63c29671bdc5e697dca55f2df0ae09` (the emulator image includes the local demo
-seed from `sdkconfig.local`, so another laptop gets a different hash).
+firmware reports its version as `ad1ac37`); the report demo builds, the report emulator runs and the latest native
+test run from commit `51bba23`, also clean (the firmware reports `51bba23`); the run followed section 4b as written. Logs were committed after each.
+Report demo image hashes: board `fadc0f31a3ee06073fa652036057cc1cf7f2d6a0d8ce2a2a1a40209badbfbfa3`, emulator
+`f4f7544775df0a12d5c7401ccb16c94f7ded8efc5563be2c9f9d401d93a3e6ff` (both images include the local demo seed
+from `sdkconfig.local`, so another laptop gets different hashes).
 Smoke test image hashes (`ad1ac37`):
 board `icvsp_ecu.bin` `0c7c4604ffd4fc35c5350f2dccdc8836ccd3daec54c14ec862b01be1a16cccaa`,
 emulator `icvsp_ecu.bin` `50f078f0ef9b8bfc5750af6cf62b113f982ba707650abfe8832d208451b17db2`.
@@ -42,6 +42,11 @@ Found and fixed while doing this:
   already used up and the next try followed at once. It now starts when the attempt ends; test
   `test_retry_delay_counts_from_the_end_of_a_slow_attempt` (failed before the fix). Found by Codex review, with
   two more fixed in the same commit: a lost IP address was not noticed, and a malformed demo seed was accepted.
+- A second Codex review: any 200/201 deleted the report, so a captive portal or a wrong URL answering 200 could
+  lose reports. Now only the backend's ACK for that report counts (`"ack":"stored"` and its event ID); test
+  `test_only_a_stored_ack_for_this_report_counts` (failed before the fix). Also: the demo result now counts
+  reports pushed out of a full queue, start-up memory failures stop with a message, and section 4b below was
+  made copy-paste runnable (it was not: the token placeholder broke the shell command).
 - The camera driver takes its I2C port from the build config, not from the code; pinned to port 0 so the IMU
   can use port 1 (`sdkconfig.defaults`).
 - QEMU has no octal PSRAM: the emulator build uses quad mode (`sdkconfig.qemu`); the board build stays octal.
@@ -69,7 +74,7 @@ cd firmware
 pio test -e native
 ```
 
-Expected: `93 test cases: 93 succeeded`.
+Expected: `94 test cases: 94 succeeded`.
 
 ## 3. Build for the board
 
@@ -145,9 +150,14 @@ then quit QEMU (Ctrl-A then X) and start it again. Expected: `NET link=online`, 
 laptop to have internet. 10.0.2.2 is the laptop as seen from inside QEMU.
 
 The backend checks in `logs/backend_report_checks.log` (stored view, resend = duplicate, one field changed = 401)
-were made with a short Python script after the run: it read the stored line from the test database, posted it
-again unchanged, then posted it with `"severity":"high"` changed to `"severity":"low"`. The commands and answers
-are in that log.
+were made after the run, with the backend still up, by:
+
+```bash
+python3 firmware/results/bringup/backend_report_checks.py /tmp/icvsp_demo.sqlite3
+```
+
+It reads the stored line from the test database, posts it again unchanged, then posts it with
+`"severity":"high"` changed to `"severity":"low"`.
 
 **On the board** (when it arrives). In `sdkconfig.local` set `CONFIG_ICVSP_WIFI_SSID`, `CONFIG_ICVSP_WIFI_PASSWORD`
 and `CONFIG_ICVSP_REPORT_URL="http://LAPTOP_LAN_IP:8010/reports"` (the laptop's address on the same Wi-Fi, from

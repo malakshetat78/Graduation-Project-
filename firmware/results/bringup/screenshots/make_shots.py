@@ -13,7 +13,7 @@ OUT = Path(sys.argv[2])
 OUT.mkdir(parents=True, exist_ok=True)
 BRAVE = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 COMMIT = "ad1ac37"       # smoke test run (shots 2, 3)
-COMMIT_NET = "3e704d3"   # network report run and the latest host tests (shots 1, 5, 6)
+COMMIT_NET = "51bba23"   # network report run and the latest host tests (shots 1, 5, 6)
 ONLY = set(sys.argv[3:])
 
 
@@ -28,7 +28,7 @@ def read(name):
 def colour(line):
     e = html.escape(line)
     e = re.sub(r"\b(PASS|PASSED|succeeded|Project build complete|201 Created|-&gt; 201)", r'<span class="ok">\1</span>', e)
-    e = re.sub(r"\b(FAIL|FAILED|ERROR|Rebooting\.\.\.|401 Unauthorized|bad_signature)", r'<span class="bad">\1</span>', e)
+    e = re.sub(r"\b(FAIL|FAILED|ERROR|Rebooting\.\.\.|401 Unauthorized|403 Forbidden|bad_signature)", r'<span class="bad">\1</span>', e)
     e = e.replace("***ERROR***", '<span class="bad">***ERROR***</span>')
     e = re.sub(r"\b(SKIP)\b", r'<span class="skip">\1</span>', e)
     if line.startswith("$ "):
@@ -132,7 +132,8 @@ if wanted(5):
 if wanted(6):
   be = [l.replace("INFO:     ", "") for l in read("backend_report_demo.log") if "/reports" in l or "/devices" in l]
   ck = read("backend_report_checks.log")
-  lines = (["# backend log during the run (uvicorn on the laptop, port 8010)"] + be[:2] + ["", *ck])
+  lines = (["# backend log: run 1 (key not registered yet), registration, run 2 (uvicorn on the laptop, port 8010)"]
+           + be[:3] + ["", *ck])
   render("6_backend_checks", "Backend: the report is stored; a resend is a duplicate; a changed copy is refused",
          "HOST (laptop backend)", "HOST", lines,
          f"Commit {COMMIT_NET} - local SQLite test database, test device ecu-demo-01. "
