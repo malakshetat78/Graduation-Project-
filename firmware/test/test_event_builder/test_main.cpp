@@ -136,6 +136,18 @@ void test_heading_stays_in_range() {
     TEST_ASSERT_NOT_NULL(std::strstr(buf, "\"heading_deg\":270.0,"));
 }
 
+void test_time_after_year_9999_is_refused_not_cut_off() {
+    EventBuilder b("dev-01", "imu-v0", 1);
+    char buf[640];
+    GnssFix f = fix();
+    f.utc_ms = 253402300799999LL;  // 9999-12-31T23:59:59.999Z: the last time that fits the format
+    TEST_ASSERT_TRUE(b.build(pothole(), f, buf, sizeof buf) > 0);
+    TEST_ASSERT_NOT_NULL(std::strstr(buf, "\"detected_at\":\"9999-12-31T23:59:59.999Z\""));
+    f.utc_ms = 253402300800000LL;  // year 10000 would not fit: a signed report must not carry a cut-off date
+    TEST_ASSERT_EQUAL(0, b.build(pothole(), f, buf, sizeof buf));
+    TEST_ASSERT_EQUAL(2, b.next_seq());  // only the first build used an ID
+}
+
 int main(int, char**) {
     UNITY_BEGIN();
     RUN_TEST(test_utc_formatting);
@@ -148,5 +160,6 @@ int main(int, char**) {
     RUN_TEST(test_no_event_before_gnss_time_is_known);
     RUN_TEST(test_buffer_too_small_is_refused);
     RUN_TEST(test_heading_stays_in_range);
+    RUN_TEST(test_time_after_year_9999_is_refused_not_cut_off);
     return UNITY_END();
 }

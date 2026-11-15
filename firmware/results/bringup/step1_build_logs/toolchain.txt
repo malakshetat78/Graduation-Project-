@@ -1,0 +1,6 @@
+ESP-IDF v5.5.5
+xtensa-esp-elf-gcc (crosstool-NG esp-14.2.0_20260121) 14.2.0
+cmake version 4.4.3
+Python 3.13.13
+26.6.2
+arm64

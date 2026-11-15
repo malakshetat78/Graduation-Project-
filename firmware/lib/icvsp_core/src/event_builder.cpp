@@ -20,8 +20,12 @@ void format_utc(int64_t utc_ms, char out[25]) {
     const unsigned day = doy - (153 * mp + 2) / 5 + 1;
     const unsigned month = mp < 10 ? mp + 3 : mp - 9;
     const long long year = static_cast<long long>(yoe) + era * 400 + (month <= 2);
-    std::snprintf(out, 25, "%04lld-%02u-%02uT%02d:%02d:%02d.%03dZ", year, month, day, sod / 3600,
-                  (sod / 60) % 60, sod % 60, ms);
+    // Every field is bounded to its width so the 24 characters always fit (build() refuses times after
+    // 9999-12-31, see kMaxUtcMs); the bounds also let the compiler prove it (GCC 14 -Wformat-truncation).
+    std::snprintf(out, 25, "%04u-%02u-%02uT%02u:%02u:%02u.%03uZ", static_cast<unsigned>(year % 10000),
+                  month % 100u, day % 100u, static_cast<unsigned>(sod / 3600) % 100u,
+                  static_cast<unsigned>(sod / 60 % 60) % 100u, static_cast<unsigned>(sod % 60) % 100u,
+                  static_cast<unsigned>(ms) % 1000u);
 }
 
 void grid_cell(double lat, double lon, char* out, size_t cap) {
@@ -33,6 +37,7 @@ void grid_cell(double lat, double lon, char* out, size_t cap) {
 size_t EventBuilder::build(const Detection& d, const GnssFix& fix, char* buf, size_t cap,
                            char* msg_id_out, size_t msg_id_cap, const char* model) {
     if (fix.utc_ms <= 0) return 0;  // no GNSS time yet: the capture time would be unknown
+    if (fix.utc_ms >= kMaxUtcMs) return 0;  // would not fit the timestamp format
     const bool located = fix.valid && fix.acc_m > 0;
     char id[64], ts[25], where[200], peak[32] = "";
     std::snprintf(id, sizeof id, "%s-%lu-%lu", device_id_, static_cast<unsigned long>(boot_id_),

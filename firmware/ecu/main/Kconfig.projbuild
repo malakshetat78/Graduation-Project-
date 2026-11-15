@@ -1,0 +1,14 @@
+menu "ICVSP ECU smoke test"
+
+config ICVSP_SMOKE_EMULATOR
+    bool "Built for QEMU: skip the probes that need real hardware"
+    default n
+    help
+        Set by sdkconfig.qemu. The camera, IMU and GPS probes are reported as SKIP instead of FAIL.
+
+config ICVSP_GPS_LISTEN_S
+    int "Seconds to listen to the GPS UART"
+    default 5
+    range 2 60
+
+endmenu

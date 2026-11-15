@@ -15,15 +15,21 @@ tested on a laptop before we have a board. Built with [PlatformIO](https://platf
 | `lib/icvsp_core/src/replay_guard` | Rejects stale (> 30 s), future-dated and repeated messages | FR-06 |
 | `lib/icvsp_sim` | Simulated IMU and GNSS: a car driving over chosen hazards | – |
 | `lib/monocypher` | [Monocypher 4.0.2](https://monocypher.org) (BSD-2 / CC0), standard Ed25519 | – |
+| `lib/icvsp_board/src/nmea` | GNSS NMEA parser (RMC/GGA, checksums, strict field checks, UTC carried forward, stale fix) for the NEO-6M / L76K on UART | FR-25 |
+| `lib/icvsp_board/src/report_queue`, `uplink` | Offline queue of signed lines and delivery to `POST /reports` with retry; a report leaves the queue when the backend has answered for it, or when the queue is full (the oldest is dropped and counted) | proposed ECU delivery requirement |
+| `lib/icvsp_board/src/wifi_link` | Wi-Fi join / reconnect state machine (driver behind an interface) | proposed ECU delivery requirement |
+| `lib/icvsp_board/src/ecu_app` | The ECU main loop: waits for GNSS time, feeds fresh IMU samples to the Device, keeps delivering | FR-25, FR-SEC-05 |
 
-`icvsp_core` makes no hardware calls, so the same code runs on the laptop and on the ESP32-S3.
+`icvsp_core` and `icvsp_board` make no hardware calls (the board drivers sit behind interfaces), so the same
+code runs on the laptop and on the ESP32-S3. The board drivers themselves (UART, I2C MPU6050, Wi-Fi, HTTPS) are
+not written yet.
 
 ## Run it
 
 ```bash
 pip install platformio cryptography
 cd firmware
-pio test -e native                         # unit tests (52)
+pio test -e native                         # unit and integration tests (91)
 pio run -e native && .pio/build/native/program   # demo drive: prints signed reports as JSON
 python tools/check_with_engine.py          # builds the demo, then checks its reports from the backend side
 ```
@@ -70,6 +76,8 @@ secure boot, and key provisioning and registration are part of the cybersecurity
 
 ## Known gaps
 
-- No board environment yet: uncomment `[env:xiao_esp32s3]` in `platformio.ini` once we have a board (the
-  first build downloads the ESP32 toolchain, several hundred MB).
+- Board firmware is only a boot/sensor smoke test so far: `ecu/` (ESP-IDF 5.5.5) builds for the XIAO
+  ESP32-S3 and boots in QEMU; nothing has run on the real board yet. See `results/bringup/BRINGUP_CHECKLIST.md`.
+  The full ECU loop on the board (Wi-Fi, HTTPS delivery in its own task, persistent queue) is still to write.
+- The report queue is RAM only: reports are lost on a reboot (flash or microSD storage is the next step).
 - `road_segment` is a coarse grid cell (about 200 m) until the backend maps reports to real roads.

@@ -36,7 +36,11 @@ private:
     uint32_t seq_ = 1;
 };
 
-// ISO 8601 UTC with milliseconds, e.g. 2026-10-03T01:02:03.456Z (24 characters + NUL).
+// 10000-01-01T00:00:00Z: build() refuses this time and later ones, which would not fit the format.
+constexpr int64_t kMaxUtcMs = 253402300800000LL;
+
+// ISO 8601 UTC with milliseconds, e.g. 2026-10-03T01:02:03.456Z (24 characters + NUL), for
+// 0 <= utc_ms < kMaxUtcMs.
 void format_utc(int64_t utc_ms, char out[25]);
 
 // Coarse grid cell (about 200 m) used as road_segment until the backend maps reports to real roads.

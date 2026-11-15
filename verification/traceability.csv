@@ -105,6 +105,42 @@ F-49,Unit,firmware/test/test_signer/test_main.cpp,test_another_key_does_not_veri
 F-50,Unit,firmware/test/test_signer/test_main.cpp,test_seed_is_wiped,NFR-10
 F-51,Unit,firmware/test/test_signer/test_main.cpp,test_too_long_message_is_refused,NFR-10
 F-52,Unit,firmware/test/test_signer/test_main.cpp,test_hex_round_trip_and_bad_input,NFR-10
+F-55,Unit,firmware/test/test_nmea/test_main.cpp,test_days_from_civil_matches_known_dates,FR-25
+F-56,Unit,firmware/test/test_nmea/test_main.cpp,test_textbook_rmc_and_gga_give_the_position,FR-25
+F-57,Unit,firmware/test/test_nmea/test_main.cpp,test_multi_constellation_sentences_with_utc_time,FR-25
+F-58,Unit,firmware/test/test_nmea/test_main.cpp,test_time_moves_forward_with_the_device_clock_between_sentences,FR-25
+F-59,Unit,firmware/test/test_nmea/test_main.cpp,test_bad_checksum_is_ignored_and_counted,FR-25
+F-60,Unit,firmware/test/test_nmea/test_main.cpp,test_no_fix_yet_means_no_position_and_no_time,FR-25
+F-61,Unit,firmware/test/test_nmea/test_main.cpp,test_time_survives_a_lost_fix_but_position_does_not,FR-25
+F-62,Unit,firmware/test/test_nmea/test_main.cpp,test_silence_makes_the_fix_stale,FR-25
+F-63,Unit,firmware/test/test_nmea/test_main.cpp,test_garbage_and_split_bytes_are_handled,FR-25
+F-64,Unit,firmware/test/test_nmea/test_main.cpp,test_southern_and_western_hemispheres_are_negative,FR-25
+F-65,Unit,firmware/test/test_nmea/test_main.cpp,test_malformed_coordinates_do_not_give_a_fix,FR-25
+F-66,Unit,firmware/test/test_nmea/test_main.cpp,test_impossible_coordinates_are_rejected,FR-25
+F-67,Unit,firmware/test/test_nmea/test_main.cpp,test_missing_speed_is_unknown_not_the_old_speed,FR-25
+F-68,Unit,firmware/test/test_nmea/test_main.cpp,test_fix_quality_expires_when_gga_stops,FR-25
+F-69,Unit,firmware/test/test_nmea/test_main.cpp,test_impossible_dates_and_malformed_times_are_not_trusted,FR-25
+F-70,Unit,firmware/test/test_nmea/test_main.cpp,test_clock_stays_right_past_a_full_millis_period,FR-25
+F-71,Unit,firmware/test/test_nmea/test_main.cpp,test_absurd_numeric_fields_do_not_give_a_fix,FR-25
+F-72,Unit,firmware/test/test_nmea/test_main.cpp,test_clock_survives_a_30_day_gap_between_calls,FR-25
+F-73,Unit,firmware/test/test_nmea/test_main.cpp,test_a_slightly_older_timestamp_is_placed_in_the_past,FR-25
+F-74,Unit,firmware/test/test_uplink/test_main.cpp,test_queue_keeps_order_and_drops_the_oldest_when_full,(proposed:ECU-delivery)
+F-75,Unit,firmware/test/test_uplink/test_main.cpp,test_queue_refuses_empty_and_oversized_lines,(proposed:ECU-delivery)
+F-76,Unit,firmware/test/test_uplink/test_main.cpp,test_nothing_is_sent_while_offline,(proposed:ECU-delivery)
+F-77,Unit,firmware/test/test_uplink/test_main.cpp,test_stored_reports_leave_the_queue_in_order_body_unchanged,(proposed:ECU-delivery)
+F-78,Unit,firmware/test/test_uplink/test_main.cpp,test_final_refusals_are_dropped_not_retried,(proposed:ECU-delivery)
+F-79,Unit,firmware/test/test_uplink/test_main.cpp,test_no_answer_and_server_errors_keep_the_report_and_back_off,(proposed:ECU-delivery)
+F-80,Unit,firmware/test/test_uplink/test_main.cpp,test_retry_delay_doubles_caps_at_five_minutes_and_has_jitter,(proposed:ECU-delivery)
+F-81,Unit,firmware/test/test_uplink/test_main.cpp,test_retry_timer_survives_the_millis_wraparound,(proposed:ECU-delivery)
+F-82,Unit,firmware/test/test_uplink/test_main.cpp,test_reports_made_while_offline_are_delivered_after_reconnect,(proposed:ECU-delivery)
+F-83,Unit,firmware/test/test_wifi_link/test_main.cpp,test_joins_and_goes_online,(proposed:ECU-delivery)
+F-84,Unit,firmware/test/test_wifi_link/test_main.cpp,test_failed_join_backs_off_5_10_20_up_to_60_seconds,(proposed:ECU-delivery)
+F-85,Unit,firmware/test/test_wifi_link/test_main.cpp,test_lost_connection_reconnects_after_one_second_and_resets_backoff,(proposed:ECU-delivery)
+F-86,Integration,firmware/test/test_ecu_app/test_main.cpp,test_waits_for_gnss_time_before_using_the_imu,FR-25
+F-87,Integration,firmware/test/test_ecu_app/test_main.cpp,test_pothole_report_is_signed_queued_while_offline_and_delivered_later,FR-02 FR-25 FR-SEC-05
+F-88,Integration,firmware/test/test_ecu_app/test_main.cpp,test_old_and_pre_time_imu_samples_are_dropped,FR-25
+F-89,Integration,firmware/test/test_ecu_app/test_main.cpp,test_sample_age_limit_is_exact_and_future_samples_are_refused,FR-25
+F-90,Integration,firmware/test/test_ecu_app/test_main.cpp,test_samples_are_still_used_after_25_days_of_running,FR-25
 IT-01,Integration,firmware/tools/check_with_engine.py,device reports pass engine schema; Ed25519 verified by independent library; tampered/re-timed rejected,FR-02 FR-04 NFR-10 FR-SEC-05 FR-SEC-07 FR-SEC-13
 E-01,System,engine/icvsp/experiment.py,"Stage 2: engine vs baselines, 2000 runs per setting",NFR-03 NFR-04 NFR-05 NFR-06
 E-02,Software (ML),ai/scripts (Ultralytics val),"Detector accuracy per class on public SBP-YOLO test set (1,104 images)",FR-01
@@ -256,3 +292,4 @@ B-111,Unit,backend/tests/test_backend.py,OldDatabaseFile.test_file_from_before_t
 B-112,Unit,backend/tests/test_backend.py,Tokens.test_key_server_certificates_do_not_depend_on_the_python_install,FR-SEC-01
 T-53,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_two_devices_is_not_a_duplicate,FR-SEC-10 FR-11
 T-54,Unit,engine/tests/test_components.py,ReplayIds.test_same_event_id_from_one_device_is_a_duplicate,FR-06 FR-SEC-10
+F-91,Unit,firmware/test/test_event_builder/test_main.cpp,test_time_after_year_9999_is_refused_not_cut_off,FR-02 FR-25
