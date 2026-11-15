@@ -1,0 +1,11 @@
+# HOST: laptop backend log for the same run (uvicorn, port 8010)
+INFO:     Started server process [50758]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57706 - "POST /devices HTTP/1.1" 201 Created
+INFO:     127.0.0.1:57711 - "POST /reports HTTP/1.1" 201 Created
+INFO:     127.0.0.1:57715 - "GET /reports?device_id=ecu-demo-01 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57716 - "POST /reports HTTP/1.1" 201 Created
+INFO:     127.0.0.1:57717 - "POST /reports HTTP/1.1" 401 Unauthorized
+INFO:     Shutting down

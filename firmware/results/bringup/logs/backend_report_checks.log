@@ -1,0 +1,7 @@
+# HOST checks against the laptop backend (port 8010, local SQLite), after the emulator run
+$ GET /reports?device_id=ecu-demo-01
+{"event_id": "ecu-demo-01-1794774425-1", "device_id": "ecu-demo-01", "type": "pothole", "severity": "high", "detection_confidence": 0.95, "evaluation": "evaluated"}
+$ POST /reports  (the same signed line again, as a retry after a lost answer)
+201 {"status":"duplicate","ack":"stored","event_id":"ecu-demo-01-1794774425-1","device_id":"ecu-demo-01","stored_at":1794774443.943792,"evaluation":"evaluated"}
+$ POST /reports  (same line, one field changed: severity high -> low, signature kept)
+401 {"detail":"signature does not verify with the registered key","code":"bad_signature","retryable":false}
