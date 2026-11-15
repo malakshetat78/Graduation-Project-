@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "json_reply.h"
+
 namespace icvsp {
 
 namespace {
@@ -23,16 +25,18 @@ uint32_t Uplink::retry_delay_ms(uint32_t failures, float random_unit) {
 }
 
 bool Uplink::is_stored_ack(const char* line, const char* body) {
-    if (line == nullptr || body == nullptr || std::strstr(body, "\"ack\":\"stored\"") == nullptr) return false;
-    static const char kKey[] = "\"msg_id\":\"";
-    const char* id = std::strstr(line, kKey);
-    if (id == nullptr) return false;
-    id += sizeof kKey - 1;
-    const char* end = std::strchr(id, '"');
-    if (end == nullptr || end == id || end - id > 100) return false;
-    char want[128];
-    std::snprintf(want, sizeof want, "\"event_id\":\"%.*s\"", static_cast<int>(end - id), id);
-    return std::strstr(body, want) != nullptr;
+    if (line == nullptr || body == nullptr) return false;
+    char id[96], sender[96], v[96];
+    if (!json_top_string(line, "msg_id", id, sizeof id) || id[0] == '\0') return false;
+    if (!json_top_string(line, "sender", sender, sizeof sender) || sender[0] == '\0') return false;
+    return json_top_string(body, "ack", v, sizeof v) && std::strcmp(v, "stored") == 0 &&
+           json_top_string(body, "event_id", v, sizeof v) && std::strcmp(v, id) == 0 &&
+           json_top_string(body, "device_id", v, sizeof v) && std::strcmp(v, sender) == 0;
+}
+
+bool Uplink::is_unknown_device(const char* body) {
+    char code[32];
+    return body != nullptr && json_top_string(body, "code", code, sizeof code) && std::strcmp(code, "unknown_device") == 0;
 }
 
 bool Uplink::is_final(int status) {
@@ -48,23 +52,33 @@ void Uplink::tick(uint32_t now_ms, bool online) {
     waiting_ = false;
 
     const char* line = queue_.front();
-    const int status = transport_.post_report(line, std::strlen(line));
+    reply_[0] = '\0';
+    const int status = transport_.post_report(line, std::strlen(line), reply_, sizeof reply_);
+    reply_[sizeof reply_ - 1] = '\0';
     stats_.last_status = status;
-    if (status == 200 || status == 201) {
+    if ((status == 200 || status == 201) && is_stored_ack(line, reply_)) {
         queue_.pop();
         ++stats_.stored;
         failures_ = 0;
+        not_provisioned_ = false;
+        return;
+    }
+    if (status == 403 && is_unknown_device(reply_)) {
+        ++stats_.not_provisioned;
+        not_provisioned_ = true;
     } else if (is_final(status)) {
         queue_.pop();
         ++stats_.refused;
         failures_ = 0;
+        not_provisioned_ = false;
+        return;
     } else {
-        ++stats_.failures;
-        const uint32_t ended_ms = clock_ms_ ? clock_ms_() : now_ms;
-        next_try_ms_ = ended_ms + retry_delay_ms(failures_, random_unit_ ? random_unit_() : 0.5f);
-        waiting_ = true;
-        if (failures_ < UINT32_MAX) ++failures_;
+        ++stats_.failures;  // no answer, a server error, or a 2xx that is not this report's ACK
     }
+    const uint32_t ended_ms = clock_ms_ ? clock_ms_() : now_ms;
+    next_try_ms_ = ended_ms + retry_delay_ms(failures_, random_unit_ ? random_unit_() : 0.5f);
+    waiting_ = true;
+    if (failures_ < UINT32_MAX) ++failures_;
 }
 
 }  // namespace icvsp

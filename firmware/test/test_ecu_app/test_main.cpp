@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "ecu_app.h"
+#include "json_reply.h"
 #include "uplink.h"
 #include "wifi_link.h"
 #include "signer.h"
@@ -51,10 +52,15 @@ struct FakeWifi : WifiDriver {
     void disconnect() override {}
 };
 
-struct FakeTransport : ReportTransport {
+struct FakeTransport : ReportTransport {  // answers like the backend: a stored ACK for the report it got
     std::vector<std::string> bodies;
-    int post_report(const char* line, size_t len) override {
+    int post_report(const char* line, size_t len, char* reply, size_t cap) override {
         bodies.emplace_back(line, len);
+        char id[64] = {}, sender[64] = {};
+        json_top_string(bodies.back().c_str(), "msg_id", id, sizeof id);
+        json_top_string(bodies.back().c_str(), "sender", sender, sizeof sender);
+        std::snprintf(reply, cap, "{\"status\":\"accepted\",\"ack\":\"stored\",\"event_id\":\"%s\",\"device_id\":\"%s\"}",
+                      id, sender);
         return 201;
     }
 };

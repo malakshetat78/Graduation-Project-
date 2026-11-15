@@ -54,6 +54,7 @@ struct Line {
 QueueHandle_t g_lines;              // app task -> delivery task
 std::atomic<uint32_t> g_signed{0}, g_handoff_dropped{0};           // written by the app task
 std::atomic<uint32_t> g_stored{0}, g_refused{0}, g_failures{0};     // written by the delivery task
+std::atomic<uint32_t> g_not_provisioned{0};                         // 403 unknown_device answers (report kept)
 std::atomic<uint32_t> g_queue_dropped{0};  // pushed out of the full ReportQueue (oldest first)
 std::atomic<size_t> g_queued{0};
 
@@ -109,15 +110,18 @@ void delivery_task(void*) {
         }
         uplink.tick(now, link.online());
         const Uplink::Stats& s = uplink.stats();
-        if (s.stored != last.stored || s.refused != last.refused || s.failures != last.failures) {
-            std::printf("UPLINK stored=%" PRIu32 " refused=%" PRIu32 " failures=%" PRIu32 " last_status=%d queued=%u"
-                        " queue_dropped=%" PRIu32 "\n", s.stored, s.refused, s.failures, s.last_status,
-                        static_cast<unsigned>(queue.size()), queue.dropped());
+        if (s.stored != last.stored || s.refused != last.refused || s.failures != last.failures ||
+            s.not_provisioned != last.not_provisioned) {
+            std::printf("UPLINK stored=%" PRIu32 " refused=%" PRIu32 " failures=%" PRIu32 " not_provisioned=%" PRIu32
+                        " last_status=%d queued=%u queue_dropped=%" PRIu32 "%s\n", s.stored, s.refused, s.failures,
+                        s.not_provisioned, s.last_status, static_cast<unsigned>(queue.size()), queue.dropped(),
+                        uplink.not_provisioned() ? " (device key not registered: report kept, will retry)" : "");
             last = s;
         }
         g_stored = s.stored;
         g_refused = s.refused;
         g_failures = s.failures;
+        g_not_provisioned = s.not_provisioned;
         g_queued = queue.size();
         g_queue_dropped = queue.dropped();
         vTaskDelay(pdMS_TO_TICKS(50));
@@ -267,13 +271,20 @@ extern "C" void app_main() {
                 app.imu_stale(), g_signed.load());
 
     // Every signed report ends as stored, refused or dropped (hand-off or full queue); wait up to 60 s for that.
+    // A device the backend does not know keeps its reports and retries, so the demo stops waiting once the
+    // backend has said "unknown_device" for every report still queued (it would wait for registration).
     auto settled = [] { return g_stored + g_refused + g_handoff_dropped + g_queue_dropped; };
-    for (int i = 0; i < 600 && (settled() < g_signed || g_queued > 0); ++i) vTaskDelay(pdMS_TO_TICKS(100));
+    for (int i = 0; i < 600 && (settled() < g_signed || g_queued > 0); ++i) {
+        if (g_not_provisioned > 0 && g_not_provisioned >= g_queued) break;
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
     const uint32_t dropped = g_handoff_dropped + g_queue_dropped;
     const bool ok = g_signed > 0 && g_stored == g_signed && g_refused == 0 && dropped == 0;
     std::printf("DEMO RESULT %s signed=%" PRIu32 " stored_by_backend=%" PRIu32 " refused=%" PRIu32
-                " send_failures=%" PRIu32 " dropped=%" PRIu32 " (handoff=%" PRIu32 " queue_full=%" PRIu32 ")\n",
-                ok ? "PASS" : "FAIL", g_signed.load(), g_stored.load(), g_refused.load(), g_failures.load(), dropped,
-                g_handoff_dropped.load(), g_queue_dropped.load());
+                " send_failures=%" PRIu32 " not_provisioned=%" PRIu32 " kept=%u dropped=%" PRIu32
+                " (handoff=%" PRIu32 " queue_full=%" PRIu32 ")%s\n",
+                ok ? "PASS" : "FAIL", g_signed.load(), g_stored.load(), g_refused.load(), g_failures.load(),
+                g_not_provisioned.load(), static_cast<unsigned>(g_queued.load()), dropped, g_handoff_dropped.load(), g_queue_dropped.load(),
+                g_not_provisioned > 0 && !ok ? " - register this device's public key with the backend" : "");
     for (;;) vTaskDelay(pdMS_TO_TICKS(1000));
 }

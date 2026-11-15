@@ -296,3 +296,7 @@ F-91,Unit,firmware/test/test_event_builder/test_main.cpp,test_time_after_year_99
 F-92,Integration,firmware/test/test_ecu_app/test_main.cpp,test_app_loop_never_touches_the_network,(proposed:ECU-delivery)
 F-93,Unit,firmware/test/test_uplink/test_main.cpp,test_retry_delay_counts_from_the_end_of_a_slow_attempt,(proposed:ECU-delivery)
 F-94,Unit,firmware/test/test_uplink/test_main.cpp,test_only_a_stored_ack_for_this_report_counts,(proposed:ECU-delivery)
+F-95,Unit,firmware/test/test_uplink/test_main.cpp,test_json_reader_handles_escapes_and_rejects_bad_json,(proposed:ECU-delivery)
+F-96,Unit,firmware/test/test_uplink/test_main.cpp,test_unknown_device_keeps_the_report_until_registered,(proposed:ECU-delivery)
+F-97,Unit,firmware/test/test_uplink/test_main.cpp,test_other_403_and_signature_refusals_stay_final,(proposed:ECU-delivery)
+F-98,Unit,firmware/test/test_uplink/test_main.cpp,test_success_status_without_a_valid_ack_is_retried,(proposed:ECU-delivery)
