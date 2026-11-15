@@ -1,5 +1,5 @@
-run 2026-11-15T18:54:19Z
-base commit 63ebf39 + uncommitted working tree
+run 2026-11-15T19:56:39Z
+commit ad1ac37 (clean tree)
 PlatformIO Core, version 6.2.0
 Apple clang version 21.0.0 (clang-2100.1.1.101)
 Verbosity level can be increased via `-v, -vv, or -vvv` option
@@ -20,7 +20,7 @@ test/test_event_builder/test_main.cpp:160: test_no_event_before_gnss_time_is_kno
 test/test_event_builder/test_main.cpp:161: test_buffer_too_small_is_refused	[PASSED]
 test/test_event_builder/test_main.cpp:162: test_heading_stays_in_range	[PASSED]
 test/test_event_builder/test_main.cpp:163: test_time_after_year_9999_is_refused_not_cut_off	[PASSED]
-------------- native:test_event_builder [PASSED] Took 1.59 seconds -------------
+------------- native:test_event_builder [PASSED] Took 1.83 seconds -------------
 
 Processing test_fusion in native environment
 --------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ test/test_fusion/test_main.cpp:95: test_camera_too_late_is_a_separate_report	[PA
 test/test_fusion/test_main.cpp:96: test_imu_decides_the_type_when_sensors_disagree	[PASSED]
 test/test_fusion/test_main.cpp:97: test_forward_camera_waits_for_the_impact	[PASSED]
 test/test_fusion/test_main.cpp:98: test_flush_reports_everything_pending	[PASSED]
----------------- native:test_fusion [PASSED] Took 1.23 seconds ----------------
+---------------- native:test_fusion [PASSED] Took 1.13 seconds ----------------
 
 Processing test_signer in native environment
 --------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ test/test_signer/test_main.cpp:116: test_another_key_does_not_verify	[PASSED]
 test/test_signer/test_main.cpp:117: test_seed_is_wiped	[PASSED]
 test/test_signer/test_main.cpp:118: test_too_long_message_is_refused	[PASSED]
 test/test_signer/test_main.cpp:119: test_hex_round_trip_and_bad_input	[PASSED]
----------------- native:test_signer [PASSED] Took 1.24 seconds ----------------
+---------------- native:test_signer [PASSED] Took 1.14 seconds ----------------
 
 Processing test_replay_guard in native environment
 --------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ test/test_replay_guard/test_main.cpp:76: test_messages_from_the_future_are_refus
 test/test_replay_guard/test_main.cpp:77: test_window_is_configurable	[PASSED]
 test/test_replay_guard/test_main.cpp:78: test_old_ids_are_forgotten_after_the_window	[PASSED]
 test/test_replay_guard/test_main.cpp:79: test_full_table_refuses_rather_than_forgets	[PASSED]
-------------- native:test_replay_guard [PASSED] Took 1.23 seconds -------------
+------------- native:test_replay_guard [PASSED] Took 1.17 seconds -------------
 
 Processing test_wifi_link in native environment
 --------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ Testing...
 test/test_wifi_link/test_main.cpp:80: test_joins_and_goes_online	[PASSED]
 test/test_wifi_link/test_main.cpp:81: test_failed_join_backs_off_5_10_20_up_to_60_seconds	[PASSED]
 test/test_wifi_link/test_main.cpp:82: test_lost_connection_reconnects_after_one_second_and_resets_backoff	[PASSED]
---------------- native:test_wifi_link [PASSED] Took 1.31 seconds ---------------
+--------------- native:test_wifi_link [PASSED] Took 1.17 seconds ---------------
 
 Processing test_nmea in native environment
 --------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ test/test_nmea/test_main.cpp:282: test_clock_stays_right_past_a_full_millis_peri
 test/test_nmea/test_main.cpp:283: test_absurd_numeric_fields_do_not_give_a_fix	[PASSED]
 test/test_nmea/test_main.cpp:284: test_clock_survives_a_30_day_gap_between_calls	[PASSED]
 test/test_nmea/test_main.cpp:285: test_a_slightly_older_timestamp_is_placed_in_the_past	[PASSED]
------------------ native:test_nmea [PASSED] Took 1.22 seconds -----------------
+----------------- native:test_nmea [PASSED] Took 1.17 seconds -----------------
 
 Processing test_hazard_tracker in native environment
 --------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ test/test_hazard_tracker/test_main.cpp:174: test_low_confidence_boxes_are_ignore
 test/test_hazard_tracker/test_main.cpp:175: test_nothing_is_reported_while_parked	[PASSED]
 test/test_hazard_tracker/test_main.cpp:176: test_two_separate_potholes_give_two_reports	[PASSED]
 test/test_hazard_tracker/test_main.cpp:177: test_a_gap_longer_than_allowed_starts_a_new_track	[PASSED]
------------- native:test_hazard_tracker [PASSED] Took 1.14 seconds ------------
+------------ native:test_hazard_tracker [PASSED] Took 1.13 seconds ------------
 
 Processing test_uplink in native environment
 --------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ test/test_uplink/test_main.cpp:162: test_no_answer_and_server_errors_keep_the_re
 test/test_uplink/test_main.cpp:163: test_retry_delay_doubles_caps_at_five_minutes_and_has_jitter	[PASSED]
 test/test_uplink/test_main.cpp:164: test_retry_timer_survives_the_millis_wraparound	[PASSED]
 test/test_uplink/test_main.cpp:165: test_reports_made_while_offline_are_delivered_after_reconnect	[PASSED]
----------------- native:test_uplink [PASSED] Took 1.18 seconds ----------------
+---------------- native:test_uplink [PASSED] Took 1.17 seconds ----------------
 
 Processing test_bump_detector in native environment
 --------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ test/test_bump_detector/test_main.cpp:110: test_braking_is_not_a_hazard	[PASSED]
 test/test_bump_detector/test_main.cpp:111: test_jolts_while_parked_are_ignored	[PASSED]
 test/test_bump_detector/test_main.cpp:112: test_one_report_per_hazard_but_separate_hazards_are_kept	[PASSED]
 test/test_bump_detector/test_main.cpp:113: test_nothing_is_reported_during_warmup	[PASSED]
-------------- native:test_bump_detector [PASSED] Took 1.18 seconds -------------
+------------- native:test_bump_detector [PASSED] Took 1.16 seconds -------------
 
 Processing test_ecu_app in native environment
 --------------------------------------------------------------------------------
@@ -154,20 +154,20 @@ test/test_ecu_app/test_main.cpp:253: test_pothole_report_is_signed_queued_while_
 test/test_ecu_app/test_main.cpp:254: test_old_and_pre_time_imu_samples_are_dropped	[PASSED]
 test/test_ecu_app/test_main.cpp:255: test_sample_age_limit_is_exact_and_future_samples_are_refused	[PASSED]
 test/test_ecu_app/test_main.cpp:256: test_samples_are_still_used_after_25_days_of_running	[PASSED]
----------------- native:test_ecu_app [PASSED] Took 1.20 seconds ----------------
+---------------- native:test_ecu_app [PASSED] Took 1.15 seconds ----------------
 
 =================================== SUMMARY ===================================
 Environment    Test                 Status    Duration
 -------------  -------------------  --------  ------------
-native         test_event_builder   PASSED    00:00:01.587
-native         test_fusion          PASSED    00:00:01.235
-native         test_signer          PASSED    00:00:01.236
-native         test_replay_guard    PASSED    00:00:01.233
-native         test_wifi_link       PASSED    00:00:01.307
-native         test_nmea            PASSED    00:00:01.220
-native         test_hazard_tracker  PASSED    00:00:01.137
-native         test_uplink          PASSED    00:00:01.182
-native         test_bump_detector   PASSED    00:00:01.180
-native         test_ecu_app         PASSED    00:00:01.196
-================= 91 test cases: 91 succeeded in 00:00:12.514 =================
+native         test_event_builder   PASSED    00:00:01.825
+native         test_fusion          PASSED    00:00:01.129
+native         test_signer          PASSED    00:00:01.143
+native         test_replay_guard    PASSED    00:00:01.166
+native         test_wifi_link       PASSED    00:00:01.173
+native         test_nmea            PASSED    00:00:01.166
+native         test_hazard_tracker  PASSED    00:00:01.132
+native         test_uplink          PASSED    00:00:01.173
+native         test_bump_detector   PASSED    00:00:01.155
+native         test_ecu_app         PASSED    00:00:01.150
+================= 91 test cases: 91 succeeded in 00:00:12.212 =================
 exit=0

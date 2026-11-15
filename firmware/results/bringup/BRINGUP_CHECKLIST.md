@@ -18,11 +18,11 @@ Every result below says where it ran: **HOST** (laptop, native tests), **EMULATO
 | Flash, boot, GPS, IMU, camera on the board | BOARD | **NOT RUN**: board not delivered yet | - (fill in below) |
 | Wi-Fi join, signed report to the backend | BOARD | **NOT RUN**: not built yet | - |
 
-Provenance: these results were produced from the **uncommitted** working tree of branch
-`shahesta/ecu-bringup` on base commit `63ebf39`, so the firmware reports its version as `63ebf39-dirty`.
-Image hashes: board `icvsp_ecu.bin` `7d31bf0399f46f4e346f019b495f87a04ac184e520cd4f724d029934402eeccb`,
-emulator `icvsp_ecu.bin` `7da9305b7f7dd7f9dcef04476df46caed181d996007fa3f05a4a545fc8db08a2`.
-After the commit, the builds and the emulator run are repeated so the logs name the exact commit.
+Provenance: the ECU builds, the emulator run and the native test run were made from commit `ad1ac37` with a
+clean tree (the firmware reports its version as `ad1ac37`); the logs were committed after it.
+Image hashes: board `icvsp_ecu.bin` `0c7c4604ffd4fc35c5350f2dccdc8836ccd3daec54c14ec862b01be1a16cccaa`,
+emulator `icvsp_ecu.bin` `50f078f0ef9b8bfc5750af6cf62b113f982ba707650abfe8832d208451b17db2`.
+Malak's projects (`STEP1_BUILD.md`) were built from her commit `a452c66`.
 
 Found and fixed while doing this:
 - The chip compiler (GCC 14) rejected `format_utc`: a GNSS time after the year 9999 would have been cut off
