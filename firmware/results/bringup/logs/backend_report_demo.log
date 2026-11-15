@@ -1,11 +1,15 @@
 # HOST: laptop backend log for runs 1 and 2 (uvicorn, port 8010)
-INFO:     Started server process [62402]
+INFO:     Started server process [98478]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8010 (Press CTRL+C to quit)
-INFO:     127.0.0.1:57926 - "POST /reports HTTP/1.1" 403 Forbidden
-INFO:     127.0.0.1:57928 - "POST /devices HTTP/1.1" 201 Created
-INFO:     127.0.0.1:57932 - "POST /reports HTTP/1.1" 201 Created
-INFO:     127.0.0.1:57933 - "GET /reports?device_id=ecu-demo-01 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57934 - "POST /reports HTTP/1.1" 201 Created
-INFO:     127.0.0.1:57935 - "POST /reports HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:59498 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59500 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59505 - "POST /reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59509 - "POST /reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59512 - "POST /reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59515 - "POST /devices HTTP/1.1" 201 Created
+INFO:     127.0.0.1:59519 - "POST /reports HTTP/1.1" 201 Created
+INFO:     127.0.0.1:59520 - "GET /reports?device_id=ecu-demo-01 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59521 - "POST /reports HTTP/1.1" 201 Created
+INFO:     127.0.0.1:59522 - "POST /reports HTTP/1.1" 401 Unauthorized

@@ -10,22 +10,22 @@ Every result below says where it ran: **HOST** (laptop, native tests), **EMULATO
 
 | What | Where | Result | Evidence |
 |---|---|---|---|
-| Device logic unit tests (detection, fusion, events, signing, NMEA, queue, uplink, app loop) | HOST | **94/94 pass** (at `51bba23`) | `logs/native_tests.log` |
+| Device logic unit tests (detection, fusion, events, signing, NMEA, queue, uplink, app loop) | HOST | **98/98 pass** (at `4aaa22b`) | `logs/native_tests.log` |
 | Malak's firmware builds for the chip (`espidf_security`, `ble`) | cross-compile | **Built**; `ble` needs the 8 MB flash setting | `STEP1_BUILD.md`, `step1_build_logs/` |
 | `espidf_security` signing demo runs on the chip's CPU | EMULATOR | Signs and verifies; then **stack overflow and reboot loop** (54 reboots in 25 s). Fixed by an 8 KB main stack (no reboots) | `logs/qemu_espidf_security.log`, `logs/qemu_espidf_security_stack8k.log` |
 | `firmware/ecu` smoke test builds for the board | cross-compile | **Built, 0 warnings**, 76% of app partition free | `logs/ecu_build_board.log` |
 | `firmware/ecu` smoke test boots | EMULATOR | **chip PASS, signing PASS**, gps/imu/camera SKIP (not emulated), no reboots in a 60 s run | `logs/qemu_ecu_smoke.log` |
 | Flash, boot, GPS, IMU, camera on the board | BOARD | **NOT RUN**: board not delivered yet | - (fill in below) |
 | Report demo firmware builds for the board (Wi-Fi) and the emulator | cross-compile | **Built, 0 warnings**, 37% of app partition free (board) | `logs/ecu_report_build_board.log`, `logs/ecu_report_build_qemu.log` |
-| ECU app on the chip signs a pothole report and sends it to `POST /reports` | EMULATOR + laptop backend | **PASS**: network up, SNTP time, report signed, backend answered **201 accepted**, no reboots. QEMU Ethernet stands in for Wi-Fi; HTTP only (TLS not exercised); IMU drive and GNSS sentences simulated; demo key | `logs/qemu_report_demo.log`, `logs/backend_report_demo.log`, screenshot 5. The run before registering the key was refused (403 unknown device), as it must be: `logs/qemu_report_demo_unregistered.log` |
+| ECU app on the chip signs a pothole report and sends it to `POST /reports` | EMULATOR + laptop backend | **PASS**: network up, SNTP time, report signed, backend answered **201 accepted**, no reboots. QEMU Ethernet stands in for Wi-Fi; HTTP only (TLS not exercised); IMU drive and GNSS sentences simulated; demo key | `logs/qemu_report_demo.log`, `logs/backend_report_demo.log`, screenshot 5. The run before registering the key got **403 unknown_device**: the ECU kept the report and retried it with back-off (`not_provisioned=3 kept=1`, nothing deleted): `logs/qemu_report_demo_unregistered.log` |
 | Backend checks on that report | HOST | Stored as a pothole, severity high; the same line again = duplicate (safe retry); one field changed = **401 bad signature** | `logs/backend_report_checks.log` (made by `backend_report_checks.py`), screenshot 6 |
 | Wi-Fi join, signed report to the backend | BOARD | **NOT RUN**: board not delivered yet (same firmware, `sdkconfig.report` without the QEMU overlay) | - |
 
 Provenance: the smoke-test builds and emulator run were made from commit `ad1ac37` with a clean tree (the
 firmware reports its version as `ad1ac37`); the report demo builds, the report emulator runs and the latest native
-test run from commit `51bba23`, also clean (the firmware reports `51bba23`); the run followed section 4b as written. Logs were committed after each.
-Report demo image hashes: board `fadc0f31a3ee06073fa652036057cc1cf7f2d6a0d8ce2a2a1a40209badbfbfa3`, emulator
-`f4f7544775df0a12d5c7401ccb16c94f7ded8efc5563be2c9f9d401d93a3e6ff` (both images include the local demo seed
+test run from commit `4aaa22b`, also clean (the firmware reports `4aaa22b`); the run followed section 4b as written. Logs were committed after each.
+Report demo image hashes: board `c9e7ba1b28dba60c397bd9060af91b086e4a001c9846349245bdec577cbb30e6`, emulator
+`93e643cf23490264ef5cd1e588da53ac2fa08d47d18bf8719c0f40f6988e4816` (both images include the local demo seed
 from `sdkconfig.local`, so another laptop gets different hashes).
 Smoke test image hashes (`ad1ac37`):
 board `icvsp_ecu.bin` `0c7c4604ffd4fc35c5350f2dccdc8836ccd3daec54c14ec862b01be1a16cccaa`,
@@ -47,6 +47,15 @@ Found and fixed while doing this:
   `test_only_a_stored_ack_for_this_report_counts` (failed before the fix). Also: the demo result now counts
   reports pushed out of a full queue, start-up memory failures stop with a message, and section 4b below was
   made copy-paste runnable (it was not: the token placeholder broke the shell command).
+- A third review: that ACK check searched the text for exact strings, so a normal JSON reply with spaces
+  would have been rejected and an error object containing those words accepted. Replies are now read as JSON
+  (`json_reply.cpp`): only top-level `ack`, `event_id` (= the report's `msg_id`) and `device_id` (= its sender)
+  count; truncated, malformed or nested-only replies are not an ACK. Also, a 403 `unknown_device` (key not
+  registered yet, normal for a new board) used to delete the report; now it is kept and retried with back-off
+  and the ECU reports `not_provisioned`. Other 403s (revoked device) and 400/401/409/413/422 still drop it.
+  Tests `test_json_reader_handles_escapes_and_rejects_bad_json`, `test_unknown_device_keeps_the_report_until_registered`,
+  `test_other_403_and_signature_refusals_stay_final`, `test_success_status_without_a_valid_ack_is_retried`
+  (they did not compile or failed before the change).
 - The camera driver takes its I2C port from the build config, not from the code; pinned to port 0 so the IMU
   can use port 1 (`sdkconfig.defaults`).
 - QEMU has no octal PSRAM: the emulator build uses quad mode (`sdkconfig.qemu`); the board build stays octal.
@@ -74,7 +83,7 @@ cd firmware
 pio test -e native
 ```
 
-Expected: `94 test cases: 94 succeeded`.
+Expected: `98 test cases: 98 succeeded`.
 
 ## 3. Build for the board
 
@@ -135,8 +144,9 @@ python -m esptool --chip esp32s3 merge_bin --fill-flash-size 8MB -o flash_qemu.b
 qemu-system-xtensa -nographic -machine esp32s3 -m 8M -drive file=flash_qemu.bin,if=mtd,format=raw -nic user,model=open_eth
 ```
 
-The first boot prints `DEMO device=ecu-demo-01 ... public_key=...` (64 hex characters) and its report is refused
-(403 unknown device), because the backend does not know the key yet. Register it once (Terminal 3), pasting the
+The first boot prints `DEMO device=ecu-demo-01 ... public_key=...` (64 hex characters). The backend does not know the key
+yet and answers 403 `unknown_device`; the ECU keeps the report, retries it with back-off and prints
+`DEMO RESULT FAIL ... not_provisioned=N kept=1 ... - register this device's public key with the backend`. Register it once (Terminal 3), pasting the
 key in place of PASTE_KEY_HERE:
 
 ```bash

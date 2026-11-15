@@ -1,5 +1,5 @@
-# EMULATOR run of the report demo firmware (firmware/ecu, sdkconfig.report + sdkconfig.report_qemu), commit 51bba23, clean tree
-# 2026-11-15T20:46:54Z  qemu-system-xtensa -display none -machine esp32s3 -m 8M -drive file=flash_qemu.bin,if=mtd,format=raw -nic user,model=open_eth -serial file:<log>
+# EMULATOR run of the report demo firmware (firmware/ecu, sdkconfig.report + sdkconfig.report_qemu), commit 4aaa22b, clean tree
+# 2026-11-15T23:01:18Z  qemu-system-xtensa -display none -machine esp32s3 -m 8M -drive file=flash_qemu.bin,if=mtd,format=raw -nic user,model=open_eth -serial file:<log>
 # backend: laptop, backend/ at the same commit, port 8010, fresh local SQLite, started as in BRINGUP_CHECKLIST.md 4b. HTTP only: TLS not exercised.
 # simulated: IMU drive and GNSS sentences (demo coordinates). The sent report holds those demo coordinates only.
 # run 2 of 2: after registering the key printed in run 1 with POST /devices (checklist 4b)
@@ -13,80 +13,80 @@ load:0x403c8700,len:0xd24
 load:0x403cb700,len:0x2eec
 entry 0x403c8924
 I (18) boot: ESP-IDF v5.5.5 2nd stage bootloader
-I (19) boot: compile time Nov 15 2026 22:44:46
-I (19) boot: Multicore bootloader
+I (19) boot: compile time Nov 16 2026 01:00:05
+I (20) boot: Multicore bootloader
 I (23) boot: chip revision: v0.0
 I (24) boot: efuse block revision: v0.0
-I (24) boot.esp32s3: Boot SPI Speed : 80MHz
+I (25) boot.esp32s3: Boot SPI Speed : 80MHz
 I (25) boot.esp32s3: SPI Mode       : SLOW READ
 I (25) boot.esp32s3: SPI Flash Size : 8MB
 I (27) boot: Enabling RNG early entropy source...
 I (32) boot: Partition Table:
 I (32) boot: ## Label            Usage          Type ST Offset   Length
 I (32) boot:  0 nvs              WiFi data        01 02 00009000 00006000
-I (32) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (33) boot:  1 phy_init         RF data          01 01 0000f000 00001000
 I (33) boot:  2 factory          factory app      00 00 00010000 00177000
-I (33) boot: End of partition table
-I (34) esp_image: segment 0: paddr=00010020 vaddr=3c070020 size=1cbd8h (117720) map
-I (49) esp_image: segment 1: paddr=0002cc00 vaddr=3fc94400 size=03418h ( 13336) load
-I (51) esp_image: segment 2: paddr=00030020 vaddr=42000020 size=6f6a4h (456356) map
-I (104) esp_image: segment 3: paddr=0009f6cc vaddr=3fc97818 size=001c8h (   456) load
-I (105) esp_image: segment 4: paddr=0009f89c vaddr=40374000 size=103d8h ( 66520) load
-I (113) esp_image: segment 5: paddr=000afc7c vaddr=50000000 size=00020h (    32) load
-I (114) boot: Loaded app from partition at offset 0x10000
-I (114) boot: Disabling RNG early entropy source...
-W (251) rtcinit: o_code calibration fail
+I (34) boot: End of partition table
+I (35) esp_image: segment 0: paddr=00010020 vaddr=3c070020 size=1cc48h (117832) map
+I (50) esp_image: segment 1: paddr=0002cc70 vaddr=3fc94400 size=033a8h ( 13224) load
+I (52) esp_image: segment 2: paddr=00030020 vaddr=42000020 size=6ff54h (458580) map
+I (103) esp_image: segment 3: paddr=0009ff7c vaddr=3fc977a8 size=00238h (   568) load
+I (104) esp_image: segment 4: paddr=000a01bc vaddr=40374000 size=103d8h ( 66520) load
+I (113) esp_image: segment 5: paddr=000b059c vaddr=50000000 size=00020h (    32) load
+I (115) boot: Loaded app from partition at offset 0x10000
+I (115) boot: Disabling RNG early entropy source...
+W (254) rtcinit: o_code calibration fail
 
-I (133) esp_psram: Found 8MB PSRAM device
-I (133) esp_psram: Speed: 80MHz
-I (134) cpu_start: Multicore app
-I (137) esp_psram: SPI SRAM memory test OK
-I (147) cpu_start: GPIO 44 and 43 are used as console UART I/O pins
-I (149) cpu_start: Pro cpu start user code
-I (149) cpu_start: cpu freq: 160000000 Hz
-I (149) app_init: Application information:
-I (149) app_init: Project name:     icvsp_ecu
-I (149) app_init: App version:      51bba23
-I (149) app_init: Compile time:     Nov 15 2026 22:44:30
-I (149) app_init: ELF file SHA256:  29782d07d...
-I (149) app_init: ESP-IDF:          v5.5.5
-I (150) efuse_init: Min chip rev:     v0.0
-I (150) efuse_init: Max chip rev:     v0.99 
-I (150) efuse_init: Chip rev:         v0.0
-I (150) heap_init: Initializing. RAM available for dynamic allocation:
-I (150) heap_init: At 3FCA2920 len 00046DF0 (283 KiB): RAM
-I (150) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
-I (150) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
-I (151) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
-I (151) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
-I (155) spi_flash: detected chip: gd
-I (155) spi_flash: flash io: dio
-I (156) sleep_gpio: Configure to isolate all GPIO pins in sleep state
-I (156) sleep_gpio: Enable automatic switching of GPIO sleep configuration
-I (158) main_task: Started on CPU0
-I (158) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
-I (158) main_task: Calling app_main()
+I (134) esp_psram: Found 8MB PSRAM device
+I (135) esp_psram: Speed: 80MHz
+I (136) cpu_start: Multicore app
+I (139) esp_psram: SPI SRAM memory test OK
+I (148) cpu_start: GPIO 44 and 43 are used as console UART I/O pins
+I (150) cpu_start: Pro cpu start user code
+I (150) cpu_start: cpu freq: 160000000 Hz
+I (151) app_init: Application information:
+I (151) app_init: Project name:     icvsp_ecu
+I (151) app_init: App version:      4aaa22b
+I (151) app_init: Compile time:     Nov 16 2026 00:59:46
+I (151) app_init: ELF file SHA256:  5988fb3d3...
+I (151) app_init: ESP-IDF:          v5.5.5
+I (151) efuse_init: Min chip rev:     v0.0
+I (151) efuse_init: Max chip rev:     v0.99 
+I (151) efuse_init: Chip rev:         v0.0
+I (152) heap_init: Initializing. RAM available for dynamic allocation:
+I (152) heap_init: At 3FCA2B20 len 00046BF0 (282 KiB): RAM
+I (152) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (152) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (152) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (153) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (156) spi_flash: detected chip: gd
+I (157) spi_flash: flash io: dio
+I (157) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (158) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (160) main_task: Started on CPU0
+I (160) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (160) main_task: Calling app_main()
 
-DEMO BEGIN signed-report demo, EMULATOR build, firmware 51bba23, ESP-IDF v5.5.5
+DEMO BEGIN signed-report demo, EMULATOR build, firmware 4aaa22b, ESP-IDF v5.5.5
 DEMO link=qemu-ethernet url=http://10.0.2.2:8010/reports device=ecu-demo-01
 DEMO simulated: IMU drive (30 s, pothole at 15 s) and GNSS sentences at demo coordinates; demo key; real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks
-I (218) esp_eth.netif.netif_glue: 52:54:00:12:34:56
-I (218) esp_eth.netif.netif_glue: ethernet attached to netif
+I (220) esp_eth.netif.netif_glue: 52:54:00:12:34:56
+I (220) esp_eth.netif.netif_glue: ethernet attached to netif
 NET link=connecting (qemu-ethernet) joins=0 failed=0
-I (1328) esp_netif_handlers: eth ip: 10.0.2.15, mask: 255.255.255.0, gw: 10.0.2.2
+I (1330) esp_netif_handlers: eth ip: 10.0.2.15, mask: 255.255.255.0, gw: 10.0.2.2
 NET got-ip qemu-ethernet ip=10.0.2.15 gw=10.0.2.2
 NET link=online (qemu-ethernet) joins=1 failed=0
-DEMO time synced by SNTP (pool.ntp.org): 2026-11-15T20:46:57Z
-DEMO device=ecu-demo-01 boot_id=1794775617 public_key=11c3d6838aad1d91a9fb202385934ba8a45ec1d383759a4ccf7d3183081d9364 (demo key)
+DEMO time synced by SNTP (pool.ntp.org): 2026-11-15T23:01:20Z
+DEMO device=ecu-demo-01 boot_id=1794783680 public_key=11c3d6838aad1d91a9fb202385934ba8a45ec1d383759a4ccf7d3183081d9364 (demo key)
 DEMO drive t= 0 s state=running imu_used=1 discarded=0 stale=0 gnss_sentences=2
-DEMO drive t= 5 s state=running imu_used=501 discarded=0 stale=0 gnss_sentences=12
+DEMO drive t= 5 s state=running imu_used=502 discarded=0 stale=0 gnss_sentences=12
 DEMO drive t=10 s state=running imu_used=1001 discarded=0 stale=0 gnss_sentences=22
-DEMO drive t=15 s state=running imu_used=1502 discarded=0 stale=0 gnss_sentences=32
+DEMO drive t=15 s state=running imu_used=1501 discarded=0 stale=0 gnss_sentences=32
 REPORT signed #1 (728 bytes) -> delivery queue
-HTTP POST http://10.0.2.2:8010/reports -> 201 {"status":"accepted","ack":"stored","event_id":"ecu-demo-01-1794775617-1","device_id":"ecu-demo-01","stored_at":1794775635.3019571,"evaluation":"pending"}
-UPLINK stored=1 refused=0 failures=0 last_status=201 queued=0 queue_dropped=0
+HTTP POST http://10.0.2.2:8010/reports -> 201 {"status":"accepted","ack":"stored","event_id":"ecu-demo-01-1794783680-1","device_id":"ecu-demo-01","stored_at":1794783698.5771441,"evaluation":"pending"}
+UPLINK stored=1 refused=0 failures=0 not_provisioned=0 last_status=201 queued=0 queue_dropped=0
 DEMO drive t=20 s state=running imu_used=2001 discarded=0 stale=0 gnss_sentences=42
 DEMO drive t=25 s state=running imu_used=2502 discarded=0 stale=0 gnss_sentences=52
 DEMO drive t=30 s state=running imu_used=3000 discarded=0 stale=0 gnss_sentences=62
 DEMO drive done: imu_used=3000 stale=0 signed=1
-DEMO RESULT PASS signed=1 stored_by_backend=1 refused=0 send_failures=0 dropped=0 (handoff=0 queue_full=0)
+DEMO RESULT PASS signed=1 stored_by_backend=1 refused=0 send_failures=0 not_provisioned=0 kept=0 dropped=0 (handoff=0 queue_full=0)
