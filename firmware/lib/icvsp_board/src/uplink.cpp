@@ -1,5 +1,6 @@
 #include "uplink.h"
 
+#include <cstdio>
 #include <cstring>
 
 namespace icvsp {
@@ -19,6 +20,19 @@ uint32_t Uplink::retry_delay_ms(uint32_t failures, float random_unit) {
     if (random_unit < 0) random_unit = 0;
     if (random_unit > 1) random_unit = 1;
     return static_cast<uint32_t>(base * (0.8f + random_unit * 0.4f) + 0.5f);
+}
+
+bool Uplink::is_stored_ack(const char* line, const char* body) {
+    if (line == nullptr || body == nullptr || std::strstr(body, "\"ack\":\"stored\"") == nullptr) return false;
+    static const char kKey[] = "\"msg_id\":\"";
+    const char* id = std::strstr(line, kKey);
+    if (id == nullptr) return false;
+    id += sizeof kKey - 1;
+    const char* end = std::strchr(id, '"');
+    if (end == nullptr || end == id || end - id > 100) return false;
+    char want[128];
+    std::snprintf(want, sizeof want, "\"event_id\":\"%.*s\"", static_cast<int>(end - id), id);
+    return std::strstr(body, want) != nullptr;
 }
 
 bool Uplink::is_final(int status) {

@@ -12,7 +12,9 @@ class ReportTransport {
 public:
     virtual ~ReportTransport() = default;
     // POSTs one signed report line as the request body. Returns the HTTP status, or 0 when there was no
-    // answer at all (no connection, DNS, TLS handshake or certificate failure, timeout).
+    // answer at all (no connection, DNS, TLS handshake or certificate failure, timeout). A 200/201 must be
+    // returned only for a body that passes Uplink::is_stored_ack; any other 2xx body counts as no answer (0),
+    // so a captive portal or a wrong URL can never make the device delete a report.
     virtual int post_report(const char* line, size_t len) = 0;
 };
 
@@ -39,6 +41,9 @@ public:
 
     static uint32_t retry_delay_ms(uint32_t failures, float random_unit);
     static bool is_final(int status);
+    // True when body is the backend's ACK for this report line: "ack":"stored" and event_id equal to the
+    // line's msg_id (the backend sends compact JSON, as Device does).
+    static bool is_stored_ack(const char* line, const char* body);
 
     const Stats& stats() const { return stats_; }
     uint32_t consecutive_failures() const { return failures_; }

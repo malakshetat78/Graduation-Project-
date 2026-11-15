@@ -86,6 +86,22 @@ void test_retry_delay_counts_from_the_end_of_a_slow_attempt() {
     TEST_ASSERT_EQUAL_INT(2, t.posts);
 }
 
+// A 200/201 only counts when the body is the backend's ACK for this very report: "ack":"stored" and the
+// report's msg_id as event_id. Anything else (a captive portal, a wrong URL, another report's ACK) is no answer.
+void test_only_a_stored_ack_for_this_report_counts() {
+    const char* line = "{\"event\":{},\"sender\":\"ecu-1\",\"msg_id\":\"ecu-1-7-1\",\"utc_ms\":1}";
+    TEST_ASSERT_TRUE(Uplink::is_stored_ack(line,
+        "{\"status\":\"accepted\",\"ack\":\"stored\",\"event_id\":\"ecu-1-7-1\",\"device_id\":\"ecu-1\"}"));
+    TEST_ASSERT_TRUE(Uplink::is_stored_ack(line,
+        "{\"status\":\"duplicate\",\"ack\":\"stored\",\"event_id\":\"ecu-1-7-1\"}"));
+    TEST_ASSERT_FALSE(Uplink::is_stored_ack(line, ""));
+    TEST_ASSERT_FALSE(Uplink::is_stored_ack(line, "<html>Welcome to the hotel Wi-Fi</html>"));
+    TEST_ASSERT_FALSE(Uplink::is_stored_ack(line, "{\"ack\":\"stored\",\"event_id\":\"ecu-1-7-10\"}"));  // other report
+    TEST_ASSERT_FALSE(Uplink::is_stored_ack(line, "{\"ack\":\"queued\",\"event_id\":\"ecu-1-7-1\"}"));
+    TEST_ASSERT_FALSE(Uplink::is_stored_ack("{\"no_msg_id\":1}", "{\"ack\":\"stored\",\"event_id\":\"\"}"));
+    TEST_ASSERT_FALSE(Uplink::is_stored_ack(nullptr, "{\"ack\":\"stored\"}"));
+}
+
 void test_nothing_is_sent_while_offline() {
     FakeTransport t;
     Uplink u(*q, t, half);
@@ -193,6 +209,7 @@ int main(int, char**) {
     RUN_TEST(test_retry_delay_doubles_caps_at_five_minutes_and_has_jitter);
     RUN_TEST(test_retry_timer_survives_the_millis_wraparound);
     RUN_TEST(test_retry_delay_counts_from_the_end_of_a_slow_attempt);
+    RUN_TEST(test_only_a_stored_ack_for_this_report_counts);
     RUN_TEST(test_reports_made_while_offline_are_delivered_after_reconnect);
     return UNITY_END();
 }

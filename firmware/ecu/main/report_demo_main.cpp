@@ -4,7 +4,7 @@
 //                  sign (Ed25519). Each signed line is handed to the delivery task through a FreeRTOS queue
 //                  and the loop moves on; it never waits for the network.
 //   delivery task  the tested WifiLink (join / back-off / reconnect) and Uplink (send oldest first, remove only
-//                  after the backend answered, retry with back-off) over the chip's real network stack.
+//                  after the backend answered, retry with back-off) over the chip firmware's network stack (lwIP).
 //
 // What is real and what is simulated (stated in every log, so a demo is never mistaken for a road test):
 //   real       EcuApp, Device (detection, fusion, event, signature), NmeaParser, ReportQueue, WifiLink, Uplink,
@@ -54,6 +54,7 @@ struct Line {
 QueueHandle_t g_lines;              // app task -> delivery task
 std::atomic<uint32_t> g_signed{0}, g_handoff_dropped{0};           // written by the app task
 std::atomic<uint32_t> g_stored{0}, g_refused{0}, g_failures{0};     // written by the delivery task
+std::atomic<uint32_t> g_queue_dropped{0};  // pushed out of the full ReportQueue (oldest first)
 std::atomic<size_t> g_queued{0};
 
 uint32_t now_ms() { return static_cast<uint32_t>(esp_timer_get_time() / 1000); }
@@ -109,14 +110,16 @@ void delivery_task(void*) {
         uplink.tick(now, link.online());
         const Uplink::Stats& s = uplink.stats();
         if (s.stored != last.stored || s.refused != last.refused || s.failures != last.failures) {
-            std::printf("UPLINK stored=%" PRIu32 " refused=%" PRIu32 " failures=%" PRIu32 " last_status=%d queued=%u\n",
-                        s.stored, s.refused, s.failures, s.last_status, static_cast<unsigned>(queue.size()));
+            std::printf("UPLINK stored=%" PRIu32 " refused=%" PRIu32 " failures=%" PRIu32 " last_status=%d queued=%u"
+                        " queue_dropped=%" PRIu32 "\n", s.stored, s.refused, s.failures, s.last_status,
+                        static_cast<unsigned>(queue.size()), queue.dropped());
             last = s;
         }
         g_stored = s.stored;
         g_refused = s.refused;
         g_failures = s.failures;
         g_queued = queue.size();
+        g_queue_dropped = queue.dropped();
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
@@ -193,7 +196,7 @@ extern "C" void app_main() {
                 esp_app_get_description()->version, esp_app_get_description()->idf_ver);
     std::printf("DEMO link=%s url=%s device=%s\n", EspNetDriver::kind(), CONFIG_ICVSP_REPORT_URL, CONFIG_ICVSP_DEVICE_ID);
     std::printf("DEMO simulated: IMU drive (%.0f s, pothole at %.0f s) and GNSS sentences at demo coordinates; "
-                "demo key; real: ECU app, signing, network stack, backend checks\n", kDriveS, kPotholeAtS);
+                "demo key; real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks\n", kDriveS, kPotholeAtS);
 
     esp_err_t err = nvs_flash_init();  // the Wi-Fi driver keeps its calibration in NVS
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -205,7 +208,9 @@ extern "C" void app_main() {
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     g_lines = xQueueCreate(4, sizeof(Line));
-    xTaskCreate(delivery_task, "delivery", 12288, nullptr, 4, nullptr);
+    if (g_lines == nullptr) halt("no memory for the delivery queue");
+    if (xTaskCreate(delivery_task, "delivery", 12288, nullptr, 4, nullptr) != pdPASS)
+        halt("no memory for the delivery task");
 
     // Time. On the road it comes from GNSS; here SNTP stands in for it, and the GNSS sentences carry it.
     esp_sntp_config_t sntp = ESP_NETIF_SNTP_DEFAULT_CONFIG(CONFIG_ICVSP_SNTP_SERVER);
@@ -261,11 +266,14 @@ extern "C" void app_main() {
     std::printf("DEMO drive done: imu_used=%" PRIu32 " stale=%" PRIu32 " signed=%" PRIu32 "\n", app.imu_samples(),
                 app.imu_stale(), g_signed.load());
 
-    for (int i = 0; i < 600 && (g_stored + g_refused < g_signed - g_handoff_dropped || g_queued > 0); ++i)
-        vTaskDelay(pdMS_TO_TICKS(100));
-    const bool ok = g_signed > 0 && g_stored == g_signed && g_refused == 0 && g_handoff_dropped == 0;
+    // Every signed report ends as stored, refused or dropped (hand-off or full queue); wait up to 60 s for that.
+    auto settled = [] { return g_stored + g_refused + g_handoff_dropped + g_queue_dropped; };
+    for (int i = 0; i < 600 && (settled() < g_signed || g_queued > 0); ++i) vTaskDelay(pdMS_TO_TICKS(100));
+    const uint32_t dropped = g_handoff_dropped + g_queue_dropped;
+    const bool ok = g_signed > 0 && g_stored == g_signed && g_refused == 0 && dropped == 0;
     std::printf("DEMO RESULT %s signed=%" PRIu32 " stored_by_backend=%" PRIu32 " refused=%" PRIu32
-                " send_failures=%" PRIu32 " dropped=%" PRIu32 "\n", ok ? "PASS" : "FAIL", g_signed.load(), g_stored.load(),
-                g_refused.load(), g_failures.load(), g_handoff_dropped.load());
+                " send_failures=%" PRIu32 " dropped=%" PRIu32 " (handoff=%" PRIu32 " queue_full=%" PRIu32 ")\n",
+                ok ? "PASS" : "FAIL", g_signed.load(), g_stored.load(), g_refused.load(), g_failures.load(), dropped,
+                g_handoff_dropped.load(), g_queue_dropped.load());
     for (;;) vTaskDelay(pdMS_TO_TICKS(1000));
 }
