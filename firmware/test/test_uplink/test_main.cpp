@@ -26,6 +26,18 @@ struct FakeTransport : ReportTransport {
 
 float half() { return 0.5f; }
 
+uint32_t g_clock = 0;  // device clock for the slow-transport test
+uint32_t clock_ms() { return g_clock; }
+
+struct SlowTransport : ReportTransport {  // every POST takes 10 s and gets no answer (e.g. a TCP timeout)
+    int posts = 0;
+    int post_report(const char*, size_t) override {
+        ++posts;
+        g_clock += 10000;
+        return 0;
+    }
+};
+
 ReportQueue* q;  // ~35 KB: kept off the test's stack
 
 }  // namespace
@@ -54,6 +66,24 @@ void test_queue_refuses_empty_and_oversized_lines() {
     big.pop_back();
     TEST_ASSERT_TRUE(q->push(big.c_str()));  // 1099 characters: the longest line Device builds
     TEST_ASSERT_EQUAL_size_t(1, q->size());
+}
+
+// The board's HTTP client blocks for up to 10 s. The retry delay must start when the attempt ended, not when
+// it began, or a slow failure would use up the whole back-off and the next try would follow at once.
+void test_retry_delay_counts_from_the_end_of_a_slow_attempt() {
+    SlowTransport t;
+    Uplink u(*q, t, half, clock_ms);
+    q->push("a");
+    g_clock = 0;
+    u.tick(g_clock, true);  // fails at 10 000; first delay 2 000 ms (jitter 0.5 -> exactly 2 000)
+    TEST_ASSERT_EQUAL_INT(1, t.posts);
+    u.tick(10050, true);
+    TEST_ASSERT_EQUAL_INT(1, t.posts);  // still waiting
+    u.tick(11999, true);
+    TEST_ASSERT_EQUAL_INT(1, t.posts);
+    g_clock = 12000;
+    u.tick(12000, true);
+    TEST_ASSERT_EQUAL_INT(2, t.posts);
 }
 
 void test_nothing_is_sent_while_offline() {
@@ -162,6 +192,7 @@ int main(int, char**) {
     RUN_TEST(test_no_answer_and_server_errors_keep_the_report_and_back_off);
     RUN_TEST(test_retry_delay_doubles_caps_at_five_minutes_and_has_jitter);
     RUN_TEST(test_retry_timer_survives_the_millis_wraparound);
+    RUN_TEST(test_retry_delay_counts_from_the_end_of_a_slow_attempt);
     RUN_TEST(test_reports_made_while_offline_are_delivered_after_reconnect);
     return UNITY_END();
 }

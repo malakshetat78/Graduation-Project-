@@ -1,4 +1,13 @@
-menu "ICVSP ECU smoke test"
+menu "ICVSP ECU"
+
+choice ICVSP_APP
+    prompt "Firmware to build"
+    default ICVSP_APP_SMOKE
+    config ICVSP_APP_SMOKE
+        bool "Boot/sensor smoke test"
+    config ICVSP_APP_REPORT_DEMO
+        bool "Signed report demo: ECU app -> POST /reports over the network"
+endchoice
 
 config ICVSP_SMOKE_EMULATOR
     bool "Built for QEMU: skip the probes that need real hardware"
@@ -10,5 +19,38 @@ config ICVSP_GPS_LISTEN_S
     int "Seconds to listen to the GPS UART"
     default 5
     range 2 60
+
+config ICVSP_NET_QEMU_ETH
+    bool "Network over QEMU's emulated Ethernet instead of Wi-Fi (emulator only)"
+    default n
+    help
+        Set by sdkconfig.report_qemu. QEMU has no Wi-Fi radio; it emulates an OpenCores Ethernet port.
+
+config ICVSP_WIFI_SSID
+    string "Wi-Fi network name (set it in sdkconfig.local, not in git)"
+    default ""
+
+config ICVSP_WIFI_PASSWORD
+    string "Wi-Fi password (set it in sdkconfig.local, not in git)"
+    default ""
+
+config ICVSP_REPORT_URL
+    string "Backend POST /reports URL"
+    default "http://10.0.2.2:8010/reports"
+    help
+        10.0.2.2 is the laptop as seen from inside QEMU. On the board: the laptop's LAN address, later the
+        Cloud Run https:// URL.
+
+config ICVSP_SNTP_SERVER
+    string "SNTP server (report demo clock; on the road the clock comes from GNSS)"
+    default "pool.ntp.org"
+
+config ICVSP_DEVICE_ID
+    string "Device ID registered in the backend"
+    default "ecu-demo-01"
+
+config ICVSP_DEMO_SEED_HEX
+    string "Demo signing seed, 64 hex characters (sdkconfig.local only; a demo key, not a production key)"
+    default ""
 
 endmenu

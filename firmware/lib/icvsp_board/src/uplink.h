@@ -6,8 +6,8 @@
 
 namespace icvsp {
 
-// What the HTTPS client must provide. The board version (src/board_esp32.cpp) uses WiFiClientSecure
-// with the backend's CA certificate; the tests use a fake.
+// What the HTTP(S) client must provide. The board version (ecu/main/http_transport.cpp) uses esp_http_client,
+// checking https:// servers against ESP-IDF's root certificate bundle; the tests use a fake.
 class ReportTransport {
 public:
     virtual ~ReportTransport() = default;
@@ -30,7 +30,9 @@ public:
     };
 
     // random_unit: returns a value in [0, 1) for the jitter (esp_random() on the board).
-    Uplink(ReportQueue& queue, ReportTransport& transport, float (*random_unit)());
+    // clock_ms: the device clock, read again after each attempt so a retry delay starts when a slow attempt
+    // ended (the board's HTTP client can block for up to 10 s); without it the delay counts from now_ms.
+    Uplink(ReportQueue& queue, ReportTransport& transport, float (*random_unit)(), uint32_t (*clock_ms)() = nullptr);
 
     // Call often. Sends at most one report per call, and nothing while offline or waiting out a retry.
     void tick(uint32_t now_ms, bool online);
@@ -45,6 +47,7 @@ private:
     ReportQueue& queue_;
     ReportTransport& transport_;
     float (*random_unit_)();
+    uint32_t (*clock_ms_)();
     uint32_t failures_ = 0;
     uint32_t next_try_ms_ = 0;
     bool waiting_ = false;

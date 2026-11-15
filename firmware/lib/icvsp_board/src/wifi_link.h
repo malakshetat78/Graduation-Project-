@@ -3,7 +3,8 @@
 
 namespace icvsp {
 
-// What the Wi-Fi driver must provide (board: Arduino WiFi in station mode; tests: a fake).
+// What a network link driver must provide. Named after Wi-Fi, but any link that gives the ECU an IP address
+// fits: Wi-Fi station on the board, the emulated Ethernet port in QEMU, a 4G modem (PPP) later; tests: a fake.
 class WifiDriver {
 public:
     virtual ~WifiDriver() = default;

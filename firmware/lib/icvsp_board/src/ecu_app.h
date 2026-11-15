@@ -5,8 +5,6 @@
 #include "imu_source.h"
 #include "nmea.h"
 #include "report_queue.h"
-#include "uplink.h"
-#include "wifi_link.h"
 
 namespace icvsp {
 
@@ -21,10 +19,9 @@ namespace icvsp {
 //                   up by a slow loop would otherwise get the wrong place and time); its UTC is moved back
 //                   by its age.
 //
-// In both states Wi-Fi is kept up and queued reports are delivered whenever it is online; nothing is lost
-// while offline (up to the queue size). Delivery runs inside tick(): a transport that blocks (a real HTTPS
-// request waiting on a timeout) stalls the IMU reads for that long. On the board, delivery must move to its
-// own task before this is used with live sensors (planned, not done).
+// Sending is not done here. Signed lines go to the Device's sink (the ReportQueue in the tests, a queue
+// to the delivery task on the board), and a separate delivery loop keeps the network link up (WifiLink)
+// and sends them (Uplink). So a slow or failing network never delays the IMU reads.
 class EcuApp {
 public:
     enum class State { WaitingForTime, Running };
@@ -34,13 +31,11 @@ public:
     // Give this as the Device's sink with the queue as its context.
     static void queue_sink(const char* line, void* queue);
 
-    EcuApp(Device& device, NmeaParser& gnss, ImuSource& imu, WifiLink& wifi, Uplink& uplink, ReportQueue& queue)
-        : device_(device), gnss_(gnss), imu_(imu), wifi_(wifi), uplink_(uplink), queue_(queue) {}
+    EcuApp(Device& device, NmeaParser& gnss, ImuSource& imu) : device_(device), gnss_(gnss), imu_(imu) {}
 
     void tick(uint32_t now_ms);
 
     State state() const { return state_; }
-    size_t queued() const { return queue_.size(); }
     uint32_t imu_samples() const { return imu_samples_; }
     uint32_t imu_discarded() const { return imu_discarded_; }  // read before GNSS time was known
     uint32_t imu_stale() const { return imu_stale_; }  // older than kMaxSampleAgeMs when read
@@ -50,9 +45,6 @@ private:
     Device& device_;
     NmeaParser& gnss_;
     ImuSource& imu_;
-    WifiLink& wifi_;
-    Uplink& uplink_;
-    ReportQueue& queue_;
     State state_ = State::WaitingForTime;
     uint32_t imu_samples_ = 0, imu_discarded_ = 0, imu_stale_ = 0;
     uint32_t running_since_ms_ = 0;

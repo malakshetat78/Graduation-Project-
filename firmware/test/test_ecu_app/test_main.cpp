@@ -11,6 +11,8 @@
 #include <vector>
 
 #include "ecu_app.h"
+#include "uplink.h"
+#include "wifi_link.h"
 #include "signer.h"
 #include "sim.h"
 
@@ -110,13 +112,20 @@ struct Rig {
         std::memset(seed, 0x11, sizeof seed);
         device = new Device("ecu-test-01", 7, seed, EcuApp::queue_sink, &queue);
         std::memcpy(pk, device->public_key(), 32);
-        app = new EcuApp(*device, gnss, imu, wifi, uplink, queue);
+        app = new EcuApp(*device, gnss, imu);
     }
     ~Rig() {
         delete app;
         delete device;
     }
 };
+
+// The delivery loop (its own task on the board): keep the link up and send queued reports.
+template <typename R>
+void deliver(R& r, uint32_t now) {
+    r.wifi.tick(now);
+    r.uplink.tick(now, r.wifi.online());
+}
 
 // Drive 30 s east at 35 km/h with a pothole at 15 s. GNSS gets its first fix at 3 s, Wi-Fi only at 20 s.
 void drive(Rig& r, bool gnss_ever) {
@@ -134,6 +143,7 @@ void drive(Rig& r, bool gnss_ever) {
         }
         r.wifi_hw.up = now >= 20000;
         r.app->tick(now);
+        deliver(r, now);
     }
 }
 
@@ -160,7 +170,7 @@ void test_pothole_report_is_signed_queued_while_offline_and_delivered_later() {
     TEST_ASSERT_TRUE(r.app->imu_discarded() > 0);  // the first 3 s, before the fix
     TEST_ASSERT_TRUE(r.app->imu_samples() > 2000);
     TEST_ASSERT_EQUAL_size_t(1, r.https.bodies.size());
-    TEST_ASSERT_EQUAL_size_t(0, r.app->queued());
+    TEST_ASSERT_EQUAL_size_t(0, r.queue.size());
     TEST_ASSERT_EQUAL_UINT32(1, r.uplink.stats().stored);
 
     const std::string& line = r.https.bodies[0];
@@ -212,7 +222,7 @@ struct ListRig {  // the same parts as Rig, with an IMU that ignores time stamps
     ListRig() {
         std::memset(seed, 0x22, sizeof seed);
         device = new Device("ecu-test-02", 1, seed, EcuApp::queue_sink, &queue);
-        app = new EcuApp(*device, gnss, imu, wifi, uplink, queue);
+        app = new EcuApp(*device, gnss, imu);
     }
     ~ListRig() {
         delete app;
@@ -247,6 +257,31 @@ void test_samples_are_still_used_after_25_days_of_running() {
     TEST_ASSERT_EQUAL_UINT32(0, r.app->imu_discarded());
 }
 
+void test_app_loop_never_touches_the_network() {
+    // Sensing and sending are separate loops: however long a send takes, the IMU keeps being read.
+    Rig r;
+    r.wifi_hw.up = true;
+    sim::Drive d;
+    d.duration_s = 30;
+    d.speed_kmh = 35;
+    d.events = {{sim::Feature::Pothole, 15.0f, 9.0f}};
+    r.imu.samples = d.imu();
+    double lon = 31.2800;
+    for (uint32_t now = 0; now <= 30000; now += 10) {
+        if (now % 1000 == 0) {
+            const int t = static_cast<int>(now / 1000);
+            r.gnss.feed(sentences_at(t, 30.0444, lon, d.speed_at(t)).c_str(), now);
+            lon += d.speed_at(t) / 3.6 / (111320.0 * std::cos(30.0444 * 3.14159265 / 180));
+        }
+        r.app->tick(now);  // the app loop only: no deliver()
+    }
+    TEST_ASSERT_EQUAL_size_t(1, r.queue.size());       // the pothole was detected, signed and queued
+    TEST_ASSERT_EQUAL_size_t(0, r.https.bodies.size());  // but nothing was sent from the app loop
+    for (uint32_t now = 30010; now <= 30100; now += 10) deliver(r, now);  // join, then send
+    TEST_ASSERT_EQUAL_size_t(1, r.https.bodies.size());  // the delivery loop sends it
+    TEST_ASSERT_EQUAL_size_t(0, r.queue.size());
+}
+
 int main(int, char**) {
     UNITY_BEGIN();
     RUN_TEST(test_waits_for_gnss_time_before_using_the_imu);
@@ -254,5 +289,6 @@ int main(int, char**) {
     RUN_TEST(test_old_and_pre_time_imu_samples_are_dropped);
     RUN_TEST(test_sample_age_limit_is_exact_and_future_samples_are_refused);
     RUN_TEST(test_samples_are_still_used_after_25_days_of_running);
+    RUN_TEST(test_app_loop_never_touches_the_network);
     return UNITY_END();
 }

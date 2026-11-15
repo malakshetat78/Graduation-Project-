@@ -1,6 +1,7 @@
 # ESP-IDF generated artifacts (dependencies.lock IS committed: it pins the camera driver version)
 /build/
 /build_qemu/
+/build_*/
 /sdkconfig
 /sdkconfig.old
 /managed_components/

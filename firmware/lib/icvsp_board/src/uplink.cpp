@@ -9,8 +9,8 @@ constexpr uint32_t kFirstDelayMs = 2000;
 constexpr uint32_t kMaxDelayMs = 300000;
 }  // namespace
 
-Uplink::Uplink(ReportQueue& queue, ReportTransport& transport, float (*random_unit)())
-    : queue_(queue), transport_(transport), random_unit_(random_unit) {}
+Uplink::Uplink(ReportQueue& queue, ReportTransport& transport, float (*random_unit)(), uint32_t (*clock_ms)())
+    : queue_(queue), transport_(transport), random_unit_(random_unit), clock_ms_(clock_ms) {}
 
 uint32_t Uplink::retry_delay_ms(uint32_t failures, float random_unit) {
     const uint32_t shift = failures < 8 ? failures : 8;
@@ -46,7 +46,8 @@ void Uplink::tick(uint32_t now_ms, bool online) {
         failures_ = 0;
     } else {
         ++stats_.failures;
-        next_try_ms_ = now_ms + retry_delay_ms(failures_, random_unit_ ? random_unit_() : 0.5f);
+        const uint32_t ended_ms = clock_ms_ ? clock_ms_() : now_ms;
+        next_try_ms_ = ended_ms + retry_delay_ms(failures_, random_unit_ ? random_unit_() : 0.5f);
         waiting_ = true;
         if (failures_ < UINT32_MAX) ++failures_;
     }

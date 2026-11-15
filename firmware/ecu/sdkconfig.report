@@ -1,0 +1,3 @@
+# Report demo firmware (layer on top of sdkconfig.defaults). Wi-Fi name/password and the demo seed go in the
+# git-ignored sdkconfig.local (copy sdkconfig.local.example).
+CONFIG_ICVSP_APP_REPORT_DEMO=y
