@@ -105,13 +105,16 @@ In the emulator the chip, flash and PSRAM values come from QEMU's model, and tim
 
 ## 4b. Signed report demo in the emulator (network)
 
-Terminal 1, the backend on the laptop with a throw-away local database (never the team's Supabase):
+Terminal 1, the backend on the laptop with a fresh throw-away database (never the team's Supabase). The admin
+token is made up here and saved in a file so Terminal 3 can use it:
 
 ```bash
 cd backend
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-env -u DATABASE_URL -u SUPABASE_URL ICVSP_DB=/tmp/icvsp_demo.sqlite3 ICVSP_ALLOW_ANONYMOUS=1 \
-  ICVSP_ADMIN_TOKEN=<any-random-dev-token> .venv/bin/uvicorn --factory icvsp_backend.app:create_app --port 8010
+rm -f /tmp/icvsp_demo.sqlite3
+python3 -c "import secrets; print(secrets.token_hex(16))" > /tmp/icvsp_demo_admin_token
+env -u DATABASE_URL -u SUPABASE_URL -u SUPABASE_JWT_SECRET ICVSP_DB=/tmp/icvsp_demo.sqlite3 ICVSP_ALLOW_ANONYMOUS=1 \
+  ICVSP_ADMIN_TOKEN="$(cat /tmp/icvsp_demo_admin_token)" .venv/bin/uvicorn --factory icvsp_backend.app:create_app --port 8010
 ```
 
 Terminal 2, a demo key and the firmware:
@@ -127,20 +130,39 @@ python -m esptool --chip esp32s3 merge_bin --fill-flash-size 8MB -o flash_qemu.b
 qemu-system-xtensa -nographic -machine esp32s3 -m 8M -drive file=flash_qemu.bin,if=mtd,format=raw -nic user,model=open_eth
 ```
 
-The first boot prints `DEMO device=ecu-demo-01 ... public_key=<64 hex>`. Register that key once (Terminal 3):
+The first boot prints `DEMO device=ecu-demo-01 ... public_key=...` (64 hex characters) and its report is refused
+(403 unknown device), because the backend does not know the key yet. Register it once (Terminal 3), pasting the
+key in place of PASTE_KEY_HERE:
 
 ```bash
-curl -X POST localhost:8010/devices -H "X-Admin-Token: <same-token>" -H 'Content-Type: application/json' \
-  -d '{"device_id":"ecu-demo-01","public_key":"<64 hex>","vetted":false}'
+PK=PASTE_KEY_HERE
+curl -X POST localhost:8010/devices -H "X-Admin-Token: $(cat /tmp/icvsp_demo_admin_token)" \
+  -H 'Content-Type: application/json' -d "{\"device_id\":\"ecu-demo-01\",\"public_key\":\"$PK\",\"vetted\":false}"
 ```
 
-then restart QEMU. Expected: `NET link=online`, `DEMO time synced by SNTP`, `REPORT signed #1`,
+then quit QEMU (Ctrl-A then X) and start it again. Expected: `NET link=online`, `DEMO time synced by SNTP`, `REPORT signed #1`,
 `HTTP POST ... -> 201 {"status":"accepted"...}`, `DEMO RESULT PASS signed=1 stored_by_backend=1`. SNTP needs the
 laptop to have internet. 10.0.2.2 is the laptop as seen from inside QEMU.
 
-On the board: build with `SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.report;sdkconfig.local"`, set the Wi-Fi
-name, password and `CONFIG_ICVSP_REPORT_URL=http://<laptop LAN IP>:8010/reports` in `sdkconfig.local`, start the
-backend with `--host 0.0.0.0`, and flash as in section 5.
+The backend checks in `logs/backend_report_checks.log` (stored view, resend = duplicate, one field changed = 401)
+were made with a short Python script after the run: it read the stored line from the test database, posted it
+again unchanged, then posted it with `"severity":"high"` changed to `"severity":"low"`. The commands and answers
+are in that log.
+
+**On the board** (when it arrives). In `sdkconfig.local` set `CONFIG_ICVSP_WIFI_SSID`, `CONFIG_ICVSP_WIFI_PASSWORD`
+and `CONFIG_ICVSP_REPORT_URL="http://LAPTOP_LAN_IP:8010/reports"` (the laptop's address on the same Wi-Fi, from
+`ipconfig getifaddr en0`). Start the backend as above but add `--host 0.0.0.0` so the board can reach it. Then
+build and flash the report firmware from its own build folder (the plain `idf.py flash` of section 5 flashes the
+smoke test instead):
+
+```bash
+cd firmware/ecu
+idf.py -B build_report_board -D SDKCONFIG=build_report_board/sdkconfig \
+  -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.report;sdkconfig.local" set-target esp32s3 build
+idf.py -B build_report_board -p /dev/cu.usbmodem101 flash monitor
+```
+
+Expected: `NET link=online (wifi)`, then the same lines as in the emulator. Register the board's key the same way.
 
 ## 5. Flash the board
 

@@ -124,7 +124,7 @@ if wanted(5):
             "[... boot log lines omitted ...]"] + keep + ["", "[run: 0 reboots; backend on the laptop, port 8010]"])
   render("5_emulator_report_accepted", "ESP32-S3 emulator: ECU signs a pothole report and sends it to the backend",
          "EMULATOR + NETWORK", "NET", lines,
-         f"Firmware commit {COMMIT_NET}. Real: ECU app, signing, chip network stack, backend checks. Simulated: IMU drive, "
+         f"Firmware commit {COMMIT_NET}. Real code: ECU app, signing, the firmware network stack running in QEMU (emulated NIC, no radio), backend checks. Simulated: IMU drive, "
          "GNSS sentences, demo key. QEMU Ethernet stands in for Wi-Fi; HTTP, TLS not exercised. "
          "Log: firmware/results/bringup/logs/qemu_report_demo.log")
 
