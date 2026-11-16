@@ -18,19 +18,24 @@ Every result below says where it ran: **HOST** (laptop, native tests), **EMULATO
 | Flash, boot, GPS, IMU, camera on the board | BOARD | **NOT RUN**: board not delivered yet | - (fill in below) |
 | Report firmware builds for the board (Wi-Fi), the emulator and the HTTPS test | cross-compile | **Built, 0 warnings**, 37% of app partition free (board) | `logs/ecu_report_build_board.log`, `logs/ecu_report_build_qemu.log`, `logs/ecu_report_build_tls.log` |
 | ECU app on the chip signs a pothole report and sends it to `POST /reports` | EMULATOR + laptop backend | **PASS**: network up, SNTP time, report signed, backend answered **201 accepted**, no reboots. QEMU Ethernet stands in for Wi-Fi; HTTP here (HTTPS in the next row); IMU drive and GNSS sentences simulated; the chip's own key, made at first boot (`DEMO key created`) and loaded from flash on the next boot (`DEMO key loaded`) | `logs/qemu_report_demo.log`, `logs/backend_report_demo.log`, screenshot 5. The run before registering the key got **403 unknown_device**: the ECU kept the report and retried it with back-off (`not_provisioned=4 kept=1`, nothing deleted): `logs/qemu_report_demo_unregistered.log`, screenshot 7 |
-| HTTPS: certificate checks | EMULATOR + laptop backend | **5/5 PASS**: untrusted CA, wrong host name and expired certificate refused (mbedTLS -0x2700, report kept, backend received nothing); valid certificate accepted (403 before registration, then 201). Test CA only, not the hosted backend | `logs/tls/summary.txt`, `logs/tls/` (section 4c) |
+| HTTPS: certificate checks, TLS 1.3 only | EMULATOR + laptop backend | **6/6 PASS** (at `75f5f8d`): untrusted CA, wrong host name and expired certificate refused (mbedTLS -0x2700, report kept, backend received nothing); valid certificate accepted over TLS 1.3 (403 before registration, then 201); a server that allows only TLS 1.2 refused (no fallback) | `logs/tls/summary.txt`, `logs/tls/` (section 4c), screenshot 8 |
+| ECU report to the **live AWS backend** | EMULATOR + AWS Lambda + team Supabase | **PASS** (at `75f5f8d`): over the internet, HTTPS with the public root certificates, TLS 1.3, **201 accepted** (event `ecu-qemu-cloud-01-1794858622-1`). Test device `ecu-qemu-cloud-01`, registered by Nourseen; test location 23.5, 27.0 | `logs/qemu_aws_report.log`, screenshot 9, `TEST_CASES.md` TC-15 |
 | Backend checks on that report | HOST | Stored as a pothole, severity high; the same line again = duplicate (safe retry); one field changed = **401 bad signature** | `logs/backend_report_checks.log` (made by `backend_report_checks.py`), screenshot 6 |
 | Wi-Fi join, signed report to the backend | BOARD | **NOT RUN**: board not delivered yet (same firmware, `sdkconfig.report` without the QEMU overlay) | - |
 
 Provenance: all five firmware images (smoke test board and emulator, report board, emulator and HTTPS test)
 were built from scratch from commit `b89fa8f` with a clean tree (every image reports its version as `b89fa8f`),
-and the native tests, the emulator smoke test, the report runs and the HTTPS checks were run from those images.
+and the native tests, the emulator smoke test, the report runs and the first HTTPS checks (5 cases) were run from those images.
+The TLS 1.3 HTTPS checks (6 cases, now in `logs/tls/`) and the AWS run were made from commit `75f5f8d` (clean tree).
 The logs were committed afterwards. Image hashes (`b89fa8f`, also in `logs/image_hashes.txt`):
 smoke board `icvsp_ecu.bin` `acb4f84b4ed9f71968d98b6de339cf319e456c96d3a6ac7d9b9363543d5d9dec`,
 smoke emulator `icvsp_ecu.bin` `082ff731a3a561082eaae8b95515f180bd2cfe6049c65c3b63fe308c7f8c7acf`,
 report board `icvsp_ecu.bin` `fb348d6c9851d5eea264075d0038c9e8533f28cf4b8480fc5ab1eb8e3b660559`,
 report emulator `flash_qemu.bin` `e003598ad39df6c3207f0163249c609f790a0fc24a08d5135c9ada7cdd3da333`,
-HTTPS test `flash_qemu.bin` `34a38ea313c6ead8b7b6350e61a0b7990fab61395436292acbdd7fef6068d79f`
+HTTPS test `flash_qemu.bin` `34a38ea313c6ead8b7b6350e61a0b7990fab61395436292acbdd7fef6068d79f`;
+from `75f5f8d` (TLS 1.3): HTTPS test `flash_qemu.bin` `b8e3e7332286ef8badd319efea08c2798d409096026ca0c0760610c4a49920d7`,
+AWS report app `build_report_aws/icvsp_ecu.bin` `e94a88a63db84d57e4b3cc8f692b0c634916f317f8777fc3d9351fc6ee3eec6c`
+(the AWS run used the app written into the test device's flash, which also holds its key)
 (the HTTPS image embeds the test CA made on this laptop, and `sdkconfig.local` can differ, so another laptop
 gets different hashes for the report images).
 Malak's projects (`STEP1_BUILD.md`) were built from her commit `a452c66`.
@@ -202,7 +207,7 @@ Expected: `NET link=online (wifi)`, then the same lines as in the emulator. Regi
 ## 4c. HTTPS checks in the emulator (certificates)
 
 The report firmware sends over HTTPS when its URL starts with `https://`. On a real deployment it checks the
-server certificate against ESP-IDF's bundle of public root certificates (the hosted backend, planned on AWS). For a test on the laptop,
+server certificate against ESP-IDF's bundle of public root certificates (the hosted backend on AWS Lambda). For a test on the laptop,
 a separate build trusts **only** a throw-away test CA, and the laptop backend serves HTTPS with a different
 certificate in each case. Certificate dates are checked (`CONFIG_MBEDTLS_HAVE_TIME_DATE=y`, now in
 `sdkconfig.report`; it is off by default in ESP-IDF, which would accept an expired certificate).
@@ -236,8 +241,8 @@ exactly its intended reason; the firmware itself cannot print the reason (mbedTL
 The laptop check also prints the TLS version the server agrees to: `TLSv1.3` in cases 4-5, `TLSv1.2` in case 6.
 Case 6 would get `201` if the firmware fell back to TLS 1.2, since the device is registered by then; instead the
 server closes the handshake (mbedTLS `-0x7280`, connection closed) because the firmware offers only TLS 1.3.
-Logs: `logs/tls/` (one serial log per case, the backend log and `summary.txt`). Still open: a run against the real hosted backend (AWS)
-URL (public root bundle).
+Logs: `logs/tls/` (one serial log per case, the backend log and `summary.txt`). The same firmware against the real
+AWS backend with the public root bundle: `logs/qemu_aws_report.log` (201).
 
 ## Requirements to tests (V-model, ECU part)
 
@@ -261,7 +266,7 @@ in QEMU, BUILD = cross-compile for the chip, BOARD = the real XIAO ESP32-S3 (not
 | FR-SEC-09 unique message ID and signed send time | device ID + boot ID + sequence | HOST | F-12, F-14 | PASS |
 | FR-SEC-10 reject replayed or stale messages (device side) | seen-ID and freshness checks | HOST | F-39..F-45 (`test_replay_guard`) | PASS |
 | FR-SEC-08 HTTPS/TLS transport (ECU to backend, mentor architecture) | certificate chain, host name and dates checked; bad certificates refused, report kept; TLS 1.3 only, no fallback to 1.2 | EMULATOR | section 4c, `logs/tls/` | PASS (6/6, test CA) |
-| FR-SEC-08 against the hosted backend (AWS) | public root bundle, real URL | EMULATOR / BOARD | - | NOT RUN (URL not ready) |
+| FR-SEC-08 against the hosted backend (AWS) | public root bundle, real Lambda URL, TLS 1.3; signed report stored | EMULATOR / BOARD | `logs/qemu_aws_report.log`, `TEST_CASES.md` TC-15 | PASS (emulator, 201); BOARD NOT RUN |
 | (proposed) ECU delivery: no report lost | only the backend's ACK for that report deletes it (JSON read strictly); retries with back-off; 403 unknown_device kept; offline queue | HOST + EMULATOR | F-74..F-82, F-93..F-100 (`test_uplink`); F-86..F-90, F-92 (`test_ecu_app`) | PASS |
 | (proposed) network link recovery | join, lost IP, re-join, give-up and retry | HOST (fake driver) | F-83..F-85 (`test_wifi_link`) | PASS; real Wi-Fi radio NOT RUN |
 | NFR-SEC-02 no hard-coded private keys | per-device key by default; demo seed only in git-ignored `sdkconfig.local` | inspection + HOST | `ecu/main/Kconfig.projbuild`, F-101..F-106 | PASS |
@@ -312,8 +317,7 @@ The log never contains the GPS position or camera pixels; only counts, sizes and
 - Wi-Fi join and a signed report from the real board (done in the emulator over emulated Ethernet; board not
   delivered yet).
 - Reports and boot counter kept in flash across power loss (the device key already is: NVS).
-- HTTPS to the hosted backend (AWS) with the public root bundle (the certificate checks are tested against a local test CA in
-  section 4c, TLS 1.3 only; AWS URL not ready).
+- HTTPS to the hosted backend (AWS) from the real board (done from the emulator: `logs/qemu_aws_report.log`, 201).
 - Flash encryption and NVS encryption, so the stored key cannot be read out of the flash.
 - Clock from GNSS on the road; the report demo uses SNTP in place of the GNSS clock.
 - Wi-Fi reconnect behaviour on the real radio (tested only against the fake driver in the host tests).

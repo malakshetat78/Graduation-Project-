@@ -14,6 +14,8 @@ OUT.mkdir(parents=True, exist_ok=True)
 BRAVE = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 COMMIT = "b89fa8f"       # smoke test run (shots 2, 3)
 COMMIT_NET = "b89fa8f"   # network report runs and the latest host tests (shots 1, 5, 6, 7)
+COMMIT_CLOUD = "75f5f8d" # TLS 1.3 checks and the run against the AWS backend (shots 8, 9)
+T004 = "cbc9ddb"         # Nourseen's T-004 live tests on AWS (shot 10), branch nourseen/aws-lambda-deploy (PR 18)
 ONLY = set(sys.argv[3:])
 
 
@@ -27,7 +29,7 @@ def read(name):
 
 def colour(line):
     e = html.escape(line)
-    e = re.sub(r"\b(PASS|PASSED|succeeded|Project build complete|201 Created|-&gt; 201)", r'<span class="ok">\1</span>', e)
+    e = re.sub(r"\b(PASS|PASSED|succeeded|Project build complete|201 Created|-&gt; 201|TLSv1\.3)", r'<span class="ok">\1</span>', e)
     e = re.sub(r"\b(FAIL|FAILED|ERROR|Rebooting\.\.\.|401 Unauthorized|403 Forbidden|bad_signature)", r'<span class="bad">\1</span>', e)
     e = re.sub(r"(\(device key not registered: report kept, will retry\)|kept=1)", r'<span class="skip">\1</span>', e)
     e = e.replace("***ERROR***", '<span class="bad">***ERROR***</span>')
@@ -50,6 +52,7 @@ body {{ margin:0; background:#e9edf2; font-family:-apple-system,Helvetica,Arial,
 .badge {{ margin-left:auto; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.5px; }}
 .HOST {{ background:#1f6feb; color:#fff; }} .EMU {{ background:#a371f7; color:#fff; }} .BUILD {{ background:#3fb950; color:#0d1117; }}
 .BUG {{ background:#f0883e; color:#0d1117; }} .NET {{ background:#2ea043; color:#fff; }}
+.AWS {{ background:#ff9900; color:#0d1117; }} .TLS {{ background:#8957e5; color:#fff; }}
 pre {{ margin:0; padding:18px 20px; color:#d6deeb; font:13.5px/1.5 Menlo,monospace; white-space:pre-wrap; word-break:break-all; }}
 .ok {{ color:#3fb950; font-weight:700; }} .bad {{ color:#ff7b72; font-weight:700; }} .skip {{ color:#d29922; font-weight:700; }}
 .cmd {{ color:#79c0ff; }} .dim {{ color:#8b949e; font-style:italic; }}
@@ -153,3 +156,50 @@ if wanted(7):
          "EMULATOR + NETWORK", "NET", lines,
          f"Firmware commit {COMMIT_NET}. Before the fix a 403 deleted the report; now 403 unknown_device keeps it "
          "(other 403s, e.g. revoked device, still drop it). Log: firmware/results/bringup/logs/qemu_report_demo_unregistered.log")
+
+
+def git_show(rev, path):
+    return subprocess.run(["git", "show", f"{rev}:{path}"], check=True, capture_output=True, text=True).stdout
+
+
+# 8. HTTPS checks in the emulator, TLS 1.3 only (EMULATOR + TLS)
+if wanted(8):
+  sm = [l for l in read("tls/summary.txt") if l.strip()]
+  lines = ["$ firmware/results/bringup/tls/run_tls_checks.sh logs/tls",
+           "# the same emulated chip against a laptop HTTPS server with a different certificate in each case"] + sm
+  render("8_https_tls13_checks", "ESP32-S3 emulator: HTTPS certificate checks, TLS 1.3 only (6 cases)",
+         "EMULATOR + TLS", "TLS", lines,
+         f"Firmware commit {COMMIT_CLOUD}. Cases 1-3: bad certificates refused, report kept. 4-5: good certificate, "
+         "TLS 1.3, 403 then 201. 6: server allows only TLS 1.2, refused (no fallback). Logs: firmware/results/bringup/logs/tls/")
+
+# 9. The ECU firmware sends a signed report to the live AWS backend (EMULATOR + AWS)
+if wanted(9):
+  r = [l for l in read("qemu_aws_report.log") if not l.startswith("#")]
+  keep = [l for l in r if l.startswith(("DEMO", "NET", "REPORT", "HTTP", "UPLINK"))]
+  lines = (["$ qemu-system-xtensa -machine esp32s3 -m 8M -drive file=flash.bin,if=mtd,format=raw -nic user,model=open_eth",
+            "[... boot log lines omitted ...]"] + keep
+           + ["", "[HTTPS over the internet to AWS Lambda (us-east-1), TLS 1.3, server certificate checked against the public root bundle]"])
+  render("9_ecu_to_aws_cloud", "ESP32-S3 emulator -> AWS cloud: the ECU's signed report is stored by the live backend",
+         "EMULATOR + AWS CLOUD", "AWS", lines,
+         f"Firmware commit {COMMIT_CLOUD} (sdkconfig.report_aws). Test device ecu-qemu-cloud-01, registered on the live backend "
+         "by Nourseen; key made on the chip. Simulated: IMU drive and GNSS at the team test location 23.5, 27.0 (Western Desert). "
+         "Database: team Supabase. Log: firmware/results/bringup/logs/qemu_aws_report.log")
+
+# 10. Nourseen's live test cases against the same AWS backend (AWS)
+if wanted(10):
+  import json
+  checks = []
+  for f in ("deploy/aws/results/t004-partA-20261116T183530Z.json", "deploy/aws/results/t004-partB-20261116T191409Z.json",
+            "deploy/aws/results/t004-partB11-20261116T193030Z.json"):
+      checks += json.loads(git_show(T004, f))["checks"]
+  lines = ["$ python deploy/aws/integration_test.py --url https://<id>.lambda-url.us-east-1.on.aws --part A|B"]
+  for c in checks:
+      exp = "/".join(map(str, c["expected"]))
+      ok = "PASS" if c["passed"] else "FAIL"
+      code = re.search(r'"code":"(\w+)"', c.get("response") or "")
+      lines.append(f"{ok}  {c['check']}: {c['request']} -> expected {exp}, got {c['status']}"
+                   + (f" {code.group(1)}" if code else ""))
+  render("10_aws_backend_test_cases", "AWS cloud backend: live endpoint and security test cases (T-004)",
+         "AWS CLOUD", "AWS", lines,
+         f"Nourseen's T-004 run on the live Lambda URL, commit {T004} (PR 18). Test device t004-test-01, revoked at the end. "
+         "Evidence: deploy/aws/results/*.json, CloudWatch logs in deploy/aws/results/cloudwatch-part*.txt")

@@ -4,3 +4,6 @@ fb348d6c9851d5eea264075d0038c9e8533f28cf4b8480fc5ab1eb8e3b660559  build_report_b
 e003598ad39df6c3207f0163249c609f790a0fc24a08d5135c9ada7cdd3da333  build_report_qemu/flash_qemu.bin
 34a38ea313c6ead8b7b6350e61a0b7990fab61395436292acbdd7fef6068d79f  build_report_tls/flash_qemu.bin
 082ff731a3a561082eaae8b95515f180bd2cfe6049c65c3b63fe308c7f8c7acf  build_qemu/icvsp_ecu.bin
+# built from commit 75f5f8d (clean tree): TLS 1.3 HTTPS checks and the run against the AWS backend
+b8e3e7332286ef8badd319efea08c2798d409096026ca0c0760610c4a49920d7  build_report_tls/flash_qemu.bin
+e94a88a63db84d57e4b3cc8f692b0c634916f317f8777fc3d9351fc6ee3eec6c  build_report_aws/icvsp_ecu.bin

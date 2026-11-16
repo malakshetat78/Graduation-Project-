@@ -1,4 +1,4 @@
-# case 1: server certificate 'untrusted' (see run_tls_checks.sh); 2026-11-16T04:23:59Z
+# case 1: server certificate 'untrusted' (see run_tls_checks.sh); 2026-11-16T19:51:07Z
 # laptop check, same CA and server: self-signed certificate in certificate chain
 ESP-ROM:esp32s3-20210327
 Build:Mar 27 2021
@@ -9,116 +9,116 @@ load:0x3fce2820,len:0x14f0
 load:0x403c8700,len:0xd24
 load:0x403cb700,len:0x2eec
 entry 0x403c8924
-I (18) boot: ESP-IDF v5.5.5 2nd stage bootloader
-I (19) boot: compile time Nov 16 2026 06:20:43
-I (19) boot: Multicore bootloader
-I (23) boot: chip revision: v0.0
-I (23) boot: efuse block revision: v0.0
-I (24) boot.esp32s3: Boot SPI Speed : 80MHz
-I (24) boot.esp32s3: SPI Mode       : SLOW READ
-I (24) boot.esp32s3: SPI Flash Size : 8MB
-I (26) boot: Enabling RNG early entropy source...
-I (31) boot: Partition Table:
-I (31) boot: ## Label            Usage          Type ST Offset   Length
-I (31) boot:  0 nvs              WiFi data        01 02 00009000 00006000
-I (32) boot:  1 phy_init         RF data          01 01 0000f000 00001000
-I (32) boot:  2 factory          factory app      00 00 00010000 00177000
-I (33) boot: End of partition table
-I (33) esp_image: segment 0: paddr=00010020 vaddr=3c080020 size=1d048h (118856) map
-I (47) esp_image: segment 1: paddr=0002d070 vaddr=3fc94400 size=02fa8h ( 12200) load
-I (50) esp_image: segment 2: paddr=00030020 vaddr=42000020 size=71ae0h (465632) map
-I (101) esp_image: segment 3: paddr=000a1b08 vaddr=3fc973a8 size=00638h (  1592) load
-I (102) esp_image: segment 4: paddr=000a2148 vaddr=40374000 size=103d8h ( 66520) load
-I (110) esp_image: segment 5: paddr=000b2528 vaddr=50000000 size=00020h (    32) load
-I (112) boot: Loaded app from partition at offset 0x10000
-I (112) boot: Disabling RNG early entropy source...
-W (248) rtcinit: o_code calibration fail
+I (19) boot: ESP-IDF v5.5.5 2nd stage bootloader
+I (20) boot: compile time Nov 16 2026 06:20:43
+I (20) boot: Multicore bootloader
+I (24) boot: chip revision: v0.0
+I (25) boot: efuse block revision: v0.0
+I (26) boot.esp32s3: Boot SPI Speed : 80MHz
+I (26) boot.esp32s3: SPI Mode       : SLOW READ
+I (26) boot.esp32s3: SPI Flash Size : 8MB
+I (28) boot: Enabling RNG early entropy source...
+I (33) boot: Partition Table:
+I (33) boot: ## Label            Usage          Type ST Offset   Length
+I (33) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (34) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (34) boot:  2 factory          factory app      00 00 00010000 00177000
+I (35) boot: End of partition table
+I (36) esp_image: segment 0: paddr=00010020 vaddr=3c080020 size=1d268h (119400) map
+I (51) esp_image: segment 1: paddr=0002d290 vaddr=3fc94400 size=02d88h ( 11656) load
+I (54) esp_image: segment 2: paddr=00030020 vaddr=42000020 size=7f5b8h (521656) map
+I (112) esp_image: segment 3: paddr=000af5e0 vaddr=3fc97188 size=00858h (  2136) load
+I (113) esp_image: segment 4: paddr=000afe40 vaddr=40374000 size=103d8h ( 66520) load
+I (122) esp_image: segment 5: paddr=000c0220 vaddr=50000000 size=00020h (    32) load
+I (123) boot: Loaded app from partition at offset 0x10000
+I (124) boot: Disabling RNG early entropy source...
+W (272) rtcinit: o_code calibration fail
 
-I (131) esp_psram: Found 8MB PSRAM device
-I (131) esp_psram: Speed: 80MHz
-I (132) cpu_start: Multicore app
-I (135) esp_psram: SPI SRAM memory test OK
-I (145) cpu_start: GPIO 44 and 43 are used as console UART I/O pins
-I (147) cpu_start: Pro cpu start user code
-I (147) cpu_start: cpu freq: 160000000 Hz
-I (147) app_init: Application information:
-I (147) app_init: Project name:     icvsp_ecu
-I (147) app_init: App version:      b89fa8f
-I (147) app_init: Compile time:     Nov 16 2026 06:20:32
-I (147) app_init: ELF file SHA256:  cc9d24c7b...
-I (147) app_init: ESP-IDF:          v5.5.5
-I (147) efuse_init: Min chip rev:     v0.0
-I (147) efuse_init: Max chip rev:     v0.99 
-I (148) efuse_init: Chip rev:         v0.0
-I (148) heap_init: Initializing. RAM available for dynamic allocation:
-I (148) heap_init: At 3FCA3350 len 000463C0 (280 KiB): RAM
-I (148) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
-I (148) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
-I (148) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
-I (149) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
-I (153) spi_flash: detected chip: gd
-I (153) spi_flash: flash io: dio
-I (153) sleep_gpio: Configure to isolate all GPIO pins in sleep state
-I (154) sleep_gpio: Enable automatic switching of GPIO sleep configuration
-I (156) main_task: Started on CPU0
-I (156) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
-I (156) main_task: Calling app_main()
+I (143) esp_psram: Found 8MB PSRAM device
+I (144) esp_psram: Speed: 80MHz
+I (145) cpu_start: Multicore app
+I (148) esp_psram: SPI SRAM memory test OK
+I (157) cpu_start: GPIO 44 and 43 are used as console UART I/O pins
+I (160) cpu_start: Pro cpu start user code
+I (160) cpu_start: cpu freq: 160000000 Hz
+I (160) app_init: Application information:
+I (160) app_init: Project name:     icvsp_ecu
+I (160) app_init: App version:      75f5f8d
+I (160) app_init: Compile time:     Nov 16 2026 21:49:33
+I (160) app_init: ELF file SHA256:  b6f09182e...
+I (160) app_init: ESP-IDF:          v5.5.5
+I (160) efuse_init: Min chip rev:     v0.0
+I (160) efuse_init: Max chip rev:     v0.99 
+I (160) efuse_init: Chip rev:         v0.0
+I (161) heap_init: Initializing. RAM available for dynamic allocation:
+I (161) heap_init: At 3FCA3618 len 000460F8 (280 KiB): RAM
+I (161) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (161) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (161) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (162) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (166) spi_flash: detected chip: gd
+I (166) spi_flash: flash io: dio
+I (167) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (167) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (169) main_task: Started on CPU0
+I (169) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (169) main_task: Calling app_main()
 
-DEMO BEGIN signed-report demo, EMULATOR build, firmware b89fa8f, ESP-IDF v5.5.5
+DEMO BEGIN signed-report demo, EMULATOR build, firmware 75f5f8d, ESP-IDF v5.5.5
 DEMO link=qemu-ethernet url=https://10.0.2.2:8443/reports
-DEMO simulated: IMU drive (30 s, pothole at 15 s) and GNSS sentences at demo coordinates; real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks
-I (206) esp_eth.netif.netif_glue: 52:54:00:12:34:56
-I (206) esp_eth.netif.netif_glue: ethernet attached to netif
+DEMO simulated: IMU drive (30 s, pothole at 15 s) and GNSS sentences at demo coordinates 30.0444, 31.2357; real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks
+I (229) esp_eth.netif.netif_glue: 52:54:00:12:34:56
+I (239) esp_eth.netif.netif_glue: ethernet attached to netif
 NET link=connecting (qemu-ethernet) joins=0 failed=0
-I (1316) esp_netif_handlers: eth ip: 10.0.2.15, mask: 255.255.255.0, gw: 10.0.2.2
+I (1349) esp_netif_handlers: eth ip: 10.0.2.15, mask: 255.255.255.0, gw: 10.0.2.2
 NET got-ip qemu-ethernet ip=10.0.2.15 gw=10.0.2.2
 NET link=online (qemu-ethernet) joins=1 failed=0
-DEMO time synced by SNTP (pool.ntp.org): 2026-11-16T04:24:02Z
+DEMO time synced by SNTP (pool.ntp.org): 2026-11-16T19:51:09Z
 DEMO key created (per-device key, NVS)
-DEMO device=ecu-000000000000 boot_id=1794803042 public_key=620e768ea80413655aa12c44beca4035d5f6df3639b5accaf877cc4a3c29692f (per-device key)
+DEMO device=ecu-000000000000 boot_id=1794858669 public_key=13675d5501e11f5035b8f3349a79cb3f6e65dba16336ec946ddeff1f51a4a5dd (per-device key)
 DEMO drive t= 0 s state=running imu_used=1 discarded=0 stale=0 gnss_sentences=2
 DEMO drive t= 5 s state=running imu_used=501 discarded=0 stale=0 gnss_sentences=12
 DEMO drive t=10 s state=running imu_used=1001 discarded=0 stale=0 gnss_sentences=22
 DEMO drive t=15 s state=running imu_used=1501 discarded=0 stale=0 gnss_sentences=32
 REPORT signed #1 (748 bytes) -> delivery queue
-E (21366) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
-E (21366) esp-tls: Failed to open new connection
-E (21366) transport_base: Failed to open a new connection
-E (21366) HTTP_CLIENT: Connection failed, sock < 0
+E (20459) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
+E (20459) esp-tls: Failed to open new connection
+E (20459) transport_base: Failed to open a new connection
+E (20469) HTTP_CLIENT: Connection failed, sock < 0
 HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT)
 UPLINK stored=0 refused=0 failures=1 not_provisioned=0 last_status=0 queued=1 queue_dropped=0
-DEMO drive t=20 s state=running imu_used=1984 discarded=0 stale=17 gnss_sentences=42
-E (24006) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
-E (24006) esp-tls: Failed to open new connection
-E (24006) transport_base: Failed to open a new connection
-E (24016) HTTP_CLIENT: Connection failed, sock < 0
+DEMO drive t=20 s state=running imu_used=2001 discarded=0 stale=0 gnss_sentences=42
+E (22879) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
+E (22879) esp-tls: Failed to open new connection
+E (22879) transport_base: Failed to open a new connection
+E (22879) HTTP_CLIENT: Connection failed, sock < 0
 HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT)
 UPLINK stored=0 refused=0 failures=2 not_provisioned=0 last_status=0 queued=1 queue_dropped=0
-DEMO drive t=25 s state=running imu_used=2484 discarded=0 stale=17 gnss_sentences=52
-E (29206) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
-E (29206) esp-tls: Failed to open new connection
-E (29206) transport_base: Failed to open a new connection
-E (29206) HTTP_CLIENT: Connection failed, sock < 0
+E (27089) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
+E (27089) esp-tls: Failed to open new connection
+E (27089) transport_base: Failed to open a new connection
+E (27089) HTTP_CLIENT: Connection failed, sock < 0
 HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT)
 UPLINK stored=0 refused=0 failures=3 not_provisioned=0 last_status=0 queued=1 queue_dropped=0
-DEMO drive t=30 s state=running imu_used=2983 discarded=0 stale=17 gnss_sentences=62
-DEMO drive done: imu_used=2983 stale=17 signed=1
-E (37916) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
-E (37916) esp-tls: Failed to open new connection
-E (37916) transport_base: Failed to open a new connection
-E (37926) HTTP_CLIENT: Connection failed, sock < 0
+DEMO drive t=25 s state=running imu_used=2447 discarded=0 stale=63 gnss_sentences=52
+DEMO drive t=30 s state=running imu_used=2915 discarded=0 stale=85 gnss_sentences=62
+DEMO drive done: imu_used=2915 stale=85 signed=1
+E (36719) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
+E (36719) esp-tls: Failed to open new connection
+E (36719) transport_base: Failed to open a new connection
+E (36719) HTTP_CLIENT: Connection failed, sock < 0
 HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT)
 UPLINK stored=0 refused=0 failures=4 not_provisioned=0 last_status=0 queued=1 queue_dropped=0
-E (51266) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
-E (51266) esp-tls: Failed to open new connection
-E (51266) transport_base: Failed to open a new connection
-E (51266) HTTP_CLIENT: Connection failed, sock < 0
+E (51569) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
+E (51569) esp-tls: Failed to open new connection
+E (51569) transport_base: Failed to open a new connection
+E (51579) HTTP_CLIENT: Connection failed, sock < 0
 HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT)
 UPLINK stored=0 refused=0 failures=5 not_provisioned=0 last_status=0 queued=1 queue_dropped=0
-E (82416) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
-E (82416) esp-tls: Failed to open new connection
-E (82416) transport_base: Failed to open a new connection
-E (82416) HTTP_CLIENT: Connection failed, sock < 0
+E (84439) esp-tls-mbedtls: mbedtls_ssl_handshake returned -0x2700
+E (84449) esp-tls: Failed to open new connection
+E (84449) transport_base: Failed to open a new connection
+E (84449) HTTP_CLIENT: Connection failed, sock < 0
 HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT)
 UPLINK stored=0 refused=0 failures=6 not_provisioned=0 last_status=0 queued=1 queue_dropped=0
 DEMO RESULT FAIL signed=1 stored_by_backend=0 refused=0 send_failures=6 not_provisioned=0 kept=1 dropped=0 (handoff=0 queue_full=0)

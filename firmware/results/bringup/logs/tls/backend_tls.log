@@ -1,37 +1,45 @@
-INFO:     Started server process [61994]
+INFO:     Started server process [14693]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on https://127.0.0.1:8443 (Press CTRL+C to quit)
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [61994]
-INFO:     Started server process [62469]
+INFO:     Finished server process [14693]
+INFO:     Started server process [15360]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on https://127.0.0.1:8443 (Press CTRL+C to quit)
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [62469]
-INFO:     Started server process [62948]
+INFO:     Finished server process [15360]
+INFO:     Started server process [16114]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on https://127.0.0.1:8443 (Press CTRL+C to quit)
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [62948]
-INFO:     Started server process [63431]
+INFO:     Finished server process [16114]
+INFO:     Started server process [16695]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on https://127.0.0.1:8443 (Press CTRL+C to quit)
-INFO:     127.0.0.1:60982 - "POST /reports HTTP/1.1" 403 Forbidden
-INFO:     127.0.0.1:60983 - "POST /reports HTTP/1.1" 403 Forbidden
-INFO:     127.0.0.1:60984 - "POST /reports HTTP/1.1" 403 Forbidden
-INFO:     127.0.0.1:60985 - "POST /devices HTTP/1.1" 201 Created
-INFO:     127.0.0.1:60986 - "POST /reports HTTP/1.1" 201 Created
+INFO:     127.0.0.1:50440 - "POST /reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50442 - "POST /reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50443 - "POST /reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50444 - "POST /devices HTTP/1.1" 201 Created
+INFO:     127.0.0.1:50451 - "POST /reports HTTP/1.1" 201 Created
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [63431]
+INFO:     Finished server process [16695]
+INFO:     Started server process [17090]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on https://127.0.0.1:8443 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17090]
