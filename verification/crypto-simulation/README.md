@@ -1,119 +1,104 @@
-# ROVO Phase 2 — Offline Mobile Relay + Local Cloud Simulator
+# ROVO Phase 3 — Signed Reports and Offline Delivery (Standalone Simulation)
 
-Builds **directly on your working Phase 1**. The **160-byte encrypted/signed packet format is unchanged**:
+**Scope:** Laptop-only demonstration. This directory is **NOT integrated** with the graduation project's production firmware signer (`firmware/lib/icvsp_core`, `signer.h`) or the actual backend `POST /reports` endpoint. It uses a separate `ROVO` v2 binary format and demo `/v1/hazards` endpoint. Integration and format reconciliation require a separate task and review **before production use**.
 
-- **C++ ECU** generates `ROVO header(47) || ciphertext(33) || tag(16) || Ed25519 signature(64)`.
-- **Python Mobile Simulator** stores the 160-byte opaque packet in a local SQLite outbox while offline, **without decrypting it**.
-- When connectivity returns, Mobile posts the same bytes to a **local FastAPI server**.
-- **Python Cloud Simulator** verifies Ed25519 *first*, decrypts XChaCha20-Poly1305, checks the timestamp, and stores accepted report IDs in SQLite.
+## Security architecture
 
-This is a **local, laptop-only simulator**. It uses `http://127.0.0.1` to test the flow; it DOES NOT claim to provide actual internet or TLS. For production, Flutter→Cloud Run must use **HTTPS**. BLE, Flutter, Supabase, key provisioning and Cloud Run deployment are NOT yet implemented.
+- **ECU (C++ / Monocypher):** signs hazard data using **standard Ed25519** and the ECU's private signing key. It does **not encrypt** the message.
+- **Flutter/mobile relay (simulated here in Python):** receives and queues the signed bytes offline, then forwards the same bytes when it has Internet. The mobile app **can read the data**; the signature alone is not confidential storage.
+- **HTTPS/TLS:** protects the **mobile-to-cloud network connection** in a real deployment. TLS is **not** exercised by the local HTTP/TestClient simulation; HTTPS between phone and Cloud does **not** protect the BLE leg or locally saved data.
+- **Cloud (Python):** uses the trusted ECU public signing key to verify the signature, then validates the hazard fields, applies offline age rules, and records the report. The Cloud does **not decrypt** the packet.
+- See [SECURITY_ARCHITECTURE.md](SECURITY_ARCHITECTURE.md) for key ownership and trust boundaries.
+
+## Wire packet v2: 120 bytes (standalone demo only)
+
+| Field | Bytes | Details |
+|---|---:|---|
+| Magic | 4 | `ROVO` |
+| Version | 1 | `0x02` |
+| Device ID | 16 | `ROVO-DEMO-ECU-01` |
+| Payload length | 2 | Big-endian; fixed 33 |
+| Message ID | 16 | Random, unique per device |
+| Timestamp | 8 | UTC epoch milliseconds, big-endian |
+| Latitude, longitude | 4 + 4 | Signed int32, degrees × 1e7, big-endian |
+| Hazard type | 1 | 1 = pothole, 2 = speed bump |
+| Ed25519 signature | 64 | Sign **all preceding 56 bytes** |
+| **Total** | **120** | Plaintext + signature; no nonce/tag/ciphertext |
+
+**Ed25519 is a signature algorithm, NOT encryption.** The signature covers the header and payload, including device ID and timestamp. The Cloud verifies before trusting any payload values. The code uses Monocypher's optional **standard Ed25519** implementation for cross-language compatibility with Python `cryptography`.
 
 ## Files
 
-| File | Purpose |
+| Path | Purpose |
 |---|---|
-| `src/ecu_sim.cpp` | Unchanged Phase 1 C++ ECU simulator |
-| `generate_keys.py` | Demo-only symmetric + Ed25519 keys |
-| `build.sh` | Compile the C++ simulator (now creates missing `vendor/`) |
-| `verify_packet.py` | Unchanged Phase 1 verification/decryption function |
-| `cloud_api.py` | Local FastAPI ingestion, signature verification, replay/idempotency checks, SQLite reports |
-| `mobile_sim.py` | Offline SQLite outbox, online upload/ack/retry |
-| `show_reports.py` | Inspect SQLite reports |
-| `test_phase1.py` | Original Phase 1 tests |
-| `test_phase2.py` | Phase 2 automated tests |
-| `requirements.txt` | Python dependencies |
+| `src/ecu_sim.cpp` | Laptop C++ ECU generator / signer |
+| `generate_keys.py` | Demo Ed25519 keypair (never upload keys/) |
+| `build.sh` | Obtain checksum-verified Monocypher 4.0.3 and build |
+| `verify_packet.py` | Verify Ed25519 and parse v2 packet |
+| `cloud_api.py` | FastAPI demo endpoint, age validation, duplicate handling, SQLite |
+| `mobile_sim.py` | Offline SQLite queue and resend logic |
+| `conftest.py`, `test_support.py` | Isolated pytest fixture and independent signing helpers |
+| `test_phase1.py`, `test_phase2.py`, `test_phase3.py` | Verification, resilience, security regression checks |
+| `demo_phase3.py` | 10 native C++ packets → outbox → in-process FastAPI scenario |
+| `show_reports.py` | Print locally stored demo reports |
 
-## Setup (Mac Terminal, from the extracted `ROVO_Phase2` folder)
+## Install and run on macOS
+
+Run these commands **inside `verification/crypto-simulation`** (not inside a downloaded Phase 2 ZIP):
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python generate_keys.py   # only once; do NOT overwrite existing keys
+python generate_keys.py   # ONE TIME; don't overwrite demo signing keys
 ./build.sh
 ```
 
-If you want to reuse Phase 1 demo keys instead, copy the whole existing `keys` folder into the new Phase 2 folder **before** running the simulator; skip `generate_keys.py`. Do not publish or send real keys to anyone.
+If you already have `keys/sign_seed.bin` and `keys/sign_pub.bin` from the old simulation, they remain usable; old `enc_key.bin` is **unused**. Never commit `keys/`, secrets, `data/`, `vendor/`, `.venv/`, or generated binaries. For genuine devices, use per-device secure key provisioning instead.
 
-## Run — three terminals
-
-**Terminal 1: start local Cloud Simulator** (from `ROVO_Phase2`, with environment activated)
+**Terminal 1** — run the Cloud locally (port 8001, deliberately not the main backend's 8000):
 
 ```bash
-python -m uvicorn cloud_api:app --host 127.0.0.1 --port 8000
+python -m uvicorn cloud_api:app --host 127.0.0.1 --port 8001
 ```
 
-Keep this terminal open. To confirm, visit `http://127.0.0.1:8000/healthz`.
-
-**Terminal 2: ECU sends to phone while offline** (from same folder)
-
-```bash
-./build/ecu_sim
-python mobile_sim.py receive packet.bin
-python mobile_sim.py status
-```
-
-Expected: `pending: 1`. At this point, the packet is stored locally and **not uploaded**.
-
-Try multiple distinct hazards (the C++ simulator creates fresh `message_id` and nonce each run):
-
-```bash
-./build/ecu_sim
-python mobile_sim.py receive packet.bin
-./build/ecu_sim
-python mobile_sim.py receive packet.bin
-python mobile_sim.py status
-```
-
-Expected `pending: 3` if you followed all commands above. You can also **stop Terminal 1** and the pending encrypted packets remain safely queued in `data/mobile_queue.sqlite3`.
-
-**Terminal 3: phone regains Internet / local server reachable**
-
-```bash
-python mobile_sim.py sync
-python mobile_sim.py status
-python show_reports.py
-```
-
-Expected: Mobile prints Cloud ACKs; `pending` becomes 0; Cloud database shows stored unique reports. You can use Terminal 2 for these commands too.
-
-**Simulate no internet:** Stop the API with Ctrl+C, create and receive a fresh packet, then run `python mobile_sim.py sync`. The simulator will say network unavailable and preserve the queued packet. Restart the API and run `sync` again.
-
-## Test Phase 2, including replay and modified messages
-
-```bash
-python -m pytest -v test_phase2.py
-```
-
-Tests include: valid packet accepted, identical retry acknowledged without duplication, *different but validly signed packet with reused Message ID* rejected (409), modified nonce/ciphertext/tag/signature rejected, future/stale timestamps rejected, body length/content type errors, offline storage, failed-network retry, successful replay-safe delivery, rejected packet kept for diagnosis, and **optional real C++ → Python API integration** if `./build/ecu_sim` is present.
-
-Tests use temporary keys and databases. The original Phase 1 tests are still available:
+**Terminal 2** — send while offline, then sync:
 
 ```bash
 ./build/ecu_sim
 python verify_packet.py
-python test_phase1.py
+python mobile_sim.py receive packet.bin
+python mobile_sim.py status
+python mobile_sim.py sync
+python show_reports.py
 ```
 
-## Cloud API behavior
+To prove offline behavior: stop Terminal 1 before `sync`. The app retains the queued packet; restart Terminal 1, then run `python mobile_sim.py sync` again. The transfer is over **local HTTP only**. Production requires HTTPS/TLS and a real authenticated endpoint.
 
-- `GET /healthz` — simple health check.
-- `POST /v1/hazards` — 160 raw encrypted bytes, `Content-Type: application/octet-stream`.
-- `201 {"status":"accepted", ...}` — new valid hazard saved.
-- `200 {"status":"duplicate", ...}` — exact same authenticated packet already recorded; acknowledged as safe transport retry. **Not stored twice**.
-- `409` — **different authenticated packet** using the same `(device_id, message_id)`; replay/conflict.
-- `422` — invalid crypto, packet length, or timestamp.
+**Run automated tests** (isolated temporary signing keys and SQLite databases):
 
-**Offline policy:** the demo accepts reports up to 30 days old, and allows up to 5 minutes of future timestamp skew. This is a configurable policy, not a cryptographic guarantee: the ECU needs a reliable clock before this is suitable for production.
+```bash
+python -m pytest -v test_phase1.py test_phase2.py test_phase3.py
+python demo_phase3.py   # requires ./build.sh and local demo signing keys
+```
 
-**Important limitations:**
+The tests include valid signing and verification, tampering, unknown device (same valid key, different device ID), conflicting Message ID, stale/future timestamps, **a 31-day delayed identical retry after lost ACK**, startup-only DB initialization, ten offline packets, a lost ACK, and optional native C++ / Python compatibility.
 
-- No real BLE, ESP32-S3 firmware, Flutter, TLS termination, Supabase, or Google Cloud Run yet.
-- Current key files are demo-only, with a single registered device ID. Real deployment needs a server-side per-device key registry and private key provisioning/storage.
-- Ed25519 default Monocypher EdDSA mode is not interchangeable with standard Ed25519; use the optional `monocypher-ed25519` source already compiled by `build.sh`.
-- No mobile-authentication or per-device rate limiting at the API. The signature proves the packet was signed with a trusted key, not which phone uploaded it.
-- The outbox SQLite DB is not OS-backed encrypted storage, and there are no background workers; those belong in the Flutter/production phase.
-- Local `http://127.0.0.1` is exclusively for dev. Use **HTTPS/TLS** for real uploads.
-- Some rejected packets are retained (marked `rejected`) for inspection, rather than being silently dropped or endlessly retried.
-- Replay ledger data is stored locally (SQLite) and persists across server restarts, but production should use shared durable storage and apply retention policies.
+## Endpoint / duplicate behavior
+
+- `POST /v1/hazards` accepts exactly 120 bytes of `application/octet-stream` on this simulator; NOT the team's `POST /reports`.
+- `201 accepted`: valid new signed report stored once.
+- `200 duplicate`: an already stored **identical verified signed packet** retried at any age, even after the 30-day new-report window.
+- `409 conflict`: a **different, validly signed** packet with an already used `(device_id, message_id)`.
+- `422`: bad signature, unknown device, malformed packet, illegal hazard data, stale **new** report, or future timestamp.
+- `413`: oversized payload; `415`: unsupported media type; `503`: database temporarily unavailable.
+
+Signature verification happens **before** duplicate lookup, and lookup happens **before** the age check. The SQLite primary key also prevents duplicate rows on concurrent inserts. The 30-day offline age and 5-minute clock skew are demonstration policies, not device security guarantees. Database creation occurs during the FastAPI application **lifespan startup**, not on module import.
+
+## Limitations and integration handoff
+
+- No physical ESP32-S3, GNSS, Bluetooth LE, Flutter, deployed Cloud Run, production TLS, Supabase, device enrollment, or secure key storage tested.
+- The demo hardcodes **one registered device ID** and loads a demo public key from a local file. Public keys need a trusted registry, private keys must never leave the device, and TLS certificate/private key handling belongs to the server/platform.
+- An Ed25519 signature ensures source-key authenticity and integrity, **not confidentiality**. The phone can see and locally store the plaintext. BLE and storage require their own threat-model decisions.
+- Do not replace `signer.h`, production signed-report format, or `POST /reports` using this simulator. Verify their existing data model and canonical signed bytes before integration.
+- `test_phase1.py` is converted into pytest tests and does not need `packet.bin` at import time. Native C++ tests automatically skip when the simulator has not been built.

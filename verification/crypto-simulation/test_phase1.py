@@ -1,27 +1,22 @@
-"""Run after C++ writes packet.bin; confirms that tampered packets are rejected."""
-from pathlib import Path
-from verify_packet import verify_and_decrypt, PacketRejected
+"""Phase 1 standalone Ed25519-only packet verifier checks."""
+
+import pytest
+
+from test_support import sample_packet
+from verify_packet import PACKET_LEN, PacketRejected, verify_signed_packet
 
 
-keys = Path('keys')
-original = Path('packet.bin').read_bytes()
-report = verify_and_decrypt(original, keys)
-assert report['packet_bytes'] == 160
-assert report['hazard_type'] == 'Pothole'
-print('PASS: original 160-byte C++ packet verified + decrypted')
+def test_phase1_valid_signed_packet(setup):
+    packet = sample_packet(setup)
+    decoded = verify_signed_packet(packet, setup['key_dir'])
+    assert len(packet) == PACKET_LEN == 120
+    assert decoded['hazard_type'] == 'Pothole'
+    assert decoded['device_id'] == 'ROVO-DEMO-ECU-01'
 
-for name, byte_index in [
-    ('header (nonce)', 22),
-    ('ciphertext', 48),
-    ('authentication tag', 81),
-    ('signature', 100),
-]:
-    changed = bytearray(original)
-    changed[byte_index] ^= 1
-    try:
-        verify_and_decrypt(bytes(changed), keys)
-    except PacketRejected:
-        print(f'PASS: changed {name} rejected')
-    else:
-        raise AssertionError(f'FAIL: tampered {name} was accepted')
-print('PASS: all Phase 1 checks successful')
+
+@pytest.mark.parametrize('index', [4, 5, 21, 23, 34, 55, 56, 119])
+def test_phase1_tampering_rejected(setup, index):
+    tampered = bytearray(sample_packet(setup))
+    tampered[index] ^= 1
+    with pytest.raises(PacketRejected):
+        verify_signed_packet(bytes(tampered), setup['key_dir'])

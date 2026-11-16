@@ -1,4 +1,4 @@
-"""Inspect locally accepted reports for the Phase 2 simulation (not an HTTP API)."""
+"""Inspect locally accepted reports for the Phase 3 standalone simulation (not an HTTP API)."""
 import argparse
 from pathlib import Path
 import sqlite3
