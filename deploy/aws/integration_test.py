@@ -147,6 +147,14 @@ def wait_for_evaluator(api: Api, event_id: str) -> dict:
     return seen
 
 
+def after_revoke(api: Api, car: Car) -> None:
+    """B11: a report in the revoked device's name is refused. The backend checks the device status before the
+    signature, so this also works with a new key when the run's key is gone (the device is already revoked)."""
+    line = car.report(time.time() - 2, LAT, LON).decode().encode()
+    api.call("B11 report after revoke is refused", "POST", "/reports", line, expect=(403,),
+             writes="1 row in rejections")
+
+
 def save(api: Api, part: str, out_dir: Path, extra: dict) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -159,7 +167,8 @@ def save(api: Api, part: str, out_dir: Path, extra: dict) -> Path:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--url", required=True)
-    ap.add_argument("--part", choices=("A", "B"), required=True)
+    ap.add_argument("--part", choices=("A", "B", "B11"), required=True,
+                    help="B11 alone: one report in the name of the already revoked test device")
     ap.add_argument("--execute", action="store_true", help="Part B only: really send the writes")
     ap.add_argument("--admin-token-ssm", default="/icvsp/admin_token")
     ap.add_argument("--out", default=str(ROOT / "deploy/aws/results"))
@@ -169,6 +178,17 @@ def main() -> None:
         api = Api(a.url)
         part_a(api)
         print("saved", save(api, "A", Path(a.out), {"writes": "none"}))
+        sys.exit(0 if all(c["passed"] for c in api.log) else 1)
+
+    if a.part == "B11":
+        car = Car(DEVICE, boot=2)  # new in-memory key; the run's key is gone and the device is revoked anyway
+        if not a.execute:
+            print(f"DRY RUN: would POST one report as {DEVICE} (revoked), expect 403 device_revoked, "
+                  "writes 1 row in rejections. Run again with --execute to send.")
+            return
+        api = Api(a.url)
+        after_revoke(api, car)
+        print("saved", save(api, "B11", Path(a.out), {"test_device": DEVICE, "location": [LAT, LON]}))
         sys.exit(0 if all(c["passed"] for c in api.log) else 1)
 
     car, ghost = Car(DEVICE), Car(UNREGISTERED)   # fresh keys, in memory only
@@ -204,6 +224,7 @@ def main() -> None:
                             "expected": ["REVOKED"], "status": 200, "passed": status == ["REVOKED"], "ms": None,
                             "writes": "nothing", "response": json.dumps(status)})
             print(f"{'PASS' if status == ['REVOKED'] else 'FAIL'}  B10 test device shows REVOKED   {status}")
+            after_revoke(api, car)
         print("saved", save(api, "B", Path(a.out), {"test_device": DEVICE, "public_key": car.public_hex,
                                                      "location": [LAT, LON], "evaluation": evaluation}))
     sys.exit(0 if all(c["passed"] for c in api.log) else 1)

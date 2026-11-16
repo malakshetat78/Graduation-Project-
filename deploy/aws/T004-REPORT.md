@@ -26,7 +26,7 @@ Reproduce: `deploy/aws/README.md` (including the Windows section).
 | Part | What | Where it ran | Result | Evidence |
 |---|---|---|---|---|
 | A | health, ready, 4 calls without credentials | live URL, read only | **6/6 pass** | `results/t004-partA-*.json`, `results/cloudwatch-partA.txt` |
-| B | register, valid, duplicate, stale, bad signature, tampered, unregistered, evaluator, revoke | live URL + shared Supabase (approved minimal plan) | **10/10 pass** | `results/t004-partB-20261116T191409Z.json`, `results/cloudwatch-partB.txt`, `results/test-records.md` |
+| B | register, valid, duplicate, stale, bad signature, tampered, unregistered, evaluator, revoke, report after revoke | live URL + shared Supabase (approved minimal plan) | **11/11 pass** | `results/t004-partB-20261116T191409Z.json`, `results/t004-partB11-20261116T193030Z.json`, `results/cloudwatch-partB.txt`, `results/test-records.md` |
 | C | the team's 188 backend tests incl. restarts, database down then retry, two evaluators at once | local `supabase/postgres:17.11.0.003` in Docker, isolated | **188/188 pass, 0 skipped** | `results/partC-postgres-tests.log` |
 
 ### Part B, expected vs actual
@@ -43,6 +43,7 @@ Reproduce: `deploy/aws/README.md` (including the Windows section).
 | B8 evaluator | evaluated within 180 s | evaluated; hazard `suppressed` | accepted 19:13:53, evaluated by 19:14:02 |
 | B9 revoke | 200 | 200 | 1008 |
 | B10 device REVOKED | REVOKED | REVOKED | |
+| B11 report after revoke (added after review) | 403 | 403 device_revoked | 843 |
 
 Latencies are single requests from a laptop in Egypt to us-east-1, not a performance benchmark. First request
 after idle (cold start): 2.7 to 3.9 s; warm requests: 0.5 to 1.3 s.

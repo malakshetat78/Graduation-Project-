@@ -1,0 +1,24 @@
+{
+  "part": "B11",
+  "target": "https://bamrqyu5hizs6q6dy37wxvlebu0xwtlk.lambda-url.us-east-1.on.aws",
+  "utc": "20261116T193030Z",
+  "test_device": "t004-test-01",
+  "location": [
+    23.5,
+    27.0
+  ],
+  "checks": [
+    {
+      "check": "B11 report after revoke is refused",
+      "request": "POST /reports",
+      "expected": [
+        403
+      ],
+      "status": 403,
+      "passed": true,
+      "ms": 843,
+      "writes": "1 row in rejections",
+      "response": "{\"detail\":\"device revoked\",\"code\":\"device_revoked\",\"retryable\":false}"
+    }
+  ]
+}
