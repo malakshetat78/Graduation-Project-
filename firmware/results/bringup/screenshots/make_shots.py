@@ -13,7 +13,7 @@ OUT = Path(sys.argv[2])
 OUT.mkdir(parents=True, exist_ok=True)
 BRAVE = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 COMMIT = "ad1ac37"       # smoke test run (shots 2, 3)
-COMMIT_NET = "51bba23"   # network report run and the latest host tests (shots 1, 5, 6)
+COMMIT_NET = "4aaa22b"   # network report runs and the latest host tests (shots 1, 5, 6, 7)
 ONLY = set(sys.argv[3:])
 
 
@@ -29,6 +29,7 @@ def colour(line):
     e = html.escape(line)
     e = re.sub(r"\b(PASS|PASSED|succeeded|Project build complete|201 Created|-&gt; 201)", r'<span class="ok">\1</span>', e)
     e = re.sub(r"\b(FAIL|FAILED|ERROR|Rebooting\.\.\.|401 Unauthorized|403 Forbidden|bad_signature)", r'<span class="bad">\1</span>', e)
+    e = re.sub(r"(\(device key not registered: report kept, will retry\)|kept=1)", r'<span class="skip">\1</span>', e)
     e = e.replace("***ERROR***", '<span class="bad">***ERROR***</span>')
     e = re.sub(r"\b(SKIP)\b", r'<span class="skip">\1</span>', e)
     if line.startswith("$ "):
@@ -76,7 +77,7 @@ if wanted(1):
   total = [l for l in nat if "test cases:" in l]
   render("1_laptop_tests", "Laptop: device logic unit tests", "HOST (laptop)", "HOST",
          ["$ pio test -e native"] + [f"[... per-test output omitted, {len(nat)} lines in the full log ...]"] + summary + total,
-         f"Commit {COMMIT_NET} - 15 Nov 2026 - full log: firmware/results/bringup/logs/native_tests.log")
+         f"Commit {COMMIT_NET} - 15 Nov 2026 (UTC) - full log: firmware/results/bringup/logs/native_tests.log")
 
 # 2. Emulator run of the ECU smoke test (EMULATOR)
 if wanted(2):
@@ -133,8 +134,21 @@ if wanted(6):
   be = [l.replace("INFO:     ", "") for l in read("backend_report_demo.log") if "/reports" in l or "/devices" in l]
   ck = read("backend_report_checks.log")
   lines = (["# backend log: run 1 (key not registered yet), registration, run 2 (uvicorn on the laptop, port 8010)"]
-           + be[:3] + ["", *ck])
+           + be[:be.index(next(l for l in be if "/devices" in l)) + 2] + ["", *ck])
   render("6_backend_checks", "Backend: the report is stored; a resend is a duplicate; a changed copy is refused",
          "HOST (laptop backend)", "HOST", lines,
          f"Commit {COMMIT_NET} - local SQLite test database, test device ecu-demo-01. "
          "Logs: firmware/results/bringup/logs/backend_report_demo.log, backend_report_checks.log")
+
+# 7. Emulator: device not registered yet -> 403 unknown_device, the report is KEPT and retried (EMULATOR + network)
+if wanted(7):
+  r = [l for l in read("qemu_report_demo_unregistered.log") if not l.startswith("#")]
+  keep = [l for l in r if l.startswith(("DEMO", "NET", "REPORT", "HTTP", "UPLINK")) and not l.startswith("DEMO drive t=")]
+  lines = (["# run 1 of 2: the backend does not know this device's public key yet",
+            "$ qemu-system-xtensa -machine esp32s3 -m 8M -drive file=flash_qemu.bin,if=mtd,format=raw -nic user,model=open_eth",
+            "[... boot log lines and drive progress lines omitted ...]"] + keep
+           + ["", "[the report stays queued: it is sent again after registration, or dropped later as 422 stale]"])
+  render("7_emulator_unknown_device_kept", "ESP32-S3 emulator: key not registered yet - 403, report kept and retried",
+         "EMULATOR + NETWORK", "NET", lines,
+         f"Firmware commit {COMMIT_NET}. Before the fix a 403 deleted the report; now 403 unknown_device keeps it "
+         "(other 403s, e.g. revoked device, still drop it). Log: firmware/results/bringup/logs/qemu_report_demo_unregistered.log")
