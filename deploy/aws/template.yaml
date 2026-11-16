@@ -62,6 +62,7 @@ Resources:
         Evaluate:
           Type: ScheduleV2
           Properties:
+            Name: !Sub ${AWS::StackName}-evaluate  # stack-prefixed, so deploy permissions can be limited to icvsp-backend-*
             ScheduleExpression: rate(1 minute)
             Input: '{"icvsp_task": "evaluate"}'
 
