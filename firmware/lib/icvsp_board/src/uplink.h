@@ -30,6 +30,10 @@ public:
 //                        2 s, 4 s, 8 s ... up to 5 min, +-20 % jitter
 class Uplink {
 public:
+    // Room for the backend's longest ACK: event ID up to 128 and device ID up to 64 characters, each \u-escaped
+    // in the worst case (6 bytes per character), plus the other fields. A longer body is cut and is no ACK.
+    static constexpr size_t kReplyCap = 1536;
+
     struct Stats {
         uint32_t stored = 0, refused = 0, failures = 0, not_provisioned = 0;
         int last_status = -1;
@@ -67,7 +71,7 @@ private:
     bool waiting_ = false;
     bool not_provisioned_ = false;
     Stats stats_;
-    char reply_[512] = {};  // the backend's replies are well under 300 bytes
+    char reply_[kReplyCap] = {};
 };
 
 }  // namespace icvsp

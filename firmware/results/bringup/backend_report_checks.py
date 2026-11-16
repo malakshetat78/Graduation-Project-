@@ -2,7 +2,7 @@
 
 usage: python3 backend_report_checks.py <demo sqlite file> [backend URL, default http://127.0.0.1:8010]
 
-1. GET /reports for ecu-demo-01: what was stored (no position printed).
+1. GET /reports for the device that sent the latest report: what was stored (no position printed).
 2. POST the same signed line again: must be accepted as a duplicate (a safe retry after a lost answer).
 3. POST it with one field changed (severity high -> low), signature kept: must be refused (bad signature).
 Only the standard library is used. The signed line itself is not printed (it holds the demo coordinates).
@@ -11,6 +11,7 @@ import json
 import sqlite3
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 
 db = sys.argv[1]
@@ -27,14 +28,15 @@ def post(body):
         return e.code, e.read().decode()
 
 
+con = sqlite3.connect(db)
+device, line = con.execute("select device_id, line from reports order by received_at desc").fetchone()
+line = line.encode()
 print(f"# HOST checks against the laptop backend ({base}, local SQLite), after the emulator run")
-print("$ GET /reports?device_id=ecu-demo-01")
-with urllib.request.urlopen(base + "/reports?device_id=ecu-demo-01") as r:
+print(f"$ GET /reports?device_id={device}")
+with urllib.request.urlopen(base + "/reports?device_id=" + urllib.parse.quote(device)) as r:
     for x in json.load(r):
         print(json.dumps({k: x[k] for k in ("event_id", "device_id", "type", "severity", "detection_confidence",
                                             "evaluation")}))
-line = sqlite3.connect(db).execute(
-    "select line from reports where device_id = 'ecu-demo-01' order by received_at desc").fetchone()[0].encode()
 print("$ POST /reports  (the same signed line again, as a retry after a lost answer)")
 print(*post(line))
 changed = line.replace(b'"severity":"high"', b'"severity":"low"', 1)

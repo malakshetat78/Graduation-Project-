@@ -46,11 +46,24 @@ config ICVSP_SNTP_SERVER
     default "pool.ntp.org"
 
 config ICVSP_DEVICE_ID
-    string "Device ID registered in the backend"
-    default "ecu-demo-01"
+    string "Device ID registered in the backend (empty: ecu-<MAC address>)"
+    default ""
+    help
+        Leave empty on every board: the ID is then made from the chip's factory MAC address, so each ECU has
+        its own without per-board settings.
+
+choice ICVSP_KEY_SOURCE
+    prompt "Signing key"
+    default ICVSP_KEY_PER_DEVICE
+    config ICVSP_KEY_PER_DEVICE
+        bool "Per device: made on the chip at first boot (hardware RNG), kept in NVS"
+    config ICVSP_KEY_DEMO_SEED
+        bool "Demo seed from sdkconfig.local (same key on every board; demos only)"
+endchoice
 
 config ICVSP_DEMO_SEED_HEX
     string "Demo signing seed, 64 hex characters (sdkconfig.local only; a demo key, not a production key)"
+    depends on ICVSP_KEY_DEMO_SEED
     default ""
 
 endmenu

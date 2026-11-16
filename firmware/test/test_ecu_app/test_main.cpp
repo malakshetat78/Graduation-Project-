@@ -56,7 +56,7 @@ struct FakeTransport : ReportTransport {  // answers like the backend: a stored 
     std::vector<std::string> bodies;
     int post_report(const char* line, size_t len, char* reply, size_t cap) override {
         bodies.emplace_back(line, len);
-        char id[64] = {}, sender[64] = {};
+        char id[160] = {}, sender[80] = {};
         json_top_string(bodies.back().c_str(), "msg_id", id, sizeof id);
         json_top_string(bodies.back().c_str(), "sender", sender, sizeof sender);
         std::snprintf(reply, cap, "{\"status\":\"accepted\",\"ack\":\"stored\",\"event_id\":\"%s\",\"device_id\":\"%s\"}",

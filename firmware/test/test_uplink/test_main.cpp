@@ -18,10 +18,11 @@ std::string L(const char* id) { return std::string("{\"event\":{},\"sender\":\"c
 
 // The backend's stored ACK for a line (accepted or duplicate).
 std::string ack_for(const std::string& line, const char* status = "accepted") {
-    char id[64] = {};
+    char id[160] = {}, sender[80] = {};
     json_top_string(line.c_str(), "msg_id", id, sizeof id);
+    json_top_string(line.c_str(), "sender", sender, sizeof sender);
     return std::string("{\"status\":\"") + status + "\",\"ack\":\"stored\",\"event_id\":\"" + id +
-           "\",\"device_id\":\"car\",\"stored_at\":1.5,\"evaluation\":\"pending\"}";
+           "\",\"device_id\":\"" + sender + "\",\"stored_at\":1.5,\"evaluation\":\"pending\"}";
 }
 
 struct FakeTransport : ReportTransport {
@@ -142,6 +143,43 @@ void test_only_a_stored_ack_for_this_report_counts() {
     TEST_ASSERT_FALSE(Uplink::is_stored_ack("{\"no_msg_id\":1}", "{\"ack\":\"stored\",\"event_id\":\"\"}"));
     TEST_ASSERT_FALSE(Uplink::is_stored_ack(nullptr, good));
     TEST_ASSERT_FALSE(Uplink::is_stored_ack(line, nullptr));
+}
+
+// Codex review 3: an escaped NUL must not cut a value or key short, raw bytes must be valid UTF-8, and key
+// names have no length limit of their own.
+void test_json_reader_rejects_nul_and_bad_utf8_and_reads_long_keys() {
+    char v[64];
+    TEST_ASSERT_FALSE(json_top_string("{\"ack\":\"stored\\u0000junk\"}", "ack", v, sizeof v));
+    TEST_ASSERT_FALSE(json_top_string("{\"ack\\u0000junk\":\"stored\"}", "ack", v, sizeof v));
+    TEST_ASSERT_FALSE(json_top_string("{\"k\":\"v\",\"x\":\"\xff\"}", "k", v, sizeof v));        // not UTF-8
+    TEST_ASSERT_FALSE(json_top_string("{\"k\":\"v\",\"x\":\"\xc0\xaf\"}", "k", v, sizeof v));    // overlong
+    TEST_ASSERT_FALSE(json_top_string("{\"k\":\"v\",\"x\":\"\xed\xa0\x80\"}", "k", v, sizeof v)); // surrogate
+    TEST_ASSERT_FALSE(json_top_string("{\"k\":\"v\",\"x\":\"\xe2\x82\"}", "k", v, sizeof v));    // cut sequence
+    TEST_ASSERT_FALSE(json_top_string("{\"k\":\"v\",\"x\":\"\xf4\x90\x80\x80\"}", "k", v, sizeof v)); // > U+10FFFF
+    TEST_ASSERT_TRUE(json_top_string("{\"k\":\"\xe2\x82\xac \xf0\x9f\x98\x80\"}", "k", v, sizeof v));  // valid UTF-8
+    TEST_ASSERT_EQUAL_STRING("\xe2\x82\xac \xf0\x9f\x98\x80", v);
+    const std::string k31(31, 'a'), k32(32, 'b'), k100(100, 'c');
+    TEST_ASSERT_TRUE(json_top_string(("{\"" + k31 + "\":\"x\"}").c_str(), k31.c_str(), v, sizeof v));
+    TEST_ASSERT_TRUE(json_top_string(("{\"" + k32 + "\":\"y\"}").c_str(), k32.c_str(), v, sizeof v));
+    TEST_ASSERT_EQUAL_STRING("y", v);
+    TEST_ASSERT_TRUE(json_top_string(("{\"" + k100 + "\":\"z\"}").c_str(), k100.c_str(), v, sizeof v));
+    TEST_ASSERT_FALSE(json_top_string(("{\"" + k32 + "\":\"y\"}").c_str(), k31.c_str(), v, sizeof v));  // prefix only
+}
+
+// The backend allows event IDs up to 128 and device IDs up to 64 characters (backend/icvsp_backend/verify.py).
+void test_ack_with_the_longest_ids_the_backend_allows_counts() {
+    const std::string dev(64, 'd'), ev(128, 'e');
+    const std::string line = "{\"event\":{},\"sender\":\"" + dev + "\",\"msg_id\":\"" + ev + "\"}";
+    const std::string ack = "{\"status\":\"duplicate\",\"ack\":\"stored\",\"event_id\":\"" + ev + "\",\"device_id\":\"" +
+                            dev + "\",\"stored_at\":1794783698.5771441,\"evaluation\":\"evaluated\"}";
+    TEST_ASSERT_TRUE(Uplink::is_stored_ack(line.c_str(), ack.c_str()));
+    TEST_ASSERT_TRUE(ack.size() < Uplink::kReplyCap);
+    FakeTransport t;
+    Uplink u(*q, t, half);
+    q->push(line.c_str());
+    u.tick(0, true);
+    TEST_ASSERT_TRUE(q->empty());
+    TEST_ASSERT_EQUAL_UINT32(1, u.stats().stored);
 }
 
 void test_json_reader_handles_escapes_and_rejects_bad_json() {
@@ -325,6 +363,8 @@ int main(int, char**) {
     RUN_TEST(test_retry_delay_counts_from_the_end_of_a_slow_attempt);
     RUN_TEST(test_only_a_stored_ack_for_this_report_counts);
     RUN_TEST(test_json_reader_handles_escapes_and_rejects_bad_json);
+    RUN_TEST(test_json_reader_rejects_nul_and_bad_utf8_and_reads_long_keys);
+    RUN_TEST(test_ack_with_the_longest_ids_the_backend_allows_counts);
     RUN_TEST(test_unknown_device_keeps_the_report_until_registered);
     RUN_TEST(test_other_403_and_signature_refusals_stay_final);
     RUN_TEST(test_success_status_without_a_valid_ack_is_retried);

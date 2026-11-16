@@ -2,7 +2,7 @@
 #   smoke test (default)  boot/sensor checks, smoke_main.cpp
 #   report demo           signed report over the network to POST /reports (sdkconfig.report)
 if(CONFIG_ICVSP_APP_REPORT_DEMO)
-    set(app_srcs "report_demo_main.cpp" "net_link.cpp" "http_transport.cpp")
+    set(app_srcs "report_demo_main.cpp" "net_link.cpp" "http_transport.cpp" "nvs_secret_store.cpp")
 else()
     set(app_srcs "smoke_main.cpp")
 endif()

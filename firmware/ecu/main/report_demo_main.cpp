@@ -21,9 +21,11 @@
 #include <sys/time.h>
 #include <vector>
 
+#include "device_identity.h"
 #include "ecu_app.h"
 #include "esp_app_desc.h"
 #include "esp_event.h"
+#include "esp_mac.h"
 #include "esp_netif.h"
 #include "esp_netif_sntp.h"
 #include "esp_random.h"
@@ -34,6 +36,7 @@
 #include "http_transport.h"
 #include "net_link.h"
 #include "nvs_flash.h"
+#include "nvs_secret_store.h"
 #include "sdkconfig.h"
 #include "sim.h"
 #include "uplink.h"
@@ -46,6 +49,11 @@ namespace {
 constexpr float kDriveS = 30.0f;
 constexpr float kSpeedKmh = 35.0f;
 constexpr float kPotholeAtS = 15.0f;
+#if CONFIG_ICVSP_KEY_DEMO_SEED
+constexpr char kKeyLabel[] = "demo key";
+#else
+constexpr char kKeyLabel[] = "per-device key";
+#endif
 
 struct Line {
     char s[ReportQueue::kMaxLine];
@@ -55,6 +63,7 @@ QueueHandle_t g_lines;              // app task -> delivery task
 std::atomic<uint32_t> g_signed{0}, g_handoff_dropped{0};           // written by the app task
 std::atomic<uint32_t> g_stored{0}, g_refused{0}, g_failures{0};     // written by the delivery task
 std::atomic<uint32_t> g_not_provisioned{0};                         // 403 unknown_device answers (report kept)
+std::atomic<bool> g_blocked_unregistered{false};                    // the last answer was 403 unknown_device
 std::atomic<uint32_t> g_queue_dropped{0};  // pushed out of the full ReportQueue (oldest first)
 std::atomic<size_t> g_queued{0};
 
@@ -122,6 +131,7 @@ void delivery_task(void*) {
         g_refused = s.refused;
         g_failures = s.failures;
         g_not_provisioned = s.not_provisioned;
+        g_blocked_unregistered = uplink.not_provisioned();
         g_queued = queue.size();
         g_queue_dropped = queue.dropped();
         vTaskDelay(pdMS_TO_TICKS(50));
@@ -170,6 +180,7 @@ void feed_gnss(NmeaParser& gnss, int64_t utc_s, const GnssFix& f, uint32_t now) 
     feed_sentence(gnss, body, now);
 }
 
+#if CONFIG_ICVSP_KEY_DEMO_SEED
 int hex_digit(char c) {
     if (c >= '0' && c <= '9') return c - '0';
     if (c >= 'a' && c <= 'f') return c - 'a' + 10;
@@ -188,6 +199,8 @@ bool parse_seed(const char* hex, uint8_t out[32]) {
     return true;
 }
 
+#endif
+
 void halt(const char* why) {
     std::printf("DEMO RESULT FAIL %s\n", why);
     for (;;) vTaskDelay(pdMS_TO_TICKS(1000));
@@ -198,9 +211,10 @@ void halt(const char* why) {
 extern "C" void app_main() {
     std::printf("\nDEMO BEGIN signed-report demo, %s build, firmware %s, ESP-IDF %s\n", build_kind(),
                 esp_app_get_description()->version, esp_app_get_description()->idf_ver);
-    std::printf("DEMO link=%s url=%s device=%s\n", EspNetDriver::kind(), CONFIG_ICVSP_REPORT_URL, CONFIG_ICVSP_DEVICE_ID);
-    std::printf("DEMO simulated: IMU drive (%.0f s, pothole at %.0f s) and GNSS sentences at demo coordinates; "
-                "demo key; real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks\n", kDriveS, kPotholeAtS);
+    std::printf("DEMO link=%s url=%s\n", EspNetDriver::kind(), CONFIG_ICVSP_REPORT_URL);
+    std::printf("DEMO simulated: IMU drive (%.0f s, pothole at %.0f s) and GNSS sentences at demo coordinates%s; "
+                "real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks\n", kDriveS,
+                kPotholeAtS, kKeyLabel[0] == 'd' ? "; demo key" : "");
 
     esp_err_t err = nvs_flash_init();  // the Wi-Fi driver keeps its calibration in NVS
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -227,13 +241,30 @@ extern "C" void app_main() {
     strftime(iso, sizeof iso, "%Y-%m-%dT%H:%M:%SZ", &u);
     std::printf("DEMO time synced by SNTP (%s): %s\n", CONFIG_ICVSP_SNTP_SERVER, iso);
 
+    // This ECU's identity: the device ID from its MAC address, the signing key made on the chip at first boot
+    // and kept in NVS (or the demo seed when ICVSP_KEY_DEMO_SEED is chosen). The private seed is never printed.
+    static char device_id[40];
+    if (CONFIG_ICVSP_DEVICE_ID[0] != '\0') {
+        std::snprintf(device_id, sizeof device_id, "%s", CONFIG_ICVSP_DEVICE_ID);
+    } else {
+        uint8_t mac[6];
+        ESP_ERROR_CHECK(esp_efuse_mac_get_default(mac));
+        icvsp::device_id_from_mac(mac, device_id, sizeof device_id);
+    }
     uint8_t seed[32];
+#if CONFIG_ICVSP_KEY_DEMO_SEED
     if (!parse_seed(CONFIG_ICVSP_DEMO_SEED_HEX, seed)) halt("CONFIG_ICVSP_DEMO_SEED_HEX missing (sdkconfig.local)");
-    static Device* device = new Device(CONFIG_ICVSP_DEVICE_ID, static_cast<uint32_t>(boot_s), seed, sink, nullptr);
+#else
+    NvsSecretStore store;
+    const icvsp::KeyStatus ks = icvsp::load_or_create_seed(store, esp_fill_random, seed);
+    std::printf("DEMO key %s (per-device key, NVS)\n", icvsp::to_string(ks));
+    if (ks != icvsp::KeyStatus::Loaded && ks != icvsp::KeyStatus::Created) halt("no usable signing key");
+#endif
+    static Device* device = new Device(device_id, static_cast<uint32_t>(boot_s), seed, sink, nullptr);
     char pk[65];
     for (int i = 0; i < 32; ++i) std::snprintf(pk + 2 * i, 3, "%02x", device->public_key()[i]);
-    std::printf("DEMO device=%s boot_id=%" PRIu32 " public_key=%s (demo key)\n", CONFIG_ICVSP_DEVICE_ID,
-                static_cast<uint32_t>(boot_s), pk);
+    std::printf("DEMO device=%s boot_id=%" PRIu32 " public_key=%s (%s)\n", device_id,
+                static_cast<uint32_t>(boot_s), pk, kKeyLabel);
 
     sim::Drive drive;
     drive.duration_s = kDriveS;
@@ -271,11 +302,13 @@ extern "C" void app_main() {
                 app.imu_stale(), g_signed.load());
 
     // Every signed report ends as stored, refused or dropped (hand-off or full queue); wait up to 60 s for that.
-    // A device the backend does not know keeps its reports and retries, so the demo stops waiting once the
-    // backend has said "unknown_device" for every report still queued (it would wait for registration).
+    // A device the backend does not know keeps its reports and retries until it is registered, so the demo
+    // stops waiting when the backend's latest answer is "unknown_device" (the uplink's current state, cleared by
+    // the next stored report) and every signed report has reached the delivery queue or been settled; nothing
+    // is still in the hand-off between the two tasks.
     auto settled = [] { return g_stored + g_refused + g_handoff_dropped + g_queue_dropped; };
     for (int i = 0; i < 600 && (settled() < g_signed || g_queued > 0); ++i) {
-        if (g_not_provisioned > 0 && g_not_provisioned >= g_queued) break;
+        if (g_blocked_unregistered && settled() + g_queued >= g_signed) break;
         vTaskDelay(pdMS_TO_TICKS(100));
     }
     const uint32_t dropped = g_handoff_dropped + g_queue_dropped;
@@ -285,6 +318,6 @@ extern "C" void app_main() {
                 " (handoff=%" PRIu32 " queue_full=%" PRIu32 ")%s\n",
                 ok ? "PASS" : "FAIL", g_signed.load(), g_stored.load(), g_refused.load(), g_failures.load(),
                 g_not_provisioned.load(), static_cast<unsigned>(g_queued.load()), dropped, g_handoff_dropped.load(), g_queue_dropped.load(),
-                g_not_provisioned > 0 && !ok ? " - register this device's public key with the backend" : "");
+                g_blocked_unregistered && !ok ? " - register this device's public key with the backend" : "");
     for (;;) vTaskDelay(pdMS_TO_TICKS(1000));
 }

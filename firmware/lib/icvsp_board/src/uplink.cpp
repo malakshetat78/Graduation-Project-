@@ -26,7 +26,7 @@ uint32_t Uplink::retry_delay_ms(uint32_t failures, float random_unit) {
 
 bool Uplink::is_stored_ack(const char* line, const char* body) {
     if (line == nullptr || body == nullptr) return false;
-    char id[96], sender[96], v[96];
+    char id[129], sender[65], v[129];  // the backend's limits: event ID 128, device ID 64 characters
     if (!json_top_string(line, "msg_id", id, sizeof id) || id[0] == '\0') return false;
     if (!json_top_string(line, "sender", sender, sizeof sender) || sender[0] == '\0') return false;
     return json_top_string(body, "ack", v, sizeof v) && std::strcmp(v, "stored") == 0 &&
