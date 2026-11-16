@@ -5,7 +5,7 @@ lines in grey italics are notes (omitted lines, run length), not device output. 
 
 | Image | Where | What it shows |
 |---|---|---|
-| `1_laptop_tests.png` | HOST (laptop) | 98/98 unit tests of the device logic |
+| `1_laptop_tests.png` | HOST (laptop) | 106/106 unit tests of the device logic |
 | `2_emulator_smoke_test.png` | EMULATOR (QEMU) | The ECU firmware boots; chip and signing PASS; sensors SKIP (not emulated) |
 | `3_board_firmware_build.png` | BUILD | The ECU firmware builds for the XIAO ESP32-S3 with 0 warnings |
 | `4_bug_found_and_fixed.png` | EMULATOR (QEMU) | Stack overflow + reboot loop in the signing demo, and the run with the fix |
@@ -14,4 +14,4 @@ lines in grey italics are notes (omitted lines, run length), not device output. 
 | `7_emulator_unknown_device_kept.png` | EMULATOR + NETWORK | Before the key is registered: 403 unknown_device, the ECU keeps the report and retries (nothing deleted) |
 
 Regenerate: `python3 make_shots.py "$PWD/../logs" "$PWD" [numbers]` (needs a Chromium browser; path set in the
-script). Shots 2-4 come from the smoke-test run at `ad1ac37`; shots 1, 5, 6 and 7 from `4aaa22b`.
+script). Shots 1-3 and 5-7 come from the runs at `b89fa8f`; shot 4 from Malak's `a452c66`.

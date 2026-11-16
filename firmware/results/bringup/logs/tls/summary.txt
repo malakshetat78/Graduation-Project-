@@ -1,0 +1,21 @@
+# HTTPS checks, commit b89fa8f (clean), build_report_tls/flash_qemu.bin sha256=34a38ea313c6ead8b7b6350e61a0b7990fab61395436292acbdd7fef6068d79f
+# output of: results/bringup/tls/run_tls_checks.sh logs/tls
+PASS  1 untrusted: laptop TLS client gives the intended reason: self-signed certificate in certificate chain
+PASS  1 untrusted: no answer from the server (HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT))
+PASS  1 untrusted: firmware refused the certificate (-0x2700)
+PASS  1 untrusted: report kept, nothing stored
+PASS  2 wrong_host: laptop TLS client gives the intended reason: IP address mismatch, certificate is not valid for '127.0.0.1'.
+PASS  2 wrong_host: no answer from the server (HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT))
+PASS  2 wrong_host: firmware refused the certificate (-0x2700)
+PASS  2 wrong_host: report kept, nothing stored
+PASS  3 expired: laptop TLS client gives the intended reason: certificate has expired
+PASS  3 expired: no answer from the server (HTTP POST https://10.0.2.2:8443/reports -> no answer (ESP_ERR_HTTP_CONNECT))
+PASS  3 expired: firmware refused the certificate (-0x2700)
+PASS  3 expired: report kept, nothing stored
+PASS  4 good: laptop TLS client accepts it
+PASS  4 good: TLS accepted, backend answered (not registered yet) (HTTP POST https://10.0.2.2:8443/reports -> 403 )
+register ecu-000000000000 over https (test CA):
+{"device_id":"ecu-000000000000","status":"ACTIVE","pairing_code":"****"}
+PASS  5 good: TLS accepted, report stored (HTTP POST https://10.0.2.2:8443/reports -> 201 )
+
+ALL TLS CHECKS PASSED

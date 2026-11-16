@@ -12,8 +12,8 @@ LOGS = Path(sys.argv[1])
 OUT = Path(sys.argv[2])
 OUT.mkdir(parents=True, exist_ok=True)
 BRAVE = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
-COMMIT = "ad1ac37"       # smoke test run (shots 2, 3)
-COMMIT_NET = "4aaa22b"   # network report runs and the latest host tests (shots 1, 5, 6, 7)
+COMMIT = "b89fa8f"       # smoke test run (shots 2, 3)
+COMMIT_NET = "b89fa8f"   # network report runs and the latest host tests (shots 1, 5, 6, 7)
 ONLY = set(sys.argv[3:])
 
 
@@ -77,7 +77,7 @@ if wanted(1):
   total = [l for l in nat if "test cases:" in l]
   render("1_laptop_tests", "Laptop: device logic unit tests", "HOST (laptop)", "HOST",
          ["$ pio test -e native"] + [f"[... per-test output omitted, {len(nat)} lines in the full log ...]"] + summary + total,
-         f"Commit {COMMIT_NET} - 15 Nov 2026 (UTC) - full log: firmware/results/bringup/logs/native_tests.log")
+         f"Commit {COMMIT_NET} - 16 Nov 2026 (UTC) - full log: firmware/results/bringup/logs/native_tests.log")
 
 # 2. Emulator run of the ECU smoke test (EMULATOR)
 if wanted(2):
@@ -126,7 +126,8 @@ if wanted(5):
   render("5_emulator_report_accepted", "ESP32-S3 emulator: ECU signs a pothole report and sends it to the backend",
          "EMULATOR + NETWORK", "NET", lines,
          f"Firmware commit {COMMIT_NET}. Real code: ECU app, signing, the firmware network stack running in QEMU (emulated NIC, no radio), backend checks. Simulated: IMU drive, "
-         "GNSS sentences, demo key. QEMU Ethernet stands in for Wi-Fi; HTTP, TLS not exercised. "
+         "GNSS sentences. The chip's own key (made at first boot, loaded from flash). QEMU Ethernet stands in for Wi-Fi; "
+         "HTTP in this run, HTTPS certificate checks in logs/tls/. "
          "Log: firmware/results/bringup/logs/qemu_report_demo.log")
 
 # 6. The backend side of the same run (HOST)
@@ -137,7 +138,7 @@ if wanted(6):
            + be[:be.index(next(l for l in be if "/devices" in l)) + 2] + ["", *ck])
   render("6_backend_checks", "Backend: the report is stored; a resend is a duplicate; a changed copy is refused",
          "HOST (laptop backend)", "HOST", lines,
-         f"Commit {COMMIT_NET} - local SQLite test database, test device ecu-demo-01. "
+         f"Commit {COMMIT_NET} - local SQLite test database, test device ecu-000000000000 (emulator blank MAC). "
          "Logs: firmware/results/bringup/logs/backend_report_demo.log, backend_report_checks.log")
 
 # 7. Emulator: device not registered yet -> 403 unknown_device, the report is KEPT and retried (EMULATOR + network)

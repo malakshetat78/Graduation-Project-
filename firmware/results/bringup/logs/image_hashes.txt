@@ -1,0 +1,6 @@
+# sha256 of the firmware images built from commit b89fa8f (clean tree), paths relative to firmware/ecu
+acb4f84b4ed9f71968d98b6de339cf319e456c96d3a6ac7d9b9363543d5d9dec  build/icvsp_ecu.bin
+fb348d6c9851d5eea264075d0038c9e8533f28cf4b8480fc5ab1eb8e3b660559  build_report_board/icvsp_ecu.bin
+e003598ad39df6c3207f0163249c609f790a0fc24a08d5135c9ada7cdd3da333  build_report_qemu/flash_qemu.bin
+34a38ea313c6ead8b7b6350e61a0b7990fab61395436292acbdd7fef6068d79f  build_report_tls/flash_qemu.bin
+082ff731a3a561082eaae8b95515f180bd2cfe6049c65c3b63fe308c7f8c7acf  build_qemu/icvsp_ecu.bin
