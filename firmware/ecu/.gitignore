@@ -13,3 +13,4 @@
 
 # certificates and keys made by results/bringup/tls/make_test_certs.py - throw-away test material, never commit
 /tls_test/
+/cloud_device/
