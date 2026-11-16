@@ -1,16 +1,37 @@
-# ROVO Standalone Signed-Only Simulation — Test Status
+# ROVO Standalone Signed-Only Simulation — Test Results
 
-Previous v1 branch: 28 local tests passed for the *old* encrypted/signature packet format. This revision switches to signed-only packet v2; previous counts are not valid evidence for v2.
+Packet v2 (Ed25519 signature only, no message encryption). Standalone demo: not the project's `signer.h` format
+or `POST /reports` (see README.md and SECURITY_ARCHITECTURE.md).
 
-After signed-only refactor, tests executed in the assistant's local isolated Python environment:
+## Run with the native C++ signer built (no skipped tests)
 
+- Code under test: commit `ca2505f` (test files unchanged since)
+- Date: 2026-11-16
+- Machine: macOS 26.6.2 (arm64), Python 3.13.13, Apple clang version 21.0.0 (clang-2100.1.1.101)
+- Monocypher 4.0.3, SHA-512 checked by `build.sh`
+
+```bash
+./build.sh
+python -m pytest -v -rs test_phase1.py test_phase2.py test_phase3.py
 ```
-python -m pytest -q test_phase1.py test_phase2.py test_phase3.py
-41 passed, 2 skipped
-```
 
-Two native C++/Monocypher interoperability tests were skipped here because Monocypher sources and the compiled native binary were unavailable in this environment. The user should run `./build.sh` followed by the full test suite on the macOS workstation, and record the new results before declaring C++ v2 interoperability passed. The official GitHub Actions workflow for the main project has not yet been checked for the new commit.
+Result: **43 passed, 0 skipped, 0 failed.** The two C++ tests ran (`test_optional_actual_cpp_binary`,
+`test_phase3_real_cpp_packet_to_python_when_built`): packets signed by the C++/Monocypher program were verified by
+Python `cryptography` and accepted (201).
 
-**Coverage includes:** Ed25519 verification, altered header/payload/signature, unknown device with the correct signing key, new report validation, 31-day-old valid retry after lost ACK, SQLite idempotency across restarts, ten offline reports, connection loss, and database initialization only at app startup.
+An earlier run without the C++ build gave 41 passed and 2 skipped; those two skipped tests are the C++ to Python
+check, so that run did not show C++/Python compatibility.
 
-This is a local functional/security regression suite, not a production security audit or full firmware/backend integration test.
+## In CI
+
+GitHub Actions (`.github/workflows/verification.yml`) builds the C++ signer and runs the three files on every push;
+`crypto.log` is kept with the run's evidence. Each test function is listed in `verification/traceability.csv`
+(rows C-01 to C-23). The traceability check counts a skipped test as failed, so CI fails if the C++ tests do not run.
+
+## What this does and does not show
+
+Shows, for this demo format: C++ signs and Python verifies; any changed header, payload or signature byte is
+rejected; a wrong key or an unregistered device ID is rejected; an identical retry is acknowledged once (also after
+the 30-day window, for a lost ACK); a different packet reusing a message ID gets 409; offline queueing and retry.
+
+Does not show: the project's real report format, an ESP32, BLE, TLS, or the real backend.

@@ -11,7 +11,9 @@
 | Key at mobile | No Ed25519 signing private key required; can forward opaque bytes | Validates server's TLS certificate via OS trust store |
 | What it does NOT do | Hide message contents or stop replay on its own | Protect BLE data or local phone storage; authenticate the physical ECU |
 
-**Flow:** ECU creates `device_id + message_id + timestamp + lat/lon + hazard`, signs header and payload using Ed25519, sends over BLE to phone. The phone queues exact bytes offline. When online, it sends the same signed bytes over HTTPS/TLS to Cloud Run. Cloud matches the device ID to a **trusted registered public key**, verifies Ed25519, checks for an already accepted identical `(device_id, message_id, packet_hash)`, then applies timestamp/field validation and stores new reports.
+**Flow:** ECU creates `device_id + message_id + timestamp + lat/lon + hazard`, signs header and payload using Ed25519, sends over BLE to phone. The phone queues exact bytes offline. When online, it sends the same signed bytes over HTTPS/TLS to Cloud Run. Cloud matches the device ID to a **trusted registered public key**, verifies Ed25519, checks the fields (latitude, longitude, hazard type, timestamp format), then looks for an already accepted identical `(device_id, message_id, packet_hash)`. Only a report it has not seen yet gets the age and future-time checks, and is then stored.
+
+**Who is authenticated:** only the ECU, through its signing key. The demo does not authenticate the phone or the user that uploads: anyone can send bytes to `POST /v1/hazards`, and only a correct signature from the registered key gets a report stored. Checking the uploading phone or user is a separate job for the real backend (user sign-in, FR-SEC-01).
 
 **Key rule:** Signing uses the ECU's private key, verification uses the corresponding registered public key. Public-key trust must be established by secure enrollment; merely including a public key in a packet would not prove device identity. **No application-level symmetric encryption** is used in this revision.
 

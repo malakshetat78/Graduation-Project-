@@ -10,9 +10,11 @@ list in requirements.csv, and
     (cd engine && python3 -m unittest -v 2> ../engine.log)
     (cd backend && python3 -m unittest -v 2> ../backend.log)
     python3 -m unittest sil/test_sil.py -v 2> sil.log
+    (cd verification/crypto-simulation && ./build.sh && python3 -m pytest -v -rs test_phase*.py > ../../crypto.log)
     (cd firmware && pio test -e native -v > ../firmware.log && python3 tools/check_with_engine.py > ../integration.log)
     python3 verification/check_traceability.py --unittest-log engine=engine.log --unittest-log backend=backend.log \
-        --unittest-log sil=sil.log --firmware-log firmware.log --integration-log integration.log
+        --unittest-log sil=sil.log --firmware-log firmware.log --integration-log integration.log \
+        --pytest-log verification/crypto-simulation=crypto.log
 
 Experiments (E-) are long or need private data, and inspections (I-) are done by a person, so they are not
 rerun here; the report shows them as "recorded".
@@ -26,6 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HERE = Path(__file__).resolve().parent
+PYTEST_DIRS = ('verification/crypto-simulation',)   # pytest suites: one row per test function
 
 
 def code_tests() -> set[tuple[str, str]]:
@@ -40,14 +43,28 @@ def code_tests() -> set[tuple[str, str]]:
                 cls = m.group(1)
             elif m := re.match(r'    def (test_\w+)', line):
                 found.add((str(f.relative_to(ROOT)), f'{cls}.{m.group(1)}'))
+    for d in PYTEST_DIRS:
+        for f in sorted((ROOT / d).glob('test_*.py')):
+            for name in re.findall(r'^def (test_\w+)', f.read_text(), re.M):
+                found.add((str(f.relative_to(ROOT)), name))
     for f in sorted((ROOT / 'firmware/test').glob('*/test_main.cpp')):
         for name in re.findall(r'RUN_TEST\((\w+)\)', f.read_text()):
             found.add((str(f.relative_to(ROOT)), name))
     return found
 
 
-def results(unittest_logs: dict[str, str], firmware_log: str, integration_log: str | None) -> dict[tuple[str, str], str]:
+def results(unittest_logs: dict[str, str], firmware_log: str, integration_log: str | None,
+            pytest_logs: dict[str, str] | None = None) -> dict[tuple[str, str], str]:
     res = {}
+    # pytest -v: "test_x.py::test_name[param] PASSED". A function passes only if every parameter case passed;
+    # SKIPPED counts as a failure, so a test that silently did not run (e.g. the C++ build missing) fails CI.
+    for base, log in (pytest_logs or {}).items():
+        for m in re.finditer(r'^(test_\w+\.py)::(test_\w+)(?:\[[^\n]*\])? (PASSED|FAILED|ERROR|SKIPPED|XFAIL|XPASS)\b',
+                             log, re.M):
+            fname, name, outcome = m.groups()
+            key = (f'{base}/{fname}', name)
+            ok = outcome == 'PASSED' and res.get(key, 'Pass') == 'Pass'
+            res[key] = 'Pass' if ok else 'Fail'
     # "test_x (tests.module.Class.test_x) ... ok"; a test with a docstring prints the docstring on a second line.
     # Each log comes with the folder its tests were run from (engine, backend) or live in (sil).
     for base, log in unittest_logs.items():
@@ -76,6 +93,8 @@ def main() -> int:
                     help='Python unittest -v output, e.g. engine=engine.log (repeat for each suite)')
     ap.add_argument('--firmware-log', required=True)
     ap.add_argument('--integration-log')
+    ap.add_argument('--pytest-log', action='append', default=[], metavar='FOLDER=LOG',
+                    help='pytest -v output, with the folder the tests were run from')
     ap.add_argument('--out', default='traceability_report.md')
     a = ap.parse_args()
 
@@ -83,11 +102,12 @@ def main() -> int:
     items = list(csv.DictReader(open(HERE / 'traceability.csv')))
     logs = {k: Path(v).read_text() for k, v in (x.split('=', 1) for x in a.unittest_log)}
     res = results(logs, Path(a.firmware_log).read_text(),
-                  Path(a.integration_log).read_text() if a.integration_log else None)
+                  Path(a.integration_log).read_text() if a.integration_log else None,
+                  {k: Path(v).read_text() for k, v in (x.split('=', 1) for x in a.pytest_log)})
     errors = []
 
     kind = lambda i: i['test_id'].split('-')[0]
-    listed = {(i['file'], i['test']) for i in items if kind(i) in ('T', 'F', 'B', 'S')}
+    listed = {(i['file'], i['test']) for i in items if kind(i) in ('T', 'F', 'B', 'S', 'C')}
     existing = code_tests()
     for f, t in sorted(existing - listed):
         errors.append(f'test not in traceability.csv: {f} {t}')
@@ -97,7 +117,7 @@ def main() -> int:
     by_req = defaultdict(list)
     for i in items:
         k = kind(i)
-        if k in ('T', 'F', 'B', 'S'):
+        if k in ('T', 'F', 'B', 'S', 'C'):
             i['result'] = res.get((i['file'], i['test']), 'Not run')
         elif k == 'IT':
             i['result'] = res.get((i['file'], '*'), 'Not run')
@@ -129,7 +149,7 @@ def main() -> int:
         ids = ', '.join(t['test_id'] for t in by_req.get(rid, []))
         rows.append(f"| {rid} | {r['priority']} | {v} | {ids} |")
 
-    n_auto = sum(1 for i in items if kind(i) in ('T', 'F', 'B', 'S', 'IT'))
+    n_auto = sum(1 for i in items if kind(i) in ('T', 'F', 'B', 'S', 'C', 'IT'))
     n_pass = sum(1 for i in items if i['result'] == 'Pass')
     lines = ['# ICVSP traceability report', '',
              f'{n_pass} of {n_auto} automated verification items pass; '
