@@ -1,0 +1,84 @@
+{
+  "part": "A",
+  "target": "https://bamrqyu5hizs6q6dy37wxvlebu0xwtlk.lambda-url.us-east-1.on.aws",
+  "utc": "20261116T183530Z",
+  "writes": "none",
+  "checks": [
+    {
+      "check": "A1 health",
+      "request": "GET /health",
+      "expected": [
+        200
+      ],
+      "status": 200,
+      "passed": true,
+      "ms": 2676,
+      "writes": "nothing",
+      "response": "{\"status\":\"ok\"}"
+    },
+    {
+      "check": "A2 ready (database reachable)",
+      "request": "GET /ready",
+      "expected": [
+        200
+      ],
+      "status": 200,
+      "passed": true,
+      "ms": 1284,
+      "writes": "nothing",
+      "response": "{\"status\":\"ready\",\"reports_pending\":0}"
+    },
+    {
+      "check": "A3 register device without admin token",
+      "request": "POST /devices",
+      "expected": [
+        401,
+        403
+      ],
+      "status": 401,
+      "passed": true,
+      "ms": 804,
+      "writes": "nothing",
+      "response": "{\"detail\":\"admin token required\"}"
+    },
+    {
+      "check": "A4 operator overview without admin token",
+      "request": "GET /admin/overview",
+      "expected": [
+        401,
+        403
+      ],
+      "status": 401,
+      "passed": true,
+      "ms": 741,
+      "writes": "nothing",
+      "response": "{\"detail\":\"admin token required\"}"
+    },
+    {
+      "check": "A5 hazard search without sign-in",
+      "request": "GET /hazards?lat=23.5&lon=27.0",
+      "expected": [
+        401,
+        403
+      ],
+      "status": 401,
+      "passed": true,
+      "ms": 791,
+      "writes": "nothing",
+      "response": "{\"detail\":\"sign-in required\"}"
+    },
+    {
+      "check": "A6 report status without sign-in",
+      "request": "GET /reports/t004-test-01/none",
+      "expected": [
+        401,
+        403
+      ],
+      "status": 401,
+      "passed": true,
+      "ms": 1539,
+      "writes": "nothing",
+      "response": "{\"detail\":\"sign-in required\"}"
+    }
+  ]
+}
