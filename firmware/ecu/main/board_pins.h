@@ -52,3 +52,24 @@ constexpr int CAM_SCCB_PORT = 0;  // must match CONFIG_SCCB_HARDWARE_I2C_PORT0 i
 
 // ---- User LED -------------------------------------------------------------------------------------------
 constexpr gpio_num_t LED_GPIO = GPIO_NUM_21;  // low = on
+
+// ---- Build-time check: no GPIO is given to two functions --------------------------------------------------
+// (the reserved modem pins are included so a later sensor cannot take them by accident)
+namespace board_pins_check {
+constexpr int kUsed[] = {GPS_TX_GPIO, GPS_RX_GPIO, IMU_SDA_GPIO, IMU_SCL_GPIO, CAM_XCLK, CAM_SIOD, CAM_SIOC,
+                         CAM_Y9, CAM_Y8, CAM_Y7, CAM_Y6, CAM_Y5, CAM_Y4, CAM_Y3, CAM_Y2, CAM_VSYNC, CAM_HREF,
+                         CAM_PCLK, static_cast<int>(LED_GPIO), 1 /* modem TX */, 2 /* modem RX */, 4 /* modem PWRKEY */};
+constexpr bool all_distinct() {
+    for (size_t i = 0; i < sizeof kUsed / sizeof kUsed[0]; ++i)
+        for (size_t j = i + 1; j < sizeof kUsed / sizeof kUsed[0]; ++j)
+            if (kUsed[i] == kUsed[j]) return false;
+    return true;
+}
+constexpr bool none_is_strapping_or_flash() {  // GPIO0/3/45/46 strapping, 19/20 USB, 26-37 flash + octal PSRAM
+    for (int g : kUsed)
+        if (g == 0 || g == 3 || g == 45 || g == 46 || g == 19 || g == 20 || (g >= 26 && g <= 37)) return false;
+    return true;
+}
+static_assert(all_distinct(), "board_pins.h: a GPIO is assigned to two functions");
+static_assert(none_is_strapping_or_flash(), "board_pins.h: a GPIO is a strapping, USB, flash or PSRAM pin");
+}  // namespace board_pins_check

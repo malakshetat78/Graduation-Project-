@@ -216,11 +216,12 @@ extern "C" void app_main() {
                 "real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks\n", kDriveS,
                 kPotholeAtS, kKeyLabel[0] == 'd' ? "; demo key" : "");
 
-    esp_err_t err = nvs_flash_init();  // the Wi-Fi driver keeps its calibration in NVS
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
+    // NVS holds the Wi-Fi calibration and this ECU's signing key. The usual ESP-IDF recipe erases NVS when it
+    // reports no free pages or a new format; that would silently replace the key (a new identity under the same
+    // device ID), so the firmware stops instead and a person decides (erase the flash, then register the new key).
+    const esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
+        halt("NVS needs erasing, which would destroy the device key: erase the flash (idf.py erase-flash) and register the new key");
     ESP_ERROR_CHECK(err);
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());

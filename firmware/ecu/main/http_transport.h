@@ -4,7 +4,8 @@
 // Uplink decides what to do with them (remove, keep for registration, refuse for good, or retry).
 //
 // https:// URLs check the server certificate against ESP-IDF's bundle of public root certificates; this
-// needs the clock set first (SNTP or GNSS time). http:// is for a backend on the laptop only.
+// needs the clock set first (SNTP or GNSS time); certificate dates are checked (CONFIG_MBEDTLS_HAVE_TIME_DATE).
+// The HTTPS test build (sdkconfig.report_tls) trusts only a test CA instead. http:// is for a laptop backend only.
 #include "uplink.h"
 
 class EspHttpTransport : public icvsp::ReportTransport {

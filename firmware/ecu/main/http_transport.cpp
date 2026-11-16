@@ -7,13 +7,23 @@
 #include "esp_http_client.h"
 #include "sdkconfig.h"
 
+#if CONFIG_ICVSP_TLS_TEST_CA
+extern const char kTestCa[] asm("_binary_ca_pem_start");
+#endif
+
 int EspHttpTransport::post_report(const char* line, size_t len, char* reply, size_t reply_cap) {
     if (reply_cap > 0) reply[0] = '\0';
     esp_http_client_config_t cfg = {};
     cfg.url = CONFIG_ICVSP_REPORT_URL;
     cfg.method = HTTP_METHOD_POST;
     cfg.timeout_ms = 10000;
-    if (std::strncmp(CONFIG_ICVSP_REPORT_URL, "https://", 8) == 0) cfg.crt_bundle_attach = esp_crt_bundle_attach;
+    if (std::strncmp(CONFIG_ICVSP_REPORT_URL, "https://", 8) == 0) {
+#if CONFIG_ICVSP_TLS_TEST_CA
+        cfg.cert_pem = kTestCa;  // test build: only the test CA is trusted
+#else
+        cfg.crt_bundle_attach = esp_crt_bundle_attach;  // public root certificates (Cloud Run)
+#endif
+    }
 
     esp_http_client_handle_t c = esp_http_client_init(&cfg);
     if (c == nullptr) return 0;

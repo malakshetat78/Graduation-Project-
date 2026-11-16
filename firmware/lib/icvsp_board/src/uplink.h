@@ -30,9 +30,10 @@ public:
 //                        2 s, 4 s, 8 s ... up to 5 min, +-20 % jitter
 class Uplink {
 public:
-    // Room for the backend's longest ACK: event ID up to 128 and device ID up to 64 characters, each \u-escaped
-    // in the worst case (6 bytes per character), plus the other fields. A longer body is cut and is no ACK.
-    static constexpr size_t kReplyCap = 1536;
+    // Room for the backend's longest ACK: event ID up to 128 and device ID up to 64 characters, each written
+    // as an escaped surrogate pair in the worst case (12 bytes per character: 2304 bytes), plus the other
+    // fields. A longer body is cut and is no ACK (the report is kept and retried).
+    static constexpr size_t kReplyCap = 2560;
 
     struct Stats {
         uint32_t stored = 0, refused = 0, failures = 0, not_provisioned = 0;

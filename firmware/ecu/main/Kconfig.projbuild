@@ -41,6 +41,13 @@ config ICVSP_REPORT_URL
         10.0.2.2 is the laptop as seen from inside QEMU. On the board: the laptop's LAN address, later the
         Cloud Run https:// URL.
 
+config ICVSP_TLS_TEST_CA
+    bool "HTTPS test build: trust only the test CA in tls_test/ca.pem (not the public root bundle)"
+    default n
+    help
+        Set by sdkconfig.report_tls for the certificate tests against the laptop backend. Never on a real
+        deployment: there the server certificate is checked against ESP-IDF's public root bundle.
+
 config ICVSP_SNTP_SERVER
     string "SNTP server (report demo clock; on the road the clock comes from GNSS)"
     default "pool.ntp.org"

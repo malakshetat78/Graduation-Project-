@@ -174,6 +174,16 @@ void test_ack_with_the_longest_ids_the_backend_allows_counts() {
                             dev + "\",\"stored_at\":1794783698.5771441,\"evaluation\":\"evaluated\"}";
     TEST_ASSERT_TRUE(Uplink::is_stored_ack(line.c_str(), ack.c_str()));
     TEST_ASSERT_TRUE(ack.size() < Uplink::kReplyCap);
+    // The limits are characters, not bytes: 128 / 64 four-byte characters, sent as raw UTF-8 in the line and
+    // \u-escaped (surrogate pairs) in the reply, as Python's json.dumps does by default.
+    std::string ev4, dev4, ev4e, dev4e;
+    for (int i = 0; i < 128; ++i) { ev4 += "\xf0\x9f\x98\x80"; ev4e += "\\ud83d\\ude00"; }
+    for (int i = 0; i < 64; ++i) { dev4 += "\xf0\x9f\x98\x80"; dev4e += "\\ud83d\\ude00"; }
+    const std::string line4 = "{\"event\":{},\"sender\":\"" + dev4 + "\",\"msg_id\":\"" + ev4 + "\"}";
+    const std::string ack4 = "{\"status\":\"accepted\",\"ack\":\"stored\",\"event_id\":\"" + ev4e + "\",\"device_id\":\"" +
+                             dev4e + "\",\"stored_at\":1794783698.5771441,\"evaluation\":\"pending\"}";
+    TEST_ASSERT_TRUE(Uplink::is_stored_ack(line4.c_str(), ack4.c_str()));
+    TEST_ASSERT_TRUE(ack4.size() < Uplink::kReplyCap);
     FakeTransport t;
     Uplink u(*q, t, half);
     q->push(line.c_str());
