@@ -1,0 +1,11 @@
+# CloudWatch, icvsp-backend-BackendLogs-04XLhibgRfNw, 2026-11-16 19:50:20-19:53:00 UTC
+# ECU emulator report ecu-qemu-cloud-01-1794858622-1 (POST /reports 201) and the following scheduled evaluator runs
+
+19:50:42.314Z [INFO] 2026-11-16T19:50:42.314Z 9b77b19f-dfe0-4008-8bc1-db45bec98880 POST /reports 201
+19:50:42.316Z REPORT RequestId: 9b77b19f-dfe0-4008-8bc1-db45bec98880 Duration: 683.20 ms Billed Duration: 684 ms Memory Size: 512 MB Max Memory Used: 170 MB
+19:50:56.531Z REPORT RequestId: b86afb5e-93b1-4cd1-99cc-bd7fc7a7280c Duration: 73.63 ms Billed Duration: 74 ms Memory Size: 512 MB Max Memory Used: 170 MB
+19:51:58.150Z REPORT RequestId: b86afb5e-cfb1-4cd1-99cc-bd7fc7a7280c Duration: 1613.86 ms Billed Duration: 1614 ms Memory Size: 512 MB Max Memory Used: 170 MB
+19:52:56.671Z REPORT RequestId: b86afb5f-0bb1-4cd1-99cc-bd7fc7a7280c Duration: 211.24 ms Billed Duration: 212 ms Memory Size: 512 MB Max Memory Used: 170 MB
+
+# Note: scheduled evaluator runs (REPORT lines without a "POST" line) log nothing else; the evaluation result is
+# shown in ecu-qemu-overview.json (evaluation: evaluated, hazard decision and reasons).
