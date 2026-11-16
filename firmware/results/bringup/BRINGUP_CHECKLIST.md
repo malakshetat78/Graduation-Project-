@@ -259,7 +259,7 @@ in QEMU, BUILD = cross-compile for the chip, BOARD = the real XIAO ESP32-S3 (not
 | FR-01 on the real sensors | camera captures a frame; IMU answers and reads 1 g | BOARD | smoke test checks 5 and 6 (section 6) | NOT RUN |
 | FR-25 GNSS time and position | NMEA parsing, checksums, fix and UTC handling | HOST | F-55..F-73 (`test_nmea`) | PASS |
 | FR-25 on the real L76K | NMEA bytes and sentences arrive on UART1; fix outdoors | BOARD | smoke test checks 4 and 8 | NOT RUN |
-| FR-SEC-03 unique device identity with an Ed25519 key | key made on the chip at first boot, kept in flash, different per board, never silently replaced (NVS is never auto-erased); ID from the MAC | HOST + EMULATOR | F-101..F-106 (`test_device_identity`); `logs/qemu_report_demo_unregistered.log` (`DEMO key created`), `logs/qemu_report_demo.log` (`DEMO key loaded`, same public key) | PASS (host, emulator); BOARD NOT RUN |
+| FR-SEC-03 unique device identity with an Ed25519 key | key made on the chip at first boot, kept in flash, different per board, never silently replaced (NVS is never auto-erased; a storage read error refuses the key instead of making a new one, `ecu/main/nvs_secret_store.cpp`); ID from the MAC | HOST + EMULATOR | F-101..F-106 (`test_device_identity`); `logs/qemu_report_demo_unregistered.log` (`DEMO key created`), `logs/qemu_report_demo.log` (`DEMO key loaded`, same public key) | PASS (host, emulator); BOARD NOT RUN |
 | FR-SEC-04 controlled provisioning | unregistered key gets 403 and the report is kept; after `POST /devices` the same key is accepted | EMULATOR | `logs/qemu_report_demo_unregistered.log`, `logs/qemu_report_demo.log`, F-96 | PASS |
 | FR-SEC-05 sign on the device | Ed25519 (RFC 8032 vectors), signed bytes forwarded unchanged; backend verifies the chip's report | HOST + EMULATOR | F-46..F-52 (`test_signer`), `test_event_builder`; backend 201, changed copy 401 (`logs/backend_report_checks.log`) | PASS |
 | FR-SEC-06 canonical signed fields | fixed field order and format | HOST | F-11, F-48 | PASS |
@@ -278,21 +278,21 @@ in QEMU, BUILD = cross-compile for the chip, BOARD = the real XIAO ESP32-S3 (not
 
 Before power: fit the Wi-Fi/BT antenna, seat the camera ribbon, check the GPS module is stacked the right way,
 wire the MPU6050 (VCC 3V3, GND, SDA, SCL to the pins in `ecu/main/board_pins.h`, **pending Malak**).
+Leave the microSD slot **empty**: GPIO21 is both the LED and the SD card's chip select.
+
+Flash and save the log in one go, so the log starts at the first boot (the smoke test prints its summary once,
+right after boot; a monitor started later would miss it):
 
 ```bash
 ls /dev/cu.usbmodem*
 cd firmware/ecu
-idf.py -p /dev/cu.usbmodem101 flash monitor
+idf.py -p /dev/cu.usbmodem101 flash monitor | tee ../results/bringup/logs/board_smoke_$(date +%Y%m%d_%H%M).log
 ```
 
 Use the port name `ls` printed (`/dev/cu.usbmodem101` is an example). If no port appears or flashing fails:
 hold BOOT, tap RESET, release BOOT, flash again, then tap RESET. Quit the monitor with Ctrl-].
-
-Save the log for the evidence:
-
-```bash
-idf.py -p /dev/cu.usbmodem101 monitor | tee ../results/bringup/logs/board_smoke_$(date +%Y%m%d_%H%M).log
-```
+To record another run without flashing again: start `idf.py -p /dev/cu.usbmodem101 monitor | tee <new log file>`,
+then tap RESET so the smoke test runs again inside the recorded log.
 
 ## 6. Board smoke test: expected results
 

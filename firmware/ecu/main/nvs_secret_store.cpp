@@ -9,7 +9,11 @@ constexpr char kKey[] = "sign_seed";
 
 icvsp::SecretStore::Read NvsSecretStore::load_seed(uint8_t seed[32]) {
     nvs_handle_t h;
-    if (nvs_open(kNamespace, NVS_READONLY, &h) != ESP_OK) return Read::Absent;  // namespace not made yet
+    const esp_err_t open_err = nvs_open(kNamespace, NVS_READONLY, &h);
+    // Only "namespace not made yet" means first boot. Any other error (NVS not initialised, flash read failure, ...)
+    // must not lead to a new key: that would silently replace the identity already registered in the backend.
+    if (open_err == ESP_ERR_NVS_NOT_FOUND) return Read::Absent;
+    if (open_err != ESP_OK) return Read::Corrupt;
     size_t len = 32;
     const esp_err_t err = nvs_get_blob(h, kKey, seed, &len);
     nvs_close(h);

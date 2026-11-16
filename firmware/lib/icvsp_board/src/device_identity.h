@@ -14,6 +14,8 @@ namespace icvsp {
 // Where the seed is kept (NVS on the board, a fake in the tests).
 class SecretStore {
 public:
+    // Absent: nothing stored yet (first boot). Corrupt: a stored record that is unusable, or a store that cannot be
+    // read; both are refused, never replaced by a new key.
     enum class Read { Ok, Absent, Corrupt };
     virtual ~SecretStore() = default;
     virtual Read load_seed(uint8_t seed[32]) = 0;
@@ -23,7 +25,8 @@ public:
 enum class KeyStatus {
     Loaded,       // the seed from an earlier boot
     Created,      // first boot: a new random seed, now stored
-    Corrupt,      // a stored record of the wrong size: refused, never silently replaced (the identity would change)
+    Corrupt,      // a stored record of the wrong size, or a store that cannot be read: refused, never silently
+                  // replaced (the identity would change)
     BadRandom,    // the random source returned all zeros or the same bytes twice: refused
     StoreFailed,  // could not store a new seed: refused (a key that is lost at reset would be useless)
 };
