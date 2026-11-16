@@ -139,6 +139,12 @@ SQLite database; the cloud run used the live AWS backend and the team Supabase d
 <p align="center"><img src="firmware/results/bringup/screenshots/9_ecu_to_aws_cloud.png" width="720" alt="ECU firmware in the ESP32-S3 emulator sends a signed report to the live AWS backend: 201 stored"></p>
 <p align="center"><img src="firmware/results/bringup/screenshots/11_aws_report_evaluated.png" width="720" alt="The same report on AWS: CloudWatch POST /reports 201, then evaluated by the trust engine"></p>
 
+Real AWS pages (live account, not rendered from logs): the backend's dashboard on AWS showing the ECU's hazard and the
+CloudWatch log of its `POST /reports 201`. More in [`screenshots/aws_console/`](firmware/results/bringup/screenshots/README.md#real-aws-screenshots-aws_console).
+
+<p align="center"><img src="firmware/results/bringup/screenshots/aws_console/12_dashboard_ecu_hazard.jpg" width="720" alt="ICVSP operator dashboard on AWS: hazard hz_0002 reported by ecu-qemu-cloud-01, suppressed, with the trust engine's reasons"></p>
+<p align="center"><img src="firmware/results/bringup/screenshots/aws_console/15_cloudwatch_post_reports_201.jpg" width="720" alt="AWS CloudWatch log: POST /reports 201 at 19:50:42 UTC"></p>
+
 All test cases (input, expected, actual, proof): [`firmware/results/bringup/TEST_CASES.md`](firmware/results/bringup/TEST_CASES.md).
 All screenshots: [`firmware/results/bringup/screenshots/`](firmware/results/bringup/screenshots/README.md).
 
