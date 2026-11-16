@@ -48,6 +48,29 @@ Then set the ECU's report URL to `https://<id>.lambda-url.<region>.on.aws/report
 Delete everything again: `aws cloudformation delete-stack --stack-name icvsp-backend`, then the
 `/icvsp/*` parameters and the `icvsp-deploy-*` bucket.
 
+## Running the scripts from Windows (Git Bash)
+
+Tested on Windows 11 with Git for Windows and AWS CLI v2 (T-004). Three things differ from macOS and Linux:
+
+1. **Line endings.** With `core.autocrlf=true` the scripts are checked out with CRLF and bash refuses them.
+   `.gitattributes` now keeps `*.sh` on LF; on an older checkout run `git rm --cached -r deploy/aws && git checkout -- deploy/aws`.
+2. **`/icvsp/...` names are rewritten.** Git Bash turns arguments that look like paths into Windows paths, so
+   `/icvsp/database_url` reaches AWS as `C:/Program Files/Git/icvsp/database_url` (AWS then refuses it). Keep
+   `/icvsp` and `Key=Name` unconverted while file paths still convert:
+   `MSYS2_ARG_CONV_EXCL='/icvsp;Key=Name'`.
+3. **Temporary files.** `set_secrets.sh` hands the secret to the AWS CLI through a temporary file; Git Bash puts it in
+   `/tmp`, which the Windows AWS CLI cannot open. Point `TMPDIR` at the Windows temp folder **inside** bash (Git Bash
+   resets it at start-up).
+
+From PowerShell:
+
+```powershell
+& 'C:\Program Files\Git\bin\bash.exe' -c 'MSYS_NO_PATHCONV=1 TMPDIR=C:/Users/<you>/AppData/Local/Temp AWS_PROFILE=icvsp AWS_REGION=us-east-1 exec deploy/aws/set_secrets.sh'
+& 'C:\Program Files\Git\bin\bash.exe' -c 'MSYS2_ARG_CONV_EXCL=/icvsp\;Key=Name AWS_PROFILE=icvsp AWS_REGION=us-east-1 SUPABASE_URL=https://<project>.supabase.co exec deploy/aws/deploy.sh'
+```
+
+`deploy.sh` accepts only a lowercase `y` at its confirmation prompt.
+
 ## Safety
 
 - Without a database the function refuses to start: Lambda's disk is temporary, so a report the backend
