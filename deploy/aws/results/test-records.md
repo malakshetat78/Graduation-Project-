@@ -1,53 +1,56 @@
 # T-004: test records on the shared Supabase database
 
-Approved by Shahesta (minimal controlled plan). Written by `deploy/aws/integration_test.py --part B --execute`
-against the `icvsp-backend` Lambda stack. Part A and Part C write nothing to Supabase.
+Approved by Shahesta (minimal controlled plan) and by Nourseen. Written by
+`deploy/aws/integration_test.py --part B --execute` against the `icvsp-backend` Lambda stack (us-east-1).
+Part A and Part C wrote nothing to Supabase.
 
-**Status: PLANNED, not run yet.** This file is updated with the actual run time and IDs after Part B.
+## Runs
 
-## Identities
+| Run (UTC) | Result | Written |
+|---|---|---|
+| 2026-11-16 19:05:30 | stopped at B1: 401, because the admin token stored in SSM ended in a newline (Windows bug, fixed in `set_secrets.sh`) | **nothing** (refused before registration; no report sent) |
+| 2026-11-16 19:13:52 – 19:14:09 | **10/10 passed**, evidence `t004-partB-20261116T191409Z.json`, logs `cloudwatch-partB.txt` | the rows below |
+
+## Identities and location
 
 | ID | Role |
 |---|---|
-| `t004-test-01` | the only registered test device; key generated in memory for the run, never saved, not an ECU key |
-| `t004-test-unregistered` | never registered; only proves unknown devices are refused |
+| `t004-test-01` | the only registered test device; Ed25519 key generated in memory for the run, never saved, not an ECU key. Public key in the evidence file |
+| `t004-test-unregistered` | never registered; no device row exists |
 
-Location of every test report: **lat 23.5, lon 27.0** (Western Desert), far from the team's routes.
+Every test report: **lat 23.5, lon 27.0** (Western Desert).
 
-## Planned writes
+## Rows written (actual)
 
-| Check | Request | Expected | Database effect |
-|---|---|---|---|
-| B1 | `POST /devices` (admin token) | 201 | 1 row in `devices` (`t004-test-01`, not vetted) |
-| B2 | `POST /reports` valid signed report | 201 accepted | 1 row in `reports` (+ the device's counter in `device_counters`) |
-| B3 | same report again | 201 duplicate | none |
-| B4 | report 3 days old | 422 stale | 1 row in `rejections` |
-| B5 | invalid signature | 401 | 1 row in `rejections` |
-| B6 | payload changed after signing | 401 | 1 row in `rejections` |
-| B7 | unregistered device | 403 | 1 row in `rejections` |
-| B8 | 1-minute evaluator (read-only polling of `/admin/overview`) | evaluated | the evaluator may add 1 hazard + 1 evidence row for the test report |
-| B9 | `POST /devices/t004-test-01/revoke` | 200 | `t004-test-01` status → `REVOKED` (runs even if a check fails) |
+| Check | Answer | Database effect |
+|---|---|---|
+| B1 register `t004-test-01` | 201 | 1 row in `devices` (not vetted) |
+| B2 valid signed report `t004-test-01-1-1` | 201 accepted | 1 row in `reports`, 1 row in `device_counters` |
+| B3 same report again | 201 duplicate | none |
+| B4 3-day-old report | 422 `stale` | 1 row in `rejections` |
+| B5 invalid signature | 401 `bad_signature` | 1 row in `rejections` |
+| B6 payload changed after signing | 401 `bad_signature` | 1 row in `rejections` |
+| B7 unregistered device | 403 `unknown_device` | 1 row in `rejections` |
+| B8 evaluator | report evaluated; test hazard state **`suppressed`** | evaluator's own rows for the test report (hazard decision, evidence, evaluation run) |
+| B9 revoke | 200 | `t004-test-01` status → **REVOKED** (verified, B10) |
 
-About 7 report calls and 2 admin calls in total. No load test, no concurrency test, no beacons, no schema change,
-no existing row read into the evidence, changed or deleted.
+Also changed during T-004 (not database): SSM `/icvsp/admin_token` rotated to version 2 (the first value was unusable),
+and the Lambda description updated once to reload it. No other AWS resource was changed.
 
-## What stays afterwards
+## What stays and when it goes
 
 | Record | Count | Removed by |
 |---|---|---|
-| `devices`: `t004-test-01` (REVOKED) | 1 | nothing: the backend role cannot delete devices (by design). An administrator can remove it in Supabase |
-| `reports` + `device_counters` | 1 + 1 | backend retention (reports 15 days) |
+| `devices`: `t004-test-01` (REVOKED) | 1 | nothing automatic; the backend role cannot delete devices. An administrator may remove it in Supabase |
+| `reports` + `device_counters` | 1 + 1 | backend retention (reports: 15 days) |
 | `rejections` | 4 | backend retention (90 days) |
-| `hazards` + `hazard_evidence` (if created) | 1 + 1 | not deleted; the hazard expires (pothole freshness about 48 h) |
+| hazard decision for the test report | 1 | stays `suppressed`, then expires |
 
-## Why no driver can be alerted
+No existing row was changed or deleted. No schema change, no migration.
 
-Checked in the code, not assumed:
+## Why no driver was or can be alerted
 
-1. `service.hazards_ahead` sets `alert` only when the hazard's level is **warning** (`corroborated` or `confirmed`) and
-   the driver is inside the alert range. A single new, unvetted device cannot corroborate its own report, so its
-   hazard is at most `unconfirmed` (advisory, `alert: false`).
-2. In the local rehearsal of this exact run, the evaluator put the test hazard in state **`suppressed`**, which is not
-   shown to drivers at all.
-3. The location is 23.5, 27.0, hundreds of kilometres from the routes the team drives.
-4. The backend sends no push notifications; drivers only see hazards near their own position when they ask.
+1. `service.hazards_ahead` raises `alert` only for level **warning** (`corroborated` / `confirmed`) inside the alert range.
+2. The live run put the test hazard in state **`suppressed`**: not returned to drivers at all.
+3. The test device is now REVOKED: any further report from its key is refused.
+4. 23.5, 27.0 is far from the team's routes, and the backend sends no push notifications.

@@ -1,0 +1,43 @@
+18:59:57Z REPORT RequestId: b86afb52-9fb1-4cd1-99cc-bd7fc7a7280c Duration: 1054.48 ms Billed Duration: 1055 ms Memory Size: 512 MB Max Memory Used: 160 MB
+19:00:56Z REPORT RequestId: b86afb52-dbb1-4cd1-99cc-bd7fc7a7280c Duration: 211.67 ms Billed Duration: 212 ms Memory Size: 512 MB Max Memory Used: 160 MB
+19:01:57Z REPORT RequestId: b86afb53-17b1-4cd1-99cc-bd7fc7a7280c Duration: 1052.23 ms Billed Duration: 1053 ms Memory Size: 512 MB Max Memory Used: 160 MB
+19:02:57Z REPORT RequestId: b86afb53-53b1-4cd1-99cc-bd7fc7a7280c Duration: 1053.01 ms Billed Duration: 1054 ms Memory Size: 512 MB Max Memory Used: 160 MB
+19:03:57Z REPORT RequestId: b86afb53-8fb1-4cd1-99cc-bd7fc7a7280c Duration: 1062.60 ms Billed Duration: 1063 ms Memory Size: 512 MB Max Memory Used: 160 MB
+19:04:56Z REPORT RequestId: b86afb53-cbb1-4cd1-99cc-bd7fc7a7280c Duration: 211.32 ms Billed Duration: 212 ms Memory Size: 512 MB Max Memory Used: 160 MB
+19:05:30Z [INFO] 2026-11-16T19:05:30.271Z a7e57dfb-0639-4e94-a72a-2c9575501869 POST /devices 401
+19:05:30Z REPORT RequestId: a7e57dfb-0639-4e94-a72a-2c9575501869 Duration: 360.27 ms Billed Duration: 361 ms Memory Size: 512 MB Max Memory Used: 164 MB
+19:05:57Z REPORT RequestId: b86afb54-07b1-4cd1-99cc-bd7fc7a7280c Duration: 912.66 ms Billed Duration: 913 ms Memory Size: 512 MB Max Memory Used: 164 MB
+19:06:57Z REPORT RequestId: b86afb54-43b1-4cd1-99cc-bd7fc7a7280c Duration: 1048.48 ms Billed Duration: 1049 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:07:56Z REPORT RequestId: b86afb54-7fb1-4cd1-99cc-bd7fc7a7280c Duration: 211.56 ms Billed Duration: 212 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:08:57Z REPORT RequestId: b86afb54-bbb1-4cd1-99cc-bd7fc7a7280c Duration: 1050.46 ms Billed Duration: 1051 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:09:57Z REPORT RequestId: b86afb54-f7b1-4cd1-99cc-bd7fc7a7280c Duration: 1049.27 ms Billed Duration: 1050 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:10:56Z REPORT RequestId: b86afb55-33b1-4cd1-99cc-bd7fc7a7280c Duration: 212.22 ms Billed Duration: 213 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:11:57Z REPORT RequestId: b86afb55-6fb1-4cd1-99cc-bd7fc7a7280c Duration: 1065.23 ms Billed Duration: 1066 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:12:57Z REPORT RequestId: b86afb55-abb1-4cd1-99cc-bd7fc7a7280c Duration: 1051.91 ms Billed Duration: 1052 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:13:30Z INIT_START Runtime Version: python:3.12.mainlinev2.v86 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:528a1f62ceab48183d548f944f99fe9d473db6131852b6f56d94482c6f07c61d
+19:13:31Z [INFO] 2026-11-16T19:13:31.006Z Found credentials in environment variables.
+19:13:33Z [INFO] 2026-11-16T19:13:33.760Z 982b7bf2-1a91-42be-8198-ea55c8e87c39 GET /admin/overview 200
+19:13:33Z REPORT RequestId: 982b7bf2-1a91-42be-8198-ea55c8e87c39 Duration: 1187.96 ms Billed Duration: 3022 ms Memory Size: 512 MB Max Memory Used: 163 MB Init Duration: 1833.86 ms
+19:13:52Z [INFO] 2026-11-16T19:13:52.009Z e2a127e7-0f79-4912-a512-5cc49de9c098 POST /devices 201
+19:13:52Z REPORT RequestId: e2a127e7-0f79-4912-a512-5cc49de9c098 Duration: 82.89 ms Billed Duration: 83 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:13:53Z [INFO] 2026-11-16T19:13:53.277Z 576f6c7f-1a2a-4f21-9f42-ffeb59f7314c POST /reports 201
+19:13:53Z REPORT RequestId: 576f6c7f-1a2a-4f21-9f42-ffeb59f7314c Duration: 677.31 ms Billed Duration: 678 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:13:54Z [INFO] 2026-11-16T19:13:54.169Z c00027f2-3ebf-4807-8e15-da58bdf677e3 POST /reports 201
+19:13:54Z REPORT RequestId: c00027f2-3ebf-4807-8e15-da58bdf677e3 Duration: 144.29 ms Billed Duration: 145 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:13:55Z [INFO] 2026-11-16T19:13:55.105Z f55983d0-cb50-4f11-aa0c-52ffa0576f51 POST /reports 422
+19:13:55Z REPORT RequestId: f55983d0-cb50-4f11-aa0c-52ffa0576f51 Duration: 217.71 ms Billed Duration: 218 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:13:55Z [INFO] 2026-11-16T19:13:55.922Z c9a0020d-73e6-4003-bd18-812d85b0b65d POST /reports 401
+19:13:55Z REPORT RequestId: c9a0020d-73e6-4003-bd18-812d85b0b65d Duration: 143.99 ms Billed Duration: 144 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:13:57Z INIT_START Runtime Version: python:3.12.mainlinev2.v86 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:528a1f62ceab48183d548f944f99fe9d473db6131852b6f56d94482c6f07c61d
+19:13:57Z [INFO] 2026-11-16T19:13:57.526Z Found credentials in environment variables.
+19:13:58Z REPORT RequestId: b86afb55-e7b1-4cd1-99cc-bd7fc7a7280c Duration: 1835.37 ms Billed Duration: 1836 ms Memory Size: 512 MB Max Memory Used: 165 MB
+19:14:00Z [INFO] 2026-11-16T19:14:00.003Z a47bb6ca-5c36-42ff-8281-cdd5dddfb9bc POST /reports 401
+19:14:00Z REPORT RequestId: a47bb6ca-5c36-42ff-8281-cdd5dddfb9bc Duration: 489.99 ms Billed Duration: 2817 ms Memory Size: 512 MB Max Memory Used: 163 MB Init Duration: 2326.04 ms
+19:14:00Z [INFO] 2026-11-16T19:14:00.616Z 1b99e5bd-e04a-4bd8-afb5-98a53f8f3665 POST /reports 403
+19:14:00Z REPORT RequestId: 1b99e5bd-e04a-4bd8-afb5-98a53f8f3665 Duration: 143.69 ms Billed Duration: 144 ms Memory Size: 512 MB Max Memory Used: 164 MB
+19:14:02Z [INFO] 2026-11-16T19:14:02.041Z 0c46bbed-72ca-4735-8458-cb206fad515f GET /admin/overview 200
+19:14:02Z REPORT RequestId: 0c46bbed-72ca-4735-8458-cb206fad515f Duration: 714.24 ms Billed Duration: 715 ms Memory Size: 512 MB Max Memory Used: 164 MB
+19:14:02Z [INFO] 2026-11-16T19:14:02.937Z d425b7c4-02a6-4a8e-bc6e-d2cbc2fac256 POST /devices/t004-test-01/revoke 200
+19:14:02Z REPORT RequestId: d425b7c4-02a6-4a8e-bc6e-d2cbc2fac256 Duration: 74.65 ms Billed Duration: 75 ms Memory Size: 512 MB Max Memory Used: 164 MB
+19:14:09Z [INFO] 2026-11-16T19:14:09.043Z 38c8f85e-2805-40cf-b179-c708f1456eb5 GET /admin/overview 200
+19:14:09Z REPORT RequestId: 38c8f85e-2805-40cf-b179-c708f1456eb5 Duration: 712.32 ms Billed Duration: 713 ms Memory Size: 512 MB Max Memory Used: 166 MB
