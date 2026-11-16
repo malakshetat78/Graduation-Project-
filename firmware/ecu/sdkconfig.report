@@ -1,0 +1,10 @@
+# Report demo firmware (layer on top of sdkconfig.defaults). Wi-Fi name/password and the demo seed go in the
+# git-ignored sdkconfig.local (copy sdkconfig.local.example).
+CONFIG_ICVSP_APP_REPORT_DEMO=y
+# Check certificate dates (not-before / not-after). Off by default in ESP-IDF: without it an EXPIRED server
+# certificate is accepted. Needs the clock set first (SNTP now, GNSS time on the road).
+CONFIG_MBEDTLS_HAVE_TIME_DATE=y
+# TLS 1.3 to the backend (as FR-SEC-08 asks of the phone/app link); the firmware requires it (ICVSP_TLS_REQUIRE_1_3). Plain PSK key exchange
+# (no fresh key per connection) is not needed.
+CONFIG_MBEDTLS_SSL_PROTO_TLS1_3=y
+CONFIG_MBEDTLS_SSL_TLS1_3_KEXM_PSK=n

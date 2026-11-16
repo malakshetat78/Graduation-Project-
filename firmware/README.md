@@ -15,15 +15,22 @@ tested on a laptop before we have a board. Built with [PlatformIO](https://platf
 | `lib/icvsp_core/src/replay_guard` | Rejects stale (> 30 s), future-dated and repeated messages | FR-06 |
 | `lib/icvsp_sim` | Simulated IMU and GNSS: a car driving over chosen hazards | – |
 | `lib/monocypher` | [Monocypher 4.0.2](https://monocypher.org) (BSD-2 / CC0), standard Ed25519 | – |
+| `lib/icvsp_board/src/nmea` | GNSS NMEA parser (RMC/GGA, checksums, strict field checks, UTC carried forward, stale fix) for the NEO-6M / L76K on UART | FR-25 |
+| `lib/icvsp_board/src/report_queue`, `uplink` | Offline queue of signed lines and delivery to `POST /reports` with retry; a report leaves the queue when the backend has answered for it, or when the queue is full (the oldest is dropped and counted) | proposed ECU delivery requirement |
+| `lib/icvsp_board/src/wifi_link` | Wi-Fi join / reconnect state machine (driver behind an interface) | proposed ECU delivery requirement |
+| `lib/icvsp_board/src/ecu_app` | The ECU main loop: waits for GNSS time, feeds fresh IMU samples to the Device, keeps delivering | FR-25, FR-SEC-05 |
 
-`icvsp_core` makes no hardware calls, so the same code runs on the laptop and on the ESP32-S3.
+`icvsp_core` and `icvsp_board` make no hardware calls (the board drivers sit behind interfaces), so the same
+code runs on the laptop and on the ESP32-S3. The chip-side parts (Wi-Fi, HTTPS delivery, the device key in
+flash, GPS UART, MPU6050 and camera checks) are in `ecu/`. Still to do: confirm the IMU pins, test on the board,
+and feed the real IMU and GPS readings into the report firmware (it uses a simulated drive for now).
 
 ## Run it
 
 ```bash
 pip install platformio cryptography
 cd firmware
-pio test -e native                         # unit tests (52)
+pio test -e native                         # unit and integration tests (106)
 pio run -e native && .pio/build/native/program   # demo drive: prints signed reports as JSON
 python tools/check_with_engine.py          # builds the demo, then checks its reports from the backend side
 ```
@@ -65,11 +72,14 @@ The signature covers
 
 The event JSON is written in one fixed format, so its bytes are the canonical form. The receiver checks the
 signature first and only then the replay window, so forged messages cannot fill the replay table. The
-private key handling here is a demo (fixed public seed); on the board the key belongs in encrypted flash with
-secure boot, and key provisioning and registration are part of the cybersecurity work.
+laptop demo uses a fixed public seed. The ECU firmware (`ecu/`) makes its own key at first boot from the
+chip's random number generator and keeps it in flash (NVS); only the public key is printed, for registration.
+Flash encryption and secure boot, which protect that key from someone holding the board, are not enabled yet.
 
 ## Known gaps
 
-- No board environment yet: uncomment `[env:xiao_esp32s3]` in `platformio.ini` once we have a board (the
-  first build downloads the ESP32 toolchain, several hundred MB).
+- Nothing has run on the real board yet. `ecu/` (ESP-IDF 5.5.5) builds for the XIAO ESP32-S3; in the
+  emulator it boots, signs reports with its own key and delivers them over HTTP and HTTPS to the backend.
+  See `results/bringup/BRINGUP_CHECKLIST.md`.
+- The report queue is RAM only: reports are lost on a reboot (flash or microSD storage is the next step).
 - `road_segment` is a coarse grid cell (about 200 m) until the backend maps reports to real roads.

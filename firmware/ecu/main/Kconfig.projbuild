@@ -1,0 +1,95 @@
+menu "ICVSP ECU"
+
+choice ICVSP_APP
+    prompt "Firmware to build"
+    default ICVSP_APP_SMOKE
+    config ICVSP_APP_SMOKE
+        bool "Boot/sensor smoke test"
+    config ICVSP_APP_REPORT_DEMO
+        bool "Signed report demo: ECU app -> POST /reports over the network"
+endchoice
+
+config ICVSP_SMOKE_EMULATOR
+    bool "Built for QEMU: skip the probes that need real hardware"
+    default n
+    help
+        Set by sdkconfig.qemu. The camera, IMU and GPS probes are reported as SKIP instead of FAIL.
+
+config ICVSP_GPS_LISTEN_S
+    int "Seconds to listen to the GPS UART"
+    default 5
+    range 2 60
+
+config ICVSP_NET_QEMU_ETH
+    bool "Network over QEMU's emulated Ethernet instead of Wi-Fi (emulator only)"
+    default n
+    help
+        Set by sdkconfig.report_qemu. QEMU has no Wi-Fi radio; it emulates an OpenCores Ethernet port.
+
+config ICVSP_WIFI_SSID
+    string "Wi-Fi network name (set it in sdkconfig.local, not in git)"
+    default ""
+
+config ICVSP_WIFI_PASSWORD
+    string "Wi-Fi password (set it in sdkconfig.local, not in git)"
+    default ""
+
+config ICVSP_REPORT_URL
+    string "Backend POST /reports URL"
+    default "http://10.0.2.2:8010/reports"
+    help
+        10.0.2.2 is the laptop as seen from inside QEMU. On the board: the laptop's LAN address, later the
+        Cloud Run https:// URL.
+
+config ICVSP_TLS_REQUIRE_1_3
+    bool "HTTPS: require TLS 1.3 (offer no older version)"
+    depends on MBEDTLS_SSL_PROTO_TLS1_3
+    default y
+    help
+        Matches FR-SEC-08 (TLS 1.3 to the backend; written for the phone/app link). The ECU then offers only TLS 1.3, so a server (or a
+        man-in-the-middle) that only speaks TLS 1.2 gets no connection. AWS Lambda function URLs accept TLS 1.3.
+
+config ICVSP_TLS_TEST_CA
+    bool "HTTPS test build: trust only the test CA in tls_test/ca.pem (not the public root bundle)"
+    default n
+    help
+        Set by sdkconfig.report_tls for the certificate tests against the laptop backend. Never on a real
+        deployment: there the server certificate is checked against ESP-IDF's public root bundle.
+
+config ICVSP_SNTP_SERVER
+    string "SNTP server (report demo clock; on the road the clock comes from GNSS)"
+    default "pool.ntp.org"
+
+config ICVSP_DEMO_LAT
+    string "Report demo: latitude of the simulated drive (degrees)"
+    default "30.0444"
+    help
+        Start of the simulated GNSS route (the demo drives east from here). Default: Cairo. Runs against the
+        shared cloud database use the team's test location in the Western Desert (sdkconfig.report_aws).
+
+config ICVSP_DEMO_LON
+    string "Report demo: longitude of the simulated drive (degrees)"
+    default "31.2357"
+
+config ICVSP_DEVICE_ID
+    string "Device ID registered in the backend (empty: ecu-<MAC address>)"
+    default ""
+    help
+        Leave empty on every board: the ID is then made from the chip's factory MAC address, so each ECU has
+        its own without per-board settings.
+
+choice ICVSP_KEY_SOURCE
+    prompt "Signing key"
+    default ICVSP_KEY_PER_DEVICE
+    config ICVSP_KEY_PER_DEVICE
+        bool "Per device: made on the chip at first boot (hardware RNG), kept in NVS"
+    config ICVSP_KEY_DEMO_SEED
+        bool "Demo seed from sdkconfig.local (same key on every board; demos only)"
+endchoice
+
+config ICVSP_DEMO_SEED_HEX
+    string "Demo signing seed, 64 hex characters (sdkconfig.local only; a demo key, not a production key)"
+    depends on ICVSP_KEY_DEMO_SEED
+    default ""
+
+endmenu

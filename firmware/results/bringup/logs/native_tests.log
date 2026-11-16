@@ -1,0 +1,190 @@
+Verbosity level can be increased via `-v, -vv, or -vvv` option
+Collected 11 tests
+
+Processing test_event_builder in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_event_builder/test_main.cpp:153: test_utc_formatting	[PASSED]
+test/test_event_builder/test_main.cpp:154: test_event_has_the_exact_expected_bytes	[PASSED]
+test/test_event_builder/test_main.cpp:155: test_event_ids_count_up	[PASSED]
+test/test_event_builder/test_main.cpp:156: test_speed_bump_type	[PASSED]
+test/test_event_builder/test_main.cpp:157: test_ids_include_the_boot_so_they_never_repeat_after_a_restart	[PASSED]
+test/test_event_builder/test_main.cpp:158: test_camera_only_report_has_no_imu_peak	[PASSED]
+test/test_event_builder/test_main.cpp:159: test_no_position_fix_means_null_position_not_an_invented_one	[PASSED]
+test/test_event_builder/test_main.cpp:160: test_no_event_before_gnss_time_is_known	[PASSED]
+test/test_event_builder/test_main.cpp:161: test_buffer_too_small_is_refused	[PASSED]
+test/test_event_builder/test_main.cpp:162: test_heading_stays_in_range	[PASSED]
+test/test_event_builder/test_main.cpp:163: test_time_after_year_9999_is_refused_not_cut_off	[PASSED]
+------------- native:test_event_builder [PASSED] Took 1.23 seconds -------------
+
+Processing test_fusion in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_fusion/test_main.cpp:92: test_matching_imu_and_rear_camera_become_one_stronger_report	[PASSED]
+test/test_fusion/test_main.cpp:93: test_imu_alone_is_reported_after_the_window	[PASSED]
+test/test_fusion/test_main.cpp:94: test_camera_alone_is_reported_with_its_own_confidence	[PASSED]
+test/test_fusion/test_main.cpp:95: test_camera_too_late_is_a_separate_report	[PASSED]
+test/test_fusion/test_main.cpp:96: test_imu_decides_the_type_when_sensors_disagree	[PASSED]
+test/test_fusion/test_main.cpp:97: test_forward_camera_waits_for_the_impact	[PASSED]
+test/test_fusion/test_main.cpp:98: test_flush_reports_everything_pending	[PASSED]
+---------------- native:test_fusion [PASSED] Took 0.89 seconds ----------------
+
+Processing test_signer in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_signer/test_main.cpp:113: test_rfc8032_vector_1	[PASSED]
+test/test_signer/test_main.cpp:114: test_signed_message_verifies	[PASSED]
+test/test_signer/test_main.cpp:115: test_any_change_breaks_the_signature	[PASSED]
+test/test_signer/test_main.cpp:116: test_another_key_does_not_verify	[PASSED]
+test/test_signer/test_main.cpp:117: test_seed_is_wiped	[PASSED]
+test/test_signer/test_main.cpp:118: test_too_long_message_is_refused	[PASSED]
+test/test_signer/test_main.cpp:119: test_hex_round_trip_and_bad_input	[PASSED]
+---------------- native:test_signer [PASSED] Took 0.90 seconds ----------------
+
+Processing test_replay_guard in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_replay_guard/test_main.cpp:73: test_fresh_message_is_accepted_once	[PASSED]
+test/test_replay_guard/test_main.cpp:74: test_same_id_from_another_sender_is_a_different_message	[PASSED]
+test/test_replay_guard/test_main.cpp:75: test_old_messages_are_stale	[PASSED]
+test/test_replay_guard/test_main.cpp:76: test_messages_from_the_future_are_refused	[PASSED]
+test/test_replay_guard/test_main.cpp:77: test_window_is_configurable	[PASSED]
+test/test_replay_guard/test_main.cpp:78: test_old_ids_are_forgotten_after_the_window	[PASSED]
+test/test_replay_guard/test_main.cpp:79: test_full_table_refuses_rather_than_forgets	[PASSED]
+------------- native:test_replay_guard [PASSED] Took 0.89 seconds -------------
+
+Processing test_wifi_link in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_wifi_link/test_main.cpp:80: test_joins_and_goes_online	[PASSED]
+test/test_wifi_link/test_main.cpp:81: test_failed_join_backs_off_5_10_20_up_to_60_seconds	[PASSED]
+test/test_wifi_link/test_main.cpp:82: test_lost_connection_reconnects_after_one_second_and_resets_backoff	[PASSED]
+--------------- native:test_wifi_link [PASSED] Took 0.91 seconds ---------------
+
+Processing test_nmea in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_nmea/test_main.cpp:267: test_days_from_civil_matches_known_dates	[PASSED]
+test/test_nmea/test_main.cpp:268: test_textbook_rmc_and_gga_give_the_position	[PASSED]
+test/test_nmea/test_main.cpp:269: test_multi_constellation_sentences_with_utc_time	[PASSED]
+test/test_nmea/test_main.cpp:270: test_time_moves_forward_with_the_device_clock_between_sentences	[PASSED]
+test/test_nmea/test_main.cpp:271: test_bad_checksum_is_ignored_and_counted	[PASSED]
+test/test_nmea/test_main.cpp:272: test_no_fix_yet_means_no_position_and_no_time	[PASSED]
+test/test_nmea/test_main.cpp:273: test_time_survives_a_lost_fix_but_position_does_not	[PASSED]
+test/test_nmea/test_main.cpp:274: test_silence_makes_the_fix_stale	[PASSED]
+test/test_nmea/test_main.cpp:275: test_garbage_and_split_bytes_are_handled	[PASSED]
+test/test_nmea/test_main.cpp:276: test_southern_and_western_hemispheres_are_negative	[PASSED]
+test/test_nmea/test_main.cpp:277: test_malformed_coordinates_do_not_give_a_fix	[PASSED]
+test/test_nmea/test_main.cpp:278: test_impossible_coordinates_are_rejected	[PASSED]
+test/test_nmea/test_main.cpp:279: test_missing_speed_is_unknown_not_the_old_speed	[PASSED]
+test/test_nmea/test_main.cpp:280: test_fix_quality_expires_when_gga_stops	[PASSED]
+test/test_nmea/test_main.cpp:281: test_impossible_dates_and_malformed_times_are_not_trusted	[PASSED]
+test/test_nmea/test_main.cpp:282: test_clock_stays_right_past_a_full_millis_period	[PASSED]
+test/test_nmea/test_main.cpp:283: test_absurd_numeric_fields_do_not_give_a_fix	[PASSED]
+test/test_nmea/test_main.cpp:284: test_clock_survives_a_30_day_gap_between_calls	[PASSED]
+test/test_nmea/test_main.cpp:285: test_a_slightly_older_timestamp_is_placed_in_the_past	[PASSED]
+----------------- native:test_nmea [PASSED] Took 0.90 seconds -----------------
+
+Processing test_hazard_tracker in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_hazard_tracker/test_main.cpp:164: test_receding_bump_is_confirmed_once	[PASSED]
+test/test_hazard_tracker/test_main.cpp:165: test_single_frame_flicker_is_not_reported	[PASSED]
+test/test_hazard_tracker/test_main.cpp:166: test_three_of_five_frames_confirms_a_pothole	[PASSED]
+test/test_hazard_tracker/test_main.cpp:167: test_a_confident_pothole_seen_in_two_frames_is_confirmed	[PASSED]
+test/test_hazard_tracker/test_main.cpp:168: test_two_frames_are_not_enough_for_a_speed_bump	[PASSED]
+test/test_hazard_tracker/test_main.cpp:169: test_static_bump_box_like_a_kerb_is_rejected	[PASSED]
+test/test_hazard_tracker/test_main.cpp:170: test_bump_moving_the_wrong_way_is_rejected	[PASSED]
+test/test_hazard_tracker/test_main.cpp:171: test_forward_camera_expects_the_opposite_motion	[PASSED]
+test/test_hazard_tracker/test_main.cpp:172: test_bump_outside_the_road_region_is_ignored	[PASSED]
+test/test_hazard_tracker/test_main.cpp:173: test_road_mask_overrides_the_region_when_available	[PASSED]
+test/test_hazard_tracker/test_main.cpp:174: test_low_confidence_boxes_are_ignored	[PASSED]
+test/test_hazard_tracker/test_main.cpp:175: test_nothing_is_reported_while_parked	[PASSED]
+test/test_hazard_tracker/test_main.cpp:176: test_two_separate_potholes_give_two_reports	[PASSED]
+test/test_hazard_tracker/test_main.cpp:177: test_a_gap_longer_than_allowed_starts_a_new_track	[PASSED]
+------------ native:test_hazard_tracker [PASSED] Took 0.88 seconds ------------
+
+Processing test_device_identity in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_device_identity/test_main.cpp:117: test_first_boot_creates_and_stores_a_key_later_boots_reuse_it	[PASSED]
+test/test_device_identity/test_main.cpp:118: test_two_boards_get_different_keys	[PASSED]
+test/test_device_identity/test_main.cpp:119: test_a_corrupt_record_is_refused_not_replaced	[PASSED]
+test/test_device_identity/test_main.cpp:120: test_a_broken_random_source_never_becomes_a_key	[PASSED]
+test/test_device_identity/test_main.cpp:121: test_a_key_that_cannot_be_stored_is_not_used	[PASSED]
+test/test_device_identity/test_main.cpp:122: test_device_id_comes_from_the_mac_address	[PASSED]
+------------ native:test_device_identity [PASSED] Took 0.92 seconds ------------
+
+Processing test_uplink in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_uplink/test_main.cpp:365: test_queue_keeps_order_and_drops_the_oldest_when_full	[PASSED]
+test/test_uplink/test_main.cpp:366: test_queue_refuses_empty_and_oversized_lines	[PASSED]
+test/test_uplink/test_main.cpp:367: test_nothing_is_sent_while_offline	[PASSED]
+test/test_uplink/test_main.cpp:368: test_stored_reports_leave_the_queue_in_order_body_unchanged	[PASSED]
+test/test_uplink/test_main.cpp:369: test_final_refusals_are_dropped_not_retried	[PASSED]
+test/test_uplink/test_main.cpp:370: test_no_answer_and_server_errors_keep_the_report_and_back_off	[PASSED]
+test/test_uplink/test_main.cpp:371: test_retry_delay_doubles_caps_at_five_minutes_and_has_jitter	[PASSED]
+test/test_uplink/test_main.cpp:372: test_retry_timer_survives_the_millis_wraparound	[PASSED]
+test/test_uplink/test_main.cpp:373: test_retry_delay_counts_from_the_end_of_a_slow_attempt	[PASSED]
+test/test_uplink/test_main.cpp:374: test_only_a_stored_ack_for_this_report_counts	[PASSED]
+test/test_uplink/test_main.cpp:375: test_json_reader_handles_escapes_and_rejects_bad_json	[PASSED]
+test/test_uplink/test_main.cpp:376: test_json_reader_rejects_nul_and_bad_utf8_and_reads_long_keys	[PASSED]
+test/test_uplink/test_main.cpp:377: test_ack_with_the_longest_ids_the_backend_allows_counts	[PASSED]
+test/test_uplink/test_main.cpp:378: test_unknown_device_keeps_the_report_until_registered	[PASSED]
+test/test_uplink/test_main.cpp:379: test_other_403_and_signature_refusals_stay_final	[PASSED]
+test/test_uplink/test_main.cpp:380: test_success_status_without_a_valid_ack_is_retried	[PASSED]
+test/test_uplink/test_main.cpp:381: test_reports_made_while_offline_are_delivered_after_reconnect	[PASSED]
+---------------- native:test_uplink [PASSED] Took 0.91 seconds ----------------
+
+Processing test_bump_detector in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_bump_detector/test_main.cpp:105: test_speed_bump_is_detected_once_as_bump	[PASSED]
+test/test_bump_detector/test_main.cpp:106: test_pothole_is_detected_as_pothole	[PASSED]
+test/test_bump_detector/test_main.cpp:107: test_severity_follows_the_size_of_the_jolt	[PASSED]
+test/test_bump_detector/test_main.cpp:108: test_normal_vibration_gives_no_reports	[PASSED]
+test/test_bump_detector/test_main.cpp:109: test_rough_road_raises_the_threshold	[PASSED]
+test/test_bump_detector/test_main.cpp:110: test_braking_is_not_a_hazard	[PASSED]
+test/test_bump_detector/test_main.cpp:111: test_jolts_while_parked_are_ignored	[PASSED]
+test/test_bump_detector/test_main.cpp:112: test_one_report_per_hazard_but_separate_hazards_are_kept	[PASSED]
+test/test_bump_detector/test_main.cpp:113: test_nothing_is_reported_during_warmup	[PASSED]
+------------- native:test_bump_detector [PASSED] Took 0.91 seconds -------------
+
+Processing test_ecu_app in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test/test_ecu_app/test_main.cpp:293: test_waits_for_gnss_time_before_using_the_imu	[PASSED]
+test/test_ecu_app/test_main.cpp:294: test_pothole_report_is_signed_queued_while_offline_and_delivered_later	[PASSED]
+test/test_ecu_app/test_main.cpp:295: test_old_and_pre_time_imu_samples_are_dropped	[PASSED]
+test/test_ecu_app/test_main.cpp:296: test_sample_age_limit_is_exact_and_future_samples_are_refused	[PASSED]
+test/test_ecu_app/test_main.cpp:297: test_samples_are_still_used_after_25_days_of_running	[PASSED]
+test/test_ecu_app/test_main.cpp:298: test_app_loop_never_touches_the_network	[PASSED]
+---------------- native:test_ecu_app [PASSED] Took 0.93 seconds ----------------
+
+=================================== SUMMARY ===================================
+Environment    Test                  Status    Duration
+-------------  --------------------  --------  ------------
+native         test_event_builder    PASSED    00:00:01.233
+native         test_fusion           PASSED    00:00:00.892
+native         test_signer           PASSED    00:00:00.898
+native         test_replay_guard     PASSED    00:00:00.890
+native         test_wifi_link        PASSED    00:00:00.910
+native         test_nmea             PASSED    00:00:00.902
+native         test_hazard_tracker   PASSED    00:00:00.878
+native         test_device_identity  PASSED    00:00:00.921
+native         test_uplink           PASSED    00:00:00.910
+native         test_bump_detector    PASSED    00:00:00.915
+native         test_ecu_app          PASSED    00:00:00.932
+================ 106 test cases: 106 succeeded in 00:00:10.281 ================

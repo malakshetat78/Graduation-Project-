@@ -1,0 +1,10 @@
+# Report demo in QEMU against the team's AWS Lambda backend (live, shared Supabase database).
+# Use after sdkconfig.report and sdkconfig.report_qemu; public root certificate bundle (no test CA), TLS 1.3 only.
+# Every report goes to the shared database: get the team's OK before a run. The device is registered by whoever
+# holds the admin token (deploy/aws/register_device.sh), never with a key from sdkconfig.local.
+CONFIG_ICVSP_REPORT_URL="https://bamrqyu5hizs6q6dy37wxvlebu0xwtlk.lambda-url.us-east-1.on.aws/reports"
+# QEMU has no factory MAC (every emulator would be ecu-000000000000), so this test device gets its own name.
+CONFIG_ICVSP_DEVICE_ID="ecu-qemu-cloud-01"
+# The team's test location (Western Desert, far from any route), as in deploy/aws/results/test-records.md.
+CONFIG_ICVSP_DEMO_LAT="23.5"
+CONFIG_ICVSP_DEMO_LON="27.0"

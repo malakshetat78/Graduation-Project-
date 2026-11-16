@@ -24,12 +24,13 @@ This repository holds the working prototypes:
 | Camera detector, Pro unit (YOLO11n) | ✅ v3c, fine-tuned on Egyptian day and night footage: public test mAP50 0.846 |
 | False-alarm filters for speed bumps (road-surface check, motion check) | ✅ Cut false bump flags by over 95 % on held-out Egyptian video |
 | Egyptian road tests | 🟡 Potholes detected above chance by day and night; many unpainted bumps are barely visible on camera, so the IMU becomes the main bump sensor. Own recordings needed for a larger test set |
-| Device firmware (IMU detector, camera decision logic, camera + IMU fusion, signed reports, replay window) | ✅ 52 unit tests on a laptop (PlatformIO native); logic scored on held-out video; thresholds still to be tuned on real recordings |
+| Device firmware (IMU detector, camera decision logic, camera + IMU fusion, signed reports, replay window, report queue, delivery) | ✅ 106 unit tests on a laptop (PlatformIO native); logic scored on held-out video; thresholds still to be tuned on real recordings |
+| ECU firmware on the chip (XIAO ESP32-S3 Sense) | 🟡 Runs in the ESP32-S3 emulator: signs a pothole report with its own key and the live AWS cloud backend stores it (HTTPS, TLS 1.3). **Not yet run on the real board.** [What is proven](#ecu-firmware-on-the-chip-what-is-proven) |
 | Camera detector, Lite unit (ESPDet-Pico on ESP32-S3) | 🟡 8-bit model 486 KB, speed-bump mAP50 0.72 in ESP-PPQ simulation; builds and runs in the ESP32-S3 emulator, on-chip accuracy needs a board |
-| Backend API (device registry, signed-report checks, replay defence, durable storage, background evaluation, hazards ahead, user sign-in and roles, reputation, operator dashboard) | ✅ FastAPI on Supabase (PostgreSQL, PostGIS, Auth, RLS), tested on a local Supabase stack; not yet deployed. `backend/README.md` |
+| Backend API (device registry, signed-report checks, replay defence, durable storage, background evaluation, hazards ahead, user sign-in and roles, reputation, operator dashboard) | ✅ FastAPI on Supabase (PostgreSQL, PostGIS, Auth, RLS), tested on a local Supabase stack; deployed on AWS Lambda with the team Supabase database (Nourseen's T-004, PR 18, 17/17 live checks). `backend/README.md` |
 | System simulation (real device code → backend → trust engine → warnings), with faults and attacks | ✅ 4 scenarios, 0 % false warnings; live demo with the dashboard |
 | Detector v4 (adds three public Kaggle pothole / road datasets) | 🟡 Training on Kaggle; compared with v3c when done |
-| V2V radio, cloud deployment, in-vehicle hardware | ⏳ Planned (see roadmap) |
+| V2V radio, in-vehicle hardware | ⏳ Planned (see roadmap) |
 
 ## Engine: simulated results
 
@@ -109,9 +110,47 @@ so on-chip accuracy and speed will be measured on a board. Details: [`firmware/R
 [`firmware/espdet_qemu/README.md`](firmware/espdet_qemu/README.md).
 
 ```bash
-cd firmware && pio test -e native          # 52 unit tests
+cd firmware && pio test -e native          # 106 unit tests
 python tools/check_with_engine.py          # signed reports checked from the backend side
 ```
+
+### ECU firmware on the chip: what is proven
+
+`firmware/ecu/` is the ESP-IDF 5.5.5 firmware for the XIAO ESP32-S3 Sense (OV3660 camera, L76K GPS, MPU6050 IMU).
+It runs the same tested device code on the chip, signs each report with a key the chip makes for itself at first
+boot, and sends it to the backend's `POST /reports`. Every result says where it ran:
+
+| Step | Where it ran | Result |
+|---|---|---|
+| Device logic tests | Laptop | **106/106 pass** |
+| Firmware boots, chip and signing checks | ESP32-S3 emulator (QEMU) | **Pass**, no reboots. GPS, IMU and camera skipped: the emulator has none |
+| Chip signs a pothole report, backend checks the signature and stores it | Emulator + backend on the laptop (SQLite test database) | **201 stored**. Before its key was registered: 403, and the chip kept the report and retried |
+| Tampered and repeated reports | Backend on the laptop | One field changed: **401 rejected**. Same report again: duplicate, stored once |
+| HTTPS certificate checks (TLS 1.3 only) | Emulator + backend on the laptop, test certificates | **6/6**: untrusted, wrong-host and expired certificates refused, nothing sent; valid certificate accepted over TLS 1.3; a server that only allows TLS 1.2 is refused (no fallback). |
+| **Chip sends a signed report to the cloud** | Emulator + live backend on **AWS Lambda** + team Supabase database, over the internet | **201 stored, then evaluated by the trust engine on AWS** (one unvetted source, so no driver warning, as designed). HTTPS with TLS 1.3, AWS's real certificate checked. Test device `ecu-qemu-cloud-01` at the team test location |
+| Cloud backend test cases (Nourseen, T-004) | Live AWS backend | **17/17 pass**: health, database, admin and sign-in checks, valid / duplicate / stale / bad signature / tampered / unregistered / revoked reports, trust engine run |
+| Flash, GPS, IMU, camera on the real board | Real board | **Not run yet**: board not delivered |
+| Board sends over Wi-Fi to the hosted backend | Real board + backend on AWS + Supabase | **Not run yet**: needs the board (the same firmware already reached AWS from the emulator) |
+
+In the emulator the network is emulated Ethernet instead of Wi-Fi, and the drive (IMU and GPS data) is simulated.
+The firmware, signing, HTTP/HTTPS stack and backend checks are the real code. The laptop runs used a throw-away
+SQLite database; the cloud run used the live AWS backend and the team Supabase database, with a dedicated test device.
+
+<p align="center"><img src="firmware/results/bringup/screenshots/9_ecu_to_aws_cloud.png" width="720" alt="ECU firmware in the ESP32-S3 emulator sends a signed report to the live AWS backend: 201 stored"></p>
+<p align="center"><img src="firmware/results/bringup/screenshots/11_aws_report_evaluated.png" width="720" alt="The same report on AWS: CloudWatch POST /reports 201, then evaluated by the trust engine"></p>
+
+Real AWS pages (live account, not rendered from logs): the backend's dashboard on AWS showing the ECU's hazard and the
+CloudWatch log of its `POST /reports 201`. More in [`screenshots/aws_console/`](firmware/results/bringup/screenshots/README.md#real-aws-screenshots-aws_console).
+
+<p align="center"><img src="firmware/results/bringup/screenshots/aws_console/12_dashboard_ecu_hazard.jpg" width="720" alt="ICVSP operator dashboard on AWS: hazard hz_0002 reported by ecu-qemu-cloud-01, suppressed, with the trust engine's reasons"></p>
+<p align="center"><img src="firmware/results/bringup/screenshots/aws_console/15_cloudwatch_post_reports_201.jpg" width="720" alt="AWS CloudWatch log: POST /reports 201 at 19:50:42 UTC"></p>
+
+All test cases (input, expected, actual, proof): [`firmware/results/bringup/TEST_CASES.md`](firmware/results/bringup/TEST_CASES.md).
+All screenshots: [`firmware/results/bringup/screenshots/`](firmware/results/bringup/screenshots/README.md).
+
+Evidence (logs, firmware image hashes, screenshots, the commit every image was built from) and the exact commands
+to repeat each step: [`firmware/results/bringup/BRINGUP_CHECKLIST.md`](firmware/results/bringup/BRINGUP_CHECKLIST.md).
+Pins: [`PIN_MAP.md`](firmware/results/bringup/PIN_MAP.md).
 
 ## Backend and system simulation
 
@@ -148,8 +187,8 @@ backend and the trust engine answer.
 
 ## Verification
 
-Every push runs the V-cycle checks on GitHub Actions: 130 tests (52 device, 52 engine, 21 backend, 5 system
-simulation), the device → engine integration check, static analysis, and a traceability check that links every test to the
+Every push runs the V-cycle checks on GitHub Actions: the device (106), engine, backend and system-simulation
+tests, the device → engine integration check, static analysis, and a traceability check that links every test to the
 requirement IDs of the team's V-cycle workbooks and fails if a test is unlisted or failing. The
 requirement → test → result report appears on each run's summary page. Details: [`verification/`](verification/).
 
@@ -181,8 +220,11 @@ ai/
 └── data/               (not versioned) datasets and team recordings
 firmware/
 ├── lib/icvsp_core/     device logic: IMU detector, event builder, signer, replay guard
+├── lib/icvsp_board/    ECU logic: GPS parser, report queue, delivery, Wi-Fi link, device key, app loop
 ├── lib/icvsp_sim/      simulated IMU and GNSS
-├── test/               52 unit tests (PlatformIO native)
+├── test/               106 unit tests (PlatformIO native)
+├── ecu/                ESP-IDF firmware for the XIAO ESP32-S3 Sense (smoke test, report firmware)
+├── results/bringup/    ECU bring-up checklist, logs, screenshots, pin map
 ├── tools/              end-to-end check with the engine
 └── espdet_qemu/        ESPDet-Pico on the ESP32-S3 (ESP-IDF + ESP-DL), run in QEMU
 backend/
@@ -198,7 +240,7 @@ verification/           requirements, traceability list, golden device reports, 
 2. Tune the IMU detector on those recordings; camera + IMU fusion
 3. First boards: ESP32-S3 (IMU unit, ESPDet-Pico on-chip test) and Raspberry Pi 5 + Hailo vs Jetson Orin Nano benchmark
 4. Engine: low-density (1–2 user) and insider-attack improvements; burst packet loss
-5. Backend: rate limits, signed alerts to phones; deploy to the cloud
+5. Backend: rate limits, signed alerts to phones; deploy to AWS
 6. Vehicle-to-vehicle messaging over ESP32 (ESP-NOW)
 7. Field test: one unit on a fixed bus route, one rotating between volunteer cars
 
