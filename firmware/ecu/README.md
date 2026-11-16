@@ -17,8 +17,10 @@ Two firmwares from one project (Kconfig `ICVSP_APP`):
 | `sdkconfig.qemu` | Emulator overlay: UART console, quad PSRAM, hardware probes skipped |
 | `sdkconfig.report` | Selects the report demo firmware |
 | `sdkconfig.report_qemu` | Report demo in QEMU: emulated Ethernet instead of Wi-Fi |
-| `sdkconfig.local.example` | Copy to `sdkconfig.local` (git-ignored): Wi-Fi name/password, backend URL, demo seed |
+| `sdkconfig.report_tls` | Report demo in QEMU over HTTPS with a test CA (certificate checks, checklist section 4c) |
+| `sdkconfig.local.example` | Copy to `sdkconfig.local` (git-ignored): Wi-Fi name/password, backend URL |
 | `main/net_link.*` | Network link (Wi-Fi station / QEMU Ethernet) behind the tested `WifiLink` |
+| `main/nvs_secret_store.*` | Keeps the device's signing key in flash (NVS); made at first boot, loaded on every later boot |
 | `main/http_transport.*` | `POST /reports` with esp_http_client (root certificate bundle for https) behind the tested `Uplink` |
 | `components/` | Wrappers that compile `../lib/icvsp_core`, `../lib/icvsp_board` and Monocypher unchanged |
 | `dependencies.lock` | Pins the camera driver (espressif/esp32-camera 2.1.9) |

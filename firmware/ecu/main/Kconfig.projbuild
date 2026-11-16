@@ -41,6 +41,14 @@ config ICVSP_REPORT_URL
         10.0.2.2 is the laptop as seen from inside QEMU. On the board: the laptop's LAN address, later the
         Cloud Run https:// URL.
 
+config ICVSP_TLS_REQUIRE_1_3
+    bool "HTTPS: require TLS 1.3 (offer no older version)"
+    depends on MBEDTLS_SSL_PROTO_TLS1_3
+    default y
+    help
+        Matches FR-SEC-08 (TLS 1.3 to the backend; written for the phone/app link). The ECU then offers only TLS 1.3, so a server (or a
+        man-in-the-middle) that only speaks TLS 1.2 gets no connection. AWS Lambda function URLs accept TLS 1.3.
+
 config ICVSP_TLS_TEST_CA
     bool "HTTPS test build: trust only the test CA in tls_test/ca.pem (not the public root bundle)"
     default n
@@ -51,6 +59,17 @@ config ICVSP_TLS_TEST_CA
 config ICVSP_SNTP_SERVER
     string "SNTP server (report demo clock; on the road the clock comes from GNSS)"
     default "pool.ntp.org"
+
+config ICVSP_DEMO_LAT
+    string "Report demo: latitude of the simulated drive (degrees)"
+    default "30.0444"
+    help
+        Start of the simulated GNSS route (the demo drives east from here). Default: Cairo. Runs against the
+        shared cloud database use the team's test location in the Western Desert (sdkconfig.report_aws).
+
+config ICVSP_DEMO_LON
+    string "Report demo: longitude of the simulated drive (degrees)"
+    default "31.2357"
 
 config ICVSP_DEVICE_ID
     string "Device ID registered in the backend (empty: ecu-<MAC address>)"

@@ -10,6 +10,9 @@
 #   3 expired      test CA, right host, valid only 2020-2021           -> TLS refused, report kept, nothing sent
 #   4 good         test CA, right host, valid; device not registered   -> TLS OK, backend answers 403 unknown_device
 #   5 good         after registering the device's public key           -> TLS OK, 201 stored
+#   6 tls12_only   good certificate, but the server allows only TLS 1.2 -> TLS refused (the firmware requires
+#                  TLS 1.3, FR-SEC-08), report kept, nothing stored although the device is registered
+# The laptop check also prints the TLS version the server agreed to (TLSv1.3 in cases 4-5, TLSv1.2 in case 6).
 #
 # usage: run_tls_checks.sh <out dir for the logs>
 #   PY=/path/to/python with the backend requirements (default backend/.venv/bin/python)
@@ -40,10 +43,11 @@ stop_qemu() { [ -n "$QEMU_PID" ] && kill "$QEMU_PID" 2>/dev/null; QEMU_PID=""; }
 cleanup() { stop_qemu; stop_backend; rm -rf "$WORK"; }
 trap cleanup EXIT
 
-start_backend() {  # $1 = certificate stem
+start_backend() {  # $1 = certificate stem, $2.. = extra uvicorn options
+    local stem="$1"; shift
     ( cd "$ROOT/backend" && exec env -u DATABASE_URL -u SUPABASE_URL -u SUPABASE_JWT_SECRET ICVSP_DB="$WORK/db.sqlite3" \
         ICVSP_ALLOW_ANONYMOUS=1 ICVSP_ADMIN_TOKEN="$TOKEN" "$PY" -m uvicorn --factory icvsp_backend.app:create_app \
-        --host 127.0.0.1 --port 8443 --ssl-certfile "$CERTS/$1.crt" --ssl-keyfile "$CERTS/$1.key" \
+        --host 127.0.0.1 --port 8443 --ssl-certfile "$CERTS/$stem.crt" --ssl-keyfile "$CERTS/$stem.key" "$@" \
         >> "$OUT/backend_tls.log" 2>&1 ) &
     BACKEND_PID=$!
     disown "$BACKEND_PID"
@@ -70,8 +74,8 @@ probe() {  # TLS handshake from the laptop to 127.0.0.1:8443 with only the test 
 import socket, ssl, sys
 ctx = ssl.create_default_context(cafile=sys.argv[1])
 try:
-    with socket.create_connection(("127.0.0.1", 8443), timeout=5) as s, ctx.wrap_socket(s, server_hostname="127.0.0.1"):
-        print("ok")
+    with socket.create_connection(("127.0.0.1", 8443), timeout=5) as s, ctx.wrap_socket(s, server_hostname="127.0.0.1") as t:
+        print("ok", t.version())
 except ssl.SSLCertVerificationError as e:
     print(e.verify_message)
 except Exception as e:
@@ -117,7 +121,7 @@ done
 start_backend good
 echo "# case 4: server certificate 'good', device not registered yet; $(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$WORK/h"
 reason="$(probe)"; echo "# laptop check, same CA and server: $reason" >> "$WORK/h"
-[ "$reason" = ok ] && echo "PASS  4 good: laptop TLS client accepts it" || { echo "FAIL  4 good: laptop TLS client says: $reason"; verdict=1; }
+[ "$reason" = "ok TLSv1.3" ] && echo "PASS  4 good: laptop TLS client accepts it ($reason)" || { echo "FAIL  4 good: laptop TLS client says: $reason"; verdict=1; }
 run_emulator "$WORK/serial.log"
 cat "$WORK/h" "$WORK/serial.log" > "$OUT/qemu_tls_4_good_unregistered.log"
 check "4 good" "$OUT/qemu_tls_4_good_unregistered.log" "-> 403" "TLS accepted, backend answered (not registered yet)"
@@ -135,6 +139,24 @@ cat "$WORK/h" "$WORK/serial.log" > "$OUT/qemu_tls_5_good.log"
 stop_backend
 check "5 good" "$OUT/qemu_tls_5_good.log" "-> 201" "TLS accepted, report stored"
 grep -q "^DEMO RESULT PASS" "$OUT/qemu_tls_5_good.log" || { echo "FAIL  5 good: no DEMO RESULT PASS"; verdict=1; }
+
+# case 6: same good certificate and the same database (device registered), but the server offers only TLS 1.2
+# (uvicorn --ssl-version 5 = ssl.PROTOCOL_TLSv1_2). A firmware that fell back to TLS 1.2 would get 201 here.
+start_backend good --ssl-version 5
+L="$OUT/qemu_tls_6_tls12_only.log"
+echo "# case 6: server certificate 'good', device registered, server allows only TLS 1.2; $(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$WORK/h"
+reason="$(probe)"; echo "# laptop check, same CA and server: $reason" >> "$WORK/h"
+[ "$reason" = "ok TLSv1.2" ] && echo "PASS  6 tls12_only: laptop TLS client gets TLS 1.2 only ($reason)" ||
+    { echo "FAIL  6 tls12_only: laptop TLS client says: $reason"; verdict=1; }
+run_emulator "$WORK/serial.log"
+cat "$WORK/h" "$WORK/serial.log" > "$L"
+stop_backend
+check "6 tls12_only" "$L" "-> no answer" "no answer: the firmware does not fall back to TLS 1.2"
+if grep -q "mbedtls_ssl_handshake returned" "$L" && ! grep -q "mbedtls_ssl_handshake returned -0x2700" "$L"; then
+    echo "PASS  6 tls12_only: TLS handshake failed, not a certificate failure ($(grep -o 'mbedtls_ssl_handshake returned -0x[0-9A-Fa-f]*' "$L" | head -1))"
+else echo "FAIL  6 tls12_only: no version-related handshake failure in the log"; verdict=1; fi
+if grep -q "^DEMO RESULT .*stored_by_backend=0 .*kept=1 " "$L"; then echo "PASS  6 tls12_only: report kept, nothing stored"
+else echo "FAIL  6 tls12_only: report not kept: $(grep '^DEMO RESULT' "$L")"; verdict=1; fi
 echo
 [ $verdict -eq 0 ] && echo "ALL TLS CHECKS PASSED" || echo "SOME TLS CHECKS FAILED"
 exit $verdict

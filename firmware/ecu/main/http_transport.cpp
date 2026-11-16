@@ -18,10 +18,13 @@ int EspHttpTransport::post_report(const char* line, size_t len, char* reply, siz
     cfg.method = HTTP_METHOD_POST;
     cfg.timeout_ms = 10000;
     if (std::strncmp(CONFIG_ICVSP_REPORT_URL, "https://", 8) == 0) {
+#if CONFIG_ICVSP_TLS_REQUIRE_1_3
+        cfg.tls_version = ESP_HTTP_CLIENT_TLS_VER_TLS_1_3;  // ECU design choice (matches FR-SEC-08): no fallback to TLS 1.2
+#endif
 #if CONFIG_ICVSP_TLS_TEST_CA
         cfg.cert_pem = kTestCa;  // test build: only the test CA is trusted
 #else
-        cfg.crt_bundle_attach = esp_crt_bundle_attach;  // public root certificates (Cloud Run)
+        cfg.crt_bundle_attach = esp_crt_bundle_attach;  // public root certificates (hosted backend on AWS)
 #endif
     }
 

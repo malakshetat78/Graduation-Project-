@@ -10,12 +10,13 @@
 //   real       EcuApp, Device (detection, fusion, event, signature), NmeaParser, ReportQueue, WifiLink, Uplink,
 //              lwIP/TCP/HTTP on the chip, the backend's checks (known device, signature, schema, freshness).
 //   simulated  the IMU samples (a 30 s drive over one pothole, from lib/icvsp_sim) and the GNSS sentences
-//              (made here at demo coordinates in Cairo, carrying the current UTC time from SNTP, because the
-//              GNSS receiver is not on a road). The device key is a labelled demo key from the git-ignored
-//              sdkconfig.local; boot_id is the start time in seconds (no counter kept in flash yet).
+//              (made here at the demo coordinates, ICVSP_DEMO_LAT/LON, default Cairo, carrying the current UTC time from SNTP, because the
+//              GNSS receiver is not on a road). The device key is made on the chip at first boot and kept in NVS
+//              (or, if chosen, a labelled demo key from the git-ignored sdkconfig.local); boot_id is the start time in seconds (no counter kept in flash yet).
 #include <atomic>
 #include <cinttypes>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <sys/time.h>
@@ -212,9 +213,9 @@ extern "C" void app_main() {
     std::printf("\nDEMO BEGIN signed-report demo, %s build, firmware %s, ESP-IDF %s\n", build_kind(),
                 esp_app_get_description()->version, esp_app_get_description()->idf_ver);
     std::printf("DEMO link=%s url=%s\n", EspNetDriver::kind(), CONFIG_ICVSP_REPORT_URL);
-    std::printf("DEMO simulated: IMU drive (%.0f s, pothole at %.0f s) and GNSS sentences at demo coordinates%s; "
+    std::printf("DEMO simulated: IMU drive (%.0f s, pothole at %.0f s) and GNSS sentences at demo coordinates %s, %s%s; "
                 "real code: ECU app, signing, firmware network stack (in QEMU: emulated NIC), backend checks\n", kDriveS,
-                kPotholeAtS, kKeyLabel[0] == 'd' ? "; demo key" : "");
+                kPotholeAtS, CONFIG_ICVSP_DEMO_LAT, CONFIG_ICVSP_DEMO_LON, kKeyLabel[0] == 'd' ? "; demo key" : "");
 
     // NVS holds the Wi-Fi calibration and this ECU's signing key. The usual ESP-IDF recipe erases NVS when it
     // reports no free pages or a new format; that would silently replace the key (a new identity under the same
@@ -274,6 +275,8 @@ extern "C" void app_main() {
     static ReplayImu imu;
     imu.samples = drive.imu();
     sim::FakeGnss route;
+    route.lat0 = std::strtod(CONFIG_ICVSP_DEMO_LAT, nullptr);
+    route.lon0 = std::strtod(CONFIG_ICVSP_DEMO_LON, nullptr);
     static NmeaParser gnss;
     static EcuApp app(*device, gnss, imu);
 

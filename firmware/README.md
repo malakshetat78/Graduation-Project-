@@ -21,15 +21,16 @@ tested on a laptop before we have a board. Built with [PlatformIO](https://platf
 | `lib/icvsp_board/src/ecu_app` | The ECU main loop: waits for GNSS time, feeds fresh IMU samples to the Device, keeps delivering | FR-25, FR-SEC-05 |
 
 `icvsp_core` and `icvsp_board` make no hardware calls (the board drivers sit behind interfaces), so the same
-code runs on the laptop and on the ESP32-S3. The board drivers themselves (UART, I2C MPU6050, Wi-Fi, HTTPS) are
-not written yet.
+code runs on the laptop and on the ESP32-S3. The chip-side parts (Wi-Fi, HTTPS delivery, the device key in
+flash, GPS UART, MPU6050 and camera checks) are in `ecu/`. Still to do: confirm the IMU pins, test on the board,
+and feed the real IMU and GPS readings into the report firmware (it uses a simulated drive for now).
 
 ## Run it
 
 ```bash
 pip install platformio cryptography
 cd firmware
-pio test -e native                         # unit and integration tests (91)
+pio test -e native                         # unit and integration tests (106)
 pio run -e native && .pio/build/native/program   # demo drive: prints signed reports as JSON
 python tools/check_with_engine.py          # builds the demo, then checks its reports from the backend side
 ```
@@ -71,13 +72,14 @@ The signature covers
 
 The event JSON is written in one fixed format, so its bytes are the canonical form. The receiver checks the
 signature first and only then the replay window, so forged messages cannot fill the replay table. The
-private key handling here is a demo (fixed public seed); on the board the key belongs in encrypted flash with
-secure boot, and key provisioning and registration are part of the cybersecurity work.
+laptop demo uses a fixed public seed. The ECU firmware (`ecu/`) makes its own key at first boot from the
+chip's random number generator and keeps it in flash (NVS); only the public key is printed, for registration.
+Flash encryption and secure boot, which protect that key from someone holding the board, are not enabled yet.
 
 ## Known gaps
 
-- Board firmware is only a boot/sensor smoke test so far: `ecu/` (ESP-IDF 5.5.5) builds for the XIAO
-  ESP32-S3 and boots in QEMU; nothing has run on the real board yet. See `results/bringup/BRINGUP_CHECKLIST.md`.
-  The full ECU loop on the board (Wi-Fi, HTTPS delivery in its own task, persistent queue) is still to write.
+- Nothing has run on the real board yet. `ecu/` (ESP-IDF 5.5.5) builds for the XIAO ESP32-S3; in the
+  emulator it boots, signs reports with its own key and delivers them over HTTP and HTTPS to the backend.
+  See `results/bringup/BRINGUP_CHECKLIST.md`.
 - The report queue is RAM only: reports are lost on a reboot (flash or microSD storage is the next step).
 - `road_segment` is a coarse grid cell (about 200 m) until the backend maps reports to real roads.
