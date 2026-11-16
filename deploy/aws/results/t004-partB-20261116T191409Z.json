@@ -1,0 +1,180 @@
+{
+  "part": "B",
+  "target": "https://bamrqyu5hizs6q6dy37wxvlebu0xwtlk.lambda-url.us-east-1.on.aws",
+  "utc": "20261116T191409Z",
+  "test_device": "t004-test-01",
+  "public_key": "c07b58a58c6f57a43053b63b717b233451a1c29ada3b42048e3a1db894aa9f06",
+  "location": [
+    23.5,
+    27.0
+  ],
+  "evaluation": {
+    "report": {
+      "event_id": "t004-test-01-1-1",
+      "device_id": "t004-test-01",
+      "type": "pothole",
+      "latitude": 23.5,
+      "longitude": 27.0,
+      "detection_confidence": 0.9,
+      "detected_at": 1794856428.165,
+      "received_at": 1794856432.60241,
+      "settled": false,
+      "evaluation": "evaluated"
+    },
+    "hazards": [
+      {
+        "hazard_id": "hz_0001",
+        "type": "pothole",
+        "state": "suppressed",
+        "action": "No warning. Logged for review.",
+        "severity": "high",
+        "latitude": 23.5,
+        "longitude": 27.0,
+        "heading_deg": 90.0,
+        "independent_sources": 1,
+        "net_evidence": 0.135,
+        "support": [
+          "t004-test-01"
+        ],
+        "contra": 0,
+        "sybil_suspected": false,
+        "reasons": [
+          "t004-test-01: no position beacons from the sender around the report time",
+          "net evidence +0.13 from 1 independent source(s) \u2192 suppressed"
+        ]
+      }
+    ],
+    "device": [
+      {
+        "device_id": "t004-test-01",
+        "status": "ACTIVE",
+        "good": 0.0,
+        "bad": 0.0,
+        "reliability": 0.25
+      }
+    ],
+    "seconds_until_evaluated": 1
+  },
+  "checks": [
+    {
+      "check": "B1 register test device",
+      "request": "POST /devices",
+      "expected": [
+        201
+      ],
+      "status": 201,
+      "passed": true,
+      "ms": 686,
+      "writes": "1 row in devices",
+      "response": "{\"device_id\":\"t004-test-01\",\"status\":\"ACTIVE\",\"pairing_code\":\"****\"}"
+    },
+    {
+      "check": "B2 valid signed report",
+      "request": "POST /reports",
+      "expected": [
+        201
+      ],
+      "status": 201,
+      "passed": true,
+      "ms": 1246,
+      "writes": "1 row in reports",
+      "response": "{\"status\":\"accepted\",\"ack\":\"stored\",\"event_id\":\"t004-test-01-1-1\",\"device_id\":\"t004-test-01\",\"stored_at\":1794856432.6024067,\"evaluation\":\"pending\"}"
+    },
+    {
+      "check": "B3 same report again (duplicate)",
+      "request": "POST /reports",
+      "expected": [
+        201
+      ],
+      "status": 201,
+      "passed": true,
+      "ms": 1041,
+      "writes": "nothing new",
+      "response": "{\"status\":\"duplicate\",\"ack\":\"stored\",\"event_id\":\"t004-test-01-1-1\",\"device_id\":\"t004-test-01\",\"stored_at\":1794856432.60241,\"evaluation\":\"pending\"}"
+    },
+    {
+      "check": "B4 stale report (3 days old)",
+      "request": "POST /reports",
+      "expected": [
+        422
+      ],
+      "status": 422,
+      "passed": true,
+      "ms": 929,
+      "writes": "1 row in rejections",
+      "response": "{\"detail\":\"report too old for a pothole\",\"code\":\"stale\",\"retryable\":false}"
+    },
+    {
+      "check": "B5 invalid signature",
+      "request": "POST /reports",
+      "expected": [
+        401
+      ],
+      "status": 401,
+      "passed": true,
+      "ms": 851,
+      "writes": "1 row in rejections",
+      "response": "{\"detail\":\"signature does not verify with the registered key\",\"code\":\"bad_signature\",\"retryable\":false}"
+    },
+    {
+      "check": "B6 payload changed after signing",
+      "request": "POST /reports",
+      "expected": [
+        401
+      ],
+      "status": 401,
+      "passed": true,
+      "ms": 3921,
+      "writes": "1 row in rejections",
+      "response": "{\"detail\":\"signature does not verify with the registered key\",\"code\":\"bad_signature\",\"retryable\":false}"
+    },
+    {
+      "check": "B7 unregistered device",
+      "request": "POST /reports",
+      "expected": [
+        403
+      ],
+      "status": 403,
+      "passed": true,
+      "ms": 642,
+      "writes": "1 row in rejections",
+      "response": "{\"detail\":\"unknown device\",\"code\":\"unknown_device\",\"retryable\":false}"
+    },
+    {
+      "check": "B8 trust engine evaluated the report (1-minute schedule)",
+      "request": "GET /admin/overview",
+      "expected": [
+        "evaluated within 180 s"
+      ],
+      "status": 200,
+      "passed": true,
+      "ms": null,
+      "writes": "the evaluator may add 1 test hazard + evidence",
+      "response": "{\"report\": {\"event_id\": \"t004-test-01-1-1\", \"device_id\": \"t004-test-01\", \"type\": \"pothole\", \"latitude\": 23.5, \"longitude\": 27.0, \"detection_confidence\": 0.9, \"detected_at\": 1794856428.165, \"received_at\": 1794856432.60241, \"settled\": false, \"evaluation\": \"evaluated\"}, \"hazards\": [{\"hazard_id\": \"hz_0001\", \"type\": \"pothole\", \"state\": \"suppressed\", \"action\": \"No warning. Logged for review.\", \"severity\": \"high\", \"latitude\": 23.5, \"longitude\": 27.0, \"heading_deg\": 90.0, \"independent_sources\": 1, \"net_evidence\": 0.135, \"support\": [\"t004-test-01\"], \"contra\": 0, \"sybil_suspected\": false, \"reasons\": [\"t004-test-01: no position beacons from the sender around the report time\", \"net evidence +0.13 from 1 independent source(s) \\u2192 suppressed\"]}], \"device\": [{\"device_id\": \"t004-test-01\", \"status\": \"ACTIVE\", \"good\": 0.0, \"bad\": 0.0, \"reliability\": 0.25}], \"seconds_until_evaluated\": 1}"
+    },
+    {
+      "check": "B9 revoke test device",
+      "request": "POST /devices/t004-test-01/revoke",
+      "expected": [
+        200
+      ],
+      "status": 200,
+      "passed": true,
+      "ms": 1008,
+      "writes": "test device status set to REVOKED",
+      "response": "{\"device_id\":\"t004-test-01\",\"status\":\"REVOKED\"}"
+    },
+    {
+      "check": "B10 test device shows REVOKED (read only)",
+      "request": "GET /admin/overview",
+      "expected": [
+        "REVOKED"
+      ],
+      "status": 200,
+      "passed": true,
+      "ms": null,
+      "writes": "nothing",
+      "response": "[\"REVOKED\"]"
+    }
+  ]
+}

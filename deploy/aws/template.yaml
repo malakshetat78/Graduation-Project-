@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: ICVSP backend (FastAPI) on AWS Lambda with a public HTTPS function URL and a once-a-minute evaluator
+
+Parameters:
+  SupabaseUrl:
+    Type: String
+    Description: Supabase project URL (https://<project>.supabase.co), used to check user sign-in tokens
+    AllowedPattern: "https://.+"
+  DatabaseUrlParameter:
+    Type: String
+    Default: /icvsp/database_url
+    Description: Name of the SSM SecureString holding the PostgreSQL connection string (Supabase session pooler)
+  ReservedConcurrency:
+    Type: Number
+    Default: 0
+    MinValue: 0
+    Description: >-
+      Most instances that can run at once (each holds up to 2 database connections). 0 = no limit set, needed on
+      accounts whose Lambda concurrency limit is only 10. deploy.sh picks 5 when the account allows it.
+  AdminTokenParameter:
+    Type: String
+    Default: /icvsp/admin_token
+    Description: Name of the SSM SecureString holding the admin token (device registration, dashboard)
+
+Conditions:
+  LimitConcurrency: !Not [!Equals [!Ref ReservedConcurrency, 0]]
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Architectures: [arm64]
+    MemorySize: 512
+    Timeout: 15
+
+Resources:
+  BackendFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: ICVSP backend - signed reports, trust engine, hazards
+      CodeUri: ../../build/lambda/
+      Handler: lambda_handler.handler
+      ReservedConcurrentExecutions: !If [LimitConcurrency, !Ref ReservedConcurrency, !Ref AWS::NoValue]
+      LoggingConfig:
+        LogGroup: !Ref BackendLogs
+      Environment:
+        Variables:
+          SUPABASE_URL: !Ref SupabaseUrl
+          ICVSP_SSM_DATABASE_URL: !Ref DatabaseUrlParameter
+          ICVSP_SSM_ADMIN_TOKEN: !Ref AdminTokenParameter
+          ICVSP_WORKER_INTERVAL_S: "0"
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: ssm:GetParameters
+              Resource:
+                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DatabaseUrlParameter}
+                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${AdminTokenParameter}
+      FunctionUrlConfig:
+        AuthType: NONE  # public, like any web API; the backend itself checks signatures, tokens and the admin token
+      Events:
+        Evaluate:
+          Type: ScheduleV2
+          Properties:
+            Name: !Sub ${AWS::StackName}-evaluate  # stack-prefixed, so deploy permissions can be limited to icvsp-backend-*
+            ScheduleExpression: rate(1 minute)
+            Input: '{"icvsp_task": "evaluate"}'
+
+  BackendLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 14
+
+Outputs:
+  BackendUrl:
+    Description: Public HTTPS address of the backend (the ECU uses this plus /reports)
+    Value: !GetAtt BackendFunctionUrl.FunctionUrl

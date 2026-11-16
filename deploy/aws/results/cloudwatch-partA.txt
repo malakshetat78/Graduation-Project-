@@ -1,0 +1,50 @@
+18:19:57Z REPORT RequestId: b86afb49-3fb1-4cd1-99cc-bd7fc7a7280c Duration: 1051.35 ms Billed Duration: 1052 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:20:57Z REPORT RequestId: b86afb49-7bb1-4cd1-99cc-bd7fc7a7280c Duration: 1047.80 ms Billed Duration: 1048 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:21:07Z [INFO] 2026-11-16T18:21:07.821Z fd2ba879-a99f-43c6-871c-6d242e95a197 GET /ready 200
+18:21:07Z REPORT RequestId: fd2ba879-a99f-43c6-871c-6d242e95a197 Duration: 142.23 ms Billed Duration: 143 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:21:56Z REPORT RequestId: b86afb49-b7b1-4cd1-99cc-bd7fc7a7280c Duration: 210.53 ms Billed Duration: 211 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:22:15Z [INFO] 2026-11-16T18:22:15.503Z b390b2b8-92dc-42b2-b0e8-1fadcbdbbe8c GET /ready 200
+18:22:15Z REPORT RequestId: b390b2b8-92dc-42b2-b0e8-1fadcbdbbe8c Duration: 142.50 ms Billed Duration: 143 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:22:57Z REPORT RequestId: b86afb49-f3b1-4cd1-99cc-bd7fc7a7280c Duration: 1047.89 ms Billed Duration: 1048 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:23:56Z REPORT RequestId: b86afb4a-2fb1-4cd1-99cc-bd7fc7a7280c Duration: 216.42 ms Billed Duration: 217 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:24:57Z REPORT RequestId: b86afb4a-6bb1-4cd1-99cc-bd7fc7a7280c Duration: 1057.79 ms Billed Duration: 1058 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:25:56Z REPORT RequestId: b86afb4a-a7b1-4cd1-99cc-bd7fc7a7280c Duration: 211.08 ms Billed Duration: 212 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:26:57Z REPORT RequestId: b86afb4a-e3b1-4cd1-99cc-bd7fc7a7280c Duration: 1047.65 ms Billed Duration: 1048 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:27:57Z REPORT RequestId: b86afb4b-1fb1-4cd1-99cc-bd7fc7a7280c Duration: 1049.54 ms Billed Duration: 1050 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:28:56Z REPORT RequestId: b86afb4b-5bb1-4cd1-99cc-bd7fc7a7280c Duration: 142.14 ms Billed Duration: 143 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:29:57Z REPORT RequestId: b86afb4b-97b1-4cd1-99cc-bd7fc7a7280c Duration: 978.94 ms Billed Duration: 979 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:30:57Z REPORT RequestId: b86afb4b-d3b1-4cd1-99cc-bd7fc7a7280c Duration: 1061.69 ms Billed Duration: 1062 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:31:56Z REPORT RequestId: b86afb4c-0fb1-4cd1-99cc-bd7fc7a7280c Duration: 211.51 ms Billed Duration: 212 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:32:57Z REPORT RequestId: b86afb4c-4bb1-4cd1-99cc-bd7fc7a7280c Duration: 1048.67 ms Billed Duration: 1049 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:33:57Z REPORT RequestId: b86afb4c-87b1-4cd1-99cc-bd7fc7a7280c Duration: 1071.26 ms Billed Duration: 1072 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:34:54Z [INFO] 2026-11-16T18:34:54.363Z e35aee0b-7266-4b06-bdd6-0008249664a9 GET /health 200
+18:34:54Z REPORT RequestId: e35aee0b-7266-4b06-bdd6-0008249664a9 Duration: 143.47 ms Billed Duration: 144 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:34:56Z REPORT RequestId: b86afb4c-c3b1-4cd1-99cc-bd7fc7a7280c Duration: 71.83 ms Billed Duration: 72 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:35:25Z [INFO] 2026-11-16T18:35:25.679Z 4d791bb8-373f-44e8-8b08-fb1a06c84fae GET /health 200
+18:35:25Z REPORT RequestId: 4d791bb8-373f-44e8-8b08-fb1a06c84fae Duration: 2.99 ms Billed Duration: 3 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:35:26Z [INFO] 2026-11-16T18:35:26.997Z dea3c855-a24c-49f9-a61b-925d9ad699d4 GET /ready 200
+18:35:27Z REPORT RequestId: dea3c855-a24c-49f9-a61b-925d9ad699d4 Duration: 143.09 ms Billed Duration: 144 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:35:27Z [INFO] 2026-11-16T18:35:27.801Z 9fd245d6-7369-4378-9c9f-faf6ffc063f7 POST /devices 401
+18:35:27Z REPORT RequestId: 9fd245d6-7369-4378-9c9f-faf6ffc063f7 Duration: 3.55 ms Billed Duration: 4 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:35:28Z [INFO] 2026-11-16T18:35:28.539Z d21d5138-e813-4558-bf41-c5ba4e9f6339 GET /admin/overview 401
+18:35:28Z REPORT RequestId: d21d5138-e813-4558-bf41-c5ba4e9f6339 Duration: 3.17 ms Billed Duration: 4 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:35:29Z [INFO] 2026-11-16T18:35:29.298Z dcefd901-a3b7-4b1f-a5ef-48e64c8ad661 GET /hazards 401
+18:35:29Z REPORT RequestId: dcefd901-a3b7-4b1f-a5ef-48e64c8ad661 Duration: 3.37 ms Billed Duration: 4 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:35:30Z [INFO] 2026-11-16T18:35:30.504Z 04356739-582d-41b4-b757-b1e7e022451e GET /reports/t004-test-01/none 401
+18:35:30Z REPORT RequestId: 04356739-582d-41b4-b757-b1e7e022451e Duration: 3.37 ms Billed Duration: 4 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:35:57Z REPORT RequestId: b86afb4c-ffb1-4cd1-99cc-bd7fc7a7280c Duration: 911.27 ms Billed Duration: 912 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:36:57Z REPORT RequestId: b86afb4d-3bb1-4cd1-99cc-bd7fc7a7280c Duration: 1049.51 ms Billed Duration: 1050 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:37:57Z REPORT RequestId: b86afb4d-77b1-4cd1-99cc-bd7fc7a7280c Duration: 1056.06 ms Billed Duration: 1057 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:38:56Z REPORT RequestId: b86afb4d-b3b1-4cd1-99cc-bd7fc7a7280c Duration: 211.21 ms Billed Duration: 212 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:39:57Z REPORT RequestId: b86afb4d-efb1-4cd1-99cc-bd7fc7a7280c Duration: 1049.69 ms Billed Duration: 1050 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:40:57Z REPORT RequestId: b86afb4e-2bb1-4cd1-99cc-bd7fc7a7280c Duration: 1051.03 ms Billed Duration: 1052 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:41:04Z INIT_START Runtime Version: python:3.12.mainlinev2.v86 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:528a1f62ceab48183d548f944f99fe9d473db6131852b6f56d94482c6f07c61d
+18:41:04Z [INFO] 2026-11-16T18:41:04.404Z Found credentials in environment variables.
+18:41:57Z REPORT RequestId: b86afb4e-67b1-4cd1-99cc-bd7fc7a7280c Duration: 1047.53 ms Billed Duration: 1048 ms Memory Size: 512 MB Max Memory Used: 168 MB
+18:42:58Z REPORT RequestId: b86afb4e-a3b1-4cd1-99cc-bd7fc7a7280c Duration: 1936.02 ms Billed Duration: 4192 ms Memory Size: 512 MB Max Memory Used: 159 MB Init Duration: 2255.67 ms
+18:43:57Z REPORT RequestId: b86afb4e-dfb1-4cd1-99cc-bd7fc7a7280c Duration: 1052.53 ms Billed Duration: 1053 ms Memory Size: 512 MB Max Memory Used: 159 MB
+18:44:56Z REPORT RequestId: b86afb4f-1bb1-4cd1-99cc-bd7fc7a7280c Duration: 210.36 ms Billed Duration: 211 ms Memory Size: 512 MB Max Memory Used: 159 MB
+18:45:57Z REPORT RequestId: b86afb4f-57b1-4cd1-99cc-bd7fc7a7280c Duration: 1053.14 ms Billed Duration: 1054 ms Memory Size: 512 MB Max Memory Used: 160 MB
+18:46:57Z REPORT RequestId: b86afb4f-93b1-4cd1-99cc-bd7fc7a7280c Duration: 1046.36 ms Billed Duration: 1047 ms Memory Size: 512 MB Max Memory Used: 160 MB
+18:47:57Z REPORT RequestId: b86afb4f-cfb1-4cd1-99cc-bd7fc7a7280c Duration: 1050.01 ms Billed Duration: 1051 ms Memory Size: 512 MB Max Memory Used: 160 MB
+18:48:57Z REPORT RequestId: b86afb50-0bb1-4cd1-99cc-bd7fc7a7280c Duration: 1049.56 ms Billed Duration: 1050 ms Memory Size: 512 MB Max Memory Used: 160 MB

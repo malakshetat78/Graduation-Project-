@@ -51,3 +51,6 @@ ai/models/*_esp32s3.json
 .env
 .env.*
 !.env.example
+
+# deploy packages (deploy/aws/build.sh)
+build/
