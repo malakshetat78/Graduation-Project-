@@ -50,6 +50,18 @@ and the Lambda description updated once to reload it. No other AWS resource was 
 
 No existing row was changed or deleted. No schema change, no migration.
 
+## ECU emulator test with Shahesta (agreed in the team chat, approved by Nourseen)
+
+| Time (UTC) | Action | Database effect |
+|---|---|---|
+| 19:45:40 | registered `ecu-qemu-cloud-01` (the ECU's own public key, made by the chip in the emulator) with `register_device.sh` | 1 row in `devices` (not vetted) |
+| 19:50:41 | the ECU firmware sent one signed pothole report at 23.5, 27.0014: 201 accepted (`ecu-qemu-cloud-01-1794858622-1`) | 1 row in `reports` (+ device counter) |
+| 19:50:56 | trust engine evaluated it: hazard suppressed, no warning | the evaluator's rows for that report |
+| 20:29:12 | revoked `ecu-qemu-cloud-01` (Shahesta took screenshots instead of a video); status read back: REVOKED | `ecu-qemu-cloud-01` status → **REVOKED** |
+
+Left from this test: 1 revoked device row (permanent, like `t004-test-01`), 1 report (15-day retention), and the
+suppressed hazard decision. No rejections.
+
 ## Why no driver was or can be alerted
 
 1. `service.hazards_ahead` raises `alert` only for level **warning** (`corroborated` / `confirmed`) inside the alert range.

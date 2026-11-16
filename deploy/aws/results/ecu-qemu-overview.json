@@ -1,0 +1,54 @@
+{
+  "source": "GET /admin/overview (admin token from SSM, not saved); only rows of ecu-qemu-cloud-01 kept",
+  "snapshot_utc": "2026-11-16T20:02:03.573Z",
+  "device": [
+    {
+      "device_id": "ecu-qemu-cloud-01",
+      "status": "ACTIVE",
+      "good": 0.0,
+      "bad": 0.0,
+      "reliability": 0.25
+    }
+  ],
+  "report": [
+    {
+      "event_id": "ecu-qemu-cloud-01-1794858622-1",
+      "device_id": "ecu-qemu-cloud-01",
+      "type": "pothole",
+      "latitude": 23.5,
+      "longitude": 27.001372,
+      "detection_confidence": 0.95,
+      "detected_at": 1794858637.592,
+      "received_at": 1794858641.77946,
+      "settled": false,
+      "evaluation": "evaluated",
+      "detected_at_utc": "2026-11-16T19:50:37.592Z",
+      "received_at_utc": "2026-11-16T19:50:41.779Z"
+    }
+  ],
+  "hazard_decisions": [
+    {
+      "hazard_id": "hz_0002",
+      "type": "pothole",
+      "state": "suppressed",
+      "action": "No warning. Logged for review.",
+      "severity": "high",
+      "latitude": 23.5,
+      "longitude": 27.001372,
+      "heading_deg": 90.0,
+      "independent_sources": 1,
+      "net_evidence": 0.138,
+      "support": [
+        "ecu-qemu-cloud-01"
+      ],
+      "contra": 0,
+      "sybil_suspected": false,
+      "reasons": [
+        "ecu-qemu-cloud-01: no position beacons from the sender around the report time",
+        "net evidence +0.14 from 1 independent source(s) → suppressed"
+      ]
+    }
+  ],
+  "engine_rejected": [],
+  "rejections": []
+}
