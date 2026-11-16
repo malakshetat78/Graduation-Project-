@@ -53,6 +53,8 @@ in a `finally` block). All live runs on 16 Nov 2026 (UTC).
 | TC-T004-18 | EMULATOR + AWS | register `ecu-qemu-cloud-01` with the ECU's public key; the ECU firmware sends a signed report over HTTPS | backend logs show it received and stored | CloudWatch `POST /reports 201` at 19:50:42.3 UTC (683 ms); event `ecu-qemu-cloud-01-1794858622-1`, detected 19:50:37, received 19:50:41 | PASS | FR-SEC-05, FR-SEC-07, FR-SEC-08 | `results/cloudwatch-ecu-qemu.txt`; ECU side: Shahesta's `firmware/results/bringup/TEST_CASES.md` TC-15 |
 | TC-T004-19 | AWS | that report after the 1-minute trust engine runs (19:50:56, 19:51:58, 19:52:56 UTC) | evaluated, hazard decision, no driver warning from one unvetted source | `evaluation: evaluated`; hazard **suppressed**, "No warning. Logged for review.", net evidence +0.14 | PASS | FR-12, FR-14, FR-15 | `results/ecu-qemu-overview.json`; Shahesta's TC-17 |
 
+After these tests `ecu-qemu-cloud-01` was revoked (20:29:12 UTC, status read back: REVOKED).
+
 ## Not covered here
 
 Load and concurrency on the live stack (excluded by agreement with the team), signed backend-to-phone alerts
