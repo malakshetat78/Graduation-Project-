@@ -29,7 +29,7 @@ def read(name):
 
 def colour(line):
     e = html.escape(line)
-    e = re.sub(r"\b(PASS|PASSED|succeeded|Project build complete|201 Created|-&gt; 201|TLSv1\.3)", r'<span class="ok">\1</span>', e)
+    e = re.sub(r"\b(PASS|PASSED|succeeded|Project build complete|201 Created|-&gt; 201|/reports 201|TLSv1\.3|evaluation: evaluated)", r'<span class="ok">\1</span>', e)
     e = re.sub(r"\b(FAIL|FAILED|ERROR|Rebooting\.\.\.|401 Unauthorized|403 Forbidden|bad_signature)", r'<span class="bad">\1</span>', e)
     e = re.sub(r"(\(device key not registered: report kept, will retry\)|kept=1)", r'<span class="skip">\1</span>', e)
     e = e.replace("***ERROR***", '<span class="bad">***ERROR***</span>')
@@ -203,3 +203,23 @@ if wanted(10):
          "AWS CLOUD", "AWS", lines,
          f"Nourseen's T-004 run on the live Lambda URL, commit {T004} (PR 18). Test device t004-test-01, revoked at the end. "
          "Evidence: deploy/aws/results/*.json, CloudWatch logs in deploy/aws/results/cloudwatch-part*.txt")
+
+# 11. The same report on the AWS side: CloudWatch, then the trust engine's decision (AWS)
+if wanted(11):
+  import json
+  ecu = [l for l in read("qemu_aws_report.log") if l.startswith(("DEMO device=", "HTTP POST"))]
+  cw = [l for l in read("aws_cloudwatch_ecu.txt") if l[:2].isdigit()]
+  ov = json.loads((LOGS / "aws_overview_ecu.json").read_text())
+  r, h = ov["report"][0], ov["hazard_decisions"][0]
+  lines = (["# 1. the ECU (firmware in the emulator) sends the signed report", *ecu, "",
+            "# 2. AWS CloudWatch: the backend receives it, then the trust engine runs every minute", *cw, "",
+            f"# 3. operator view (GET /admin/overview, {ov['snapshot_utc']}): the report and the trust engine's decision",
+            f"report  {r['event_id']}  {r['type']}  at {r['latitude']}, {r['longitude']}  received {r['received_at_utc']}",
+            f"        evaluation: {r['evaluation']}",
+            f"hazard  {h['hazard_id']}  state: {h['state']}  ({h['action']})  severity {h['severity']}  sources: {h['independent_sources']}",
+            *[f"        reason: {x}" for x in h["reasons"]]])
+  render("11_aws_report_evaluated", "AWS cloud: the ECU's report received, stored and evaluated by the trust engine",
+         "AWS CLOUD", "AWS", lines,
+         "One report end to end: ECU firmware 75f5f8d (emulator) -> AWS Lambda -> team Supabase -> trust engine. "
+         "A single unvetted source is not enough for a driver warning, so the hazard is suppressed (logged for review), as designed. "
+         "Logs: logs/qemu_aws_report.log, logs/aws_cloudwatch_ecu.txt and logs/aws_overview_ecu.json (both saved by Nourseen).")

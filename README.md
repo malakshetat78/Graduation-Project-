@@ -127,7 +127,7 @@ boot, and sends it to the backend's `POST /reports`. Every result says where it 
 | Chip signs a pothole report, backend checks the signature and stores it | Emulator + backend on the laptop (SQLite test database) | **201 stored**. Before its key was registered: 403, and the chip kept the report and retried |
 | Tampered and repeated reports | Backend on the laptop | One field changed: **401 rejected**. Same report again: duplicate, stored once |
 | HTTPS certificate checks (TLS 1.3 only) | Emulator + backend on the laptop, test certificates | **6/6**: untrusted, wrong-host and expired certificates refused, nothing sent; valid certificate accepted over TLS 1.3; a server that only allows TLS 1.2 is refused (no fallback). |
-| **Chip sends a signed report to the cloud** | Emulator + live backend on **AWS Lambda** + team Supabase database, over the internet | **201 stored**: HTTPS with TLS 1.3, AWS's real certificate checked. Test device `ecu-qemu-cloud-01` at the team test location |
+| **Chip sends a signed report to the cloud** | Emulator + live backend on **AWS Lambda** + team Supabase database, over the internet | **201 stored, then evaluated by the trust engine on AWS** (one unvetted source, so no driver warning, as designed). HTTPS with TLS 1.3, AWS's real certificate checked. Test device `ecu-qemu-cloud-01` at the team test location |
 | Cloud backend test cases (Nourseen, T-004) | Live AWS backend | **17/17 pass**: health, database, admin and sign-in checks, valid / duplicate / stale / bad signature / tampered / unregistered / revoked reports, trust engine run |
 | Flash, GPS, IMU, camera on the real board | Real board | **Not run yet**: board not delivered |
 | Board sends over Wi-Fi to the hosted backend | Real board + backend on AWS + Supabase | **Not run yet**: needs the board (the same firmware already reached AWS from the emulator) |
@@ -137,6 +137,7 @@ The firmware, signing, HTTP/HTTPS stack and backend checks are the real code. Th
 SQLite database; the cloud run used the live AWS backend and the team Supabase database, with a dedicated test device.
 
 <p align="center"><img src="firmware/results/bringup/screenshots/9_ecu_to_aws_cloud.png" width="720" alt="ECU firmware in the ESP32-S3 emulator sends a signed report to the live AWS backend: 201 stored"></p>
+<p align="center"><img src="firmware/results/bringup/screenshots/11_aws_report_evaluated.png" width="720" alt="The same report on AWS: CloudWatch POST /reports 201, then evaluated by the trust engine"></p>
 
 All test cases (input, expected, actual, proof): [`firmware/results/bringup/TEST_CASES.md`](firmware/results/bringup/TEST_CASES.md).
 All screenshots: [`firmware/results/bringup/screenshots/`](firmware/results/bringup/screenshots/README.md).

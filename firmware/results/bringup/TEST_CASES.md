@@ -6,9 +6,8 @@ Screenshots are in `screenshots/`, rendered line by line from the real logs in `
 
 Path of a report, end to end: **ECU firmware** (signs it) -> **HTTPS, TLS 1.3** -> **backend** (checks the device,
 signature and freshness, stores it in the database) -> **trust engine** (evaluates it). Tested on the laptop first,
-then against the live **AWS cloud** backend (team Supabase database). On AWS, the ECU's own report is proven up to
-"stored" (TC-15); the trust engine step on AWS is proven with Nourseen's test report (TC-16, B8), and for the ECU's
-report it is still to be recorded (TC-17).
+then against the live **AWS cloud** backend (team Supabase database): one report from the ECU firmware was sent,
+stored and evaluated there (TC-15, TC-17; `screenshots/11_aws_report_evaluated.png`).
 
 Where: HOST = laptop, EMULATOR = the ECU firmware in the ESP32-S3 emulator (QEMU), AWS = the live backend on AWS
 Lambda, BOARD = the real XIAO ESP32-S3 (not delivered yet).
@@ -48,7 +47,7 @@ Lambda, BOARD = the real XIAO ESP32-S3 (not delivered yet).
 |---|---|---|---|---|---|---|
 | TC-15 | EMULATOR + AWS | ECU firmware (`sdkconfig.report_aws`) sends a signed report to the live Lambda URL over the internet; device `ecu-qemu-cloud-01` registered on the live backend | HTTPS with the public root certificates, TLS 1.3, `201` stored in the team database | 201 accepted, event `ecu-qemu-cloud-01-1794858622-1`, 16 Nov 2026 19:50:41 UTC | PASS | `screenshots/9_ecu_to_aws_cloud.png`, `logs/qemu_aws_report.log`; AWS side: `logs/aws_cloudwatch_ecu.txt` (CloudWatch, saved by Nourseen: `POST /reports 201` at 19:50:42.3 UTC, the end of a 683 ms request; the backend's `stored_at` is 19:50:41.8) |
 | TC-16 | AWS | live backend test cases A1-A6, B1-B11 (health, database, admin and sign-in checks, valid / duplicate / stale / bad signature / tampered / unregistered / revoked reports, trust engine run) | each answer as expected | 17/17 | PASS | `screenshots/10_aws_backend_test_cases.png`; T-004 (Nourseen): branch `nourseen/aws-lambda-deploy` (PR 18), commit `cbc9ddb`, folder `deploy/aws/results/` |
-| TC-17 | AWS | the ECU's report from TC-15 (`ecu-qemu-cloud-01-1794858622-1`) after the 1-minute trust engine run | the backend logs show it received and evaluated; the operator view shows `evaluation: evaluated` and a hazard decision | CloudWatch shows the scheduled evaluator ran at 19:50:56, 19:51:58 and 19:52:56 UTC; it logs no per-report result, so the operator view is still needed | PENDING | `logs/aws_cloudwatch_ecu.txt`; operator view (`ecu-qemu-overview.json`) to be saved by Nourseen |
+| TC-17 | AWS | the ECU's report from TC-15 (`ecu-qemu-cloud-01-1794858622-1`) after the 1-minute trust engine run | the backend logs show it received; the operator view shows `evaluation: evaluated` and a hazard decision (one unvetted source: no driver warning) | evaluator ran at 19:50:56, 19:51:58, 19:52:56 UTC; operator view (20:02 UTC): `evaluation: evaluated`, hazard `hz_0002` **suppressed** (no warning, logged for review): 1 unvetted source, net evidence +0.14 | PASS | `screenshots/11_aws_report_evaluated.png`, `logs/aws_cloudwatch_ecu.txt`, `logs/aws_overview_ecu.json` (both saved by Nourseen) |
 
 ## Not run yet (needs the board)
 
