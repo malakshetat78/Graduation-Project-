@@ -1,0 +1,243 @@
+D:\ICVSP\Graduation-Project-\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_bad_key_and_double_registration_are_refused (tests.test_api.Devices.test_bad_key_and_double_registration_are_refused) ... ok
+test_registration_needs_the_admin_token (tests.test_api.Devices.test_registration_needs_the_admin_token) ... ok
+test_minor_hazard_is_not_shown_and_severity_is_reported (tests.test_api.Hazards.test_minor_hazard_is_not_shown_and_severity_is_reported)
+Severity scope: two trusted cars that both measured a small jolt do not make a hazard worth showing. ... ok
+test_overview_shows_decisions_reliability_positions_and_rejections (tests.test_api.Hazards.test_overview_shows_decisions_reliability_positions_and_rejections)
+The operator dashboard's data: every decision with its state and reasons, device reliability, ... ok
+test_settle_rewards_confirmed_reports_once (tests.test_api.Hazards.test_settle_rewards_confirmed_reports_once) ... ok
+test_two_new_cars_give_only_an_advisory (tests.test_api.Hazards.test_two_new_cars_give_only_an_advisory)
+Cold start at system level: new devices (reliability 0.25) cannot raise a warning together. ... ok
+test_two_vetted_cars_give_a_warning_ahead_only (tests.test_api.Hazards.test_two_vetted_cars_give_a_warning_ahead_only) ... ok
+test_envelope_and_event_must_name_the_same_device (tests.test_api.Reports.test_envelope_and_event_must_name_the_same_device) ... ok
+test_every_rejection_is_logged_with_a_reason (tests.test_api.Reports.test_every_rejection_is_logged_with_a_reason) ... ok
+test_golden_device_report_is_accepted (tests.test_api.Reports.test_golden_device_report_is_accepted)
+Contract: the C++ device's own output is accepted unchanged (format v2, Ed25519). ... ok
+test_key_in_the_message_is_not_trusted (tests.test_api.Reports.test_key_in_the_message_is_not_trusted)
+An attacker's own key in the message does not help: only the registered key counts. ... ok
+test_malformed_body_is_rejected (tests.test_api.Reports.test_malformed_body_is_rejected) ... ok
+test_oversized_body_is_rejected (tests.test_api.Reports.test_oversized_body_is_rejected) ... ok
+test_repeated_boot_and_sequence_is_rejected (tests.test_api.Reports.test_repeated_boot_and_sequence_is_rejected) ... ok
+test_retry_of_the_same_report_is_idempotent (tests.test_api.Reports.test_retry_of_the_same_report_is_idempotent) ... ok
+test_retry_with_a_different_line_ending_is_still_a_duplicate (tests.test_api.Reports.test_retry_with_a_different_line_ending_is_still_a_duplicate)
+Found by the live-server check: a phone that adds a newline on retry must not get a conflict. ... ok
+test_reused_event_id_with_other_content_is_a_conflict (tests.test_api.Reports.test_reused_event_id_with_other_content_is_a_conflict) ... ok
+test_revoked_device_is_rejected (tests.test_api.Reports.test_revoked_device_is_rejected) ... ok
+test_signed_but_invalid_event_is_rejected_by_schema (tests.test_api.Reports.test_signed_but_invalid_event_is_rejected_by_schema) ... ok
+test_tampered_report_fails_the_signature (tests.test_api.Reports.test_tampered_report_fails_the_signature) ... ok
+test_unknown_device_is_rejected (tests.test_api.Reports.test_unknown_device_is_rejected) ... ok
+test_administrator_role_comes_from_the_database_and_takes_effect_at_once (tests.test_backend.Access.test_administrator_role_comes_from_the_database_and_takes_effect_at_once) ... ok
+test_driver_cannot_use_operator_endpoints (tests.test_backend.Access.test_driver_cannot_use_operator_endpoints) ... ok
+test_driver_sees_published_hazards_only_and_never_the_evidence (tests.test_backend.Access.test_driver_sees_published_hazards_only_and_never_the_evidence) ... ok
+test_pairing_code_works_once_and_only_for_its_device (tests.test_backend.Access.test_pairing_code_works_once_and_only_for_its_device) ... ok
+test_personal_endpoints_need_a_valid_sign_in (tests.test_backend.Access.test_personal_endpoints_need_a_valid_sign_in) ... ok
+test_reports_are_authenticated_by_the_device_not_a_user (tests.test_backend.Access.test_reports_are_authenticated_by_the_device_not_a_user)
+The phone that relays a report may have no sign-in at that moment; the signature proves the source. ... ok
+test_server_will_not_start_open_by_accident (tests.test_backend.Access.test_server_will_not_start_open_by_accident) ... ok
+test_user_cannot_read_another_users_device_or_reports (tests.test_backend.Access.test_user_cannot_read_another_users_device_or_reports) ... ok
+test_user_cannot_send_positions_for_another_users_device (tests.test_backend.Access.test_user_cannot_send_positions_for_another_users_device) ... ok
+test_alert_is_not_repeated_until_the_cooldown_passes (tests.test_backend.Ahead.test_alert_is_not_repeated_until_the_cooldown_passes) ... ok
+test_asking_does_not_store_the_position (tests.test_backend.Ahead.test_asking_does_not_store_the_position) ... ok
+test_direction_is_required (tests.test_backend.Ahead.test_direction_is_required) ... ok
+test_expired_hazard_does_not_alert (tests.test_backend.Ahead.test_expired_hazard_does_not_alert) ... ok
+test_far_from_the_route_falls_back_to_the_current_heading (tests.test_backend.Ahead.test_far_from_the_route_falls_back_to_the_current_heading) ... ok
+test_fast_car_is_alerted_earlier (tests.test_backend.Ahead.test_fast_car_is_alerted_earlier) ... ok
+test_get_hazards_excludes_a_parallel_street_when_heading_is_known (tests.test_backend.Ahead.test_get_hazards_excludes_a_parallel_street_when_heading_is_known) ... ok
+test_hazard_ahead_on_the_road_alerts_at_the_set_distance (tests.test_backend.Ahead.test_hazard_ahead_on_the_road_alerts_at_the_set_distance) ... ok
+test_hazard_behind_the_driver_on_a_route_already_under_way_does_not_alert (tests.test_backend.Ahead.test_hazard_behind_the_driver_on_a_route_already_under_way_does_not_alert) ... ok
+test_hazard_behind_the_user_does_not_alert (tests.test_backend.Ahead.test_hazard_behind_the_user_does_not_alert) ... ok
+test_hazard_in_the_other_lane_of_the_route_does_not_alert (tests.test_backend.Ahead.test_hazard_in_the_other_lane_of_the_route_does_not_alert) ... ok
+test_hazard_just_behind_the_start_of_the_route_does_not_alert (tests.test_backend.Ahead.test_hazard_just_behind_the_start_of_the_route_does_not_alert) ... ok
+test_hazard_just_past_the_end_of_the_route_does_not_alert (tests.test_backend.Ahead.test_hazard_just_past_the_end_of_the_route_does_not_alert) ... ok
+test_hazard_on_a_parallel_street_does_not_alert (tests.test_backend.Ahead.test_hazard_on_a_parallel_street_does_not_alert) ... ok
+test_opposite_direction_does_not_alert (tests.test_backend.Ahead.test_opposite_direction_does_not_alert) ... ok
+test_route_distance_is_along_the_road_not_straight_line (tests.test_backend.Ahead.test_route_distance_is_along_the_road_not_straight_line) ... ok
+test_route_passing_the_spot_again_later_still_alerts (tests.test_backend.Ahead.test_route_passing_the_spot_again_later_still_alerts)
+Behind the user on the first stretch, but the route comes back over it in the same direction. ... ok
+test_route_turning_off_before_the_hazard_does_not_alert (tests.test_backend.Ahead.test_route_turning_off_before_the_hazard_does_not_alert) ... ok
+test_unconfirmed_hazard_is_not_an_alert (tests.test_backend.Ahead.test_unconfirmed_hazard_is_not_an_alert) ... ok
+test_golden_device_lines_still_pass_the_whole_path (tests.test_backend.Contract.test_golden_device_lines_still_pass_the_whole_path) ... ok
+test_ack_means_stored_not_that_the_hazard_is_confirmed (tests.test_backend.Delivery.test_ack_means_stored_not_that_the_hazard_is_confirmed) ... ok
+test_cleanup_keeps_reports_inside_the_longest_window (tests.test_backend.Delivery.test_cleanup_keeps_reports_inside_the_longest_window) ... ok
+test_delayed_report_within_its_window_is_accepted (tests.test_backend.Delivery.test_delayed_report_within_its_window_is_accepted)
+No internet for a day and a half: a true report must not be refused for being late. ... ok
+test_device_restart_and_out_of_order_delivery_are_accepted (tests.test_backend.Delivery.test_device_restart_and_out_of_order_delivery_are_accepted)
+After a restart the boot counter rises; older queued reports may still arrive afterwards. ... ok
+test_freshness_window_follows_the_hazard_type (tests.test_backend.Delivery.test_freshness_window_follows_the_hazard_type) ... ok
+test_hostile_bodies_get_a_clear_refusal_not_a_server_error (tests.test_backend.Delivery.test_hostile_bodies_get_a_clear_refusal_not_a_server_error) ... ok
+test_lost_ack_retry_gets_the_earlier_ack_and_stores_nothing (tests.test_backend.Delivery.test_lost_ack_retry_gets_the_earlier_ack_and_stores_nothing) ... ok
+test_rejection_answer_survives_a_failing_rejection_log (tests.test_backend.Delivery.test_rejection_answer_survives_a_failing_rejection_log) ... rejection not logged, database unavailable: bad_signature
+ok
+test_rejections_are_logged_with_code_and_reason (tests.test_backend.Delivery.test_rejections_are_logged_with_code_and_reason) ... ok
+test_replay_after_cleanup_is_refused_as_too_old (tests.test_backend.Delivery.test_replay_after_cleanup_is_refused_as_too_old)
+Retention never reopens a hole: once a report is deleted, it is already outside the freshness window. ... ok
+test_retry_long_after_the_freshness_window_still_gets_its_ack (tests.test_backend.Delivery.test_retry_long_after_the_freshness_window_still_gets_its_ack)
+Stored, ACK lost, phone offline for days: it must hear "stored" so it can delete its copy. ... ok
+test_same_id_with_other_content_is_refused_as_final (tests.test_backend.Delivery.test_same_id_with_other_content_is_refused_as_final) ... ok
+test_sent_report_is_stored_and_read_back (tests.test_backend.Delivery.test_sent_report_is_stored_and_read_back)
+First integration check of the guide: send a report, it is stored, read it back through the API. ... ok
+test_signed_counter_too_large_for_the_database_is_refused (tests.test_backend.Delivery.test_signed_counter_too_large_for_the_database_is_refused) ... ok
+test_storage_failure_says_retry_and_the_same_line_then_succeeds (tests.test_backend.Delivery.test_storage_failure_says_retry_and_the_same_line_then_succeeds)
+Connection lost before saving: nothing stored, a retryable answer, no rejection. ... database unavailable: down
+ok
+test_too_old_and_future_reports_are_refused (tests.test_backend.Delivery.test_too_old_and_future_reports_are_refused) ... ok
+test_cleanup_keeps_only_positions_near_reports_still_counted (tests.test_backend.Evaluation.test_cleanup_keeps_only_positions_near_reports_still_counted) ... ok
+test_copied_traces_stay_one_source_after_the_raw_position_window (tests.test_backend.Evaluation.test_copied_traces_stay_one_source_after_the_raw_position_window)
+Three identities moving as one must not become three sources just because time passed. ... ok
+test_crash_after_saving_leaves_everything_pending_then_finishes_counting_once (tests.test_backend.Evaluation.test_crash_after_saving_leaves_everything_pending_then_finishes_counting_once)
+Processing stops after the report is stored: nothing half written, and the rerun counts each once. ... ok
+test_drive_past_evidence_survives_the_raw_position_window (tests.test_backend.Evaluation.test_drive_past_evidence_survives_the_raw_position_window)
+A hazard that drivers disproved does not come back when the raw positions are cleaned up. ... ok
+test_every_run_records_the_configuration_used (tests.test_backend.Evaluation.test_every_run_records_the_configuration_used)
+NFR-08: a decision can be traced to its inputs and configuration version. ... ok
+test_hazard_keeps_its_id_as_evidence_grows (tests.test_backend.Evaluation.test_hazard_keeps_its_id_as_evidence_grows) ... ok
+test_implausible_report_records_why_the_engine_refused_it (tests.test_backend.Evaluation.test_implausible_report_records_why_the_engine_refused_it) ... ok
+test_positions_near_a_speed_bump_report_are_kept_for_its_longer_window (tests.test_backend.Evaluation.test_positions_near_a_speed_bump_report_are_kept_for_its_longer_window) ... ok
+test_retried_report_adds_no_evidence (tests.test_backend.Evaluation.test_retried_report_adds_no_evidence) ... ok
+test_same_device_cannot_farm_reputation_from_one_hazard (tests.test_backend.Evaluation.test_same_device_cannot_farm_reputation_from_one_hazard) ... ok
+test_same_event_id_on_two_devices_counts_for_both (tests.test_backend.Evaluation.test_same_event_id_on_two_devices_counts_for_both)
+One device choosing another's event ID cannot get that device's real report thrown out. ... ok
+test_two_cars_reporting_one_hole_are_two_pieces_of_evidence (tests.test_backend.Evaluation.test_two_cars_reporting_one_hole_are_two_pieces_of_evidence)
+Same pothole, different reports: not duplicates. The engine decides how they count. ... ok
+test_file_from_before_this_schema_stops_with_a_clear_message (tests.test_backend.OldDatabaseFile.test_file_from_before_this_schema_stops_with_a_clear_message) ... ok
+test_asymmetric_project_key_works_and_a_shared_secret_token_cannot_replace_it (tests.test_backend.Tokens.test_asymmetric_project_key_works_and_a_shared_secret_token_cannot_replace_it) ... ok
+test_expired_wrong_audience_wrong_issuer_and_wrong_key_are_refused (tests.test_backend.Tokens.test_expired_wrong_audience_wrong_issuer_and_wrong_key_are_refused) ... ok
+test_key_server_certificates_do_not_depend_on_the_python_install (tests.test_backend.Tokens.test_key_server_certificates_do_not_depend_on_the_python_install) ... ok
+test_token_without_expiry_is_refused (tests.test_backend.Tokens.test_token_without_expiry_is_refused) ... ok
+test_unreachable_key_server_is_not_reported_as_a_bad_token (tests.test_backend.Tokens.test_unreachable_key_server_is_not_reported_as_a_bad_token) ... ok
+test_valid_supabase_token_is_accepted (tests.test_backend.Tokens.test_valid_supabase_token_is_accepted) ... ok
+test_c_generated_signature_is_accepted_and_identical_retry_is_duplicate (tests.test_espidf_contract.EspIdfToBackend.test_c_generated_signature_is_accepted_and_identical_retry_is_duplicate) ... ok
+test_conflicting_signed_boot_sequence_is_rejected (tests.test_espidf_contract.EspIdfToBackend.test_conflicting_signed_boot_sequence_is_rejected) ... ok
+test_tampered_c_report_is_rejected (tests.test_espidf_contract.EspIdfToBackend.test_tampered_c_report_is_rejected) ... ok
+test_second_evaluator_steps_aside_while_the_first_holds_the_lock (tests.test_postgres.Concurrency.test_second_evaluator_steps_aside_while_the_first_holds_the_lock) ... ok
+test_simultaneous_copies_make_one_record_and_one_pending_evaluation (tests.test_postgres.Concurrency.test_simultaneous_copies_make_one_record_and_one_pending_evaluation)
+Phone retry and upload arriving together: the database, not luck, makes it one report. ... ok
+test_simultaneous_different_content_with_one_id_has_one_winner (tests.test_postgres.Concurrency.test_simultaneous_different_content_with_one_id_has_one_winner) ... ok
+test_two_evaluators_at_once_do_not_double_count (tests.test_postgres.Concurrency.test_two_evaluators_at_once_do_not_double_count) ... ok
+test_backend_role_cannot_rewrite_history_or_the_schema (tests.test_postgres.Constraints.test_backend_role_cannot_rewrite_history_or_the_schema) ... ok
+test_database_itself_refuses_repeats_and_bad_values (tests.test_postgres.Constraints.test_database_itself_refuses_repeats_and_bad_values)
+Even code that skips the API cannot store these. ... ok
+test_device_with_reports_cannot_be_deleted (tests.test_postgres.Constraints.test_device_with_reports_cannot_be_deleted) ... ok
+test_evaluation_run_records_the_configuration_hash (tests.test_postgres.Constraints.test_evaluation_run_records_the_configuration_hash) ... ok
+test_same_evidence_cannot_be_stored_twice (tests.test_postgres.Constraints.test_same_evidence_cannot_be_stored_twice) ... ok
+test_postgis_search_finds_by_radius_and_state_and_validity (tests.test_postgres.Geo.test_postgis_search_finds_by_radius_and_state_and_validity) ... ok
+test_search_uses_the_geographic_index (tests.test_postgres.Geo.test_search_uses_the_geographic_index) ... ok
+test_administrator_role_comes_from_the_database_and_takes_effect_at_once (tests.test_postgres.PgAccess.test_administrator_role_comes_from_the_database_and_takes_effect_at_once) ... ok
+test_driver_cannot_use_operator_endpoints (tests.test_postgres.PgAccess.test_driver_cannot_use_operator_endpoints) ... ok
+test_driver_sees_published_hazards_only_and_never_the_evidence (tests.test_postgres.PgAccess.test_driver_sees_published_hazards_only_and_never_the_evidence) ... ok
+test_pairing_code_works_once_and_only_for_its_device (tests.test_postgres.PgAccess.test_pairing_code_works_once_and_only_for_its_device) ... ok
+test_personal_endpoints_need_a_valid_sign_in (tests.test_postgres.PgAccess.test_personal_endpoints_need_a_valid_sign_in) ... ok
+test_reports_are_authenticated_by_the_device_not_a_user (tests.test_postgres.PgAccess.test_reports_are_authenticated_by_the_device_not_a_user)
+The phone that relays a report may have no sign-in at that moment; the signature proves the source. ... ok
+test_server_will_not_start_open_by_accident (tests.test_postgres.PgAccess.test_server_will_not_start_open_by_accident) ... ok
+test_user_cannot_read_another_users_device_or_reports (tests.test_postgres.PgAccess.test_user_cannot_read_another_users_device_or_reports) ... ok
+test_user_cannot_send_positions_for_another_users_device (tests.test_postgres.PgAccess.test_user_cannot_send_positions_for_another_users_device) ... ok
+test_alert_is_not_repeated_until_the_cooldown_passes (tests.test_postgres.PgAhead.test_alert_is_not_repeated_until_the_cooldown_passes) ... ok
+test_asking_does_not_store_the_position (tests.test_postgres.PgAhead.test_asking_does_not_store_the_position) ... ok
+test_direction_is_required (tests.test_postgres.PgAhead.test_direction_is_required) ... ok
+test_expired_hazard_does_not_alert (tests.test_postgres.PgAhead.test_expired_hazard_does_not_alert) ... ok
+test_far_from_the_route_falls_back_to_the_current_heading (tests.test_postgres.PgAhead.test_far_from_the_route_falls_back_to_the_current_heading) ... ok
+test_fast_car_is_alerted_earlier (tests.test_postgres.PgAhead.test_fast_car_is_alerted_earlier) ... ok
+test_get_hazards_excludes_a_parallel_street_when_heading_is_known (tests.test_postgres.PgAhead.test_get_hazards_excludes_a_parallel_street_when_heading_is_known) ... ok
+test_hazard_ahead_on_the_road_alerts_at_the_set_distance (tests.test_postgres.PgAhead.test_hazard_ahead_on_the_road_alerts_at_the_set_distance) ... ok
+test_hazard_behind_the_driver_on_a_route_already_under_way_does_not_alert (tests.test_postgres.PgAhead.test_hazard_behind_the_driver_on_a_route_already_under_way_does_not_alert) ... ok
+test_hazard_behind_the_user_does_not_alert (tests.test_postgres.PgAhead.test_hazard_behind_the_user_does_not_alert) ... ok
+test_hazard_in_the_other_lane_of_the_route_does_not_alert (tests.test_postgres.PgAhead.test_hazard_in_the_other_lane_of_the_route_does_not_alert) ... ok
+test_hazard_just_behind_the_start_of_the_route_does_not_alert (tests.test_postgres.PgAhead.test_hazard_just_behind_the_start_of_the_route_does_not_alert) ... ok
+test_hazard_just_past_the_end_of_the_route_does_not_alert (tests.test_postgres.PgAhead.test_hazard_just_past_the_end_of_the_route_does_not_alert) ... ok
+test_hazard_on_a_parallel_street_does_not_alert (tests.test_postgres.PgAhead.test_hazard_on_a_parallel_street_does_not_alert) ... ok
+test_opposite_direction_does_not_alert (tests.test_postgres.PgAhead.test_opposite_direction_does_not_alert) ... ok
+test_route_distance_is_along_the_road_not_straight_line (tests.test_postgres.PgAhead.test_route_distance_is_along_the_road_not_straight_line) ... ok
+test_route_passing_the_spot_again_later_still_alerts (tests.test_postgres.PgAhead.test_route_passing_the_spot_again_later_still_alerts)
+Behind the user on the first stretch, but the route comes back over it in the same direction. ... ok
+test_route_turning_off_before_the_hazard_does_not_alert (tests.test_postgres.PgAhead.test_route_turning_off_before_the_hazard_does_not_alert) ... ok
+test_unconfirmed_hazard_is_not_an_alert (tests.test_postgres.PgAhead.test_unconfirmed_hazard_is_not_an_alert) ... ok
+test_golden_device_lines_still_pass_the_whole_path (tests.test_postgres.PgContract.test_golden_device_lines_still_pass_the_whole_path) ... ok
+test_ack_means_stored_not_that_the_hazard_is_confirmed (tests.test_postgres.PgDelivery.test_ack_means_stored_not_that_the_hazard_is_confirmed) ... ok
+test_cleanup_keeps_reports_inside_the_longest_window (tests.test_postgres.PgDelivery.test_cleanup_keeps_reports_inside_the_longest_window) ... ok
+test_delayed_report_within_its_window_is_accepted (tests.test_postgres.PgDelivery.test_delayed_report_within_its_window_is_accepted)
+No internet for a day and a half: a true report must not be refused for being late. ... ok
+test_device_restart_and_out_of_order_delivery_are_accepted (tests.test_postgres.PgDelivery.test_device_restart_and_out_of_order_delivery_are_accepted)
+After a restart the boot counter rises; older queued reports may still arrive afterwards. ... ok
+test_freshness_window_follows_the_hazard_type (tests.test_postgres.PgDelivery.test_freshness_window_follows_the_hazard_type) ... ok
+test_hostile_bodies_get_a_clear_refusal_not_a_server_error (tests.test_postgres.PgDelivery.test_hostile_bodies_get_a_clear_refusal_not_a_server_error) ... ok
+test_lost_ack_retry_gets_the_earlier_ack_and_stores_nothing (tests.test_postgres.PgDelivery.test_lost_ack_retry_gets_the_earlier_ack_and_stores_nothing) ... ok
+test_rejection_answer_survives_a_failing_rejection_log (tests.test_postgres.PgDelivery.test_rejection_answer_survives_a_failing_rejection_log) ... rejection not logged, database unavailable: bad_signature
+ok
+test_rejections_are_logged_with_code_and_reason (tests.test_postgres.PgDelivery.test_rejections_are_logged_with_code_and_reason) ... ok
+test_replay_after_cleanup_is_refused_as_too_old (tests.test_postgres.PgDelivery.test_replay_after_cleanup_is_refused_as_too_old)
+Retention never reopens a hole: once a report is deleted, it is already outside the freshness window. ... ok
+test_retry_long_after_the_freshness_window_still_gets_its_ack (tests.test_postgres.PgDelivery.test_retry_long_after_the_freshness_window_still_gets_its_ack)
+Stored, ACK lost, phone offline for days: it must hear "stored" so it can delete its copy. ... ok
+test_same_id_with_other_content_is_refused_as_final (tests.test_postgres.PgDelivery.test_same_id_with_other_content_is_refused_as_final) ... ok
+test_sent_report_is_stored_and_read_back (tests.test_postgres.PgDelivery.test_sent_report_is_stored_and_read_back)
+First integration check of the guide: send a report, it is stored, read it back through the API. ... ok
+test_signed_counter_too_large_for_the_database_is_refused (tests.test_postgres.PgDelivery.test_signed_counter_too_large_for_the_database_is_refused) ... ok
+test_storage_failure_says_retry_and_the_same_line_then_succeeds (tests.test_postgres.PgDelivery.test_storage_failure_says_retry_and_the_same_line_then_succeeds)
+Connection lost before saving: nothing stored, a retryable answer, no rejection. ... database unavailable: down
+ok
+test_too_old_and_future_reports_are_refused (tests.test_postgres.PgDelivery.test_too_old_and_future_reports_are_refused) ... ok
+test_cleanup_keeps_only_positions_near_reports_still_counted (tests.test_postgres.PgEvaluation.test_cleanup_keeps_only_positions_near_reports_still_counted) ... ok
+test_copied_traces_stay_one_source_after_the_raw_position_window (tests.test_postgres.PgEvaluation.test_copied_traces_stay_one_source_after_the_raw_position_window)
+Three identities moving as one must not become three sources just because time passed. ... ok
+test_crash_after_saving_leaves_everything_pending_then_finishes_counting_once (tests.test_postgres.PgEvaluation.test_crash_after_saving_leaves_everything_pending_then_finishes_counting_once)
+Processing stops after the report is stored: nothing half written, and the rerun counts each once. ... ok
+test_drive_past_evidence_survives_the_raw_position_window (tests.test_postgres.PgEvaluation.test_drive_past_evidence_survives_the_raw_position_window)
+A hazard that drivers disproved does not come back when the raw positions are cleaned up. ... ok
+test_every_run_records_the_configuration_used (tests.test_postgres.PgEvaluation.test_every_run_records_the_configuration_used)
+NFR-08: a decision can be traced to its inputs and configuration version. ... ok
+test_hazard_keeps_its_id_as_evidence_grows (tests.test_postgres.PgEvaluation.test_hazard_keeps_its_id_as_evidence_grows) ... ok
+test_implausible_report_records_why_the_engine_refused_it (tests.test_postgres.PgEvaluation.test_implausible_report_records_why_the_engine_refused_it) ... ok
+test_positions_near_a_speed_bump_report_are_kept_for_its_longer_window (tests.test_postgres.PgEvaluation.test_positions_near_a_speed_bump_report_are_kept_for_its_longer_window) ... ok
+test_retried_report_adds_no_evidence (tests.test_postgres.PgEvaluation.test_retried_report_adds_no_evidence) ... ok
+test_same_device_cannot_farm_reputation_from_one_hazard (tests.test_postgres.PgEvaluation.test_same_device_cannot_farm_reputation_from_one_hazard) ... ok
+test_same_event_id_on_two_devices_counts_for_both (tests.test_postgres.PgEvaluation.test_same_event_id_on_two_devices_counts_for_both)
+One device choosing another's event ID cannot get that device's real report thrown out. ... ok
+test_two_cars_reporting_one_hole_are_two_pieces_of_evidence (tests.test_postgres.PgEvaluation.test_two_cars_reporting_one_hole_are_two_pieces_of_evidence)
+Same pothole, different reports: not duplicates. The engine decides how they count. ... ok
+test_minor_hazard_is_not_shown_and_severity_is_reported (tests.test_postgres.PgHazards.test_minor_hazard_is_not_shown_and_severity_is_reported)
+Severity scope: two trusted cars that both measured a small jolt do not make a hazard worth showing. ... ok
+test_overview_shows_decisions_reliability_positions_and_rejections (tests.test_postgres.PgHazards.test_overview_shows_decisions_reliability_positions_and_rejections)
+The operator dashboard's data: every decision with its state and reasons, device reliability, ... ok
+test_settle_rewards_confirmed_reports_once (tests.test_postgres.PgHazards.test_settle_rewards_confirmed_reports_once) ... ok
+test_two_new_cars_give_only_an_advisory (tests.test_postgres.PgHazards.test_two_new_cars_give_only_an_advisory)
+Cold start at system level: new devices (reliability 0.25) cannot raise a warning together. ... ok
+test_two_vetted_cars_give_a_warning_ahead_only (tests.test_postgres.PgHazards.test_two_vetted_cars_give_a_warning_ahead_only) ... ok
+test_envelope_and_event_must_name_the_same_device (tests.test_postgres.PgReports.test_envelope_and_event_must_name_the_same_device) ... ok
+test_every_rejection_is_logged_with_a_reason (tests.test_postgres.PgReports.test_every_rejection_is_logged_with_a_reason) ... ok
+test_golden_device_report_is_accepted (tests.test_postgres.PgReports.test_golden_device_report_is_accepted)
+Contract: the C++ device's own output is accepted unchanged (format v2, Ed25519). ... ok
+test_key_in_the_message_is_not_trusted (tests.test_postgres.PgReports.test_key_in_the_message_is_not_trusted)
+An attacker's own key in the message does not help: only the registered key counts. ... ok
+test_malformed_body_is_rejected (tests.test_postgres.PgReports.test_malformed_body_is_rejected) ... ok
+test_oversized_body_is_rejected (tests.test_postgres.PgReports.test_oversized_body_is_rejected) ... ok
+test_repeated_boot_and_sequence_is_rejected (tests.test_postgres.PgReports.test_repeated_boot_and_sequence_is_rejected) ... ok
+test_retry_of_the_same_report_is_idempotent (tests.test_postgres.PgReports.test_retry_of_the_same_report_is_idempotent) ... ok
+test_retry_with_a_different_line_ending_is_still_a_duplicate (tests.test_postgres.PgReports.test_retry_with_a_different_line_ending_is_still_a_duplicate)
+Found by the live-server check: a phone that adds a newline on retry must not get a conflict. ... ok
+test_reused_event_id_with_other_content_is_a_conflict (tests.test_postgres.PgReports.test_reused_event_id_with_other_content_is_a_conflict) ... ok
+test_revoked_device_is_rejected (tests.test_postgres.PgReports.test_revoked_device_is_rejected) ... ok
+test_signed_but_invalid_event_is_rejected_by_schema (tests.test_postgres.PgReports.test_signed_but_invalid_event_is_rejected_by_schema) ... ok
+test_tampered_report_fails_the_signature (tests.test_postgres.PgReports.test_tampered_report_fails_the_signature) ... ok
+test_unknown_device_is_rejected (tests.test_postgres.PgReports.test_unknown_device_is_rejected) ... ok
+test_closed_store_raises_the_retryable_error (tests.test_postgres.Restart.test_closed_store_raises_the_retryable_error) ... ok
+test_database_down_gives_retryable_answer_then_the_retry_is_stored (tests.test_postgres.Restart.test_database_down_gives_retryable_answer_then_the_retry_is_stored) ... database unavailable: the pool 'pool-89' is already closed
+database unavailable: the pool 'pool-89' is already closed
+ok
+test_duplicate_protection_and_counters_survive_a_server_restart (tests.test_postgres.Restart.test_duplicate_protection_and_counters_survive_a_server_restart) ... ok
+test_pending_reports_are_finished_after_a_restart (tests.test_postgres.Restart.test_pending_reports_are_finished_after_a_restart) ... ok
+test_administrator_policy_opens_evidence_for_reading_only (tests.test_postgres.RowLevelSecurity.test_administrator_policy_opens_evidence_for_reading_only) ... ok
+test_anonymous_client_sees_nothing_at_all (tests.test_postgres.RowLevelSecurity.test_anonymous_client_sees_nothing_at_all) ... ok
+test_driver_gets_only_published_valid_hazards_through_the_search_function (tests.test_postgres.RowLevelSecurity.test_driver_gets_only_published_valid_hazards_through_the_search_function) ... ok
+test_new_supabase_user_gets_a_driver_profile_automatically (tests.test_postgres.RowLevelSecurity.test_new_supabase_user_gets_a_driver_profile_automatically) ... ok
+test_pairing_a_device_needs_the_code_even_through_the_backend (tests.test_postgres.RowLevelSecurity.test_pairing_a_device_needs_the_code_even_through_the_backend) ... ok
+test_private_columns_and_tables_are_closed_to_users (tests.test_postgres.RowLevelSecurity.test_private_columns_and_tables_are_closed_to_users) ... ok
+test_supabase_client_roles_cannot_call_the_trigger_function (tests.test_postgres.RowLevelSecurity.test_supabase_client_roles_cannot_call_the_trigger_function) ... ok
+test_user_cannot_change_trust_results_reputation_or_their_own_role (tests.test_postgres.RowLevelSecurity.test_user_cannot_change_trust_results_reputation_or_their_own_role) ... ok
+test_user_reads_only_their_own_rows (tests.test_postgres.RowLevelSecurity.test_user_reads_only_their_own_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 188 tests in 66.496s
+
+OK

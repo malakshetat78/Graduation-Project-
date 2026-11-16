@@ -1,0 +1,26 @@
+{
+  "part": "B",
+  "target": "https://bamrqyu5hizs6q6dy37wxvlebu0xwtlk.lambda-url.us-east-1.on.aws",
+  "utc": "20261116T190531Z",
+  "test_device": "t004-test-01",
+  "public_key": "01420a50e2e2928c6b49349e7d78e81d82d116dbd3bd5cec3c439ed7cce53e17",
+  "location": [
+    23.5,
+    27.0
+  ],
+  "evaluation": {},
+  "checks": [
+    {
+      "check": "B1 register test device",
+      "request": "POST /devices",
+      "expected": [
+        201
+      ],
+      "status": 401,
+      "passed": false,
+      "ms": 2084,
+      "writes": "1 row in devices",
+      "response": "{\"detail\":\"admin token required\"}"
+    }
+  ]
+}
