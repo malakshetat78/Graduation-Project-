@@ -68,11 +68,19 @@ jobs:
       - name: System test (whole chain in simulation, with attackers)
         run: python -m unittest sil/test_sil.py sil/test_ble_link.py -v 2>&1 | tee sil.log
 
+      - name: Signed-report security simulation (C++ Ed25519 signer -> Python verifier, tampering, replay)
+        working-directory: verification/crypto-simulation
+        run: |
+          pip install -r requirements.txt
+          ./build.sh
+          python -m pytest -v -rs test_phase1.py test_phase2.py test_phase3.py 2>&1 | tee ../../crypto.log
+
       - name: Requirement traceability
         run: |
           python verification/check_traceability.py --unittest-log engine=engine.log \
             --unittest-log backend=backend.log --unittest-log sil=sil.log --firmware-log firmware.log \
-            --integration-log integration.log --out traceability_report.md
+            --integration-log integration.log --pytest-log verification/crypto-simulation=crypto.log \
+            --out traceability_report.md
           cat traceability_report.md >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@v4
@@ -86,6 +94,7 @@ jobs:
             firmware.log
             integration.log
             replay_identity.log
+            crypto.log
             traceability_report.md
 
   static-analysis:

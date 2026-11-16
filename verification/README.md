@@ -3,7 +3,7 @@
 | File | What it is |
 |---|---|
 | `requirements.csv` | Requirement IDs from the system V-cycle workbook v1.1 (FR / NFR) and the security V-cycle (FR-SEC / NFR-SEC / SEC-EXT) |
-| `traceability.csv` | Every test, integration check, experiment and inspection, its V-level and the requirements it covers (T- engine, F- firmware, B- backend, S- system simulation, IT- integration, E- experiment, I- inspection) |
+| `traceability.csv` | Every test, integration check, experiment and inspection, its V-level and the requirements it covers (T- engine, F- firmware, B- backend, S- system simulation, C- standalone signed-report simulation in `crypto-simulation/`, IT- integration, E- experiment, I- inspection). C- rows name requirements as `(demo-of:ID)`: they run and must pass, but do not count as verifying the requirement, because the demo uses its own packet format, not the project's `signer.h` and `POST /reports` |
 | `golden/device_reports_v2.jsonl` | Signed reports produced by the device code: the contract between device, phone app and backend (the backend must accept them unchanged) |
 | `e2e_supabase.py` | Manual end-to-end check on a local Supabase stack: sign-up, tokens, a crash right after an ACK, alerts, attacks on the public API. Not run by CI |
 | `measure_evaluator.py` | Manual timing of one evaluator run and one cleanup at three traffic levels, on a throwaway database. Not run by CI |
