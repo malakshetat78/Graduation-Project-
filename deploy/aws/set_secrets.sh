@@ -25,7 +25,9 @@ printf '%s' "$DB" > "$TMP"; unset DB
 put /icvsp/database_url "$TMP"
 
 if [ ${#OVERWRITE[@]} -gt 0 ] || ! aws ssm get-parameter --region "$REGION" --name /icvsp/admin_token >/dev/null 2>&1; then
-    openssl rand -hex 32 | tr -d '\n' > "$TMP"
+    # strip \r too: openssl on Windows ends its line with \r\n, and the Windows AWS CLI reads a lone \r as a newline,
+    # which left the stored token unusable in an HTTP header (T-004)
+    openssl rand -hex 32 | tr -d '\r\n' > "$TMP"
     put /icvsp/admin_token "$TMP"
     echo "(admin token generated; read it in the AWS console > Systems Manager > Parameter Store when needed)"
 fi
