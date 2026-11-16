@@ -21,7 +21,7 @@ Lambda, BOARD = the real XIAO ESP32-S3 (not delivered yet).
 | TC-03 | EMULATOR | boot the smoke-test firmware | boots, chip and signing checks pass, no reboot | PASS, 0 reboots in 60 s (sensors SKIP: not emulated) | PASS | `screenshots/2_emulator_smoke_test.png` |
 | TC-04 | EMULATOR | signing demo, original stack size | runs without crashing | crashed (stack overflow, 54 reboots); fixed with an 8 KB stack, then 0 reboots | PASS after fix | `screenshots/4_bug_found_and_fixed.png` |
 
-| TC-04b | EMULATOR | boot a blank chip, then boot a chip that already has its key | first boot: `DEMO key created`; later boots: `DEMO key loaded` with the same public key; a storage read error is refused, never replaced by a new key | created on the blank chip; loaded on `ecu-qemu-cloud-01` with the same public key `778af631...88ec` | PASS | `logs/qemu_aws_report.log` (`DEMO key loaded`); refusal logic: host tests F-101..F-106 (`test_device_identity`) |
+| TC-04b | EMULATOR | boot a blank chip, then boot a chip that already has its key | first boot: `DEMO key created`; next boot: `DEMO key loaded` with the same public key | created, then loaded, public key `f615512b...120b` both times | PASS | `logs/qemu_report_demo_unregistered.log` lines 82-83 (created), `logs/qemu_report_demo.log` lines 82-83 (loaded); the cloud test chip loads its key the same way (`logs/qemu_aws_report.log`). A corrupt stored key is refused: host tests F-101..F-106 (fake store); the NVS error mapping (`ecu/main/nvs_secret_store.cpp`) is checked by code review only |
 
 ## ECU to backend on the laptop
 
