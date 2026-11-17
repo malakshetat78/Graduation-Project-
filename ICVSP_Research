@@ -1,0 +1,225 @@
+ICVSP — Platform Alternatives Research
+
+# 1. Strong Supabase alternatives — capability comparison
+
+# 2. What matters most for ICVSP?
+
+• Best direct substitutes: Nhost and Appwrite Native PostgreSQL. Both retain SQL + PostGIS + realtime/auth; migration still means rebuilding schema, API integration and access policies.
+
+• Firebase is not the best fit for the core hazard database: realtime is strong, but the NoSQL model and geohash workaround make relational evidence/reputation/history and spatial filtering less straightforward.
+
+• Historical analytics: PostgreSQL is the practical fit. Keep timestamped beacons/reports/evidence as append-only history, index event_time + device_id/hazard_id, and add time partitions/aggregations when volume justifies it. A separate warehouse/time-series service is not needed for the MVP.
+
+• Geospatial is a key differentiator: use PostGIS for distance, bounding boxes, nearby hazards and map-matching filters. It supports indexed spatial queries; simple latitude/longitude columns alone will become limiting.
+
+4. Existing Supabase limits — when could they become a problem?
+
+# 5. Email limit: keep Supabase Auth, add an SMTP provider
+
+Supabase built-in SMTP is test-only: 2 emails/hour per project and sends only to team-authorized addresses. Custom SMTP removes the built-in provider restriction; Supabase initially applies a 30 emails/hour Auth limit, adjustable in Authentication > Rate Limits. The email provider’s own quota still applies. Supabase Auth continues to handle signup, verification and password reset.
+
+# 6. Recommendation — what should ICVDP use?
+
+Keep the current stack for the MVP: Supabase PostgreSQL + Auth + Realtime, with FastAPI hosted on AWS Lightsail (start at $7/mo) and Resend Free for Auth emails. This avoids a costly migration and preserves the existing schema/team work.
+
+• Lowest practical development cost: Supabase Free + AWS Lightsail $7/mo + Resend Free = about $7/mo (but Supabase may pause; no automatic backups).
+
+• More production-ready baseline: Supabase Pro $25 + Lightsail $7 + Resend Free = about $32/mo, before taxes, optional add-ons and usage overages.
+
+• Revisit Nhost/Appwrite only if Supabase limits or pricing become a measured issue. Before migrating, benchmark real beacon rate, concurrent alert subscribers, database growth, egress and geospatial query latency.
+
+• Security actions before production: enable RLS on every exposed table; write least-privilege policies for users/devices; keep service-role/API secrets only in FastAPI environment secrets; use TLS, backups, MFA for admins, and test unauthorized reads/writes.
+
+ICVSP — AWS DATA PIPELINE & COST ESTIMATE
+
+.
+
+7. Alternatives to AWS for the ICVSP data pipeline
+
+8. AWS monthly cost estimate — all services
+
+Cost notes: $143.28/month is a planning estimate, not a fully verified AWS quote. S3 ($11.59) and Glue Spark ETL ($52.80) are the recorded AWS Pricing Calculator results; the remaining items are planning allowances. Lambda is $0 only if eligible Free Tier remains (about $0.17/month without it). Crawler/Data Quality may overlap with Spark runtime if run inside the same job. QuickSight’s $54 is provisional and depends on edition/user type. Taxes, data transfer out, support and backups are excluded; one-time S3 PUT ($0.16) is excluded.
+
+Recommended flow: Supabase (operational source of truth) → selected export / webhook / CDC → S3 (analytics copy) → Glue (ETL) → Athena (SQL analysis) → QuickSight (dashboards). Lambda, EventBridge Scheduler and Step Functions can automate jobs.
+
+Official Resources & References
+
+A. Supabase & alternative backend platforms
+
+B. Email, hosting & AWS backend services
+
+C. AWS data pipeline services & cost references
+
+D. AWS alternatives for data ingestion, processing & analytics
+
+
+## Table 1
+
+
+| Platform | Database + historical analytics | Auth + security | Realtime | Geospatial | Cost signal |
+
+| Supabase (current baseline) | PostgreSQL; SQL joins, indexes, time-based history and partitioning. Strong fit for reports, evidence, passes and evaluation runs. | Built-in Auth + PostgreSQL RLS. Policies must be enabled/tested on exposed tables; never expose service-role keys. | Built-in Postgres Changes / Broadcast. Free: 2M messages/mo; 200 peak connections. | Native PostGIS extension; spatial indexes and radius/bounding-box queries. | Free $0; Pro $25/mo. Free: 500MB DB, 1GB files, 5GB egress, 50K MAU. |
+
+| Nhost | Managed PostgreSQL + GraphQL/Hasura. SQL history, joins and partitions; closest like-for-like alternative. | Built-in Auth; Hasura role/row permissions and JWT-based authorization. | GraphQL subscriptions and event triggers. | PostGIS explicitly available on Nhost Postgres. | Starter $0: 1GB DB, 1GB files, 5GB egress; pauses after 1 week idle. Pro from $25/mo. |
+
+| Appwrite | TablesDB for app data; also offers native managed PostgreSQL with direct SQL. Use native PG for complex historical queries. | Built-in Auth; permissions at table/row/file level. Server API keys bypass permissions—keep server-side. | Realtime subscriptions to database, auth and storage events. | Native PostgreSQL supports PostGIS extensions; use this, not just TablesDB, for spatial SQL. | Cloud platform has $10 monthly DB compute credits; dedicated PostgreSQL starts around $10/mo. Verify exact tier/region. |
+
+| Firebase | Firestore NoSQL; good for event-driven app data, but relational joins and long-term SQL analytics are weaker; export/BigQuery adds another service. | Firebase Auth + Security Rules; rules must be designed/tested per collection. | Excellent live listeners; Firestore charges by reads/writes and realtime reads. | No native PostGIS. Geo queries usually use geohash + multiple queries and client-side filtering. | Firestore free: 1GiB, 50K reads/day, 20K writes/day, 10GiB egress/mo; usage billed beyond. |
+
+| --- | --- | --- | --- | --- | --- |
+
+
+## Table 2
+
+
+| Item | Free plan | Pro plan ($25/mo) | ICVSP impact |
+
+| Database | 500MB / project | 8GB included; then $0.125/GB | Device beacons/history can grow quickly; monitor table size and retention. |
+
+| File storage | 1GB | 100GB included; then $0.0213/GB | Store photos/video evidence sparingly; avoid uploading raw continuous video. |
+
+| Egress | 5GB/mo | 250GB/mo; then $0.09/GB | Repeated map/API responses and media downloads can consume bandwidth. |
+
+| Auth users | 50K MAU | 100K MAU; then $0.00325/MAU | Not an early MVP bottleneck. |
+
+| Realtime | 2M messages/mo; 200 peak connections | 5M messages/mo; 500 peak connections | Vehicle/alert fan-out can raise messages and concurrent connections. |
+
+| Reliability | Projects pause after 1 week inactivity; no automatic backups | No inactivity pause; daily backups kept 7 days | Free is fine for development, not dependable production. |
+
+| --- | --- | --- | --- |
+
+
+## Table 3
+
+
+| Provider | Current cost / quota | Decision |
+
+| Resend | Free: 3,000 emails/month, max 100/day. Pro: $20/mo for 50,000/month, no daily cap. | Best MVP choice: free tier is enough for expected auth emails. Connect via Supabase’s native Resend integration or custom SMTP; verify sending domain + SPF/DKIM. |
+
+| Amazon SES | À-la-carte: $0.10 per 1,000 outbound emails (plus attachment data). | Cheapest at high volume, but more setup (production access, domain verification, reputation/monitoring). Use if already standardizing email on AWS. |
+
+| --- | --- | --- |
+
+
+## Table 4
+
+
+| Alternative | Possible ICVDP data flow | Main service roles | Fit for ICVSP | Cost approach |
+
+| Google Cloud | Supabase export/webhook → Cloud Storage → Dataflow or Data Fusion → BigQuery → Looker | Storage: Cloud Storage; ETL/streaming: Dataflow or Data Fusion; warehouse/SQL: BigQuery; BI: Looker. | Full analytics stack with batch and streaming options; strong alternative for a data lake + warehouse workflow. | Usage-based; estimate each service in Google Cloud Pricing Calculator. |
+
+| Microsoft Azure / Fabric | Supabase export/webhook → ADLS / OneLake → Data Factory / Fabric Data Factory → Fabric Lakehouse/Warehouse → Power BI | Ingestion/orchestration: Data Factory; storage: ADLS/OneLake; processing/query: Fabric Lakehouse/Warehouse; BI: Power BI. | Integrated choice for teams using Microsoft tools; Fabric groups multiple analytics workloads. | Capacity and service based; price the required Fabric capacity and Azure services. |
+
+| Databricks Lakeflow | Supabase PostgreSQL/JDBC or custom webhook/API → cloud object storage / Delta Lake → Lakeflow Pipelines → Databricks SQL / BI | Ingestion: Lakeflow Connect; processing: Lakeflow Pipelines; orchestration: Lakeflow Jobs; analytics: Databricks SQL. | Powerful lakehouse and Spark pipeline option for more complex batch/stream workloads; validate connector fit for the selected Supabase setup. | Pay-as-you-go by workload/DBU plus underlying cloud resources; may be more than an MVP needs. |
+
+| --- | --- | --- | --- | --- |
+
+
+## Table 5
+
+
+| AWS service | Monthly usage assumption | Monthly usage assumption | Monthly estimate (USD) |
+
+| Amazon S3 | 500 GB Standard; 10,000 write requests; 100,000 read requests | 500 GB Standard; 10,000 write requests; 100,000 read requests | $11.59 |
+
+| AWS Glue – Spark ETL | 4 DPU × 1,800 minutes/month (30 runtime hours) | 4 DPU × 1,800 minutes/month (30 runtime hours) | $52.80 |
+
+| Glue Crawler | 1 run/day; 2 DPU; 10 min/run | 1 run/day; 2 DPU; 10 min/run | $4.40 |
+
+| Glue Data Quality | 1 check/day; 2 DPU; 5 min/run | 1 check/day; 2 DPU; 5 min/run | $2.20 |
+
+| AWS Lambda | 10,000 requests; 512 MB; 2 sec; assumes eligible remaining Free Tier | 10,000 requests; 512 MB; 2 sec; assumes eligible remaining Free Tier | $0.00 |
+
+| EventBridge Scheduler | 30 scheduled invocations/month | 30 scheduled invocations/month | $0.00 |
+
+| Step Functions Standard | 30 executions × 10 transitions; below free allowance | 30 executions × 10 transitions; below free allowance | $0.00 |
+
+| Amazon Athena | 1 TB scanned/month × $5/TB | 1 TB scanned/month × $5/TB | $5.00 |
+
+| Amazon QuickSight | 1 Author + 10 Readers; provisional allowance | 1 Author + 10 Readers; provisional allowance | $54.00 |
+
+| Amazon Bedrock – Nova Micro | 10M input + 2.5M output tokens | 10M input + 2.5M output tokens | $0.70 |
+
+| AWS KMS | 2 keys + approximately 100,000 requests | 2 keys + approximately 100,000 requests | $2.24 |
+
+| AWS Secrets Manager | 5 secrets + low API usage | 5 secrets + low API usage | $2.25 |
+
+| Amazon CloudWatch | Logs, 10 custom metrics and alarms; rough allowance | Logs, 10 custom metrics and alarms; rough allowance | $7.00 |
+
+| AWS CloudTrail | 1M additional data events | 1M additional data events | $1.00 |
+
+| Amazon SNS | Low notification volume | Low notification volume | $0.10 |
+
+| S3 Gateway VPC Endpoint / IAM / Lake Formation | No separate charge assumed for this usage | No separate charge assumed for this usage | $0.00 |
+
+| AWS TOTAL / MONTH / $143.28 | ANNUALIZED / $1,719.36 | CALCULATOR-BASED SUBTOTAL / $64.39 | ADDITIONAL ALLOWANCES / $78.89 / month |
+
+| --- | --- | --- | --- |
+
+
+## Table 6
+
+
+| • Supabase pricing, quotas and plan limits | • Supabase Auth rate limits and email restrictions |
+
+| • Supabase Row Level Security (RLS) | • Supabase PostGIS extension |
+
+| • Supabase Realtime documentation | • Nhost pricing |
+
+| • Nhost Postgres extensions | • Appwrite pricing |
+
+| • Appwrite Databases documentation | • Firebase pricing |
+
+| • Firebase geoqueries (geohash approach) |  |
+
+| --- | --- |
+
+
+## Table 7
+
+
+| • Resend pricing and sending quotas | • Amazon SES pricing |
+
+| • Amazon Lightsail pricing | • Amazon RDS for PostgreSQL pricing |
+
+| • Amazon RDS PostgreSQL extensions | • Amazon Cognito pricing |
+
+| • AWS AppSync pricing |  |
+
+| --- | --- |
+
+
+## Table 8
+
+
+| • Amazon S3 pricing | • AWS Glue pricing |
+
+| • Amazon Athena pricing | • Amazon QuickSight pricing |
+
+| • AWS Lambda pricing | • Amazon EventBridge pricing |
+
+| • AWS Step Functions pricing | • Amazon Bedrock pricing |
+
+| • AWS Key Management Service pricing | • AWS Secrets Manager pricing |
+
+| • Amazon CloudWatch pricing | • AWS CloudTrail pricing |
+
+| • Amazon SNS pricing | • AWS Pricing Calculator |
+
+| --- | --- |
+
+
+## Table 9
+
+
+| • Google Cloud Dataflow pricing | • Google Cloud Data Fusion pricing |
+
+| • Google BigQuery pricing | • Looker pricing |
+
+| • Azure Data Factory pricing | • Microsoft Fabric pricing |
+
+| • Power BI pricing | • Databricks Lakeflow documentation |
+
+| • Databricks pricing |  |
+
+| --- | --- |
