@@ -12,7 +12,7 @@ Two firmwares from one project (Kconfig `ICVSP_APP`):
 
 | File | What |
 |---|---|
-| `main/board_pins.h` | Every pin, in one place. IMU pins are PENDING (placeholder D4/D5). |
+| `main/board_pins.h` | Every pin, in one place. IMU on D4/D5 (confirmed by Malak's design); stacked GPS on D6/D7 plus D0/D2. |
 | `sdkconfig.defaults` | Board build: 8 MB flash, octal PSRAM, USB console, 8 KB main stack, camera on I2C port 0 |
 | `sdkconfig.qemu` | Emulator overlay: UART console, quad PSRAM, hardware probes skipped |
 | `sdkconfig.report` | Selects the report demo firmware |

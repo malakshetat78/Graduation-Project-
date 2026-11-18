@@ -196,7 +196,7 @@ void check_gps(Check& c) {
         (unsigned long)st.checksum_errors, (unsigned long)g_gps.rmc, (unsigned long)g_gps.gga,
         (unsigned long)g_gps.other, g_gps.gnss.satellites(), g_gps.gnss.has_time() ? "yes" : "no",
         fix.valid ? "yes" : "no (normal indoors)",
-        g_gps.bytes == 0 ? " - no bytes: check wiring, or swap GPS_TX_GPIO/GPS_RX_GPIO" : "");
+        g_gps.bytes == 0 ? " - no bytes: module seated the right way round? powered? (do not swap TX/RX on the stacked module)" : "");
 }
 
 // After the summary: GPS status every 10 s, and one line (once per boot) for the first fix. Never returns.
@@ -248,7 +248,7 @@ void check_imu(Check& c) {
     }
     if (!addr) {
         i2c_del_master_bus(bus);
-        set(c, Result::Fail, "nothing answers at 0x68/0x69 on SDA=GPIO%d SCL=GPIO%d (pins are PENDING)",
+        set(c, Result::Fail, "nothing answers at 0x68/0x69 on SDA=GPIO%d SCL=GPIO%d (D4/D5): check the wiring and 3V3",
             IMU_SDA_GPIO, IMU_SCL_GPIO);
         return;
     }

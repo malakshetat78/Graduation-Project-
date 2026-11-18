@@ -7,7 +7,16 @@ choice ICVSP_APP
         bool "Boot/sensor smoke test"
     config ICVSP_APP_REPORT_DEMO
         bool "Signed report demo: ECU app -> POST /reports over the network"
+    config ICVSP_APP_MODEM_BRIDGE
+        bool "Modem AT bridge: USB console <-> UART2 (SIM900A bring-up, sdkconfig.modem_bridge)"
 endchoice
+
+config ICVSP_MODEM_BAUD
+    int "Modem UART baud rate at start (change at run time with ~baud N)"
+    depends on ICVSP_APP_MODEM_BRIDGE
+    default 9600
+    help
+        SIM900 modules auto-detect the baud rate from the first "AT" they receive; 9600 is a safe start.
 
 config ICVSP_SMOKE_EMULATOR
     bool "Built for QEMU: skip the probes that need real hardware"

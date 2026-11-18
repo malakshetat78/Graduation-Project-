@@ -1,0 +1,5 @@
+# Modem AT bridge (layer on top of sdkconfig.defaults): the laptop types AT commands, the XIAO forwards them to
+# the modem on UART2 (D3 TX, D1 RX) and prints the answers. For the SIM900A bring-up, stages 1-2 of
+# results/bringup/SIM900A_BRINGUP.md. No Wi-Fi, no keys, no network; flashing it does not touch the device key in NVS.
+CONFIG_ICVSP_APP_MODEM_BRIDGE=y
+CONFIG_ICVSP_MODEM_BAUD=9600
