@@ -7,6 +7,8 @@ choice ICVSP_APP
         bool "Boot/sensor smoke test"
     config ICVSP_APP_REPORT_DEMO
         bool "Signed report demo: ECU app -> POST /reports over the network"
+    config ICVSP_APP_WIFI_HOTSPOT
+        bool "Wi-Fi hotspot station test"
 endchoice
 
 config ICVSP_SMOKE_EMULATOR
@@ -21,6 +23,7 @@ config ICVSP_GPS_LISTEN_S
     range 2 60
 
 config ICVSP_NET_QEMU_ETH
+    depends on !ICVSP_APP_WIFI_HOTSPOT
     bool "Network over QEMU's emulated Ethernet instead of Wi-Fi (emulator only)"
     default n
     help

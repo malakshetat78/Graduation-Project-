@@ -1,12 +1,18 @@
 # ECU firmware (ESP-IDF 5.5.5, XIAO ESP32-S3 Sense)
 
-Two firmwares from one project (Kconfig `ICVSP_APP`):
+Three firmwares from one project (Kconfig `ICVSP_APP`):
 
 - **Smoke test** (default): `main/smoke_main.cpp` checks the chip, signing, GPS, IMU and camera, one line each
   (`SMOKE <check> PASS|FAIL|SKIP ...`).
 - **Report demo** (`sdkconfig.report`): `main/report_demo_main.cpp` runs the ECU app on the chip and sends each
   signed report to the backend's `POST /reports` from a separate delivery task (Wi-Fi on the board, QEMU's
   emulated Ethernet in the emulator). The IMU drive and GNSS sentences are simulated and say so in the log.
+
+- **Wi-Fi hotspot station test** (`sdkconfig.hotspot`): joins a WPA2 phone hotspot and logs DHCP,
+  failed joins and reconnection over USB. Use a fresh build directory, with
+  `SDKCONFIG_DEFAULTS=sdkconfig.defaults;sdkconfig.hotspot;sdkconfig.local` and an isolated
+  generated SDK config. Put real hotspot credentials in the git-ignored `sdkconfig.local`.
+
  Build, emulator, flash commands and the expected results are in
 [`../results/bringup/BRINGUP_CHECKLIST.md`](../results/bringup/BRINGUP_CHECKLIST.md).
 
