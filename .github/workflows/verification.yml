@@ -1,4 +1,4 @@
-# V-cycle verification on every push: unit, integration, system (simulation) and traceability checks.
+﻿# V-cycle verification on every push: unit, integration, system (simulation) and traceability checks.
 # Security scans (Gitleaks, Semgrep, Trivy) are added by the cybersecurity team (Gantt C2).
 name: verification
 
@@ -36,9 +36,9 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.platformio
-          key: platformio-${{ runner.os }}-${{ hashFiles('firmware/platformio.ini') }}
+          key: platformio-${{ runner.os }}-${{ hashFiles('xaio_sw/platformio.ini') }}
       - name: Install tools
-        run: pip install platformio coverage -r backend/requirements.txt
+        run: pip install platformio coverage -r backend_sw/requirements.txt
 
       - name: Trust engine tests (unit, integration, system scenarios)
         working-directory: engine
@@ -49,28 +49,28 @@ jobs:
         run: coverage report -m --include="icvsp/*" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Backend API tests (SQLite and Supabase PostgreSQL + PostGIS, RLS, concurrency, restarts)
-        working-directory: backend
+        working-directory: backend_sw
         env:
           ICVSP_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54329/postgres
         run: python -m unittest -v 2>&1 | tee ../backend.log
 
       - name: ESP-IDF persistent anti-replay tests (native C, reboot and storage failures)
-        run: python firmware/espidf_security/tools/run_replay_identity_tests.py | tee replay_identity.log
+        run: python xaio_sw/espidf_security/tools/run_replay_identity_tests.py | tee replay_identity.log
 
       - name: Device firmware unit tests (PlatformIO native)
-        working-directory: firmware
+        working-directory: xaio_sw
         run: pio test -e native -v | tee ../firmware.log
 
       - name: Device -> engine integration (signed reports, independent Ed25519 check)
-        working-directory: firmware
+        working-directory: xaio_sw
         run: python tools/check_with_engine.py | tee ../integration.log
 
       - name: System test (whole chain in simulation, with attackers)
-        run: python -m unittest sil/test_sil.py sil/test_ble_link.py -v 2>&1 | tee sil.log
+        run: python -m unittest testing/sil/test_sil.py testing/sil/test_ble_link.py -v 2>&1 | tee sil.log
 
       - name: Requirement traceability
         run: |
-          python verification/check_traceability.py --unittest-log engine=engine.log \
+          python testing/verification/check_traceability.py --unittest-log engine=engine.log \
             --unittest-log backend=backend.log --unittest-log sil=sil.log --firmware-log firmware.log \
             --integration-log integration.log --out traceability_report.md
           cat traceability_report.md >> "$GITHUB_STEP_SUMMARY"
@@ -99,13 +99,13 @@ jobs:
       - name: Python (ruff, pyflakes rules)
         run: |
           pip install ruff
-          ruff check --select F engine backend sil firmware/tools verification
-          ruff check --select E9,F63,F7,F82 ai/scripts
+          ruff check --select F engine backend_sw testing/sil xaio_sw/tools testing/verification
+          ruff check --select E9,F63,F7,F82 ai_sw/scripts
       - name: C++ (cppcheck)
         # reported but not yet blocking: switched to blocking once the first report is clean
         continue-on-error: true
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q cppcheck
           cppcheck --std=c++17 --enable=warning,performance,portability --error-exitcode=1 --inline-suppr \
-            --suppress=missingIncludeSystem -I firmware/lib/icvsp_core/src -I firmware/lib/icvsp_sim/src \
-            firmware/lib/icvsp_core/src firmware/lib/icvsp_sim/src firmware/src
+            --suppress=missingIncludeSystem -I xaio_sw/lib/icvsp_core/src -I xaio_sw/lib/icvsp_sim/src \
+            xaio_sw/lib/icvsp_core/src xaio_sw/lib/icvsp_sim/src xaio_sw/src
