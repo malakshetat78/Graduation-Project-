@@ -1,0 +1,124 @@
+<mxfile host="Electron">
+  <diagram name="Embedded Software &amp; Security Architecture" id="0">
+    <mxGraphModel dx="1561" dy="948" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#142840;strokeColor=#142840;fontColor=#142840;fontSize=16;spacing=8;fontColor=#ffffff;fontSize=25;rounded=0;" value="&lt;b&gt;ICVSP – High-Level Embedded Software &amp;amp; Security Architecture&lt;/b&gt;" vertex="1">
+          <mxGeometry height="66" width="1525" x="35" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="hw" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#a5b4c6;fontColor=#142840;fontSize=16;spacing=8;rounded=0;verticalAlign=top;align=left;fontStyle=1;spacingTop=9;" value="Hardware Layer (ECU)" vertex="1">
+          <mxGeometry height="400" width="245" x="35" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="fw" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#a5b4c6;fontColor=#142840;fontSize=16;spacing=8;rounded=0;verticalAlign=top;align=left;fontStyle=1;spacingTop=9;" value="Firmware Layer · ESP-IDF v5.5.5 · C/C++ on ESP32-S3" vertex="1">
+          <mxGeometry height="400" width="940" x="320" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="mobile" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#a5b4c6;fontColor=#142840;fontSize=16;spacing=8;rounded=0;verticalAlign=top;align=left;fontStyle=1;spacingTop=9;" value="Mobile Application (BLE Receiver)" vertex="1">
+          <mxGeometry height="400" width="250" x="1310" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="libs" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#a5b4c6;fontColor=#142840;fontSize=16;spacing=8;rounded=0;verticalAlign=top;align=left;fontStyle=1;spacingTop=9;" value="Firmware Libraries &amp;amp; Frameworks" vertex="1">
+          <mxGeometry height="145" width="940" x="320" y="605" as="geometry" />
+        </mxCell>
+        <mxCell id="esp" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Seeed XIAO ESP32-S3 Sense&lt;/b&gt;" vertex="1">
+          <mxGeometry height="63" width="205" x="55" y="197" as="geometry" />
+        </mxCell>
+        <mxCell id="sensors" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f0f3f7;strokeColor=#6c7d91;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Sensor Inputs&lt;/b&gt;&lt;br&gt;OV3660 Camera · DVP&lt;br&gt;L76K GPS · UART&lt;br&gt;MPU6050 IMU · I²C" vertex="1">
+          <mxGeometry height="138" width="205" x="55" y="295" as="geometry" />
+        </mxCell>
+        <mxCell id="drivers" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Hardware Drivers&lt;/b&gt;&lt;br&gt;&amp;amp; Interfaces" vertex="1">
+          <mxGeometry height="106" width="128" x="343" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="acq" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Sensor Data&lt;/b&gt;&lt;br&gt;Acquisition" vertex="1">
+          <mxGeometry height="106" width="125" x="494" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="events" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Event Detection&lt;/b&gt;&lt;br&gt;&amp;amp; Processing" vertex="1">
+          <mxGeometry height="106" width="126" x="642" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="msg" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Message Construction&lt;/b&gt;&lt;br&gt;ID · timestamp&lt;br&gt;latitude · longitude" vertex="1">
+          <mxGeometry height="106" width="134" x="792" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="security" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Security Processing&lt;/b&gt;&lt;br&gt;Shared-key AEAD&lt;br&gt;Ed25519 signing&lt;br&gt;Encrypt → Sign&amp;nbsp;" vertex="1">
+          <mxGeometry height="106" width="145" x="950" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="ble" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;BLE&lt;/b&gt;&lt;br&gt;Communication" vertex="1">
+          <mxGeometry height="106" width="115" x="1121" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="warn" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f0f3f7;strokeColor=#6c7d91;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Local Warning&lt;/b&gt;&lt;br&gt;To Be Confirmed" vertex="1">
+          <mxGeometry height="63" width="165" x="622" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="queue" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f0f3f7;strokeColor=#6c7d91;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Message Queue &amp;amp; ACK Handling&lt;/b&gt;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="61" width="206" x="1020" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="rx" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;BLE Message Reception&lt;/b&gt;" vertex="1">
+          <mxGeometry height="106" width="216" x="1327" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="mobilecheck" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f0f3f7;strokeColor=#6c7d91;fontColor=#142840;fontSize=16;spacing=8;" value="Verify signature / authenticate &amp;amp; decrypt&lt;br&gt;To Be Confirmed" vertex="1">
+          <mxGeometry height="64" width="216" x="1327" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ack" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f0f3f7;strokeColor=#6c7d91;fontColor=#142840;fontSize=16;spacing=8;" value="ACK response" vertex="1">
+          <mxGeometry height="61" width="216" x="1327" y="451" as="geometry" />
+        </mxCell>
+        <mxCell id="idf" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="ESP-IDF 5.5.5" vertex="1">
+          <mxGeometry height="62" width="174" x="494" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="driverlib" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="ESP-IDF Hardware Drivers" vertex="1">
+          <mxGeometry height="62" width="128" x="343" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="mon" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="Monocypher" vertex="1">
+          <mxGeometry height="62" width="145" x="950" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="blelib" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#eaf2ff;strokeColor=#5075b5;fontColor=#142840;fontSize=16;spacing=8;" value="ESP-IDF BLE Stack" vertex="1">
+          <mxGeometry height="62" width="115" x="1121" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="note" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f0f3f7;strokeColor=#6c7d91;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Secured envelope&lt;/b&gt; · Ciphertext, nonce, authentication tag and signature · 160 bytes reported · Serialization and BLE packet transfer To Be Confirmed" vertex="1">
+          <mxGeometry height="42" width="1525" x="35" y="774" as="geometry" />
+        </mxCell>
+        <mxCell id="test" parent="1" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#f0f3f7;strokeColor=#6c7d91;fontColor=#142840;fontSize=16;spacing=8;" value="&lt;b&gt;Local evidence only&lt;/b&gt; · C++ sender and Python verification/decryption · Replay, fake ECU, tampering, lost ACK and server restart tested locally" vertex="1">
+          <mxGeometry height="42" width="1525" x="35" y="826" as="geometry" />
+        </mxCell>
+        <mxCell id="sensors-drivers" edge="1" parent="1" source="sensors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="drivers" value="Sensor data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="drivers-acq" edge="1" parent="1" source="drivers" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="acq" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="acq-events" edge="1" parent="1" source="acq" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="events" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="events-msg" edge="1" parent="1" source="events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="msg" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg-security" edge="1" parent="1" source="msg" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="security" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="security-ble" edge="1" parent="1" source="security" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="ble" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ble-rx" edge="1" parent="1" source="ble" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="rx" value="BLE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="drivers-driverlib" edge="1" parent="1" source="drivers" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;dashPattern=6 4;" target="driverlib" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="acq-idf" edge="1" parent="1" source="acq" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;dashPattern=6 4;" target="idf" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="security-mon" edge="1" parent="1" source="security" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;dashPattern=6 4;" target="mon" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ble-blelib" edge="1" parent="1" source="ble" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;dashPattern=6 4;exitX=1;exitY=0.85;entryX=1;entryY=0.5;" target="blelib" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ack-queue" edge="1" parent="1" source="ack" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="queue" value="If supported">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rx-mobilecheck" edge="1" parent="1" source="rx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=0.5;exitY=0;entryX=0.5;entryY=1;dashed=1;" target="mobilecheck" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="events-warn" edge="1" parent="1" source="events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#42566e;fontColor=#142840;labelBackgroundColor=#ffffff;fontSize=13;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="warn" value="Hazard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
