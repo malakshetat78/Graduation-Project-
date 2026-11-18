@@ -8,11 +8,11 @@ list in requirements.csv, and
   4. writes a report: every requirement with its tests and an overall result.
 
     (cd engine && python3 -m unittest -v 2> ../engine.log)
-    (cd backend && python3 -m unittest -v 2> ../backend.log)
-    python3 -m unittest sil/test_sil.py -v 2> sil.log
-    (cd firmware && pio test -e native -v > ../firmware.log && python3 tools/check_with_engine.py > ../integration.log)
-    python3 verification/check_traceability.py --unittest-log engine=engine.log --unittest-log backend=backend.log \
-        --unittest-log sil=sil.log --firmware-log firmware.log --integration-log integration.log
+    (cd backend_sw && python3 -m unittest -v 2> ../backend.log)
+    python3 -m unittest testing/sil/test_sil.py -v 2> sil.log
+    (cd xaio_sw && pio test -e native -v > ../firmware.log && python3 tools/check_with_engine.py > ../integration.log)
+    python3 testing/verification/check_traceability.py --unittest-log engine=engine.log --unittest-log backend_sw=backend.log \
+        --unittest-log testing/sil=sil.log --firmware-log firmware.log --integration-log integration.log
 
 Experiments (E-) are long or need private data, and inspections (I-) are done by a person, so they are not
 rerun here; the report shows them as "recorded".
@@ -24,15 +24,15 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 
 
 def code_tests() -> set[tuple[str, str]]:
     """(file, test) pairs that exist in the code."""
     found = set()
-    py = [*(ROOT / 'engine/tests').glob('test_*.py'), *(ROOT / 'backend/tests').glob('test_*.py'),
-          *(ROOT / 'sil').glob('test_*.py')]
+    py = [*(ROOT / 'engine/tests').glob('test_*.py'), *(ROOT / 'backend_sw/tests').glob('test_*.py'),
+          *(ROOT / 'testing/sil').glob('test_*.py')]
     for f in sorted(py):
         cls = None
         for line in f.read_text().splitlines():
@@ -40,7 +40,7 @@ def code_tests() -> set[tuple[str, str]]:
                 cls = m.group(1)
             elif m := re.match(r'    def (test_\w+)', line):
                 found.add((str(f.relative_to(ROOT)), f'{cls}.{m.group(1)}'))
-    for f in sorted((ROOT / 'firmware/test').glob('*/test_main.cpp')):
+    for f in sorted((ROOT / 'xaio_sw/test').glob('*/test_main.cpp')):
         for name in re.findall(r'RUN_TEST\((\w+)\)', f.read_text()):
             found.add((str(f.relative_to(ROOT)), name))
     return found
@@ -52,21 +52,22 @@ def results(unittest_logs: dict[str, str], firmware_log: str, integration_log: s
     # Each log comes with the folder its tests were run from (engine, backend) or live in (sil).
     for base, log in unittest_logs.items():
         # a warning printed by the code under test can split "... ok" over several lines
+        base_parts = base.split('/')
         for m in re.finditer(r'^(test_\w+) \(([\w.]+)\.(\w+)\.\w+\)(?:\n[^\n]*?)? \.\.\. '
                              r'(?:[^\n]*\n){0,6}?[^\n]*?\b(ok|FAIL|ERROR|skipped)\b', log, re.M):
             name, module, cls, outcome = m.groups()
             parts = module.split('.')
-            if parts[0] == base:
-                parts = parts[1:]
+            if parts[:len(base_parts)] == base_parts:
+                parts = parts[len(base_parts):]
             res[(f'{base}/{"/".join(parts)}.py', f'{cls}.{name}')] = 'Pass' if outcome == 'ok' else 'Fail'
     for m in re.finditer(r'^test/(\w+)/test_main\.cpp:\d+:(\w+):(PASS|FAIL|IGNORE)', firmware_log, re.M):
         suite, name, outcome = m.groups()
-        res[(f'firmware/test/{suite}/test_main.cpp', name)] = 'Pass' if outcome == 'PASS' else 'Fail'
+        res[(f'xaio_sw/test/{suite}/test_main.cpp', name)] = 'Pass' if outcome == 'PASS' else 'Fail'
     if integration_log is not None:
         lines = [l for l in integration_log.splitlines() if 'signature:' in l]
         ok = bool(lines) and all('engine: valid' in l and 'signature: ok' in l and l.rstrip().endswith('True')
                                  for l in lines)
-        res[('firmware/tools/check_with_engine.py', '*')] = 'Pass' if ok else 'Fail'
+        res[('xaio_sw/tools/check_with_engine.py', '*')] = 'Pass' if ok else 'Fail'
     return res
 
 

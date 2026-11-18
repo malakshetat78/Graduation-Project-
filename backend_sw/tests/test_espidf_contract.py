@@ -20,7 +20,7 @@ from icvsp_backend.app import create_app
 from icvsp_backend.store import Store
 
 ROOT = Path(__file__).resolve().parents[2]
-FIRMWARE = ROOT / "firmware" / "espidf_security"
+FIRMWARE = ROOT / "xaio_sw" / "espidf_security"
 SRC = FIRMWARE / "main"
 MONO = FIRMWARE / "components" / "monocypher"
 DRIVER = FIRMWARE / "tools" / "signer_cli.c"

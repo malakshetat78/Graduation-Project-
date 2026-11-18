@@ -27,8 +27,8 @@ import zlib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "backend"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "backend_sw"))
 from fastapi.testclient import TestClient  # noqa: E402
 
 from ble_link import BleConfig, BleLink  # noqa: E402
@@ -36,7 +36,7 @@ from icvsp_backend.app import create_app  # noqa: E402
 from icvsp_backend.store import Store  # noqa: E402
 from icvsp.model import from_iso  # noqa: E402
 
-FW = ROOT / "firmware"
+FW = ROOT / "xaio_sw"
 BIN = FW / ".pio" / "sil_vehicle"
 ADMIN = {"X-Admin-Token": "sil"}
 
@@ -457,7 +457,7 @@ def main() -> None:
     ap.add_argument("--scenario", choices=list(SCENARIOS) + ["all"], default="all")
     ap.add_argument("--cars", type=int)
     ap.add_argument("--seed", type=int, default=1)
-    ap.add_argument("--out", default=str(ROOT / "sil" / "results"))
+    ap.add_argument("--out", default=str(ROOT / "testing" / "sil" / "results"))
     ap.add_argument("--camera", choices=list(CAMERAS), default="assumed",
                     help="camera model profile (hit and false-report rates measured on held-out video)")
     a = ap.parse_args()

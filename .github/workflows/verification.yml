@@ -71,7 +71,7 @@ jobs:
       - name: Requirement traceability
         run: |
           python testing/verification/check_traceability.py --unittest-log engine=engine.log \
-            --unittest-log backend=backend.log --unittest-log sil=sil.log --firmware-log firmware.log \
+            --unittest-log backend_sw=backend.log --unittest-log testing/sil=sil.log --firmware-log firmware.log \
             --integration-log integration.log --out traceability_report.md
           cat traceability_report.md >> "$GITHUB_STEP_SUMMARY"
 
