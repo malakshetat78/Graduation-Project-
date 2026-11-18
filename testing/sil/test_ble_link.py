@@ -4,14 +4,14 @@ import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "backend_sw"))
 from ble_link import (BleConfig, BleLink, Reassembler, fragment, fragment_count,  # noqa: E402
                       report_loss_probability)
 from icvsp_backend.verify import parse, verify_signature  # noqa: E402
 
-REPORTS = [l.rstrip("\n").encode() for l in open(ROOT / "verification/golden/device_reports_v2.jsonl") if l.strip()]
+REPORTS = [l.rstrip("\n").encode() for l in open(ROOT / "testing/verification/golden/device_reports_v2.jsonl") if l.strip()]
 
 
 def signature_ok(raw: bytes) -> bool:

@@ -39,7 +39,7 @@ def main() -> None:
             lines.append(f"| {r['title'].split(':')[0]} | {cam} | {pct(r['warned_real_after_10min'])} | "
                          f"{pct(r['advisory_real'])} | {pct(r['queries_with_false_warning'])} | "
                          f"{pct(r['queries_with_false_advisory_or_warning'])} | {r['reports']['accepted']} |")
-    out = run_sil.ROOT / "sil" / "results" / "camera_comparison.md"
+    out = run_sil.ROOT / "testing" / "sil" / "results" / "camera_comparison.md"
     out.write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
 

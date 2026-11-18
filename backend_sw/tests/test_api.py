@@ -1,4 +1,4 @@
-"""Backend API tests: the report path (verification order, idempotent retries, replay), device lifecycle,
+﻿"""Backend API tests: the report path (verification order, idempotent retries, replay), device lifecycle,
 hazard queries and reputation updates. Run:  cd backend && python3 -m unittest -v"""
 import json
 import struct
@@ -14,7 +14,7 @@ from icvsp_backend.store import Store
 from icvsp.model import to_iso
 
 ROOT = Path(__file__).resolve().parents[2]
-GOLDEN = (ROOT / "verification/golden/device_reports_v2.jsonl").read_text().splitlines()
+GOLDEN = (ROOT / "testing/verification/golden/device_reports_v2.jsonl").read_text().splitlines()
 DEMO_KEY = json.loads(GOLDEN[0])["public_key"]
 T0 = 1790000000.0                  # 2026-09-21, the time of the golden reports
 ADMIN = {"X-Admin-Token": "test-admin"}
