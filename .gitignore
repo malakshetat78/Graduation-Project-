@@ -54,3 +54,6 @@ ai/models/*_esp32s3.json
 
 # deploy packages (deploy/aws/build.sh)
 build/
+
+# Arduino sketch Wi-Fi settings: copy secrets.example.h to secrets.h, never commit it
+xaio_sw/arduino/ICVSP_ECU/secrets.h
