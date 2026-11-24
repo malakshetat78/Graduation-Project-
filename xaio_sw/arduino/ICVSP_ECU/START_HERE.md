@@ -184,7 +184,8 @@ The test cases and the result tables to fill in are in the team repo: `5_TESTING
 5. Write a wrong ID (`0063`) and a 1-byte value (`01`): `BLE WARN ...ignored` lines, nothing else changes.
 6. Do not ACK: after 2 s `sending transport_id=.. again (attempt 2/3)`, then attempt 3, then `stalled`.
 7. Disconnect on the phone: `BLE central disconnected ... advertising again`. Reconnect and subscribe:
-   the transport starts again with a new transport ID.
+   if the report was already ACKed, a new report starts with a new transport ID; if it was not ACKed yet,
+   the same unacknowledged report resumes with the same transport ID, restarting from fragment 0.
 8. Record: phone model and Android/iOS version, nRF Connect or app version and commit, this sketch's commit,
    NimBLE-Arduino 2.5.2, Arduino-ESP32 core 3.3.12. Security: none (no pairing, any phone can connect).
 

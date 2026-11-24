@@ -34,19 +34,9 @@ count as BLE evidence.
 | TC-BLE-03 | Correct ACK clears the transport and starts the next report | Write `0001` (hex) to `7b100003-...` right after fragment 4/4 | `BLE ACK accepted transport_id=1`, then report 2 starts | Only exercised as a **late** ACK (after the transport had already stalled and the phone had unsubscribed): `BLE ACK accepted transport_id=1 (1 acknowledged so far)`. A clean "ACK immediately after the last fragment, no retries" run was not captured separately. | Partial | [run1 log](run1/ble_test_run1.txt) line 29 |
 | TC-BLE-04 | Wrong/garbled ACK is ignored | Write a wrong transport ID (`0063`) or a 1-byte value (`01`) to `7b100003-...` | `BLE WARN ... ignored` line, nothing else changes | Not exercised in this run | Pending | — |
 | TC-BLE-05 | No ACK -> retry, retry, stall | Do not ACK after a full fragment send | Retry at 2 s (`attempt 2/3`), retry again (`attempt 3/3`), then `stalled after 3 attempts` | Seen twice, matching exactly: transport 1 (lines 13-27) and transport 2 first pass (lines 52-66) | Pass | [run1 log](run1/ble_test_run1.txt) lines 13-27, 52-66 |
-| TC-BLE-06 | Unsubscribe/resubscribe before ACK resumes the same report | Unsubscribe, then resubscribe, while a report is still unacknowledged | START_HERE.md does not separately describe this case | `BLE restarting unacknowledged report transport_id=1 from fragment 1 (fresh attempts)` — same `transport_id`, not a new one, each time this happened (3 times total) | Pass | [run1 log](run1/ble_test_run1.txt) lines 10-12, 49-51, 67-69 |
-| TC-BLE-07 | Full disconnect -> reconnect -> subscribe | Disconnect on the phone, then reconnect and subscribe again | START_HERE.md step 7 says *"the transport starts again with a new transport ID"* | **Not cleanly isolated in this run.** Every reconnect we captured was the *same* central unsubscribing/resubscribing while another phone/device connected and disconnected in between (lines 30-37) without ever subscribing — so it never produced a true "same phone, full disconnect, then reconnect and subscribe" sample to compare against. | Pending — see note below | [run1 log](run1/ble_test_run1.txt) lines 30-38 |
+| TC-BLE-06 | Unsubscribe/resubscribe before ACK resumes the same report | Unsubscribe, then resubscribe, while a report is still unacknowledged | Same unacknowledged report resumes with the same transport ID, restarting from fragment 0 | `BLE restarting unacknowledged report transport_id=1 from fragment 1 (fresh attempts)` — same `transport_id`, not a new one, each time this happened (3 times total) | Pass | [run1 log](run1/ble_test_run1.txt) lines 10-12, 49-51, 67-69 |
+| TC-BLE-07 | Full disconnect -> reconnect -> subscribe | Disconnect on the phone, then reconnect and subscribe again | New transport ID only if the previous report was already ACKed; otherwise the same unacked report resumes | After the ACK at line 29 (transport 1), the next subscribe (lines 37-39, same device re-connecting) correctly started a **new** report, transport_id=2 | Pass | [run1 log](run1/ble_test_run1.txt) lines 29, 36-39 |
 | TC-BLE-08 | Metadata recorded | Record phone/app/firmware/library versions, note the lack of pairing | See Test record table above | Test record table filled in above (some fields still open) | Partial | — |
-
-## ⚠️ Open question for Shahi / mentor before the PR
-
-START_HERE.md's BLE section (step 7) says a full disconnect + reconnect should start the transport **with a new
-transport ID**. But the actual firmware behavior we observed for TC-BLE-06 (unsubscribe, then resubscribe while
-still connected, before an ACK arrived) is to **resume the same unacknowledged report**, not start a new one —
-and that matches the "resume instead of restart" fix described after the code review. We have not yet captured a
-true full-disconnect-then-reconnect sample to know whether that case also resumes (like TC-BLE-06) or truly
-starts fresh as START_HERE.md describes. Either the documentation line needs updating, or the firmware needs a
-dedicated disconnect-vs-unsubscribe test before this is marked verified. Flag this before merging.
 
 ## Next steps to close out this run
 
@@ -55,7 +45,5 @@ dedicated disconnect-vs-unsubscribe test before this is marked verified. Flag th
 2. Do a clean ACK test in isolation: subscribe, let all 4 fragments send once, ACK immediately — confirm
    `BLE ACK accepted` appears with no retries first, and that report 2 starts right after (TC-BLE-03).
 3. Write a wrong-ID or wrong-length ACK on purpose and confirm the `WARN ... ignored` line (TC-BLE-04).
-4. With the *same* phone: let a report finish, then use the phone's Bluetooth settings (not just nRF Connect's
-   disconnect button) to fully disconnect, reconnect, and subscribe again — to settle TC-BLE-07 either way.
-5. Fill in the still-open Test record fields (commit/build, ESP32 core version, phone model/OS, app version) and
+4. Fill in the still-open Test record fields (commit/build, ESP32 core version, phone model/OS, app version) and
    add the nRF Connect screenshots.
