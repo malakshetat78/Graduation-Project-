@@ -14,8 +14,7 @@ ICVSP_ECU/
       smoke_test.cpp   hardware check: chip, PSRAM, signing, GPS, IMU, camera
       report_app.cpp   report firmware: Wi-Fi -> time -> key -> signed report -> AWS
       camera_test.cpp  T-012 camera bring-up: photos at 3 sizes, timing, memory, failures, recovery
-      imu_app.cpp      MPU6050 IMU test (Rana): readings, IMU LOST / IMU BACK
-      ble_app.cpp      BLE GATT server (Mariam): sends simulated reports to the phone
+      gnss_app.cpp     T-014 GNSS bring-up (Ahmed): L76K fix, staleness, disconnect and recovery
       net_link.cpp     Wi-Fi join / reconnect
       http_transport.cpp   HTTPS POST to AWS
       nvs_secret_store.cpp keeps the board's signing key in flash
@@ -55,13 +54,9 @@ Everyone uses this same sketch. To test only your part, change **one line** in `
 | Whole-board smoke test | `#define ICVSP_APP ICVSP_APP_SMOKE` |
 | Signed reports to AWS (needs hotspot) | `#define ICVSP_APP ICVSP_APP_REPORT` |
 | Camera (T-012) | `#define ICVSP_APP ICVSP_APP_CAMERA` |
-| IMU / MPU6050 (Rana) | `#define ICVSP_APP ICVSP_APP_IMU` |
-| BLE to the phone (Mariam) | `#define ICVSP_APP ICVSP_APP_BLE` |
 
 Only the chosen program runs on the board; the others are still compiled but never started.
 `#define ICVSP_DEBUG 1` / `0` turns the extra progress and per-reading lines on or off for every program.
-The BLE program needs the **NimBLE-Arduino** library (Tools > Manage Libraries > search NimBLE-Arduino >
-install version 2.5.2 by h2zero). Only the BLE program needs it: the other programs compile without it.
 
 ## Step 1: smoke test (no Wi-Fi needed)
 
@@ -158,35 +153,9 @@ Part B, with the board (camera ribbon connected while the USB cable is **unplugg
 7. Missing-camera test: unplug USB, take the camera ribbon off, plug in, RESET. Expected: 3 start attempts,
    `CAM startup FAIL` with an error code, no crash, fast blink. Unplug USB, put the ribbon back.
 
-The test cases and the result tables to fill in are in the team repo: `5_TESTING/doc/T-012-camera-test-cases.md`.
+The test cases and the result tables to fill in are in the team repo: `testing/hardware/camera/T-012-camera-test-cases.md`.
 
-## IMU test (Rana)
-
-1. **USB unplugged.** Wire the MPU6050: SDA -> D4, SCL -> D5, VCC -> 3V3, GND -> GND.
-2. `config.h`: `#define ICVSP_APP ICVSP_APP_IMU`. Verify, Upload, Serial Monitor 115200, RESET.
-3. Keep it still for the first second (gyroscope calibration). Expected:
-   `IMU found at 0x68, WHO_AM_I=0x68 (MPU6050)`, then `IMU DETECTED`, then one line every 200 ms:
-   `IMU #12 ax=+0.01 ay=-0.02 az=+1.00 g |a|=1.00 g  gx=+0.1 gy=-0.2 gz=+0.0 deg/s`.
-   If WHO_AM_I is not 0x68 the line says so: write the value down (it is a compatible clone).
-4. Checks for the test record: lying flat |a| about 1.00 g; each of the 6 sides: which axis is +1 or -1 g;
-   rotate it by hand: which gyro axis moves; pull the SDA wire: `IMU LOST`; put it back: `IMU BACK`.
-   Repeat 3 times and save the Serial Monitor output each time.
-
-## BLE test (Mariam)
-
-1. Library NimBLE-Arduino 2.5.2 installed (see "Pick the program").
-2. `config.h`: `#define ICVSP_APP ICVSP_APP_BLE`. Verify, Upload, Serial Monitor 115200, RESET.
-   Expected: `BLE advertising as ICVSP-001, address ...`.
-3. Phone with Wi-Fi and mobile data **off**. With nRF Connect (or the Flutter app built from Malak's BLE branch):
-   scan, connect to ICVSP-001, enable notifications on 7b100002-...: the Serial Monitor shows
-   `BLE central subscribed`, `BLE new report transport_id=1`, then `BLE notify ... fragment=1/4 ...`.
-4. Write `0001` (hex) to 7b100003-...: `BLE ACK accepted transport_id=1`, then report 2 starts.
-5. Write a wrong ID (`0063`) and a 1-byte value (`01`): `BLE WARN ...ignored` lines, nothing else changes.
-6. Do not ACK: after 2 s `sending transport_id=.. again (attempt 2/3)`, then attempt 3, then `stalled`.
-7. Disconnect on the phone: `BLE central disconnected ... advertising again`. Reconnect and subscribe:
-   the transport starts again with a new transport ID.
-8. Record: phone model and Android/iOS version, nRF Connect or app version and commit, this sketch's commit,
-   NimBLE-Arduino 2.5.2, Arduino-ESP32 core 3.3.12. Security: none (no pairing, any phone can connect).
+The IMU (Rana) and BLE (Mariam) programs are added to this sketch in their own pull requests.
 
 ## Rules
 
