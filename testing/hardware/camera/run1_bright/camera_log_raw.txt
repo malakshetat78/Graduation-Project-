@@ -1,0 +1,573 @@
+RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 71 s, board on 81 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 81 s, board on 91 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 86 s, board on 96 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 91 s, board on 102 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 96 s, board on 107 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 102 s, board on 112 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 107 s, board on 117 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 112 s, board on 122 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 117 s, board on 127 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 122 s, board on 132 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 127 s, board on 137 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 132 s, board on 142 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 137 s, board on 147 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 142 s, board on 153 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 147 s, board on 158 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 153 s, board on 163 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 158 s, board on 168 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 163 s, board on 173 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 168 s, board on 178 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 173 s, board on 183 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 178 s, board on 188 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 183 s, board on 193 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 188 s, board on 198 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 193 s, board on 204 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 198 s, board on 209 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 204 s, board on 214 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 209 s, board on 219 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 214 s, board on 224 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 219 s, board on 229 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 224 s, board on 234 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 229 s, board on 239 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 234 s, board on 244 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 239 s, board on 249 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 244 s, board on 255 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 249 s, board on 260 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 255 s, board on 265 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 260 s, board on 270 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 265 s, board on 275 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 270 s, board on 280 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 275 s, board on 285 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 280 s, board on 290 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 285 s, board on 295 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 290 s, board on 300 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 295 s, board on 306 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 300 s, board on 311 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 306 s, board on 316 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 311 s, board on 321 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 316 s, board on 326 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 321 s, board on 331 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 326 s, board on 336 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 331 s, board on 341 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 336 s, board on 346 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 341 s, board on 351 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 346 s, board on 357 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 351 s, board on 362 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 357 s, board on 367 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 362 s, board on 372 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 367 s, board on 377 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 372 s, board on 382 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 377 s, board on 387 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 382 s, board on 392 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 387 s, board on 397 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 392 s, board on 402 s, free RAM 326 KB)
+
+SMOKE BEGIN ICVSP ECU smoke test (Arduino build)
+
+>>> STEP 1/6: chip and PSRAM memory
+SMOKE chip    PASS  ESP32-S3 rev2 cores=2 flash=8MB
+SMOKE psram   PASS  8192 KB
+
+>>> STEP 2/6: signing (make a test key, sign, verify, tamper)
+SMOKE signing PASS  sign=ok verify=ok tampered_rejected=yes sign_ms=11.2 verify_ms=33.3
+
+>>> STEP 3/6: GPS: listening on D7/D6 at 9600 baud
+SMOKE gps     PASS  1380 bytes, 50 good NMEA, 0 bad, fix=no (normal indoors)
+
+>>> STEP 4/6: IMU: MPU6050 on D4/D5, keep the board still
+SMOKE imu     FAIL  no I2C answer at 0x68/0x69: SDA=D4 SCL=D5 VCC=3V3 GND?
+
+>>> STEP 5/6: camera: start it and take a photo
+SMOKE camera  PASS  sensor PID=0x3660 (OV3660), frame 320x240 5233 bytes
+
+>>> STEP 6/6: finished: something FAILED (see the FAIL lines above)
+SMOKE RESULT pass=5 fail=1
+LED: fast blink = something failed
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 0 s, board on 7 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 5 s, board on 12 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 10 s, board on 17 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 15 s, board on 22 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 20 s, board on 27 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 25 s, board on 33 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 30 s, board on 38 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 35 s, board on 43 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 40 s, board on 48 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 45 s, board on 53 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 51 s, board on 58 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 56 s, board on 63 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 61 s, board on 68 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 66 s, board on 73 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 71 s, board on 78 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 76 s, board on 84 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 81 s, board on 89 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 86 s, board on 94 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 91 s, board on 99 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 96 s, board on 104 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 102 s, board on 109 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 107 s, board on 114 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 112 s, board on 119 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 117 s, board on 124 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 122 s, board on 129 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 127 s, board on 135 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 132 s, board on 140 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 137 s, board on 145 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 142 s, board on 150 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 147 s, board on 155 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 153 s, board on 160 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 158 s, board on 165 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 163 s, board on 170 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 168 s, board on 175 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 173 s, board on 180 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 178 s, board on 186 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 183 s, board on 191 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 188 s, board on 196 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 193 s, board on 201 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 198 s, board on 206 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 204 s, board on 211 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 209 s, board on 216 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 214 s, board on 221 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 219 s, board on 226 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 224 s, board on 231 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 229 s, board on 237 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 234 s, board on 242 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 239 s, board on 247 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 244 s, board on 252 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 249 s, board on 257 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 255 s, board on 262 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 260 s, board on 267 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 265 s, board on 272 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 270 s, board on 277 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 275 s, board on 282 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 280 s, board on 288 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 285 s, board on 293 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 290 s, board on 298 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 295 s, board on 303 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 300 s, board on 308 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 306 s, board on 313 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 311 s, board on 318 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 316 s, board on 323 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 321 s, board on 328 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 326 s, board on 333 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 331 s, board on 339 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 336 s, board on 344 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 341 s, board on 349 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 346 s, board on 354 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 351 s, board on 359 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 357 s, board on 364 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 362 s, board on 369 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 367 s, board on 374 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 372 s, board on 379 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 377 s, board on 384 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 382 s, board on 390 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 387 s, board on 395 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 392 s, board on 400 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 397 s, board on 405 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 402 s, board on 410 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 408 s, board on 415 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 413 s, board on 420 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 418 s, board on 425 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 423 s, board on 430 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 428 s, board on 435 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 433 s, board on 441 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 438 s, board on 446 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 443 s, board on 451 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 448 s, board on 456 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 453 s, board on 461 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 459 s, board on 466 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 464 s, board on 471 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 469 s, board on 476 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 474 s, board on 481 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 479 s, board on 486 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 484 s, board on 492 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 489 s, board on 497 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 494 s, board on 502 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 499 s, board on 507 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 504 s, board on 512 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 510 s, board on 517 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 515 s, board on 522 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 520 s, board on 527 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 525 s, board on 532 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 530 s, board on 537 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 535 s, board on 543 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 540 s, board on 548 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 545 s, board on 553 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 550 s, board on 558 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 555 s, board on 563 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 561 s, board on 568 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 566 s, board on 573 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 571 s, board on 578 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 576 s, board on 583 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 581 s, board on 588 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 586 s, board on 594 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 591 s, board on 599 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 596 s, board on 604 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 601 s, board on 609 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 606 s, board on 614 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 612 s, board on 619 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 617 s, board on 624 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 622 s, board on 629 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 627 s, board on 634 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 632 s, board on 639 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 637 s, board on 645 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 642 s, board on 650 s, free RAM 326 KB)
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines above) (in this step 647 s, board on 655 s, free RAM 326 KB)
+
+CAM BEGIN T-012 camera bring-up test (Arduino build)
+CAMSTAT build firmware=arduino-3.3.13 idf=v5.5.6-436-ga45de8ccca1 compiled="Nov 22 2026 14:39:25" shots=20 lighting="not recorded"
+CAM psram          PASS  8192 KB
+CAMSTAT mem when=before_camera internal_free=335068 internal_largest=278516 psram_free=8386096 heap_min_ever=8715908
+CAM startup        PASS  init 358.7 ms (attempt 1)
+CAM sensor         PASS  OV3660 PID=0x3660 VER=0x00 MIDH=0x00 MIDL=0x00 (expected OV3660)
+CAM start_QVGA     PASS  init 358.5 ms (attempt 1)
+-----BEGIN ICVSP JPEG name=QVGA_shot01 width=320 height=240 bytes=5237 lighting="not recorded"-----
+/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUaHBYeLCYuLSsm
+KikwNkU7MDNBNCkqPFI9QUdKTU5NLzpVW1RLWkVMTUr/2wBDAQ0ODhIQEiMUFCNKMioySkpKSkpK
+SkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkr/xAAfAAABBQEBAQEB
+AQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEH
+InEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFla
+Y2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbH
+yMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQID
+BAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJ
+IzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY
+2dri4+Tl5ufo6ery8/T19vf4+fr/wAARCADwAUADASEAAhEBAxEB/9oADAMBAAIRAxEAPwDKA20V
+RkLS0CFpcUgDFGKBiYo20AV7mDeOOtZ+MVEjRCUqEo2RUDNW3kEi1NSAWlpiK91AJU96wZIiGwao
+CL5kORV+2viOCaBl9b1DSSTrjrSGUZrxRVCaXfTERqm7tzWrZ6bt+eWkwL+3FNIqQImFQsKoRA61
+FSYxaQ0gEpQcHNSBowS71qaqES0tdJkLTqQC0tIYuKXFABijFAwK1RvLbPzL1pMaKNJWRZJDIYny
+K142DrkUgH0UAGKqXlp5q8daoRkzQleGFVtmKYBhlo+duM0hjfJJNW7XT3k6jApiNi3sY4R0yasM
+uRSAgIphFQMjYVCwqgIWFQOtMQ0UGpGNoqQJIZNjVohsjNMCxTq6jIdS0hDqWkMdTsUgDFGKBi7a
+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
+-----END ICVSP JPEG-----
+CAMSTAT res=QVGA width=320 height=240 shots=20 valid=20 no_frame=0 bad_jpeg=0 wrong_size=0 too_small=0 init_ms=358.5 get_ms_min=63.6 get_ms_avg=71.6 get_ms_max=72.1 frame_gap_ms_avg=72.0 fps=13.9 bytes_min=5137 bytes_avg=5189 bytes_max=5237 sensor=OV3660 lighting="not recorded"
+CAMSTAT mem when=running_QVGA internal_free=310884 internal_largest=262132 psram_free=8370164 heap_min_ever=8674004
+CAM capture_QVGA   PASS  20/20 valid 320x240 JPEGs, wait avg 71.6 ms, 5189 bytes avg
+CAM start_VGA      PASS  init 357.9 ms (attempt 1)
+-----BEGIN ICVSP JPEG name=VGA_shot01 width=640 height=480 bytes=13110 lighting="not recorded"-----
+/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUaHBYeLCYuLSsm
+KikwNkU7MDNBNCkqPFI9QUdKTU5NLzpVW1RLWkVMTUr/2wBDAQ0ODhIQEiMUFCNKMioySkpKSkpK
+SkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkr/xAAfAAABBQEBAQEB
+AQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEH
+InEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFla
+Y2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbH
+yMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQID
+BAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJ
+IzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY
+2dri4+Tl5ufo6ery8/T19vf4+fr/wAARCAHgAoADASEAAhEBAxEB/9oADAMBAAIRAxEAPwDIRe9S
+UzMbRVCFpaQBRQIWigYtFABRQAmKKADFFABSYoGRyJkVnyx7DUSKRHS1BQlFAwqa3l2H2pCNJTkU
+6kA16gamIjNRmqAiaq0qZpgVXXFRNTQiOkxQA4CnUARNTabGOFSIamzESUUmAUUAJRTuMKeKoQtN
+NSBEetOFUiWO70tMQopr0MCPFPpDYtLTELikoELSGmAUhpDCimSJRUjDpRTdwEopiOsptCKFopiF
+ooAWikAtFAxaKAFpKACigAoxQAUYoAQioJYtwpMoz3TYcU2syxaSpAKKALVtNtODWgKGA16hYUAR
+GmGmIiaoGqgIJBVRxVARU7FIkdS4pjInptIBRUgoAdS0gCloAKSgYtLVABNRmhEjactMB9LTELTG
+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
+-----END ICVSP JPEG-----
+CAMSTAT res=VGA width=640 height=480 shots=20 valid=20 no_frame=0 bad_jpeg=0 wrong_size=0 too_small=0 init_ms=357.9 get_ms_min=50.8 get_ms_avg=81.7 get_ms_max=108.3 frame_gap_ms_avg=84.0 fps=11.9 bytes_min=10909 bytes_avg=15418 bytes_max=30183 sensor=OV3660 lighting="not recorded"
+CAMSTAT mem when=running_VGA internal_free=310884 internal_largest=262132 psram_free=8324084 heap_min_ever=8617044
+CAM capture_VGA    PASS  20/20 valid 640x480 JPEGs, wait avg 81.7 ms, 15418 bytes avg
+CAM start_SVGA     PASS  init 358.5 ms (attempt 1)
+cam_hal: FB-OVF
+cam_hal: FB-OVF
+CAMSTAT res=SVGA width=800 height=600 shots=20 valid=20 no_frame=0 bad_jpeg=0 wrong_size=0 too_small=0 init_ms=358.5 get_ms_min=70.0 get_ms_avg=93.6 get_ms_max=218.5 frame_gap_ms_avg=92.9 fps=10.8 bytes_min=18003 bytes_avg=27844 bytes_max=87283 sensor=OV3660 lighting="not recorded"
+CAMSTAT mem when=running_SVGA internal_free=310884 internal_largest=262132 psram_free=8289524 heap_min_ever=8600408
+CAM capture_SVGA   PASS  20/20 valid 800x600 JPEGs, wait avg 93.6 ms, 27844 bytes avg
+CAMSTAT mem when=after_capture internal_free=334664 internal_largest=278516 psram_free=8386096 heap_min_ever=8600408
+CAM fail_stopped   PASS  capture with camera stopped returned no frame, handled
+E (9433) cam_hal: cam_dma_config(537): frame buffer malloc failed
+E (9434) cam_hal: cam_config(631): cam_dma_config failed
+E (9434) camera: Camera config failed with error 0xffffffff
+CAM init attempt 1/1 failed: ESP_FAIL (0xffffffff)
+CAM fail_init      PASS  start refused: ESP_FAIL (0xffffffff) after 331.5 ms, largest internal block 278516 < needed 629145: frame buffer refused, as expected
+CAM recover        PASS  camera started again after the failed start, frame valid 320x240 (5462 bytes)
+CAMSTAT mem when=after_all_tests internal_free=334448 internal_largest=278516 psram_free=8386096 heap_min_ever=8600192
+CAM memory_back    PASS  after all tests: internal 620 bytes, PSRAM 0 bytes less than before the camera started (limit 4096)
+CAM RESULT pass=13 fail=0
+LED: slow blink = all passed
