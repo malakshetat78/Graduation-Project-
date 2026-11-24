@@ -7,11 +7,13 @@
 //   ICVSP_APP_CAMERA  T-012 camera bring-up: 20 photos x 3 sizes, timing, memory, failures (no Wi-Fi needed)
 //   ICVSP_APP_IMU     MPU6050 test (Rana): one reading line every 200 ms, IMU LOST / IMU BACK
 //   ICVSP_APP_BLE     BLE GATT server (Mariam): sends simulated reports to the phone, needs NimBLE-Arduino 2.x
+//   ICVSP_APP_GNSS    T-014 L76K GNSS UART bring-up: position/time/fix/stale/disconnect (no Wi-Fi needed)
 #define ICVSP_APP_SMOKE  1
 #define ICVSP_APP_REPORT 2
 #define ICVSP_APP_CAMERA 3
 #define ICVSP_APP_IMU    4
 #define ICVSP_APP_BLE    5
+#define ICVSP_APP_GNSS   6
 #define ICVSP_APP ICVSP_APP_SMOKE
 // ---- debug prints: turn ON or OFF here ----
 //   1 = ON:  prints ">>> STEP n/N: ..." when each step starts, and "[NOW] ..." every ICVSP_DEBUG_EVERY_S
@@ -20,6 +22,18 @@
 // Change the number, then Upload again.
 #define ICVSP_DEBUG 1
 #define ICVSP_DEBUG_EVERY_S 5
+
+// ---- L76K GNSS bring-up (T-014) ----
+// Defaults from existing smoke_test.cpp; verify wiring before applying power.
+// Module TX --> ESP32 RX D7/GPIO44; module RX <-- ESP32 TX D6/GPIO43.
+#define CONFIG_ICVSP_GNSS_RX_PIN 44
+#define CONFIG_ICVSP_GNSS_TX_PIN 43
+#define CONFIG_ICVSP_GNSS_BAUD 9600
+#define CONFIG_ICVSP_GNSS_PRINT_EVERY_MS 1000
+// Opt-in only: USB S/D simulate stale/UART loss for 6 s in GNSS mode.
+#ifndef CONFIG_ICVSP_GNSS_SOFTWARE_TESTS
+#define CONFIG_ICVSP_GNSS_SOFTWARE_TESTS 0
+#endif
 
 // ---- smoke test ----
 #define CONFIG_ICVSP_GPS_LISTEN_S 5          // seconds to listen to the GPSr
