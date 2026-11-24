@@ -16,6 +16,7 @@ ICVSP_ECU/
       camera_test.cpp  T-012 camera bring-up: photos at 3 sizes, timing, memory, failures, recovery
       gnss_app.cpp     T-014 GNSS bring-up (Ahmed): L76K fix, staleness, disconnect and recovery
       ble_app.cpp      BLE GATT server (Mariam): sends simulated reports to the phone
+      imu_app.cpp      T-010 IMU test (Rana): MPU6050 readings, gyro calibration, LOST / BACK recovery
       net_link.cpp     Wi-Fi join / reconnect
       http_transport.cpp   HTTPS POST to AWS
       nvs_secret_store.cpp keeps the board's signing key in flash
@@ -56,6 +57,7 @@ Everyone uses this same sketch. To test only your part, change **one line** in `
 | Signed reports to AWS (needs hotspot) | `#define ICVSP_APP ICVSP_APP_REPORT` |
 | Camera (T-012) | `#define ICVSP_APP ICVSP_APP_CAMERA` |
 | BLE to the phone (Mariam) | `#define ICVSP_APP ICVSP_APP_BLE` |
+| IMU (T-010, Rana) | `#define ICVSP_APP ICVSP_APP_IMU` |
 
 Only the chosen program runs on the board; the others are still compiled but never started.
 `#define ICVSP_DEBUG 1` / `0` turns the extra progress and per-reading lines on or off for every program.
@@ -159,7 +161,30 @@ Part B, with the board (camera ribbon connected while the USB cable is **unplugg
 
 The test cases and the result tables to fill in are in the team repo: `testing/hardware/camera/T-012-camera-test-cases.md`.
 
-The IMU (Rana) program is added to this sketch in its own pull request.
+## IMU test (T-010, Rana, no Wi-Fi needed)
+
+Wiring (USB **unplugged** while you connect it): MPU6050 board SDA -> **D4**, SCL -> **D5**, VCC -> **3V3**,
+GND -> **GND**. Do not use 5V.
+
+1. `config.h`: `#define ICVSP_APP ICVSP_APP_IMU`. Verify, Upload, Serial Monitor 115200, RESET.
+2. Keep the board **still on the table** for about 1 second after RESET. Expected:
+   `IMU found at 0x68, WHO_AM_I=0x..`, then `IMU gyroscope bias x=.. y=.. z=.. deg/s (spread .. deg/s)`, then
+   `IMU DETECTED`. Write down the WHO_AM_I value: 0x68 is a real MPU6050, 0x70 is an MPU6500 clone (both work).
+   If it says `calibration rejected: the sensor moved`, keep it still: it tries 5 times.
+3. Then one line every 200 ms: `IMU #n ax=.. ay=.. az=.. g |a|=.. g  gx=.. gy=.. gz=.. deg/s`.
+   Lying still: `|a|` about 1.00 g (0.95 to 1.05) and gx, gy, gz near 0.
+4. Six sides: hold the board still for 3 s on each side. One axis must read about +1 g or -1 g and the other two
+   about 0: face up az=+1, face down az=-1, then ax=+1, ax=-1, ay=+1, ay=-1.
+5. Wire-loss test: pull the **SDA** wire out. Expected: `IMU LOST: I2C read failed. Retrying every 1000 ms` and
+   **no** `Guru Meditation` crash. Push the wire back in and **put the board down still**: `IMU BACK`, and the
+   reading numbers carry on (no restart from #1). Do it 3 times.
+   If the board moved while it reconnected, it prints `calibration skipped ... keeping the last bias`: that is fine.
+6. No-sensor test: unplug USB, take the SDA wire off, plug in, RESET. Expected:
+   `IMU NOT FOUND: no I2C answer at 0x68/0x69 ...`, no crash, and `IMU DETECTED` as soon as you plug SDA back in.
+7. Copy the whole Serial Monitor output (click in it, Cmd+A, Cmd+C) into a text file. Start the copy **before**
+   RESET so the first lines are in it.
+
+The test cases and results are in the team repo: `testing/hardware/imu/T-010-imu-test-cases.md`.
 
 ## BLE test (Mariam)
 
