@@ -224,7 +224,7 @@ xaio_sw/
 ├── lib/icvsp_sim/      simulated IMU and GNSS
 ├── test/               106 unit tests (PlatformIO native)
 ├── ecu/                ESP-IDF firmware for the XIAO ESP32-S3 Sense (smoke test, report firmware)
-├── arduino/ICVSP_ECU/  Arduino sketch: smoke, report, camera, IMU and BLE programs (pick one in config.h)
+├── arduino/ICVSP_ECU/  Arduino sketch: smoke, report, camera and GNSS programs (pick one in config.h)
 ├── tools/              end-to-end check with the engine
 └── espdet_qemu/        ESPDet-Pico on the ESP32-S3 (ESP-IDF + ESP-DL), run in QEMU
 backend_sw/
