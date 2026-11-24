@@ -14,7 +14,7 @@
 #define ICVSP_APP_IMU    4
 #define ICVSP_APP_BLE    5
 #define ICVSP_APP_GNSS   6
-#define ICVSP_APP ICVSP_APP_SMOKE
+#define ICVSP_APP ICVSP_APP_BLE
 // ---- debug prints: turn ON or OFF here ----
 //   1 = ON:  prints ">>> STEP n/N: ..." when each step starts, and "[NOW] ..." every ICVSP_DEBUG_EVERY_S
 //            seconds, so you always see where the program is right now.
