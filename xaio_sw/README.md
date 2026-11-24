@@ -80,6 +80,6 @@ Flash encryption and secure boot, which protect that key from someone holding th
 
 - Nothing has run on the real board yet. `ecu/` (ESP-IDF 5.5.5) builds for the XIAO ESP32-S3; in the
   emulator it boots, signs reports with its own key and delivers them over HTTP and HTTPS to the backend.
-  See `results/bringup/BRINGUP_CHECKLIST.md`.
+  See `testing/hardware/ecu/BRINGUP_CHECKLIST.md`.
 - The report queue is RAM only: reports are lost on a reboot (flash or microSD storage is the next step).
 - `road_segment` is a coarse grid cell (about 200 m) until the backend maps reports to real roads.

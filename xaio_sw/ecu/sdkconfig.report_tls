@@ -1,5 +1,5 @@
 # HTTPS test build (layer after sdkconfig.report[_qemu]): trust ONLY the test CA made by
-# results/bringup/tls/make_test_certs.py (tls_test/ca.pem, git-ignored) instead of the public root bundle,
+# testing/hardware/ecu/tls/make_test_certs.py (tls_test/ca.pem, git-ignored) instead of the public root bundle,
 # and talk to the laptop backend over https. See BRINGUP_CHECKLIST.md section 4c.
 CONFIG_ICVSP_TLS_TEST_CA=y
 CONFIG_ICVSP_REPORT_URL="https://10.0.2.2:8443/reports"

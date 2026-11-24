@@ -25,7 +25,7 @@ ICVSP_ECU/
     crypto/          Monocypher (Ed25519 signatures)
     sim/             the simulated 30 s drive with one pothole (used by the report firmware)
 
-Camera log tool: xaio_sw/tools/xiao_camera/extract_jpegs.py turns a saved camera test output into .jpg photos and
+Camera log tool: testing/hardware/camera/tools/extract_jpegs.py turns a saved camera test output into .jpg photos and
 result tables (runs on the Mac).
 ```
 
@@ -148,7 +148,7 @@ Part B, with the board (camera ribbon connected while the USB cable is **unplugg
 5. Get the photos and result tables on the Mac (Terminal, in this folder):
 
    ```
-   python3 ../../tools/xiao_camera/extract_jpegs.py run1_bright.txt --out run1_bright
+   python3 ../../../testing/hardware/camera/tools/extract_jpegs.py run1_bright.txt --out run1_bright
    ```
 
    The last line is the verdict: "one complete run, all checks passed, all photos OK" is what we want. Install
