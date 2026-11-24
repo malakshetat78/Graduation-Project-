@@ -5,37 +5,6 @@
 //   ICVSP_APP_SMOKE   hardware check: chip, PSRAM, signing, GPS, IMU, camera (no Wi-Fi needed)
 //   ICVSP_APP_REPORT  report firmware: Wi-Fi -> time -> device key -> signed report -> AWS
 //   ICVSP_APP_CAMERA  T-012 camera bring-up: 20 photos x 3 sizes, timing, memory, failures (no Wi-Fi needed)
-//   ICVSP_APP_GNSS    T-014 L76K GNSS UART bring-up: position/time/fix/stale/disconnect (no Wi-Fi needed)
-#define ICVSP_APP_SMOKE  1
-#define ICVSP_APP_REPORT 2
-#define ICVSP_APP_CAMERA 3
-// 4 and 5 are kept free for the IMU (Rana) and BLE (Mariam) programs, added in their own PRs.
-#define ICVSP_APP_GNSS   6
-#define ICVSP_APP ICVSP_APP_SMOKE
-// ---- debug prints: turn ON or OFF here ----
-//   1 = ON:  prints ">>> STEP n/N: ..." when each step starts, and "[NOW] ..." every ICVSP_DEBUG_EVERY_S
-//            seconds, so you always see where the program is right now.
-//   0 = OFF: only the normal SMOKE / NET / DEMO / HTTP lines.
-// Change the number, then Upload again.
-#define ICVSP_DEBUG 1
-#define ICVSP_DEBUG_EVERY_S 5
-
-// ---- L76K GNSS bring-up (T-014) ----
-// Defaults from existing smoke_test.cpp; verify wiring before applying power.
-// Module TX --> ESP32 RX D7/GPIO44; module RX <-- ESP32 TX D6/GPIO43.
-#define CONFIG_ICVSP_GNSS_RX_PIN 44
-#define CONFIG_ICVSP_GNSS_TX_PIN 43
-#define CONFIG_ICVSP_GNSS_BAUD 9600
-#define CONFIG_ICVSP_GNSS_PRINT_EVERY_MS 1000
-// Opt-in only: USB S/D simulate stale/UART loss for 6 s in GNSS mode.
-#ifndef CONFIG_ICVSP_GNSS_SOFTWARE_TESTS
-#pragma once
-// ===== ICVSP ECU settings: the only file you normally change (plus secrets.h for Wi-Fi) =====
-
-// Which program runs after the board starts. Pick ONE, then Upload again:
-//   ICVSP_APP_SMOKE   hardware check: chip, PSRAM, signing, GPS, IMU, camera (no Wi-Fi needed)
-//   ICVSP_APP_REPORT  report firmware: Wi-Fi -> time -> device key -> signed report -> AWS
-//   ICVSP_APP_CAMERA  T-012 camera bring-up: 20 photos x 3 sizes, timing, memory, failures (no Wi-Fi needed)
 //   ICVSP_APP_BLE     BLE GATT server (Mariam): sends simulated reports to the phone, needs NimBLE-Arduino 2.x
 //   ICVSP_APP_GNSS    T-014 L76K GNSS UART bring-up: position/time/fix/stale/disconnect (no Wi-Fi needed)
 #define ICVSP_APP_SMOKE  1
