@@ -4,7 +4,7 @@
 # the camera itself can only be tested on the physical XIAO ESP32-S3 Sense.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
-src="$here/../../arduino/ICVSP_ECU/src"
+src="$here/../../../../xaio_sw/arduino/ICVSP_ECU/src"
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 cxx="${CXX:-c++}"

@@ -1,7 +1,7 @@
 # T-012 camera bring-up tools
 
-Tools for the camera bring-up test in the [Arduino sketch](../../arduino/ICVSP_ECU/START_HERE.md#camera-bring-up-test-t-012-no-wi-fi-needed).
-Test cases and results: [T-012 camera test cases](../../results/bringup/camera/T-012-camera-test-cases.md).
+Tools for the camera bring-up test in the [Arduino sketch](../../../../xaio_sw/arduino/ICVSP_ECU/START_HERE.md#camera-bring-up-test-t-012-no-wi-fi-needed).
+Test cases and results: [T-012 camera test cases](../T-012-camera-test-cases.md).
 
 | File | What it does | Runs on |
 | --- | --- | --- |
@@ -14,7 +14,7 @@ Test cases and results: [T-012 camera test cases](../../results/bringup/camera/T
 ## Run
 
 ```text
-cd xaio_sw/tools/xiao_camera
+cd testing/hardware/camera/tools
 ./run_host_tests.sh                 # optional: ./run_host_tests.sh some_photo.jpg
 python3 extract_jpegs.py T-012_run1_bright.txt --out T-012_run1_bright
 ```

@@ -136,21 +136,21 @@ In the emulator the network is emulated Ethernet instead of Wi-Fi, and the drive
 The firmware, signing, HTTP/HTTPS stack and backend checks are the real code. The laptop runs used a throw-away
 SQLite database; the cloud run used the live AWS backend and the team Supabase database, with a dedicated test device.
 
-<p align="center"><img src="firmware/results/bringup/screenshots/9_ecu_to_aws_cloud.png" width="720" alt="ECU firmware in the ESP32-S3 emulator sends a signed report to the live AWS backend: 201 stored"></p>
-<p align="center"><img src="firmware/results/bringup/screenshots/11_aws_report_evaluated.png" width="720" alt="The same report on AWS: CloudWatch POST /reports 201, then evaluated by the trust engine"></p>
+<p align="center"><img src="testing/hardware/ecu/screenshots/9_ecu_to_aws_cloud.png" width="720" alt="ECU firmware in the ESP32-S3 emulator sends a signed report to the live AWS backend: 201 stored"></p>
+<p align="center"><img src="testing/hardware/ecu/screenshots/11_aws_report_evaluated.png" width="720" alt="The same report on AWS: CloudWatch POST /reports 201, then evaluated by the trust engine"></p>
 
 Real AWS pages (live account, not rendered from logs): the backend's dashboard on AWS showing the ECU's hazard and the
-CloudWatch log of its `POST /reports 201`. More in [`screenshots/aws_console/`](firmware/results/bringup/screenshots/README.md#real-aws-screenshots-aws_console).
+CloudWatch log of its `POST /reports 201`. More in [`screenshots/aws_console/`](testing/hardware/ecu/screenshots/README.md#real-aws-screenshots-aws_console).
 
-<p align="center"><img src="firmware/results/bringup/screenshots/aws_console/12_dashboard_ecu_hazard.jpg" width="720" alt="ICVSP operator dashboard on AWS: hazard hz_0002 reported by ecu-qemu-cloud-01, suppressed, with the trust engine's reasons"></p>
-<p align="center"><img src="firmware/results/bringup/screenshots/aws_console/15_cloudwatch_post_reports_201.jpg" width="720" alt="AWS CloudWatch log: POST /reports 201 at 19:50:42 UTC"></p>
+<p align="center"><img src="testing/hardware/ecu/screenshots/aws_console/12_dashboard_ecu_hazard.jpg" width="720" alt="ICVSP operator dashboard on AWS: hazard hz_0002 reported by ecu-qemu-cloud-01, suppressed, with the trust engine's reasons"></p>
+<p align="center"><img src="testing/hardware/ecu/screenshots/aws_console/15_cloudwatch_post_reports_201.jpg" width="720" alt="AWS CloudWatch log: POST /reports 201 at 19:50:42 UTC"></p>
 
-All test cases (input, expected, actual, proof): [`firmware/results/bringup/TEST_CASES.md`](firmware/results/bringup/TEST_CASES.md).
-All screenshots: [`firmware/results/bringup/screenshots/`](firmware/results/bringup/screenshots/README.md).
+All test cases (input, expected, actual, proof): [`testing/hardware/ecu/TEST_CASES.md`](testing/hardware/ecu/TEST_CASES.md).
+All screenshots: [`testing/hardware/ecu/screenshots/`](testing/hardware/ecu/screenshots/README.md).
 
 Evidence (logs, firmware image hashes, screenshots, the commit every image was built from) and the exact commands
-to repeat each step: [`firmware/results/bringup/BRINGUP_CHECKLIST.md`](firmware/results/bringup/BRINGUP_CHECKLIST.md).
-Pins: [`PIN_MAP.md`](firmware/results/bringup/PIN_MAP.md).
+to repeat each step: [`testing/hardware/ecu/BRINGUP_CHECKLIST.md`](testing/hardware/ecu/BRINGUP_CHECKLIST.md).
+Pins: [`PIN_MAP.md`](testing/hardware/ecu/PIN_MAP.md).
 
 ## Backend and system simulation
 
@@ -224,7 +224,6 @@ firmware/
 ├── lib/icvsp_sim/      simulated IMU and GNSS
 ├── test/               106 unit tests (PlatformIO native)
 ├── ecu/                ESP-IDF firmware for the XIAO ESP32-S3 Sense (smoke test, report firmware)
-├── results/bringup/    ECU bring-up checklist, logs, screenshots, pin map
 ├── tools/              end-to-end check with the engine
 └── espdet_qemu/        ESPDet-Pico on the ESP32-S3 (ESP-IDF + ESP-DL), run in QEMU
 backend/

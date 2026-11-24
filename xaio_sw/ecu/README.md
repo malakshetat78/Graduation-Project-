@@ -8,7 +8,7 @@ Two firmwares from one project (Kconfig `ICVSP_APP`):
   signed report to the backend's `POST /reports` from a separate delivery task (Wi-Fi on the board, QEMU's
   emulated Ethernet in the emulator). The IMU drive and GNSS sentences are simulated and say so in the log.
  Build, emulator, flash commands and the expected results are in
-[`../results/bringup/BRINGUP_CHECKLIST.md`](../results/bringup/BRINGUP_CHECKLIST.md).
+[`testing/hardware/ecu/BRINGUP_CHECKLIST.md`](../../testing/hardware/ecu/BRINGUP_CHECKLIST.md).
 
 | File | What |
 |---|---|

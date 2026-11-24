@@ -1,9 +1,9 @@
 # T-012 Camera bring-up: test cases and results
 
 - Ticket: T-012 Camera bring-up (development). Verification follows in T-013.
-- Procedure: [Arduino sketch guide, camera section](../../../arduino/ICVSP_ECU/START_HERE.md#camera-bring-up-test-t-012-no-wi-fi-needed)
-- Firmware: [camera_test.cpp](../../../arduino/ICVSP_ECU/src/app/camera_test.cpp), selected with `#define ICVSP_APP ICVSP_APP_CAMERA` in [config.h](../../../arduino/ICVSP_ECU/config.h)
-- Tools: [xaio_sw/tools/xiao_camera](../../../tools/xiao_camera/README.md)
+- Procedure: [Arduino sketch guide, camera section](../../../xaio_sw/arduino/ICVSP_ECU/START_HERE.md#camera-bring-up-test-t-012-no-wi-fi-needed)
+- Firmware: [camera_test.cpp](../../../xaio_sw/arduino/ICVSP_ECU/src/app/camera_test.cpp), selected with `#define ICVSP_APP ICVSP_APP_CAMERA` in [config.h](../../../xaio_sw/arduino/ICVSP_ECU/config.h)
+- Tools: [testing/hardware/camera/tools](tools/README.md)
 - Out of scope: hazard-detection accuracy. These tests only show that the camera produces valid images.
 
 Every result below states its setup: **physical board**, **emulator** or **host**. Only physical-board results
@@ -85,6 +85,6 @@ These run without the board. They check the code paths around the camera, not th
 | Check | Setup | Command | Result | Date |
 | --- | --- | --- | --- | --- |
 | Sketch compiles for every program (smoke, report, camera, IMU, BLE) | host, Arduino CLI, esp32 core for XIAO_ESP32S3, PSRAM OPI, NimBLE-Arduino 2.5.2 | `arduino-cli compile` per `ICVSP_APP` value | Pass: all five compile (camera 371359 bytes, BLE 561950, report 1108482) | 2026-11-23 |
-| JPEG check and Base64 unit tests (22 cases, including malformed frame and scan headers) | host, Apple clang, C++17 | `xaio_sw/tools/xiao_camera/run_host_tests.sh` | Pass | 2026-11-23 |
+| JPEG check and Base64 unit tests (22 cases, including malformed frame and scan headers) | host, Apple clang, C++17 | `testing/hardware/camera/tools/run_host_tests.sh` | Pass | 2026-11-23 |
 | Log extractor unit tests (19 cases: image structure, Pillow decode, run verdict) | host, Python 3.13, Pillow 12.2 | same script | Pass | 2026-11-23 |
 | Real JPEG through the firmware's Base64 format and back, byte for byte | host | same script | Pass | 2026-11-23 |

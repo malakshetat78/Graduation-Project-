@@ -24,11 +24,11 @@ fi
 command -v qemu-system-xtensa >/dev/null || { echo "qemu-system-xtensa not found"; exit 1; }
 
 ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
-FW="$ROOT/firmware"
+FW="$ROOT/xaio_sw"
 CERTS="$FW/ecu/tls_test"
 IMG="$FW/ecu/build_report_tls/flash_qemu.bin"
 OUT="${1:?usage: run_tls_checks.sh <out dir>}"
-PY="${PY:-$ROOT/backend/.venv/bin/python}"
+PY="${PY:-$ROOT/backend_sw/.venv/bin/python}"
 [ -f "$IMG" ] || { echo "missing $IMG (build it: checklist 4c)"; exit 1; }
 [ -f "$CERTS/good.crt" ] || { echo "missing test certificates (run make_test_certs.py)"; exit 1; }
 if lsof -nP -iTCP:8443 -sTCP:LISTEN >/dev/null 2>&1; then echo "port 8443 is in use"; exit 1; fi
@@ -45,7 +45,7 @@ trap cleanup EXIT
 
 start_backend() {  # $1 = certificate stem, $2.. = extra uvicorn options
     local stem="$1"; shift
-    ( cd "$ROOT/backend" && exec env -u DATABASE_URL -u SUPABASE_URL -u SUPABASE_JWT_SECRET ICVSP_DB="$WORK/db.sqlite3" \
+    ( cd "$ROOT/backend_sw" && exec env -u DATABASE_URL -u SUPABASE_URL -u SUPABASE_JWT_SECRET ICVSP_DB="$WORK/db.sqlite3" \
         ICVSP_ALLOW_ANONYMOUS=1 ICVSP_ADMIN_TOKEN="$TOKEN" "$PY" -m uvicorn --factory icvsp_backend.app:create_app \
         --host 127.0.0.1 --port 8443 --ssl-certfile "$CERTS/$stem.crt" --ssl-keyfile "$CERTS/$stem.key" "$@" \
         >> "$OUT/backend_tls.log" 2>&1 ) &

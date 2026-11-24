@@ -183,7 +183,7 @@ The backend checks in `logs/backend_report_checks.log` (stored view, resend = du
 were made after the run, with the backend still up, by:
 
 ```bash
-python3 firmware/results/bringup/backend_report_checks.py /tmp/icvsp_demo.sqlite3
+python3 testing/hardware/ecu/backend_report_checks.py /tmp/icvsp_demo.sqlite3
 ```
 
 It reads the stored line from the test database, posts it again unchanged, then posts it with
@@ -218,12 +218,12 @@ from the laptop with `openssl s_client -tls1_3` against a `*.lambda-url.us-east-
 
 ```bash
 cd firmware/ecu
-../../backend/.venv/bin/python ../results/bringup/tls/make_test_certs.py tls_test   # test CA + 4 server certs (git-ignored)
+../../backend_sw/.venv/bin/python ../../testing/hardware/ecu/tls/make_test_certs.py tls_test   # test CA + 4 server certs (git-ignored)
 idf.py -B build_report_tls -D SDKCONFIG=build_report_tls/sdkconfig \
   -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.qemu;sdkconfig.report;sdkconfig.report_qemu;sdkconfig.report_tls;sdkconfig.local" \
   set-target esp32s3 build
 (cd build_report_tls && python -m esptool --chip esp32s3 merge_bin --fill-flash-size 8MB -o flash_qemu.bin @flash_args)
-../results/bringup/tls/run_tls_checks.sh ../results/bringup/logs/tls   # about 9 minutes
+../../testing/hardware/ecu/tls/run_tls_checks.sh ../../testing/hardware/ecu/logs/tls   # about 9 minutes
 ```
 
 | Case | Server certificate | Expected on the ECU | Result |
@@ -286,7 +286,7 @@ right after boot; a monitor started later would miss it):
 ```bash
 ls /dev/cu.usbmodem*
 cd firmware/ecu
-idf.py -p /dev/cu.usbmodem101 flash monitor | tee ../results/bringup/logs/board_smoke_$(date +%Y%m%d_%H%M).log
+idf.py -p /dev/cu.usbmodem101 flash monitor | tee ../../testing/hardware/ecu/logs/board_smoke_$(date +%Y%m%d_%H%M).log
 ```
 
 Use the port name `ls` printed (`/dev/cu.usbmodem101` is an example). If no port appears or flashing fails:

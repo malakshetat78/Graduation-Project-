@@ -7,12 +7,12 @@ else()
     set(app_srcs "smoke_main.cpp")
 endif()
 
-# HTTPS test build: embed the test CA (made by results/bringup/tls/make_test_certs.py, git-ignored).
+# HTTPS test build: embed the test CA (made by testing/hardware/ecu/tls/make_test_certs.py, git-ignored).
 set(embed "")
 if(CONFIG_ICVSP_TLS_TEST_CA)
     set(embed "${CMAKE_CURRENT_LIST_DIR}/../tls_test/ca.pem")
     if(NOT EXISTS "${embed}")
-        message(FATAL_ERROR "CONFIG_ICVSP_TLS_TEST_CA is set but ${embed} is missing: run results/bringup/tls/make_test_certs.py")
+        message(FATAL_ERROR "CONFIG_ICVSP_TLS_TEST_CA is set but ${embed} is missing: run testing/hardware/ecu/tls/make_test_certs.py")
     endif()
 endif()
 

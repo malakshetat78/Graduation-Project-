@@ -11,6 +11,6 @@
 # local Wi-Fi credentials / server URL (see README) - never commit
 /sdkconfig.local
 
-# certificates and keys made by results/bringup/tls/make_test_certs.py - throw-away test material, never commit
+# certificates and keys made by testing/hardware/ecu/tls/make_test_certs.py - throw-away test material, never commit
 /tls_test/
 /cloud_device/

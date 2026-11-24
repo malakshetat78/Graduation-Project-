@@ -1,6 +1,6 @@
 # ECU pin map: Seeed XIAO ESP32-S3 Sense
 
-Source of truth in code: [`firmware/ecu/main/board_pins.h`](../../ecu/main/board_pins.h). The firmware build
+Source of truth in code: [`firmware/ecu/main/board_pins.h`](../../../xaio_sw/ecu/main/board_pins.h). The firmware build
 refuses to compile if two functions share a GPIO, or if a strapping, USB, flash or PSRAM pin is used
 (`static_assert` at the end of that file).
 
