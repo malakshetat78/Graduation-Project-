@@ -1,0 +1,36 @@
+CAM BEGIN T-012 camera bring-up test (Arduino build)
+CAMSTAT build firmware=arduino-3.3.12 idf=v5.5.5 compiled="Nov 24 2026 18:29:57" shots=20 lighting="bright room"
+
+>>> STEP 1/6: memory before the camera starts
+CAM psram          PASS  8192 KB
+CAMSTAT mem when=before_camera internal_free=336188 internal_largest=278516 psram_free=8386096 heap_min_ever=8717016
+
+>>> STEP 2/6: start the camera and read the sensor model
+E (1050) camera: Detected camera not supported.
+E (1051) camera: Camera probe failed with error 0x106(ESP_ERR_NOT_SUPPORTED)
+CAM init attempt 1/3 failed: ESP_ERR_NOT_SUPPORTED (0x106)
+E (1564) camera: Detected camera not supported.
+E (1565) camera: Camera probe failed with error 0x106(ESP_ERR_NOT_SUPPORTED)
+CAM init attempt 2/3 failed: ESP_ERR_NOT_SUPPORTED (0x106)
+E (2078) camera: Detected camera not supported.
+E (2079) camera: Camera probe failed with error 0x106(ESP_ERR_NOT_SUPPORTED)
+CAM init attempt 3/3 failed: ESP_ERR_NOT_SUPPORTED (0x106)
+CAM startup        FAIL  camera did not start after 3 attempts: ESP_ERR_NOT_SUPPORTED (0x106). Unplug the board, reseat the camera ribbon, try again
+
+>>> STEP 3/6: repeated capture at QVGA, VGA and SVGA (keep the scene and light the same)
+CAM capture        FAIL  skipped: the camera did not start
+
+>>> STEP 4/6: memory after the camera is stopped
+CAMSTAT mem when=after_capture internal_free=335832 internal_largest=278516 psram_free=8386096 heap_min_ever=8714720
+
+>>> STEP 5/6: failure cases and recovery
+CAM fail_stopped   PASS  capture with camera stopped returned no frame, handled
+CAM fail_init      FAIL  not run: needs a camera that starts (fix the startup check first)
+CAM recover        FAIL  not run: needs a camera that starts
+CAMSTAT mem when=after_all_tests internal_free=335832 internal_largest=278516 psram_free=8386096 heap_min_ever=8714720
+CAM memory_back    PASS  after all tests: internal 356 bytes, PSRAM 0 bytes less than before the camera started (limit 4096)
+
+>>> STEP 6/6: finished: something FAILED (see the FAIL lines)
+CAM RESULT pass=3 fail=4
+LED: fast blink = check the FAIL lines
+[NOW] STEP 6/6: finished: something FAILED (see the FAIL lines) (in this step 2 s, board on 5 s, free RAM 327 KB)
