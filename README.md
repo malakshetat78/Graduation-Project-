@@ -7,14 +7,14 @@ warns approaching drivers. It keeps working when the cloud or network is unavail
 This repository holds the working prototypes:
 - **`engine/`: the trust & consensus engine**, the decision layer and the core of the project. It decides, with a
   written reason, whether reported hazards are real enough to warn anyone, and who.
-- **`ai/`: the camera-based hazard detectors** that produce the reports: YOLO11n for the Pro unit and ESPDet-Pico
+- **`ai_sw/`: the camera-based hazard detectors** that produce the reports: YOLO11n for the Pro unit and ESPDet-Pico
   for a low-cost ESP32-S3 unit.
-- **`firmware/`: the device firmware**: IMU hazard detection, signed reports and replay protection, unit-tested on a
+- **`xaio_sw/`: the device firmware**: IMU hazard detection, signed reports and replay protection, unit-tested on a
   laptop, and the ESPDet-Pico model built for the ESP32-S3.
-- **`backend/`: the server** (FastAPI): checks signed reports, runs the trust engine, answers "which hazards are ahead?"
+- **`backend_sw/`: the server** (FastAPI): checks signed reports, runs the trust engine, answers "which hazards are ahead?"
   and has an operator dashboard.
-- **`sil/`: the system simulation**: the whole chain without hardware, with a live demo in the dashboard.
-- **`verification/`: V-cycle evidence**: requirement → test → result traceability, checked on every push.
+- **`testing/sil/`: the system simulation**: the whole chain without hardware, with a live demo in the dashboard.
+- **`testing/verification/`: V-cycle evidence**: requirement → test → result traceability, checked on every push.
 
 ## Current status
 
@@ -27,7 +27,7 @@ This repository holds the working prototypes:
 | Device firmware (IMU detector, camera decision logic, camera + IMU fusion, signed reports, replay window, report queue, delivery) | ✅ 106 unit tests on a laptop (PlatformIO native); logic scored on held-out video; thresholds still to be tuned on real recordings |
 | ECU firmware on the chip (XIAO ESP32-S3 Sense) | 🟡 Runs in the ESP32-S3 emulator: signs a pothole report with its own key and the live AWS cloud backend stores it (HTTPS, TLS 1.3). **Not yet run on the real board.** [What is proven](#ecu-firmware-on-the-chip-what-is-proven) |
 | Camera detector, Lite unit (ESPDet-Pico on ESP32-S3) | 🟡 8-bit model 486 KB, speed-bump mAP50 0.72 in ESP-PPQ simulation; builds and runs in the ESP32-S3 emulator, on-chip accuracy needs a board |
-| Backend API (device registry, signed-report checks, replay defence, durable storage, background evaluation, hazards ahead, user sign-in and roles, reputation, operator dashboard) | ✅ FastAPI on Supabase (PostgreSQL, PostGIS, Auth, RLS), tested on a local Supabase stack; deployed on AWS Lambda with the team Supabase database (Nourseen's T-004, PR 18, 17/17 live checks). `backend/README.md` |
+| Backend API (device registry, signed-report checks, replay defence, durable storage, background evaluation, hazards ahead, user sign-in and roles, reputation, operator dashboard) | ✅ FastAPI on Supabase (PostgreSQL, PostGIS, Auth, RLS), tested on a local Supabase stack; deployed on AWS Lambda with the team Supabase database (Nourseen's T-004, PR 18, 17/17 live checks). `backend_sw/README.md` |
 | System simulation (real device code → backend → trust engine → warnings), with faults and attacks | ✅ 4 scenarios, 0 % false warnings; live demo with the dashboard |
 | Detector v4 (adds three public Kaggle pothole / road datasets) | 🟡 Training on Kaggle; compared with v3c when done |
 | V2V radio, in-vehicle hardware | ⏳ Planned (see roadmap) |
@@ -61,7 +61,7 @@ Best accuracy: `v2_e150_960` (150 epochs, 960 px). `v1_e150` (640 px) is about 2
 | Pothole | 0.82 / 0.60 (0.69) | 0.83 / 0.65 (0.72) | **0.82 / 0.68 (0.75)** |
 | **Overall mAP50** | 0.795 | 0.825 (+0.030) | **0.837** (+0.042) |
 
-<p align="center"><img src="ai/results/v2_e150_960/test_confusion_matrix_normalized.png" width="520" alt="Normalised confusion matrix of v2 on the public test set"></p>
+<p align="center"><img src="ai_sw/results/v2_e150_960/test_confusion_matrix_normalized.png" width="520" alt="Normalised confusion matrix of v2 on the public test set"></p>
 
 **What we learned**
 - **Speed bumps** exceed our pre-set acceptance threshold (recall ≥ 0.75, precision ≥ 0.70) on public data; only 6 % are
@@ -77,21 +77,21 @@ Best accuracy: `v2_e150_960` (150 epochs, 960 px). `v1_e150` (640 px) is about 2
   test images, so our test numbers are not inflated by leakage.
 - **Learning curve** (v0 setup): validation mAP50 0.695 → 0.744 → 0.764 → 0.784 at 25/50/75/100 % of the data.
 
-**Since then** (details in [`ai/results/`](ai/results/)):
+**Since then** (details in [`ai_sw/results/`](ai_sw/results/)):
 - **Egyptian fine-tuning (v3–v3c):** three labelling rounds on day and night Cairo footage, used privately for
   experiments only. v3c, with kerbs added as hard negatives, has the best public-test result so far (mAP50 0.846).
 - **Speed-bump filters:** a bump box is kept only if it lies on the road surface (SegFormer road segmentation) and
   moves towards the car like a fixed object across frames. Together they remove over 95 % of false bump flags while
-  keeping about 4 in 5 of the real bumps the model finds ([`road_filter.md`](ai/results/road_filter.md),
-  [`motion_check.md`](ai/results/motion_check.md)).
+  keeping about 4 in 5 of the real bumps the model finds ([`road_filter.md`](ai_sw/results/road_filter.md),
+  [`motion_check.md`](ai_sw/results/motion_check.md)).
 - **Less computation:** processing only the bottom 60 % of the frame cuts the detector from 8.3 to 5.4 GFLOPs at 960 px
-  (2.3 at 640 px) with no measurable loss ([`crop_test.md`](ai/results/crop_test.md)).
+  (2.3 at 640 px) with no measurable loss ([`crop_test.md`](ai_sw/results/crop_test.md)).
 - **ESPDet-Pico for the ESP32-S3:** Espressif's 0.36 M-parameter model, trained on the same data. Weak on potholes
   (mAP50 0.27) but usable for speed bumps (0.78; 0.72 after 8-bit quantisation with ESP-PPQ), so we propose it as a
-  speed-bump camera for a low-cost Lite unit ([`espdet_pico.md`](ai/results/espdet_pico.md)).
+  speed-bump camera for a low-cost Lite unit ([`espdet_pico.md`](ai_sw/results/espdet_pico.md)).
 
 Models trained on private video frames (v3–v3c, ESPDet-Pico) are kept local and are not in this repository.
-The full experiment log, updated after every run, is in [`ai/results/experiments.md`](ai/results/experiments.md).
+The full experiment log, updated after every run, is in [`ai_sw/results/experiments.md`](ai_sw/results/experiments.md).
 
 ## Device firmware
 
@@ -104,10 +104,10 @@ PlatformIO native unit testing, with simulated IMU and GNSS:
 - An end-to-end check verifies the firmware's signed reports with the engine's validation and an independent Ed25519
   library.
 
-`firmware/espdet_qemu` runs the 8-bit ESPDet-Pico model with Espressif's ESP-DL on the ESP32-S3. In Espressif's QEMU
+`xaio_sw/espdet_qemu` runs the 8-bit ESPDet-Pico model with Espressif's ESP-DL on the ESP32-S3. In Espressif's QEMU
 emulator it builds, loads and runs, but the emulator gives wrong detections even for Espressif's own reference model,
-so on-chip accuracy and speed will be measured on a board. Details: [`firmware/README.md`](firmware/README.md) and
-[`firmware/espdet_qemu/README.md`](firmware/espdet_qemu/README.md).
+so on-chip accuracy and speed will be measured on a board. Details: [`xaio_sw/README.md`](xaio_sw/README.md) and
+[`xaio_sw/espdet_qemu/README.md`](xaio_sw/espdet_qemu/README.md).
 
 ```bash
 cd firmware && pio test -e native          # 106 unit tests
@@ -116,7 +116,7 @@ python tools/check_with_engine.py          # signed reports checked from the bac
 
 ### ECU firmware on the chip: what is proven
 
-`firmware/ecu/` is the ESP-IDF 5.5.5 firmware for the XIAO ESP32-S3 Sense (OV3660 camera, L76K GPS, MPU6050 IMU).
+`xaio_sw/ecu/` is the ESP-IDF 5.5.5 firmware for the XIAO ESP32-S3 Sense (OV3660 camera, L76K GPS, MPU6050 IMU).
 It runs the same tested device code on the chip, signs each report with a key the chip makes for itself at first
 boot, and sends it to the backend's `POST /reports`. Every result says where it ran:
 
@@ -154,13 +154,13 @@ Pins: [`PIN_MAP.md`](testing/hardware/ecu/PIN_MAP.md).
 
 ## Backend and system simulation
 
-[`backend/`](backend/) is the server prototype (FastAPI): it registers and revokes devices, verifies each signed
+[`backend_sw/`](backend_sw/) is the server prototype (FastAPI): it registers and revokes devices, verifies each signed
 report against the registered key, rejects replays and malformed reports (and logs why), runs the trust engine,
 answers `GET /hazards` for cars approaching a hazard and updates device reputation from confirmed or contradicted
 reports. An operator dashboard (`/dashboard`) shows every hazard decision with the engine's reasons, device
-reliability, live vehicle positions and rejections. Endpoints: [`backend/README.md`](backend/README.md).
+reliability, live vehicle positions and rejections. Endpoints: [`backend_sw/README.md`](backend_sw/README.md).
 
-[`sil/`](sil/) simulates the whole chain without hardware: dozens of cars each run the real device code, their
+[`testing/sil/`](testing/sil/) simulates the whole chain without hardware: dozens of cars each run the real device code, their
 phones upload to the backend through lossy links, and following cars are warned or not. Scenarios: new devices,
 a vetted fleet, faults (BLE loss, internet outage, GPS loss) and attacks (fake reports, Sybil identities, replay,
 tampering, unregistered and revoked devices).
@@ -173,12 +173,12 @@ tampering, unregistered and revoked devices).
 | Fleet + attacks | 67 % | 0 % (invented hazards never reached a warning) |
 
 Sensor hit rates and network behaviour are assumptions, so these numbers describe the system logic, not road
-performance: [`sil/results/summary.md`](sil/results/summary.md).
+performance: [`testing/sil/results/summary.md`](testing/sil/results/summary.md).
 
 ```bash
-cd backend && python3 -m unittest -v           # API tests (see backend/README.md for the PostgreSQL run)
-python3 sil/run_sil.py                         # whole-chain simulation, 4 scenarios
-python3 sil/live_demo.py                       # live demo: simulation against the real backend, in the dashboard
+cd backend_sw && python3 -m unittest -v           # API tests (see backend_sw/README.md for the PostgreSQL run)
+python3 testing/sil/run_sil.py                         # whole-chain simulation, 4 scenarios
+python3 testing/sil/live_demo.py                       # live demo: simulation against the real backend, in the dashboard
 ```
 
 The live demo plays a scenario in sped-up real time over HTTP and opens the dashboard, where you can pause, change
@@ -190,18 +190,18 @@ backend and the trust engine answer.
 Every push runs the V-cycle checks on GitHub Actions: the device (106), engine, backend and system-simulation
 tests, the device → engine integration check, static analysis, and a traceability check that links every test to the
 requirement IDs of the team's V-cycle workbooks and fails if a test is unlisted or failing. The
-requirement → test → result report appears on each run's summary page. Details: [`verification/`](verification/).
+requirement → test → result report appears on each run's summary page. Details: [`testing/verification/`](testing/verification/).
 
 ## Try it
 
-- **Reproduce training:** [`ai/ICVSP_train_kaggle.ipynb`](ai/ICVSP_train_kaggle.ipynb) runs unattended on Kaggle (recommended for
-  long runs); [`ai/ICVSP_train.ipynb`](ai/ICVSP_train.ipynb) is the interactive Google Colab version. Neither needs Google Drive
+- **Reproduce training:** [`ai_sw/ICVSP_train_kaggle.ipynb`](ai_sw/ICVSP_train_kaggle.ipynb) runs unattended on Kaggle (recommended for
+  long runs); [`ai_sw/ICVSP_train.ipynb`](ai_sw/ICVSP_train.ipynb) is the interactive Google Colab version. Neither needs Google Drive
   access; both download the public dataset themselves.
-- **Use the trained models:** [`ai/models/v2_e150_960.pt`](ai/models/v2_e150_960.pt) (most accurate; run with `--imgsz 960`) or
-  [`ai/models/v1_e150.pt`](ai/models/v1_e150.pt) (faster), for example
-  `python ai/scripts/predict_clips.py --weights ai/models/v1_e150.pt` on your own dash-cam clips.
+- **Use the trained models:** [`ai_sw/models/v2_e150_960.pt`](ai_sw/models/v2_e150_960.pt) (most accurate; run with `--imgsz 960`) or
+  [`ai_sw/models/v1_e150.pt`](ai_sw/models/v1_e150.pt) (faster), for example
+  `python ai_sw/scripts/predict_clips.py --weights ai_sw/models/v1_e150.pt` on your own dash-cam clips.
 
-Details, including how to record and label the Egyptian test set, are in [`ai/README.md`](ai/README.md).
+Details, including how to record and label the Egyptian test set, are in [`ai_sw/README.md`](ai_sw/README.md).
 
 ## Repository layout
 
@@ -211,26 +211,29 @@ engine/
 ├── tests/              52 tests, including every scenario's expected outcome, cold start and severity scope
 ├── schema/             Safety Event JSON schema
 └── results/            Stage 2 experiment results and charts
-ai/
+ai_sw/
 ├── ICVSP_train.ipynb   Colab notebook: download → merge → train → evaluate
 ├── scripts/            dataset download and merge, training, evaluation, clip check, experiment log
 ├── configs/            unified classes and dataset-specific mappings
 ├── models/             trained weights (public-data models only)
 ├── results/            experiment log, confusion matrices, filter, crop and ESPDet results
 └── data/               (not versioned) datasets and team recordings
-firmware/
+xaio_sw/
 ├── lib/icvsp_core/     device logic: IMU detector, event builder, signer, replay guard
 ├── lib/icvsp_board/    ECU logic: GPS parser, report queue, delivery, Wi-Fi link, device key, app loop
 ├── lib/icvsp_sim/      simulated IMU and GNSS
 ├── test/               106 unit tests (PlatformIO native)
 ├── ecu/                ESP-IDF firmware for the XIAO ESP32-S3 Sense (smoke test, report firmware)
+├── arduino/ICVSP_ECU/  Arduino sketch: smoke, report, camera, IMU and BLE programs (pick one in config.h)
 ├── tools/              end-to-end check with the engine
 └── espdet_qemu/        ESPDet-Pico on the ESP32-S3 (ESP-IDF + ESP-DL), run in QEMU
-backend/
+backend_sw/
 ├── icvsp_backend/      API, report checks, storage (Supabase, SQLite), evaluator, operator dashboard
 └── tests/              API tests
-sil/                    whole-chain simulation, live demo, results
-verification/           requirements, traceability list, golden device reports, CI check
+testing/
+├── sil/                whole-chain simulation, live demo, results
+├── verification/       requirements, traceability list, golden device reports, CI check
+└── hardware/           board test cases and evidence: camera (T-012), ECU bring-up, GNSS, BLE
 ```
 
 ## Roadmap
@@ -252,4 +255,4 @@ verification/           requirements, traceability list, golden device reports, 
 - ESPDet-Pico and its deployment tools: Espressif [esp-detection](https://github.com/espressif/esp-detection),
   [ESP-PPQ](https://github.com/espressif/esp-ppq), [ESP-DL](https://github.com/espressif/esp-dl) and ESP-IDF.
 - Road segmentation: SegFormer-B0 trained on Cityscapes (NVIDIA, via Hugging Face).
-- Signatures: [Monocypher](https://monocypher.org) 4.0.2 (BSD-2 / CC0), included in `firmware/lib/monocypher`.
+- Signatures: [Monocypher](https://monocypher.org) 4.0.2 (BSD-2 / CC0), included in `xaio_sw/lib/monocypher`.
