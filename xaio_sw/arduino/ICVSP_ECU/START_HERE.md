@@ -15,6 +15,7 @@ ICVSP_ECU/
       report_app.cpp   report firmware: Wi-Fi -> time -> key -> signed report -> AWS
       camera_test.cpp  T-012 camera bring-up: photos at 3 sizes, timing, memory, failures, recovery
       gnss_app.cpp     T-014 GNSS bring-up (Ahmed): L76K fix, staleness, disconnect and recovery
+      ble_app.cpp      BLE GATT server (Mariam): sends simulated reports to the phone
       net_link.cpp     Wi-Fi join / reconnect
       http_transport.cpp   HTTPS POST to AWS
       nvs_secret_store.cpp keeps the board's signing key in flash
@@ -54,9 +55,12 @@ Everyone uses this same sketch. To test only your part, change **one line** in `
 | Whole-board smoke test | `#define ICVSP_APP ICVSP_APP_SMOKE` |
 | Signed reports to AWS (needs hotspot) | `#define ICVSP_APP ICVSP_APP_REPORT` |
 | Camera (T-012) | `#define ICVSP_APP ICVSP_APP_CAMERA` |
+| BLE to the phone (Mariam) | `#define ICVSP_APP ICVSP_APP_BLE` |
 
 Only the chosen program runs on the board; the others are still compiled but never started.
 `#define ICVSP_DEBUG 1` / `0` turns the extra progress and per-reading lines on or off for every program.
+The BLE program needs the **NimBLE-Arduino** library (Tools > Manage Libraries > search NimBLE-Arduino >
+install version 2.5.2 by h2zero). Only the BLE program needs it: the other programs compile without it.
 
 ## Step 1: smoke test (no Wi-Fi needed)
 
@@ -155,7 +159,24 @@ Part B, with the board (camera ribbon connected while the USB cable is **unplugg
 
 The test cases and the result tables to fill in are in the team repo: `testing/hardware/camera/T-012-camera-test-cases.md`.
 
-The IMU (Rana) and BLE (Mariam) programs are added to this sketch in their own pull requests.
+The IMU (Rana) program is added to this sketch in its own pull request.
+
+## BLE test (Mariam)
+
+1. Library NimBLE-Arduino 2.5.2 installed (see "Pick the program").
+2. `config.h`: `#define ICVSP_APP ICVSP_APP_BLE`. Verify, Upload, Serial Monitor 115200, RESET.
+   Expected: `BLE advertising as ICVSP-001, address ...`.
+3. Phone with Wi-Fi and mobile data **off**. With nRF Connect (or the Flutter app built from Malak's BLE branch):
+   scan, connect to ICVSP-001, enable notifications on 7b100002-...: the Serial Monitor shows
+   `BLE central subscribed`, `BLE new report transport_id=1`, then `BLE notify ... fragment=1/4 ...`.
+4. Write `0001` (hex) to 7b100003-...: `BLE ACK accepted transport_id=1`, then report 2 starts.
+5. Write a wrong ID (`0063`) and a 1-byte value (`01`): `BLE WARN ...ignored` lines, nothing else changes.
+6. Do not ACK: after 2 s `sending transport_id=.. again (attempt 2/3)`, then attempt 3, then `stalled`.
+7. Disconnect on the phone: `BLE central disconnected ... advertising again`. Reconnect and subscribe:
+   if the report was already ACKed, a new report starts with a new transport ID; if it was not ACKed yet,
+   the same unacknowledged report resumes with the same transport ID, restarting from fragment 0.
+8. Record: phone model and Android/iOS version, nRF Connect or app version and commit, this sketch's commit,
+   NimBLE-Arduino 2.5.2, Arduino-ESP32 core 3.3.12. Security: none (no pairing, any phone can connect).
 
 ## Rules
 

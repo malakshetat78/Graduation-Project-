@@ -5,11 +5,13 @@
 //   ICVSP_APP_SMOKE   hardware check: chip, PSRAM, signing, GPS, IMU, camera (no Wi-Fi needed)
 //   ICVSP_APP_REPORT  report firmware: Wi-Fi -> time -> device key -> signed report -> AWS
 //   ICVSP_APP_CAMERA  T-012 camera bring-up: 20 photos x 3 sizes, timing, memory, failures (no Wi-Fi needed)
+//   ICVSP_APP_BLE     BLE GATT server (Mariam): sends simulated reports to the phone, needs NimBLE-Arduino 2.x
 //   ICVSP_APP_GNSS    T-014 L76K GNSS UART bring-up: position/time/fix/stale/disconnect (no Wi-Fi needed)
 #define ICVSP_APP_SMOKE  1
 #define ICVSP_APP_REPORT 2
 #define ICVSP_APP_CAMERA 3
-// 4 and 5 are kept free for the IMU (Rana) and BLE (Mariam) programs, added in their own PRs.
+// 4 is kept free for the IMU (Rana) program, added in its own PR.
+#define ICVSP_APP_BLE    5
 #define ICVSP_APP_GNSS   6
 #define ICVSP_APP ICVSP_APP_SMOKE
 // ---- debug prints: turn ON or OFF here ----

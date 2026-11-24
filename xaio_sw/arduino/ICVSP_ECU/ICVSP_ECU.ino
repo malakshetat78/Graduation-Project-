@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #include "config.h"
+#include "src/app/ble_app.h"
 #include "src/app/camera_test.h"
 #include "src/app/gnss_app.h"
 #include "src/app/log.h"
@@ -29,6 +30,8 @@ void setup() {
     run_camera_test();  // src/app/camera_test.cpp: prints CAM / CAMSTAT lines, sample photos and the result
 #elif ICVSP_APP == ICVSP_APP_GNSS
     start_gnss_app();   // src/app/gnss_app.cpp: real L76K UART/NMEA bring-up, no Wi-Fi needed
+#elif ICVSP_APP == ICVSP_APP_BLE
+    start_ble_app();    // src/app/ble_app.cpp: BLE GATT server, runs in its own task
 #else
 #error "Set ICVSP_APP in config.h"
 #endif
