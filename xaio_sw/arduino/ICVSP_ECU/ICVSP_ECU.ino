@@ -64,6 +64,8 @@ void loop() {
         where_am_i();
 #if ICVSP_APP == ICVSP_APP_REPORT
         report_status();
+#elif ICVSP_APP == ICVSP_APP_BLE
+        ble_status();
 #endif
     }
 #endif
