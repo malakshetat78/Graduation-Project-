@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "../src/app/log.h"
+#include "log.h"
 #include <cassert>
 #include <cstdarg>
 #include <iostream>
@@ -11,7 +11,7 @@ int log_line(const char* fmt, ...) {
     int n=vsnprintf(b,sizeof b,fmt,ap); va_end(ap); logs+=b; return n;
 }
 void step(int,int,const char*) {}
-#include "../src/app/gnss_app.cpp"
+#include "gnss_app.cpp"
 std::string sentence(const std::string& body) {
     unsigned sum=0; for(unsigned char c:body) sum^=c;
     char end[8]; snprintf(end,sizeof end,"*%02X\r\n",sum);

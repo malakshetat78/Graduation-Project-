@@ -7,6 +7,7 @@
 #include "src/app/ble_app.h"
 #include "src/app/camera_test.h"
 #include "src/app/imu_app.h"
+#include "src/app/gnss_app.h"
 #include "src/app/log.h"
 #include "src/app/report_app.h"
 #include "src/app/smoke_test.h"
@@ -32,12 +33,32 @@ void setup() {
     start_imu_app();    // src/app/imu_app.cpp: finds the MPU6050, calibrates the gyroscope
 #elif ICVSP_APP == ICVSP_APP_BLE
     start_ble_app();    // src/app/ble_app.cpp: BLE server in its own task, prints BLE ... lines
+#elif ICVSP_APP == ICVSP_APP_GNSS
+    start_gnss_app();   // src/app/gnss_app.cpp: real L76K UART/NMEA bring-up, no Wi-Fi needed
 #else
 #error "Set ICVSP_APP in config.h"
 #endif
 }
 
 void loop() {
+#if ICVSP_APP == ICVSP_APP_GNSS
+    // Drain the GNSS UART promptly; the normal LED loop below blocks for seconds.
+    gnss_app_loop();
+    delay(1);
+    static uint32_t last_led = 0;
+    if (millis() - last_led >= 1000) {
+        last_led = millis();
+        digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+    }
+#if ICVSP_DEBUG
+    static uint32_t gnss_last_debug = 0;
+    if (millis() - gnss_last_debug >= ICVSP_DEBUG_EVERY_S * 1000UL) {
+        gnss_last_debug = millis();
+        where_am_i();
+    }
+#endif
+    return;
+#endif
 #if ICVSP_APP == ICVSP_APP_IMU
     imu_app_loop();     // reads the IMU every 200 ms; no blocking LED blink here so readings stay on time
     delay(1);           // let the idle task run between readings (no busy spin)

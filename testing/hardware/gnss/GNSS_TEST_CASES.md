@@ -1,6 +1,6 @@
 # T-014 GNSS Test Cases and Execution Results
 
-The recorded run demonstrates GNSS fix acquisition, handling of an initial no-fix state, simulated stale data, and simulated receive disconnection with recovery. All four executed test cases below passed their stated checks. The complete supplied serial log is included unchanged in Appendix A.
+The recorded run demonstrates GNSS fix acquisition, handling of an initial no-fix state, simulated stale data, and simulated receive disconnection with recovery. All four executed test cases below passed their stated checks. The complete supplied serial log is included in Appendix A with coordinates rounded for privacy.
 
 ## Test run details
 
@@ -139,11 +139,11 @@ Line numbers below refer to the original `gps.txt` including its initial blank l
 - D injection starts: line(s) 281, 299.
 - D recovery PASS: line(s) 293, 310.
 
-Original log SHA-256: `e13162bbe16d717678af8ebbd247327951da62977eb86f4a3b9a36124ea12451`.
+Original log retained privately; public coordinates are rounded.
 
-## Appendix A Complete original serial log
+## Appendix A Privacy-redacted serial log
 
-The content inside the following block is the full supplied log, with no removed or edited lines.
+The content inside the following block is the full supplied log, with latitude and longitude rounded to two decimal places for privacy.
 
 ```text
 
@@ -384,32 +384,32 @@ GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
 GNSS EVENT NO_FIX -> VALID_FIX
-GNSS FIX lat=30.5581790 lon=31.0039062 UTC=2026-11-23T18:56:56Z sats=4 HDOP=3.00 quality=1 speed=0.5km/h
-GNSS FIX lat=30.5581788 lon=31.0039072 UTC=2026-11-23T18:56:57Z sats=4 HDOP=3.00 quality=1 speed=0.4km/h
-GNSS FIX lat=30.5581800 lon=31.0039115 UTC=2026-11-23T18:56:58Z sats=4 HDOP=3.00 quality=1 speed=0.5km/h
-GNSS FIX lat=30.5581807 lon=31.0039160 UTC=2026-11-23T18:56:59Z sats=4 HDOP=3.00 quality=1 speed=0.6km/h
-GNSS FIX lat=30.5581783 lon=31.0039167 UTC=2026-11-23T18:57:00Z sats=4 HDOP=3.00 quality=1 speed=4.5km/h
-GNSS FIX lat=30.5581885 lon=31.0039418 UTC=2026-11-23T18:57:01Z sats=5 HDOP=2.80 quality=1 speed=1.6km/h
-GNSS FIX lat=30.5581885 lon=31.0039545 UTC=2026-11-23T18:57:02Z sats=5 HDOP=2.80 quality=1 speed=0.8km/h
-GNSS FIX lat=30.5581848 lon=31.0039532 UTC=2026-11-23T18:57:03Z sats=5 HDOP=2.80 quality=1 speed=0.3km/h
-GNSS FIX lat=30.5581817 lon=31.0039527 UTC=2026-11-23T18:57:04Z sats=6 HDOP=2.80 quality=1 speed=0.9km/h
-GNSS FIX lat=30.5581752 lon=31.0039572 UTC=2026-11-23T18:57:05Z sats=6 HDOP=2.80 quality=1 speed=0.6km/h
-GNSS FIX lat=30.5581752 lon=31.0039632 UTC=2026-11-23T18:57:06Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
-GNSS FIX lat=30.5581717 lon=31.0039745 UTC=2026-11-23T18:57:07Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
-GNSS FIX lat=30.5581710 lon=31.0039828 UTC=2026-11-23T18:57:08Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
-GNSS FIX lat=30.5581770 lon=31.0039977 UTC=2026-11-23T18:57:09Z sats=6 HDOP=2.80 quality=1 speed=4.3km/h
-GNSS FIX lat=30.5581748 lon=31.0039957 UTC=2026-11-23T18:57:10Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
-GNSS FIX lat=30.5581775 lon=31.0039908 UTC=2026-11-23T18:57:11Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
-GNSS FIX lat=30.5581765 lon=31.0039920 UTC=2026-11-23T18:57:12Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
-GNSS FIX lat=30.5581690 lon=31.0039985 UTC=2026-11-23T18:57:13Z sats=6 HDOP=2.80 quality=1 speed=3.8km/h
-GNSS FIX lat=30.5581627 lon=31.0040053 UTC=2026-11-23T18:57:14Z sats=6 HDOP=2.80 quality=1 speed=3.0km/h
-GNSS FIX lat=30.5581592 lon=31.0040090 UTC=2026-11-23T18:57:15Z sats=6 HDOP=2.80 quality=1 speed=1.7km/h
-GNSS FIX lat=30.5581567 lon=31.0040107 UTC=2026-11-23T18:57:16Z sats=6 HDOP=2.90 quality=1 speed=1.1km/h
-GNSS FIX lat=30.5581552 lon=31.0040110 UTC=2026-11-23T18:57:17Z sats=6 HDOP=2.90 quality=1 speed=1.3km/h
-GNSS FIX lat=30.5581517 lon=31.0040062 UTC=2026-11-23T18:57:18Z sats=6 HDOP=2.90 quality=1 speed=2.3km/h
-GNSS FIX lat=30.5581558 lon=31.0040340 UTC=2026-11-23T18:57:19Z sats=6 HDOP=2.90 quality=1 speed=1.7km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:56:56Z sats=4 HDOP=3.00 quality=1 speed=0.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:56:57Z sats=4 HDOP=3.00 quality=1 speed=0.4km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:56:58Z sats=4 HDOP=3.00 quality=1 speed=0.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:56:59Z sats=4 HDOP=3.00 quality=1 speed=0.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:00Z sats=4 HDOP=3.00 quality=1 speed=4.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:01Z sats=5 HDOP=2.80 quality=1 speed=1.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:02Z sats=5 HDOP=2.80 quality=1 speed=0.8km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:03Z sats=5 HDOP=2.80 quality=1 speed=0.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:04Z sats=6 HDOP=2.80 quality=1 speed=0.9km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:05Z sats=6 HDOP=2.80 quality=1 speed=0.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:06Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:07Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:08Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:09Z sats=6 HDOP=2.80 quality=1 speed=4.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:10Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:11Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:12Z sats=6 HDOP=2.80 quality=1 speed=0.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:13Z sats=6 HDOP=2.80 quality=1 speed=3.8km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:14Z sats=6 HDOP=2.80 quality=1 speed=3.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:15Z sats=6 HDOP=2.80 quality=1 speed=1.7km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:16Z sats=6 HDOP=2.90 quality=1 speed=1.1km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:17Z sats=6 HDOP=2.90 quality=1 speed=1.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:18Z sats=6 HDOP=2.90 quality=1 speed=2.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:19Z sats=6 HDOP=2.90 quality=1 speed=1.7km/h
 GNSS TEST S BEGIN software simulation 6000ms
-GNSS FIX lat=30.5581558 lon=31.0040340 UTC=2026-11-23T18:57:20Z sats=6 HDOP=2.90 quality=1 speed=1.7km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:20Z sats=6 HDOP=2.90 quality=1 speed=1.7km/h
 GNSS EVENT VALID_FIX -> STALE
 GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
 GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
@@ -419,16 +419,16 @@ GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
 GNSS TEST timeout PASS; waiting for fresh RMC+GGA
 GNSS TEST S PASS: fresh fix recovered
 GNSS EVENT STALE -> VALID_FIX
-GNSS FIX lat=30.5581598 lon=31.0040278 UTC=2026-11-23T18:57:26Z sats=6 HDOP=2.90 quality=1 speed=1.2km/h
-GNSS FIX lat=30.5581603 lon=31.0040337 UTC=2026-11-23T18:57:27Z sats=6 HDOP=2.90 quality=1 speed=2.2km/h
-GNSS FIX lat=30.5581590 lon=31.0040497 UTC=2026-11-23T18:57:28Z sats=6 HDOP=2.90 quality=1 speed=6.0km/h
-GNSS FIX lat=30.5581542 lon=31.0040652 UTC=2026-11-23T18:57:29Z sats=6 HDOP=2.90 quality=1 speed=6.0km/h
-GNSS FIX lat=30.5581538 lon=31.0040810 UTC=2026-11-23T18:57:30Z sats=6 HDOP=2.90 quality=1 speed=5.4km/h
-GNSS FIX lat=30.5581522 lon=31.0040825 UTC=2026-11-23T18:57:31Z sats=6 HDOP=2.90 quality=1 speed=2.7km/h
-GNSS FIX lat=30.5581525 lon=31.0040897 UTC=2026-11-23T18:57:32Z sats=6 HDOP=2.90 quality=1 speed=2.8km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:26Z sats=6 HDOP=2.90 quality=1 speed=1.2km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:27Z sats=6 HDOP=2.90 quality=1 speed=2.2km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:28Z sats=6 HDOP=2.90 quality=1 speed=6.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:29Z sats=6 HDOP=2.90 quality=1 speed=6.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:30Z sats=6 HDOP=2.90 quality=1 speed=5.4km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:31Z sats=6 HDOP=2.90 quality=1 speed=2.7km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:32Z sats=6 HDOP=2.90 quality=1 speed=2.8km/h
 GNSS TEST D BEGIN software simulation 6000ms
-GNSS FIX lat=30.5581525 lon=31.0040897 UTC=2026-11-23T18:57:33Z sats=6 HDOP=2.90 quality=1 speed=2.8km/h
-GNSS FIX lat=30.5581525 lon=31.0040897 UTC=2026-11-23T18:57:34Z sats=6 HDOP=2.90 quality=1 speed=2.8km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:33Z sats=6 HDOP=2.90 quality=1 speed=2.8km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:34Z sats=6 HDOP=2.90 quality=1 speed=2.8km/h
 GNSS EVENT VALID_FIX -> STALE
 GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
 GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
@@ -440,12 +440,12 @@ GNSS EVENT DISCONNECTED -> STALE
 GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
 GNSS TEST D PASS: fresh fix recovered
 GNSS EVENT STALE -> VALID_FIX
-GNSS FIX lat=30.5581712 lon=31.0040978 UTC=2026-11-23T18:57:40Z sats=6 HDOP=2.90 quality=1 speed=5.0km/h
-GNSS FIX lat=30.5581760 lon=31.0041042 UTC=2026-11-23T18:57:41Z sats=6 HDOP=2.90 quality=1 speed=4.1km/h
-GNSS FIX lat=30.5581802 lon=31.0041095 UTC=2026-11-23T18:57:42Z sats=6 HDOP=2.90 quality=1 speed=3.0km/h
-GNSS FIX lat=30.5581860 lon=31.0041133 UTC=2026-11-23T18:57:43Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:40Z sats=6 HDOP=2.90 quality=1 speed=5.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:41Z sats=6 HDOP=2.90 quality=1 speed=4.1km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:42Z sats=6 HDOP=2.90 quality=1 speed=3.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:43Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
 GNSS TEST D BEGIN software simulation 6000ms
-GNSS FIX lat=30.5581860 lon=31.0041133 UTC=2026-11-23T18:57:44Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:44Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
 GNSS EVENT VALID_FIX -> STALE
 GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
 GNSS STATUS STALE sats=6 HDOP=2.90 quality=1 (no usable coordinates)
@@ -457,42 +457,42 @@ GNSS TEST timeout PASS; waiting for fresh RMC+GGA
 GNSS EVENT DISCONNECTED -> STALE
 GNSS TEST D PASS: fresh fix recovered
 GNSS EVENT STALE -> VALID_FIX
-GNSS FIX lat=30.5582030 lon=31.0041407 UTC=2026-11-23T18:57:50Z sats=6 HDOP=2.90 quality=1 speed=3.5km/h
-GNSS FIX lat=30.5582030 lon=31.0041512 UTC=2026-11-23T18:57:51Z sats=6 HDOP=2.90 quality=1 speed=3.1km/h
-GNSS FIX lat=30.5582013 lon=31.0041642 UTC=2026-11-23T18:57:52Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
-GNSS FIX lat=30.5581988 lon=31.0041760 UTC=2026-11-23T18:57:53Z sats=6 HDOP=2.90 quality=1 speed=4.5km/h
-GNSS FIX lat=30.5581952 lon=31.0041878 UTC=2026-11-23T18:57:54Z sats=6 HDOP=2.90 quality=1 speed=5.0km/h
-GNSS FIX lat=30.5581923 lon=31.0042015 UTC=2026-11-23T18:57:55Z sats=6 HDOP=2.90 quality=1 speed=5.5km/h
-GNSS FIX lat=30.5581892 lon=31.0042168 UTC=2026-11-23T18:57:56Z sats=6 HDOP=2.90 quality=1 speed=8.0km/h
-GNSS FIX lat=30.5581945 lon=31.0042298 UTC=2026-11-23T18:57:57Z sats=6 HDOP=2.90 quality=1 speed=10.9km/h
-GNSS FIX lat=30.5582023 lon=31.0042467 UTC=2026-11-23T18:57:58Z sats=6 HDOP=2.90 quality=1 speed=10.1km/h
-GNSS FIX lat=30.5582085 lon=31.0042687 UTC=2026-11-23T18:57:59Z sats=6 HDOP=2.90 quality=1 speed=9.4km/h
-GNSS FIX lat=30.5582125 lon=31.0042907 UTC=2026-11-23T18:58:00Z sats=6 HDOP=2.90 quality=1 speed=8.9km/h
-GNSS FIX lat=30.5582122 lon=31.0043055 UTC=2026-11-23T18:58:01Z sats=6 HDOP=2.90 quality=1 speed=7.0km/h
-GNSS FIX lat=30.5582045 lon=31.0043120 UTC=2026-11-23T18:58:02Z sats=6 HDOP=2.90 quality=1 speed=5.8km/h
-GNSS FIX lat=30.5581943 lon=31.0042818 UTC=2026-11-23T18:58:03Z sats=6 HDOP=2.90 quality=1 speed=4.3km/h
-GNSS FIX lat=30.5581952 lon=31.0042583 UTC=2026-11-23T18:58:04Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
-GNSS FIX lat=30.5582070 lon=31.0042485 UTC=2026-11-23T18:58:05Z sats=6 HDOP=2.90 quality=1 speed=3.7km/h
-GNSS FIX lat=30.5582208 lon=31.0042525 UTC=2026-11-23T18:58:06Z sats=6 HDOP=2.90 quality=1 speed=6.3km/h
-GNSS FIX lat=30.5582365 lon=31.0044297 UTC=2026-11-23T18:58:07Z sats=6 HDOP=2.90 quality=1 speed=10.2km/h
-GNSS FIX lat=30.5582425 lon=31.0044470 UTC=2026-11-23T18:58:08Z sats=6 HDOP=2.90 quality=1 speed=9.9km/h
-GNSS FIX lat=30.5582467 lon=31.0044678 UTC=2026-11-23T18:58:09Z sats=6 HDOP=2.90 quality=1 speed=9.4km/h
-GNSS FIX lat=30.5582468 lon=31.0044882 UTC=2026-11-23T18:58:10Z sats=6 HDOP=2.90 quality=1 speed=8.9km/h
-GNSS FIX lat=30.5582423 lon=31.0044313 UTC=2026-11-23T18:58:11Z sats=6 HDOP=2.90 quality=1 speed=2.6km/h
-GNSS FIX lat=30.5582418 lon=31.0044482 UTC=2026-11-23T18:58:12Z sats=6 HDOP=2.90 quality=1 speed=3.1km/h
-GNSS FIX lat=30.5582400 lon=31.0044603 UTC=2026-11-23T18:58:13Z sats=6 HDOP=2.90 quality=1 speed=2.9km/h
-GNSS FIX lat=30.5582328 lon=31.0044653 UTC=2026-11-23T18:58:14Z sats=6 HDOP=2.90 quality=1 speed=3.1km/h
-GNSS FIX lat=30.5582253 lon=31.0044710 UTC=2026-11-23T18:58:15Z sats=6 HDOP=2.90 quality=1 speed=3.7km/h
-GNSS FIX lat=30.5582175 lon=31.0044785 UTC=2026-11-23T18:58:16Z sats=6 HDOP=2.90 quality=1 speed=4.0km/h
-GNSS FIX lat=30.5582098 lon=31.0044870 UTC=2026-11-23T18:58:17Z sats=6 HDOP=2.90 quality=1 speed=4.0km/h
-GNSS FIX lat=30.5582015 lon=31.0044897 UTC=2026-11-23T18:58:18Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
-GNSS FIX lat=30.5581940 lon=31.0044872 UTC=2026-11-23T18:58:19Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
-GNSS FIX lat=30.5581853 lon=31.0044783 UTC=2026-11-23T18:58:20Z sats=6 HDOP=2.90 quality=1 speed=4.1km/h
-GNSS FIX lat=30.5581772 lon=31.0044662 UTC=2026-11-23T18:58:21Z sats=6 HDOP=2.90 quality=1 speed=5.3km/h
-GNSS FIX lat=30.5581658 lon=31.0044468 UTC=2026-11-23T18:58:22Z sats=6 HDOP=2.90 quality=1 speed=8.0km/h
-GNSS FIX lat=30.5581502 lon=31.0044192 UTC=2026-11-23T18:58:23Z sats=6 HDOP=2.90 quality=1 speed=12.3km/h
-GNSS FIX lat=30.5581330 lon=31.0043845 UTC=2026-11-23T18:58:24Z sats=6 HDOP=2.90 quality=1 speed=13.5km/h
-GNSS FIX lat=30.5581138 lon=31.0043472 UTC=2026-11-23T18:58:25Z sats=6 HDOP=2.90 quality=1 speed=14.5km/h
-GNSS FIX lat=30.5580907 lon=31.0043102 UTC=2026-11-23T18:58:26Z sats=5 HDOP=23.80 quality=1 speed=15.8km/h
-GNSS FIX lat=30.5580632 lon=31.0042722 UTC=2026-11-23T18:58:27Z sats=5 HDOP=23.80 quality=1 speed=17.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:50Z sats=6 HDOP=2.90 quality=1 speed=3.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:51Z sats=6 HDOP=2.90 quality=1 speed=3.1km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:52Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:53Z sats=6 HDOP=2.90 quality=1 speed=4.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:54Z sats=6 HDOP=2.90 quality=1 speed=5.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:55Z sats=6 HDOP=2.90 quality=1 speed=5.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:56Z sats=6 HDOP=2.90 quality=1 speed=8.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:57Z sats=6 HDOP=2.90 quality=1 speed=10.9km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:58Z sats=6 HDOP=2.90 quality=1 speed=10.1km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:57:59Z sats=6 HDOP=2.90 quality=1 speed=9.4km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:00Z sats=6 HDOP=2.90 quality=1 speed=8.9km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:01Z sats=6 HDOP=2.90 quality=1 speed=7.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:02Z sats=6 HDOP=2.90 quality=1 speed=5.8km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:03Z sats=6 HDOP=2.90 quality=1 speed=4.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:04Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:05Z sats=6 HDOP=2.90 quality=1 speed=3.7km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:06Z sats=6 HDOP=2.90 quality=1 speed=6.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:07Z sats=6 HDOP=2.90 quality=1 speed=10.2km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:08Z sats=6 HDOP=2.90 quality=1 speed=9.9km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:09Z sats=6 HDOP=2.90 quality=1 speed=9.4km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:10Z sats=6 HDOP=2.90 quality=1 speed=8.9km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:11Z sats=6 HDOP=2.90 quality=1 speed=2.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:12Z sats=6 HDOP=2.90 quality=1 speed=3.1km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:13Z sats=6 HDOP=2.90 quality=1 speed=2.9km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:14Z sats=6 HDOP=2.90 quality=1 speed=3.1km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:15Z sats=6 HDOP=2.90 quality=1 speed=3.7km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:16Z sats=6 HDOP=2.90 quality=1 speed=4.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:17Z sats=6 HDOP=2.90 quality=1 speed=4.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:18Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:19Z sats=6 HDOP=2.90 quality=1 speed=3.6km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:20Z sats=6 HDOP=2.90 quality=1 speed=4.1km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:21Z sats=6 HDOP=2.90 quality=1 speed=5.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:22Z sats=6 HDOP=2.90 quality=1 speed=8.0km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:23Z sats=6 HDOP=2.90 quality=1 speed=12.3km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:24Z sats=6 HDOP=2.90 quality=1 speed=13.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:25Z sats=6 HDOP=2.90 quality=1 speed=14.5km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:26Z sats=5 HDOP=23.80 quality=1 speed=15.8km/h
+GNSS FIX lat=30.56 lon=31.00 UTC=2026-11-23T18:58:27Z sats=5 HDOP=23.80 quality=1 speed=17.6km/h
 ```
