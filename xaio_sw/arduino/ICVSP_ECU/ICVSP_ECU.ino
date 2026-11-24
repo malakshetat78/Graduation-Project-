@@ -1,12 +1,11 @@
 // ICVSP ECU - the main file. Arduino calls setup() once after reset, then loop() forever.
-// setup() starts the program chosen in config.h (smoke, report, camera, IMU or BLE); their code is in src/app/.
+// setup() starts the program chosen in config.h (smoke, report, camera or GNSS); their code is in src/app/.
 // The Arduino IDE compiles this file together with every .cpp/.c file in src/ into one program.
 #include <Arduino.h>
 
 #include "config.h"
 #include "src/app/ble_app.h"
 #include "src/app/camera_test.h"
-#include "src/app/imu_app.h"
 #include "src/app/gnss_app.h"
 #include "src/app/log.h"
 #include "src/app/report_app.h"
@@ -29,12 +28,10 @@ void setup() {
     start_report_app(); // src/app/report_app.cpp: runs in its own task, prints NET / DEMO / HTTP lines
 #elif ICVSP_APP == ICVSP_APP_CAMERA
     run_camera_test();  // src/app/camera_test.cpp: prints CAM / CAMSTAT lines, sample photos and the result
-#elif ICVSP_APP == ICVSP_APP_IMU
-    start_imu_app();    // src/app/imu_app.cpp: finds the MPU6050, calibrates the gyroscope
-#elif ICVSP_APP == ICVSP_APP_BLE
-    start_ble_app();    // src/app/ble_app.cpp: BLE server in its own task, prints BLE ... lines
 #elif ICVSP_APP == ICVSP_APP_GNSS
     start_gnss_app();   // src/app/gnss_app.cpp: real L76K UART/NMEA bring-up, no Wi-Fi needed
+#elif ICVSP_APP == ICVSP_APP_BLE
+    start_ble_app();    // src/app/ble_app.cpp: BLE GATT server, runs in its own task
 #else
 #error "Set ICVSP_APP in config.h"
 #endif
@@ -59,13 +56,6 @@ void loop() {
 #endif
     return;
 #endif
-#if ICVSP_APP == ICVSP_APP_IMU
-    imu_app_loop();     // reads the IMU every 200 ms; no blocking LED blink here so readings stay on time
-    delay(1);           // let the idle task run between readings (no busy spin)
-    static uint32_t last_led = 0;
-    if (millis() - last_led >= 1000) { last_led = millis(); digitalWrite(LED_PIN, !digitalRead(LED_PIN)); }
-    return;
-#endif
 #if ICVSP_DEBUG
     // Every few seconds: print where the program is right now.
     static uint32_t last_debug = 0;
@@ -74,8 +64,6 @@ void loop() {
         where_am_i();
 #if ICVSP_APP == ICVSP_APP_REPORT
         report_status();
-#elif ICVSP_APP == ICVSP_APP_BLE
-        ble_status();
 #endif
     }
 #endif
