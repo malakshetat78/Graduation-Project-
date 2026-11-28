@@ -12,9 +12,8 @@ system simulation, AI models and the V-cycle checks). `README.md` explains the p
 | `3_WEB_SW/code/database/` | Supabase schema and migrations | Rana, Mariam |
 | `3_WEB_SW/code/deploy/` | AWS deployment | Nourseen, Ahmed, Malak |
 | `3_WEB_SW/doc/` | Hand-off notes, backend-mobile contract, AWS hosting research | everyone |
-| `testing/sil/` | System simulation of the whole chain, without hardware | Shahesta |
-| `5_TESTING/code/verification/` | Requirements list, requirement → test traceability, CI check | Shahesta, security team |
-| `xaio_sw/` (moving to `1_XAIO_SW/`) | Device code (ESP32-S3): IMU detector, camera decision logic, signed reports | Shahesta, Malak |
+| `5_TESTING/` | Board test cases and logs (`doc`), traceability check and laptop tests (`code`) | everyone with a hardware task, security team |
+| `1_XAIO_SW/` | Device firmware (ESP-IDF, ESP32-S3): camera, IMU, GNSS, BLE, detectors, signed reports | Shahesta, Malak, Rana, Ahmed, Mariam |
 | `4_AI_SW/` | Camera detectors, training notebooks; labelling policy in `4_AI_SW/doc/LABELLING_POLICY.md` | Shahesta, Rana |
 | `2_FLUTTER_SW/` | Flutter app, BLE protocol, GPS features | Mariam |
 | `6_TOOLS/` | Shared scripts and utilities | everyone |

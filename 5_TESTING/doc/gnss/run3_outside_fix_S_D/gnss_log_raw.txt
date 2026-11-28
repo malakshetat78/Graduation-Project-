@@ -1,0 +1,188 @@
+I (825) esp_psram: SPI SRAM memory test OK
+I (834) cpu_start: Pro cpu start user code
+I (834) cpu_start: cpu freq: 160000000 Hz
+I (834) app_init: Application information:
+I (834) app_init: Project name:     icvsp_ecu
+I (834) app_init: App version:      16ad91a-dirty
+I (834) app_init: Compile time:     Nov 25 2026 00:00:05
+I (834) app_init: ELF file SHA256:  72bc394ed...
+I (835) app_init: ESP-IDF:          v5.5.5
+I (835) efuse_init: Min chip rev:     v0.0
+I (835) efuse_init: Max chip rev:     v0.99 
+I (835) efuse_init: Chip rev:         v0.2
+I (835) heap_init: Initializing. RAM available for dynamic allocation:
+I (836) heap_init: At 3FC97C60 len 00051AB0 (326 KiB): RAM
+I (836) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (836) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (836) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (837) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (838) spi_flash: detected chip: gd
+I (838) spi_flash: flash io: dio
+I (838) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (839) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (839) main_task: Started on CPU0
+I (839) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (839) main_task: Calling app_main()
+
+GNSS BEGIN T-014: Seeed L76K bring-up (ESP-IDF build)
+GNSS UART1 baud=9600 RX=GPIO44(D7) TX=GPIO43(D6)
+GNSS INFO module TX -> ECU RX, module RX <- ECU TX; NO WIFI / NO CLOUD
+GNSS INFO indoor NO_FIX is expected; test outdoors or at a window with clear sky
+GNSS INFO coordinates printed (removed from this saved log)
+GNSS TEST enabled: S=stale, D=disconnect; start from VALID_FIX
+GNSS EVENT STARTING -> WAITING_UART
+GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+GNSS EVENT WAITING_UART -> WAITING_RMC_GGA
+GNSS MODULE TXT ANTENNA OK
+GNSS EVENT WAITING_RMC_GGA -> VALID_FIX
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:19Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:20Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:21Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:22Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:23Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:24Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:25Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:26Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=4921 valid_NMEA=93 bad_checksum=0 overflow=0 uptime=10s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=33 BD: in_view=2 with_signal=2 best_SNR=28
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:27Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:28Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:29Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:30Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:31Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:32Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:33Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:34Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:35Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:36Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=11201 valid_NMEA=213 bad_checksum=0 overflow=0 uptime=20s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=33 BD: in_view=2 with_signal=2 best_SNR=29
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:37Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:38Z sats=7 HDOP=14.80 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:39Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+
+# recorder: sending key S
+GNSS TEST S BEGIN software simulation 6000ms
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:40Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS EVENT VALID_FIX -> STALE
+GNSS STATUS STALE sats=7 HDOP=14.70 quality=6 (no usable coordinates)
+GNSS STATUS STALE sats=7 HDOP=14.70 quality=6 (no usable coordinates)
+GNSS STATUS STALE sats=7 HDOP=14.70 quality=6 (no usable coordinates)
+GNSS STATUS STALE sats=7 HDOP=14.70 quality=6 (no usable coordinates)
+GNSS STATUS STALE sats=7 HDOP=14.70 quality=6 (no usable coordinates)
+GNSS TEST timeout PASS; waiting for fresh RMC+GGA
+GNSS TEST S PASS: fresh fix recovered
+GNSS EVENT STALE -> VALID_FIX
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:46Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=17481 valid_NMEA=260 bad_checksum=0 overflow=0 uptime=30s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=32 BD: in_view=2 with_signal=2 best_SNR=29
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:47Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:48Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:49Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:50Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:51Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:52Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:53Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:54Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:55Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:56Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=23761 valid_NMEA=380 bad_checksum=0 overflow=0 uptime=40s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=37 BD: in_view=2 with_signal=2 best_SNR=32
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:57Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:58Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:11:59Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:00Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:01Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:02Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:03Z sats=7 HDOP=14.70 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:04Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:05Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:06Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=30041 valid_NMEA=500 bad_checksum=0 overflow=0 uptime=50s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=35 BD: in_view=2 with_signal=2 best_SNR=33
+
+# recorder: sending key D
+GNSS TEST D BEGIN software simulation 6000ms
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:07Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS EVENT VALID_FIX -> STALE
+GNSS STATUS STALE sats=7 HDOP=14.60 quality=6 (no usable coordinates)
+GNSS STATUS STALE sats=7 HDOP=14.60 quality=6 (no usable coordinates)
+GNSS EVENT STALE -> DISCONNECTED
+GNSS STATUS DISCONNECTED sats=7 HDOP=14.60 quality=6 (no usable coordinates)
+GNSS STATUS DISCONNECTED sats=7 HDOP=14.60 quality=6 (no usable coordinates)
+GNSS STATUS DISCONNECTED sats=7 HDOP=14.60 quality=6 (no usable coordinates)
+GNSS TEST timeout PASS; waiting for fresh RMC+GGA
+GNSS EVENT DISCONNECTED -> STALE
+GNSS TEST D PASS: fresh fix recovered
+GNSS EVENT STALE -> VALID_FIX
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:13Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:14Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:15Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:16Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=32533 valid_NMEA=547 bad_checksum=0 overflow=0 uptime=60s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=35 BD: in_view=2 with_signal=2 best_SNR=27
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:17Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:18Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:19Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:20Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:21Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:22Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:23Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:24Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:25Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:26Z sats=7 HDOP=14.60 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=38763 valid_NMEA=667 bad_checksum=0 overflow=0 uptime=70s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=30 BD: in_view=2 with_signal=2 best_SNR=28
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:27Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:28Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:29Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:30Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:31Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:32Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:33Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+
+# recorder: sending key D
+GNSS TEST D BEGIN software simulation 6000ms
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:34Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS EVENT VALID_FIX -> STALE
+GNSS STATUS STALE sats=7 HDOP=14.50 quality=6 (no usable coordinates)
+GNSS STATUS STALE sats=7 HDOP=14.50 quality=6 (no usable coordinates)
+GNSS DEBUG bytes=43244 valid_NMEA=754 bad_checksum=0 overflow=0 uptime=80s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=31 BD: in_view=2 with_signal=2 best_SNR=31
+GNSS EVENT STALE -> DISCONNECTED
+GNSS STATUS DISCONNECTED sats=7 HDOP=14.50 quality=6 (no usable coordinates)
+GNSS STATUS DISCONNECTED sats=7 HDOP=14.50 quality=6 (no usable coordinates)
+GNSS STATUS DISCONNECTED sats=7 HDOP=14.50 quality=6 (no usable coordinates)
+GNSS TEST timeout PASS; waiting for fresh RMC+GGA
+GNSS EVENT DISCONNECTED -> STALE
+GNSS TEST D PASS: fresh fix recovered
+GNSS EVENT STALE -> VALID_FIX
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:40Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:41Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:42Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:43Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:44Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:45Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:46Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=47485 valid_NMEA=834 bad_checksum=0 overflow=0 uptime=90s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=32 BD: in_view=2 with_signal=2 best_SNR=33
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:47Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:48Z sats=7 HDOP=14.50 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:49Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:50Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:51Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:52Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:53Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:54Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:55Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:56Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS DEBUG bytes=53715 valid_NMEA=954 bad_checksum=0 overflow=0 uptime=100s
+GNSS SKY GP: in_view=9 with_signal=6 best_SNR=34 BD: in_view=2 with_signal=2 best_SNR=32
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:57Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:58Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:12:59Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+GNSS FIX lat=removed lon=removed UTC=2026-11-24T22:13:00Z sats=7 HDOP=14.40 quality=6 speed=2.5km/h
+
+# recorder: all tests done
+
+# recorder: stopped after 104 s

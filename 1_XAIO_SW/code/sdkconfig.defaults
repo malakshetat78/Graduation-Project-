@@ -1,0 +1,16 @@
+# Board build (Seeed XIAO ESP32-S3 Sense: ESP32-S3R8, 8 MB flash, 8 MB octal PSRAM)
+CONFIG_IDF_TARGET="esp32s3"
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="8MB"
+CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_40M=y
+# Console on the USB port, so UART0's pins (D6/D7) are free for the GPS on UART1
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+# The default 3584-byte main stack overflowed in the espidf_security demo (QEMU, 2026-11-15)
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+# Camera SCCB (I2C) on port 0, so port 1 stays free for the IMU (board_pins.h). The camera driver takes the
+# port from this setting, not from camera_config_t.sccb_i2c_port, when it is given the SCCB pins.
+CONFIG_SCCB_HARDWARE_I2C_DRIVER_NEW=y
+CONFIG_SCCB_HARDWARE_I2C_PORT0=y

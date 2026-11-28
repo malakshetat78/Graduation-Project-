@@ -1,0 +1,101 @@
+menu "ICVSP ECU"
+
+choice ICVSP_APP
+    prompt "Firmware to build"
+    default ICVSP_APP_SMOKE
+    config ICVSP_APP_SMOKE
+        bool "Boot/sensor smoke test"
+    config ICVSP_APP_REPORT_DEMO
+        bool "Signed report demo: ECU app -> POST /reports over the network"
+    config ICVSP_APP_CAMERA
+        bool "T-012 camera bring-up test (no Wi-Fi needed)"
+    config ICVSP_APP_IMU
+        bool "T-010 MPU6050 IMU bring-up test (no Wi-Fi needed)"
+    config ICVSP_APP_GNSS
+        bool "T-014 L76K GNSS bring-up test (no Wi-Fi needed)"
+    config ICVSP_APP_BLE
+        bool "T-016 BLE GATT bring-up test (no Wi-Fi needed)"
+    config ICVSP_APP_ECU
+        bool "All-in-one ECU: IMU, GNSS, camera, BLE (and Wi-Fi) running together"
+endchoice
+
+config ICVSP_ECU_CAMERA_PERIOD_MS
+    int "All-in-one ECU: milliseconds between camera photos"
+    depends on ICVSP_APP_ECU
+    default 5000
+    range 500 60000
+
+choice ICVSP_ECU_IMU_MOUNT
+    prompt "All-in-one ECU: how the IMU sits in the car (z must point up)"
+    depends on ICVSP_APP_ECU
+    default ICVSP_ECU_IMU_FLAT_X_FORWARD
+    config ICVSP_ECU_IMU_FLAT_X_FORWARD
+        bool "Flat, the sensor's X arrow points to the front of the car"
+    config ICVSP_ECU_IMU_FLAT_Y_FORWARD
+        bool "Flat, the sensor's Y arrow points to the front of the car"
+endchoice
+
+config ICVSP_GPS_LISTEN_S
+    int "Seconds to listen to the GPS UART"
+    default 5
+    range 2 60
+
+config ICVSP_WIFI_SSID
+    string "Wi-Fi network name (set it in sdkconfig.local, not in git)"
+    default ""
+
+config ICVSP_WIFI_PASSWORD
+    string "Wi-Fi password (set it in sdkconfig.local, not in git)"
+    default ""
+
+config ICVSP_REPORT_URL
+    string "Backend POST /reports URL"
+    default "http://10.0.2.2:8010/reports"
+    help
+        The backend's POST /reports URL: the laptop's LAN address for a local backend, or the
+        AWS https:// URL. Set it in sdkconfig.local.
+
+config ICVSP_TLS_REQUIRE_1_3
+    bool "HTTPS: require TLS 1.3 (offer no older version)"
+    depends on MBEDTLS_SSL_PROTO_TLS1_3
+    default y
+    help
+        Matches FR-SEC-08 (TLS 1.3 to the backend; written for the phone/app link). The ECU then offers only TLS 1.3, so a server (or a
+        man-in-the-middle) that only speaks TLS 1.2 gets no connection. AWS Lambda function URLs accept TLS 1.3.
+
+config ICVSP_SNTP_SERVER
+    string "SNTP server (report demo clock; on the road the clock comes from GNSS)"
+    default "pool.ntp.org"
+
+config ICVSP_DEMO_LAT
+    string "Report demo: latitude of the simulated drive (degrees)"
+    default "30.0444"
+    help
+        Start of the simulated GNSS route (the demo drives east from here). Default: Cairo.
+
+config ICVSP_DEMO_LON
+    string "Report demo: longitude of the simulated drive (degrees)"
+    default "31.2357"
+
+config ICVSP_DEVICE_ID
+    string "Device ID registered in the backend (empty: ecu-<MAC address>)"
+    default ""
+    help
+        Leave empty on every board: the ID is then made from the chip's factory MAC address, so each ECU has
+        its own without per-board settings.
+
+choice ICVSP_KEY_SOURCE
+    prompt "Signing key"
+    default ICVSP_KEY_PER_DEVICE
+    config ICVSP_KEY_PER_DEVICE
+        bool "Per device: made on the chip at first boot (hardware RNG), kept in NVS"
+    config ICVSP_KEY_DEMO_SEED
+        bool "Demo seed from sdkconfig.local (same key on every board; demos only)"
+endchoice
+
+config ICVSP_DEMO_SEED_HEX
+    string "Demo signing seed, 64 hex characters (sdkconfig.local only; a demo key, not a production key)"
+    depends on ICVSP_KEY_DEMO_SEED
+    default ""
+
+endmenu

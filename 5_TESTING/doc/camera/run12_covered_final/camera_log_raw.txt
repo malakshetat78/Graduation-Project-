@@ -1,0 +1,381 @@
+I (835) esp_psram: SPI SRAM memory test OK
+I (844) cpu_start: Pro cpu start user code
+I (844) cpu_start: cpu freq: 160000000 Hz
+I (844) app_init: Application information:
+I (844) app_init: Project name:     icvsp_ecu
+I (844) app_init: App version:      16ad91a-dirty
+I (844) app_init: Compile time:     Nov 25 2026 00:40:00
+I (844) app_init: ELF file SHA256:  00e809037...
+I (845) app_init: ESP-IDF:          v5.5.5
+I (845) efuse_init: Min chip rev:     v0.0
+I (845) efuse_init: Max chip rev:     v0.99 
+I (845) efuse_init: Chip rev:         v0.2
+I (845) heap_init: Initializing. RAM available for dynamic allocation:
+I (846) heap_init: At 3FC9A660 len 0004F0B0 (316 KiB): RAM
+I (846) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (846) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (846) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (847) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (848) spi_flash: detected chip: gd
+I (848) spi_flash: flash io: dio
+I (848) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (849) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (849) main_task: Started on CPU0
+I (849) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (849) main_task: Calling app_main()
+
+CAM BEGIN T-012 camera bring-up test (ESP-IDF build)
+CAMSTAT build firmware=16ad91a-dirty idf=v5.5.5 compiled="Nov 25 2026 00:40:00" shots=20 lighting="lens covered"
+
+>>> STEP 1/6: memory before the camera starts
+CAM psram          PASS  8192 KB
+CAMSTAT mem when=before_camera internal_free=364555 internal_largest=270336 psram_free=8386192 heap_min_ever=8718716
+
+>>> STEP 2/6: start the camera and read the sensor model
+I (2849) s3 ll_cam: DMA Channel=0
+I (2849) cam_hal: cam init ok
+I (2849) sccb-ng: pin_sda 40 pin_scl 39
+I (2849) sccb-ng: sccb_i2c_port=0
+I (2859) ov3640: Mismatch PID=0x3660
+I (2859) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (2859) camera: Detected OV3660 camera
+I (2859) camera: Detected camera at address=0x3c
+I (3169) cam_hal: PSRAM DMA mode disabled
+I (3169) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 15
+I (3169) cam_hal: Allocating 15360 Byte frame buffer in PSRAM
+I (3169) cam_hal: cam config ok
+I (3179) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM startup        PASS  init 352.0 ms (attempt 1)
+CAM sensor         PASS  OV3660 PID=0x3660 VER=0x00 MIDH=0x00 MIDL=0x00 (expected OV3660)
+
+>>> STEP 3/6: repeated capture at QVGA, VGA and SVGA (keep the scene and light the same)
+I (3199) s3 ll_cam: DMA Channel=0
+I (3199) cam_hal: cam init ok
+I (3199) sccb-ng: pin_sda 40 pin_scl 39
+I (3199) sccb-ng: sccb_i2c_port=0
+I (3209) ov3640: Mismatch PID=0x3660
+I (3209) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (3209) camera: Detected OV3660 camera
+I (3209) camera: Detected camera at address=0x3c
+I (3519) cam_hal: PSRAM DMA mode disabled
+I (3519) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 15
+I (3519) cam_hal: Allocating 15360 Byte frame buffer in PSRAM
+I (3519) cam_hal: cam config ok
+I (3529) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM start_QVGA     PASS  init 348.0 ms (attempt 1)
+CAM QVGA shot  1: 2210 bytes, 320x240, start=1 end=1 one_picture=1, wait 72.2 ms
+-----BEGIN ICVSP JPEG name=QVGA_shot01 width=320 height=240 bytes=2210 lighting="lens covered"-----
+/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUaHBYeLCYuLSsm
+KikwNkU7MDNBNCkqPFI9QUdKTU5NLzpVW1RLWkVMTUr/2wBDAQ0ODhIQEiMUFCNKMioySkpKSkpK
+SkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkr/xAAfAAABBQEBAQEB
+AQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEH
+InEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFla
+Y2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbH
+yMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQID
+BAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJ
+IzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY
+2dri4+Tl5ufo6ery8/T19vf4+fr/wAARCADwAUADASEAAhEBAxEB/9oADAMBAAIRAxEAPwDy6lpC
+CkoEFFABRQAlLQAlFAxaSgQUUAFFAwooEFFAwooAKSgQtFAxKKAFpKACigAooAKKACigB1FABRQA
+UlAgooAKKACigAooAKKBhRQIKKBhRQIKKACigYlLQAlLQAlFAC0lABRQAUUAFFADqKACkoEFFABR
+QAUUAFFAwooAKKBBSUDFooEFJQMKWgBKWgBKKACigAooAKKACigAooAKKAHUUAFJQIKKBhRQAUUA
+FFABRQAUUAFFABRQAUUAFFAgpKBhS0AJRQAUUAFFABRQAUUAFFMB1FIQlFAwooAKKACigQUUAFFA
+CUtAwooAKSgAooAWkoAKKACigAooAKKACigAooAKKACigBaKBBRQAUUAFFABRQMKKBBRQAUUAFFM
+YUUgCimIKKQwooASloASigAooAKKACigAooAKKAFooEFFABRQMKKACigQUUAFFABRQAUUDCigQUU
+DCigAooEFFABRQMSigAooAKKACigAooAdSUALSUCCloASigYtJQIWkoAKKAFpKACigAooGFFABRQ
+IKKACigYUlAC0lABRQAUUAFFABRQAtFABRQAUUCCigYUUAFFAgooAKKBhRQAUUAFFABRQAUUAJS0
+AJRQAUUAFFABRQAUUAFFAC0UAFFABRQAUUAFFAgooAKKACigYUUAFFAgooGFFAgpKBi0UAFJQIKK
+BhRQAUUAFFABRQA6koELSUALSUAFFABS0AJS0AFFABRQAUlABRQAUUALSUAFFABRQAUUDCkoAKWg
+QlFMYUUgCigB1JQIKKACigAooAKKACigAooAWigBKKACigAooAKKACigAooGFJQAUUAFFMAopAFF
+ABRTAWikAUUCCigAooAKKACigAooGFFAgooAKKACigYUUCCigBKKBhRQAUUAFFABRQAUUAFFADqK
+BCUUwClpAJRQAUtACUUAFFABS0AFJQAUUAFFABRQAUUAJS0AFFAxKKACigAooAKKYBRQAtFIQUUA
+FFABRQAUUAFFAwooEFFAwooEFFABRQMKKACigBKKACigAooAKKACigAooAKKAFooEFFAwooEFFAB
+RQMKKACigQtJQMKKBBRQMKKACigAooEFFAwpKACigAooAKKACigAooAdRQIKSgAooAKKACigAooA
+KKACigYUUCCigAooGFFAgooAKKBiUUAFFABRQAUUAFFABRQA6igQUUAJRQAUtACUtABRQAUlABRQ
+AtJQAUUAFFABRQAUUAFFABRQAUUAJRTGFFIAooAKKAHfjRQIKKAEooAKKACigBaKAEooAKKAFpKA
+FpKACloGJRQIKKACigApKBhS0AFJQAUUAFFABRQA6koEFFABRQAUUDCigQUUDCigAooAKKACigAo
+oAKKACigApKAFpKACigAooAKKACigAooAdSUCCigAooAKKACigYUUCCigAooAKKACigYUUCCigYU
+lABRQAUUAFFABRQAUUAFFABRQA6igQUlABRQAUUDCigQUUDCigQtJQAUUDCigQUUDCigAooASigA
+ooAKKACigAooAKKYBRSAdRQISigYUUCCigAooAKKACigAooAKKACkoGFLQAUlABS0AJRQAUUAFFA
+BRQAUUAFFMAopAOoxQIKSgAooAKKBhRQIKKBi0lIQUUxhRQAUUCCigYUUAFJQAtFABSUAFFABRQA
+UUAFFABRQA6igQlLQAlFABRQMKKADFFABRQIKKBhRQAUUAFFACUUAFFABRQAUUAFFABRQAUUAFFA
+BRTAdSUhBS0AJRQAUUDCigAooEFJQMWigAooAKSgAooAWkoAKKACigAooAKKACigAooAKKYBRQA7
+FFIQUUAJS0AJRQMKKACigAooAKKBBRQMKKAEooAKKACigAooAKKACigAooAKKACigAopgPpKQgoo
+ASloASloASigYtJQAUUAFFAgooAKKBhRQAUlABRQAUUAFFABRQAUUAFFABRQAUUwH0UhCUUAFFAB
+SUAFFABRQAUUAFFABRQMKKACkoAWigQUlAwpaAEooAKKACigAooAKKACigB/eigkQCimMKKQBRQA
+CkoAKKACigAooAKKACigYUUwCkpALSUAFFABRQAUUAFFABRQAUUAFFMD/9k=
+-----END ICVSP JPEG-----
+CAM QVGA shot  2: 2208 bytes, 320x240, start=1 end=1 one_picture=1, wait 61.1 ms
+CAM QVGA shot  3: 2180 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot  4: 2265 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot  5: 2202 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot  6: 2214 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot  7: 2207 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot  8: 2199 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.5 ms
+CAM QVGA shot  9: 2265 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 10: 2223 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.5 ms
+CAM QVGA shot 11: 2210 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 12: 2202 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.3 ms
+CAM QVGA shot 13: 2250 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 14: 2205 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 15: 2181 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 16: 2263 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 17: 2175 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 18: 2186 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 19: 2263 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.4 ms
+CAM QVGA shot 20: 2203 bytes, 320x240, start=1 end=1 one_picture=1, wait 71.5 ms
+CAMSTAT res=QVGA width=320 height=240 fb_count=1 shots=20 valid=20 no_frame=0 bad_jpeg=0 stuck=0 cut=0 wrong_size=0 too_small=0 init_ms=348.0 get_ms_min=61.1 get_ms_avg=70.9 get_ms_max=72.2 frame_gap_ms_avg=72.0 fps=13.9 bytes_min=2175 bytes_avg=2215 bytes_max=2265 sensor=OV3660 lighting="lens covered"
+CAMSTAT mem when=running_QVGA internal_free=342215 internal_largest=262144 psram_free=8369624 heap_min_ever=8676796
+CAM capture_QVGA   PASS  20/20 valid 320x240 JPEGs, wait avg 70.9 ms, 2215 bytes avg
+I (5289) s3 ll_cam: DMA Channel=0
+I (5289) cam_hal: cam init ok
+I (5289) sccb-ng: pin_sda 40 pin_scl 39
+I (5289) sccb-ng: sccb_i2c_port=0
+I (5299) ov3640: Mismatch PID=0x3660
+I (5299) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (5299) camera: Detected OV3660 camera
+I (5299) camera: Detected camera at address=0x3c
+I (5609) cam_hal: PSRAM DMA mode disabled
+I (5609) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 60
+I (5609) cam_hal: Allocating 61440 Byte frame buffer in PSRAM
+I (5609) cam_hal: cam config ok
+I (5619) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM start_VGA      PASS  init 352.3 ms (attempt 1)
+CAM VGA shot  1: 7578 bytes, 640x480, start=1 end=1 one_picture=1, wait 72.7 ms
+-----BEGIN ICVSP JPEG name=VGA_shot01 width=640 height=480 bytes=7578 lighting="lens covered"-----
+/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUaHBYeLCYuLSsm
+KikwNkU7MDNBNCkqPFI9QUdKTU5NLzpVW1RLWkVMTUr/2wBDAQ0ODhIQEiMUFCNKMioySkpKSkpK
+SkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkr/xAAfAAABBQEBAQEB
+AQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEH
+InEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFla
+Y2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbH
+yMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQID
+BAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJ
+IzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY
+2dri4+Tl5ufo6ery8/T19vf4+fr/wAARCAHgAoADASEAAhEBAxEB/9oADAMBAAIRAxEAPwDzAUh6
+0CFptAhaKAFoPSkAnWigBKMUxi0lABRQAtFAg6UlAwooEFFAwooAKKQBRTAKSgApaAEooAWigBKW
+kAUlMApaACkpALRQAlLQAlFMApaAEooAKKACigAFFIAopgFFABS4oASigAooAKKACigBKWgAooAc
+KUmgBKKAEpaAClpANpTTASloASigANHSgAozSAOtFMAozQIKKBhRSAKSmAtFIAopgJS0AFJQAtFA
+hKWkMKKYCUUAFLSASimAUtACUUgCimAUUALSUAFFABRQAUZpAFFMAooAKKACigBKWgAooAKKAF4p
+KQDqKYwpKCRaM0gCkpjFGKQ0AKKSgQtJQMKTNABS0AFFAgooGFFABRQAtNpCFooGFFMAopCEopjC
+igBaSgAooADRQAUtIQUUwEooGFFAC0lABRQAUUALSUAFFAC0lABRQAUUAFFABRQAlLQAUUAFFABR
+QA7FFAgFFABS0XAQ0vakA2lpjAYpKAFzmikISlpjEopCFpKYBS0AFJQAUUDA0tIQUlMYUUCFpKAE
+paBhRQIKSgYUtABRSEFJTGFLmgBKWgBKKACloAKKAEopAFFMBaSgAooAKKAFpBQAUtACUpoASigA
+ooAKKACigBeaWgAooATNLSAKSmAtNpCHUlAwopgFFIBKWmAUUCDNFAxKKAFpKAFopAJS0wCkpALR
+TAKSgBaKBCUUDCigBaKQgpKBhRQAUUAFJTAWigAopAFFMAooAKKACjNABRQAUUAFFABRQAUUAJS0
+gEopgFLQA6jrQMKSgQUtACGigBc0lIAopiCkoGLRSEFFMYtNpALRQIBRTGFFIApKYBS0AFFABRSA
+KKBC0lAwooASlzTASlpAFJTAKKACigAooAKKACigAooAKKQBRQAUUwCigAooAKKACigAooAKKAEo
+oAWigBw60UAGcUUAJQKACigApKAFpaQCUlMBaSgBaKACigBKWkAUlMBaSgBaSgAooAWikAUUxCUU
+DCigAooAKKACloASigAooAKKACigAooAKSgBaKACigAooAKKACkoAKWkAUUwEpaACigBKWgBKKAC
+igCTNJmgAoHSkAlL2oASimAUUAFFIAooAKO1MAFFABRQIKKBhSUALRQAUUgEpaACimAUUAFFIBKW
+gAooAKKYgo70DCjNABSUAFFABRQAUUAFFABRQAUUAFFIAopgFFABRQAUUAFFABSUAFLQAUUAJS0A
+LRQAtJQAUUWAKU0CEooGFFAC0lAgoxQMKKQBRTAKKQBRTAKKBBRQMSnCgBO9BoASloASloAKKQhK
+WmMKKAEpaACkoAKKQBRTAWkoAKWgBKKBBRQMWkoEFFIYUUwCigAooASloAKKACigBKWgBKWgAooA
+dSUAFFACiikAlGaYBRSASimAtFIAooAKKAEpaYCUtIAooAM0UAJS0AFFACUtABRQACkoAWimAlFI
+BaKYBRSASloAKSgAopgFFABRQAUUgCigAooAKKACimAUUhhRQAUUCCigApKYBRSAWkoAWkpgOpaA
+EooAKKACkoAWigQUlAC0lAC0lABS0DCkoAKWgApKACloEJQaBhS0AFJQAtFABSUAKaKQhKKYxaSg
+BaKAEooAKKACigQUUDCigAooAKKAEpaACigAooASloAKKACigBKWgAooAKKACkoAKKAH0UgG0tMY
+UUCCigAooAKKQC0lMAooGFFAhKdQAlFABRQAUUAFFIAopgFFIApKYC0UgFpKAEpaBhRQISloAKKA
+CkoAKXtQAUGgBKKYC0lIAopgFFABRSAKKACigAooAKKYBRSAKKAEpaYBRSGFJTESdqb3oELS0AJm
+g0DEooAWkNAgooAWkoAKKYBS0gEooAKXtQAlFAwopCClpgFFIApKYwooEFFABRQAUUDCigQUUDCi
+gA7UUCEpaACkoGFFAC0lABS0CEooGFFABRQAUUAFFABRQAUUAFFABRQAlLQAUUgHUlAwNFMQUUgC
+jNAC5pDQIO1FABRQMKKAFpKYBS0AJRSAKSmMKWgQUUgCjtTAKKACigAopAFFMBKWkACigBaSgYUU
+CEooAWimAlFABRSAKKYBRSAKKACigBaSgYUUxBSUgFopgFFABRSASimAtJSAWkpjH0lAgooGLSUC
+FpKQC9qSgAopiCigAFFBQlLSEFFMBaKAEooAKKQwooEFFMAooAKKQBRQAZopgFFABRQAUUAFFIAo
+oASimAUtACUtACUUALSUgCimAUUAFFIApKYC0lIBaKYCUUALRQMSloEJS0AJRQA+jrQAmKWgBKKB
+BRQMKKACjrQIWkoGFAoAKWgQlFAwooAKKACigAooADRQIMUUDCigAopAFJQIKWmMSigBaKQCUUwF
+opAJS0wCkoAWikAUlMAooASloAKKACigAooAKKACkoAWkoAWigAooASigBaSgB1LQAZpKBBRQMWk
+oAKKAEpaACigAooEGKMUAFFABRQAUUDDFFAC0lIQUUxi0lABRSEFFMYUUCCigApKBi0UgCigBcUl
+AhKdTGJRQAUlABRQAUUAFFACig0AJRQAUUALSUgCimAUlABRQAtHakAlLTAKSgB1FAgopAFLTGJR
+QAlLQAUUAFFAgooGFFABRSEFFMAooAKKBhRQISnUDEooAKKQgopjCkoELRSAKKYBRQMKKAEpaACi
+gBKKACigQtJQMKKACigAoNIQUUxiUUALRQAUUAFFACUUAFFABRQAUUAPH0o/CkMKDzQISimAUtIB
+KKYhaSkAUUDCimAUUCCigYUUAFFAC0UgCkpiCigYUtIAptMApaACikAUUAJS0wCikAUUAJS0xBRS
+GFJTAKKAFxxRSEJRTGFFABRSAKKACimAUlAC0UAFFIBKKYBRQAUUDFooEOpKBhRQISloAKKACg0A
+FFABRQAUUAGaDSEFFMYtJSASlpgLRSEFFMBKKQBS0DCkpgFFABRQAUUAFFABRQAUUAFFIAoNMAoo
+ASloAKSgAooADRQAUUgCimAUUAFFABRQAUUAFFACUUAFLSAKSmBJR2pAJij60CCkxQMKKYC0UgDr
+RQIMUCgYEUlMQUtAwopCCkoAKKYxaKQgpKYxaKQg7UlMYtFIAooASimAuKKQhKKYxelFIQUlAAaK
+YwopAFFMAooASloASigBaKACikAlFMBaSgAooAWkoAMUUAFJQAtFABRQAUlAD88UlABmloAKSkIX
+NFAxM0ZpgFBNABRQAZooAKKADNFIApc0AJmjNMA7UUAFLmkAlFABRTAO1FABRmgAzRQAUUAFFACU
+uaACjNAATRQAuaSkISimMKWgApKAFpKAFpKQC0lMAooAKKACigAooAKKQBRTAKKQBSUwCloAdRik
+ITFLigApKACimMKKACg0AFFABRQAUUAFFABRigAooAKKBAaKBhR0oAWigQlFAwooAWkpCCloASim
+MMUtIBKKYBRSAKDQISlNAwpKYBRQAtJSAKKYBRQAUUAFFIQUUxiUtIApKYC0lABS0AJRQAUUAPoz
+SASjmgQUUxhRQAUUAFFABRSAKKYBRSEFLTASigYUlABS0hBSUxi0UgCimAUUAFFABRQAlLQAlLQA
+UUgEpaACigApKBC0UwCkpDCigAopgFFABRSAKKYBRSAKKYBSUALSUAFFAC0lAC0lAwpaBC0tIBKU
+mmACikISigYopKACimAUtIYlFMQlLSAKKYBRSASloAKKACimAUUgCimAUUgCimAtJSAKKYBR2oAK
+KACikAUUAFFMApKAFooASigAooAKWgBKWgBKKQBRQAUUwCigAopAFJTAKWgAopDCkoEPozTEJSUA
+OpKQBRTGFFAhRRSASjNAwopgFFAgooGFFAhKWgYUUAFFABRQAUUgCimAUUAFFFwAUlIBaKYBRQAU
+UgEpaYhKKBi0UgCimIKSgYUUAFLQAlFABS0AJRQAUUAFFABRQAUlABS0AJRQAUuaAFooAKKQCUtM
+ApKACloAKKQBSUwClpAFFABRQAlLTASloAKKQBRQAUUwCikAUUAJRTAWg0gCigBKWmAlKKACikAl
+FMBaKAEooAKKQC0lABRTASlpAFFABRQAUUwCigApKAFopAFFAxKKYgooAKKBjqKACigQUtABSYoA
+KWgBKWkAlFMApKQC0UAFJTAWigAopAFLQAhopiFpKBhRQIKKBhiigAopCCigYlLTAKKBBSUhhS0w
+CigQGigYlFABRSAKKYC0lIAooAKKYBRQAlLQMKSgQUtIAopgJRQAUtAxKKBDs0UAFJQAUtACZpaA
+Cg0gFzRmgBDRQAtJQAZooAKSgBaM0AFFAC0lABRQAUUwCikAUUAGaKACigApKYC0lIAopgFLSASl
+oASlzQAlLQAlFAC0lABRQAUUwCikAUtACUUAJS0wCkoAKKACigBaKQCUtMBKKBjqM0CA0UAFFIAo
+oAKM0wAGjNIApKYC0UAFFIApKAClpgFFAAaSgBaKACigApKAFopCCimMKSkAtJTAKWkAUUwEpaAE
+ooAUUUCEooGFFIAozTAKKQBRTAKKAEpaACigAopAJRTGLSUhBRTAWkoAKWgBKKAHUUgCigBe9FAC
+dqKAEopgFLSAKSmAtFABRSAKKACigYUUxBRSAM0UAGaSmAtFAC0mKQBRTAKKQBRTASlpALmkoABR
+QAUGgAopgJRSAKWgBKKACimAUUgCigYUUCCigBKWmAUUAFJQAtFIAopgFFIBKKYDxSUCFo7UDEpa
+AEooAKKQgpaYxKWkIQ0UxhRQIKKBhRQAUUCCkoGLRQAtFABSUAKKSkIKKYwooEFFIYUUwEpaACig
+AopAFFMBKWkAUUAFLQA2loEJRTGHeikAUCmAUUgCigQUUxhRQAUlAC0UAFJQAtFADqKQBRimAYpa
+QhKKYBSUALikoAKKACigApaQBSUxhSUCCloGFL2pCEooAKWmMSigQUUAFFAwooEFFABSUDFooEFF
+AxKWgANFAhKKBhRQAUUAFFABRQAtFIBKKYBRQACigBKKAFpKACigAooAKKAFooAdRQ0AlFIAFFAB
+RQAvSm0ALRQAUCgQUUxiUtABRQAUUAA96KQC0lABRQAlLQAUUALSUxBRQMKKQBRQAUUAFFAxKKYh
+aSgAopALRTAKKAEooAU0lIAooAKKACimAUlAC0UAFJQAUtABSUAFFABRQMKWgQuaKBBRQMSloAM4
+ooAKKQgFFACUtMAooGGaKACigQUUAJS0DCikIDSUxi0UCEpaQBRmmAUlAC0UAFFACUtAwopAFJmm
+AtFIQlFMYUUhBRTGLSUAFFABRQAUUAFFABSUALRQAUUAFFACUtABRQAlFABRQBLTc80gDNJ+FABT
+qAEpKAFopgFHWkAmKKYC0UgEpaYBRSAM0maACigABpaAEooAWigBOKWgApOlABRTABS0CEpTSGJS
+0CEoFAwoNMAopAFFMAopAFJTAWkoAKWgBKKAFpKQC0UAJRTAKKACikAtJTAKKACigAopAFFAC96K
+YBiigBcUlABRQAUUAFLQAlJQAtFABRQAUUAFFACUtABRQAUUAFFABRQAUlABS0AFFAgopAFFMYUU
+CCigBKKBi0UgCkpgFFABRQAUUAFFABRQAUUAFFACUtIBKKYBS0AFFIBKWmAUlAC0lAD+KPwoASig
+BaBQAGigQlFAxe1JQIWgUgEpaYCUtAxKKAFpKACikIBRigYYopgLRSASlpgFFIBO9BoAKKYBRSAK
+KYBRSAKKYBRSAKKBBQBQMKKYBRQAlFABRQAUUgFpKYgpaQxKKYC0UgEopgFJQAtFABRQAUUAOopA
+JRQAtJTAO1O7daBCYoxSAKKBiGigAopgFFABRQAtJSEFAoGFLQIQ0UDCigAopgLRSASkoAWimAUU
+AFJSAWkpgLzRQAlLSASlxTASloASikAtJTAU0lIAopgFBpAFFMAooASloAKKQCUUwFpKACloASlo
+ASigB3NLQAtI1IBKKYxaKBBSUCCikAtHSgYUlABRQAUUALSGgBaKYBSUgCigQUtAxKKBBRQMKKYB
+RSASloAKKYBRSAKSgBaO1ABRTAKKACkpALRQAUUAJRQAUUwCikAUUwCigAooGJS0CCkpALSUwFoo
+ASigCQ0lIApKYBS0CAUlIYtIaAFpKAFpM0AFFMBKWgAopAFFABRTAKKQBRQAUUwCikAUUAFFMAop
+AFFABRTASlpDCkpiClpAJS0wEooAKKQBRTAKBQAtJSAKKYBRQAUUgCimAUlIAopgLSUAFLQAlFAC
+0lAD6KQBmigQUGgY2nUwDrSUALSUAFFIBKdTASikAtJQIKKYwopAFFAgpKYx1FIBKKYBRQAUlABS
+5pAFJTAWigAooEJRQMWikAlFMAooAWkoEFFIYUUwCigAooAKKACigApKAFooASigAooAWigAopAJ
+RTAk7UgOKAAUd6QBmkzTAKCaQC0hpgLSUAFFIQZooAXijigApKBi9qKBCUUxhS0hBTaAFooGFFAC
+0lABRQAUtAhKKYwoNIBKWmAUlAC0dqQAKWgQ2imMKKAFopAFJQAUUwCigAooAKKACikAUUwCigBK
+WgAooGFJQIWigB1JQA4UmKAuJS8UgCjtTEJRQMKKBC0UgCigBKKAFpKAFxmkoAKWgYlFAgooAKKB
+iUtMAooAMUUAFFIQlFAxaKYBRQAlLQAlLQAlLQAUUgEopgFFIBaSmAtJQAUtACUUAFFIAopgFJQA
+tFIApKAClpgJRQAtFIB9HemISigA4o4oAOKKBhRQIKOKADikoAdxScUDCikIDR2pgFIaACigYppK
+BBRQAUtAw4opCEopgFFAwpaQhKKYwpKAHU2gBaKQBRTEJTqBiUcUAJS0AJS0AFJQAUtACUUAFFAB
+RQAUUAFFABRQAUUAJRQAtJQAtFADqSgBaWkwE2mkOaYAKKACikIOaKAFptAxaKYgFKaQCUdqYBS0
+AJRQMKKBBSUDFooAKKACigAopAFJTAWloAbS0AFJQAUUgCimAUUALSUALSUAFLQAlFABRSAKKYBS
+UALSUALmikAUUwEpRQAlFAC0lAC0lAC0lAD6KLALSCkACloEJRTKCkpCFopiA0YoGJRSAKWgBKKY
+gooAWikAUUAJRQMKKYgopDCigAooAKKYC9ulJSAKM0AFFMAFJQAUUAFLQAUlAC0UgA0lABS0wEoo
+AKKACigAooAKSgB2aSgAooAKSgApaAEpaACkoAfRQAZpKBBRmgYuaSgQtGaQBmjNAWDPFJQAZ5pa
+YCUtAxKKLgFFIQUUxhRSAM0CgQUUAFFAxKXNMQZpKQC54ooGFFAgopjEpaQBmigQlLTGJRSAKKAC
+igAopgFFAC0lAC0lIAopgJS0AGaKACigAooAKSgBaKAEooAKKAJO1AHNAARTSKBBS9qBhSUAOFJS
+EFFMYlFABRQAtHagQmKKQwoxTAKKACigQvFNpDFoxTAKKQBSUwFo4pAFFMAooASloAKSgBaKQCUU
+wCloASigAooAKKQBS0AJRTAKKQBRQAUUAFFMBaSkAUUwEpaACigAooASigB9FAgozRYBKWgYlLQA
+lFABRQIKKQBRTGFFAgoNABR0oGFJQAtJQIKKBi0UCCkoGLSUAFLQAUUCEooGLSUgFzSUxBRQMKKA
+CigAooAKKAA0UAFFABRQAUUAFFABRQAUlABS0AFJQAUtABSUAFLQAUlAElFACdaMUEhikoKHY4pK
+QXDFBpiEpcUgCkp2AKKBi80YpAApKACigAo60AFLQAlFABRQAUUAFJQAUtMApKACloASloAKSgBa
+SkAUUwCigAopAFFABRQAUUAFFMBKWgBKWgAooAKKQgooGFJQAtFMApKACigApaAH5pDQIKKACjrQ
+AUUAA+tGaADPFGaQBRTuISloKCigQlFAxaSgQUZoAKWgApKACigBe1JmkAUUwCigApKBhS0CEooG
+LRQISigAooGLRQISigYUUAFLQAlFABRmgAopAFFMBKWgAooADRQAUUAFFABRQAUlAC0UAOHWjNAA
+KKADNFIQlFMYtBpAJQaACigQUUxhmjNABRQAUUgEopgLRSAWm0ALRQAGkoAKKAFpKACigAopgFFI
+BaKACkpgLTaAFopAJS0wCigAo60gCigBKKYC0UAJS0gEopgLSUALRQAlFABRQAUUAFFABS0ALmlp
+ALxSUAJRQAUvagAzSUAKaSmIKSgYtFABS0gEooAKDTASigBaSgBaSgQUtIYUUCCkoGLSUwFpKQC0
+lABRTAWkoAKKQC5ptMBaKACigAooAKKACigAooAKKACigAopAFFMApKACigApaACigBKKACloAdT
+s0mIbSUxjqTBpbAFJQAvSigQUUAFJQMcKbQMBS0CCkoAWigQlFAwFFMQUUhiUtMAopAJS0AJS0AG
+KKAEpTxQAUlMBaSkAUUwCikAUUwCikAUUwCikAUlMAooAWikAUlAC0UwCkpAFLQAlFMAooAWigAo
+oASlpASnke1NXrTsIWm0AHelzQAZpKACjNABRQAtNoAXpRQMSikAUtMQnSigYUUAFLSEJSUxi0UC
+FpDQAUUgCkpjFooASigAooAWkoAWkpAFFMAooAKKACigYtNpCFpaAEooABRTAKKACigAooAKKACi
+gAooAKKACkoAWigB1A4oGFFIkKSmAUtAwFJSAKXpTEJmikAv1opjE6UtIBtOpgJRSAKKYCUtABnN
+JSELRQMSimAtJQAUtIYlFMQtJSELSUxhRQAUUAFFABRQAUUAFFIAopgFFABRQAUUAFFABRQAlFAC
+0UgEpaYBSUAFFABRQAUUAS96KBBik470gCikAcUhqgFxSUrgLSUCCjFAwpKYBSmgYUnFIQtBoGJR
+xQAYoxQAUvFAgpOtMAopDCigBKWmAUlIApaYCUUALRQAUUAJS0AJRSAKWgApKYBRSAKKYBRQAUUA
+FFABRSAKKYBSUALRQAUlAC0lAC0UAJRQBKPSkNIBKWmISigBRQ1IBKSgBcmigYlGKAFpKACimIKO
+tIAopjEpaACg0AFFIApKYC0UCEooGFL1pAJRTAKKADFFABRQACigApaQCUUwCigApKAFooASloAK
+KAEooAKKAFpKQC0UwEpaACkoAKKACigApaAEooAmzjtR0oEAPNN70AB+lGcdaBi7uKbzQIWikIPp
+RQMSlzxQA0GlzTGFFAg7UlIYuKSmAUUCFpKQBRTASloAKKBi0UhCCimAYxRQMSlpAFGaYhCaKBi0
+lIAozTAWkoAKSgBaXtSASimAGikAtJTAKKQBRTAKKACkoAWkoAdSUAFFABRQAlFABS0Af//Z
+-----END ICVSP JPEG-----
+CAM VGA shot  2: 7539 bytes, 640x480, start=1 end=1 one_picture=1, wait 72.5 ms
+CAM VGA shot  3: 7421 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot  4: 7356 bytes, 640x480, start=1 end=1 one_picture=1, wait 71.0 ms
+CAM VGA shot  5: 7513 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot  6: 7412 bytes, 640x480, start=1 end=1 one_picture=1, wait 71.0 ms
+CAM VGA shot  7: 7330 bytes, 640x480, start=1 end=1 one_picture=1, wait 71.0 ms
+CAM VGA shot  8: 7618 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot  9: 7570 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot 10: 7200 bytes, 640x480, start=1 end=1 one_picture=1 (cut: 2+ pictures in the buffer, first kept), wait 107.2 ms
+CAM VGA shot 11: 7506 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.7 ms
+CAM VGA shot 12: 7760 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.8 ms
+CAM VGA shot 13: 7392 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot 14: 7731 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.8 ms
+CAM VGA shot 15: 7542 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot 16: 7688 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot 17: 7620 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.9 ms
+CAM VGA shot 18: 7979 bytes, 640x480, start=1 end=1 one_picture=1, wait 70.8 ms
+CAM VGA shot 19: 7383 bytes, 640x480, start=1 end=1 one_picture=1, wait 71.0 ms
+CAM VGA shot 20: 7380 bytes, 640x480, start=1 end=1 one_picture=1, wait 71.0 ms
+CAMSTAT res=VGA width=640 height=480 fb_count=1 shots=20 valid=20 no_frame=0 bad_jpeg=0 stuck=0 cut=1 wrong_size=0 too_small=0 init_ms=352.3 get_ms_min=70.7 get_ms_avg=72.9 get_ms_max=107.2 frame_gap_ms_avg=74.0 fps=13.5 bytes_min=7200 bytes_avg=7525 bytes_max=7979 sensor=OV3660 lighting="lens covered"
+CAMSTAT mem when=running_VGA internal_free=342215 internal_largest=262144 psram_free=8323544 heap_min_ever=8623484
+CAM capture_VGA    PASS  20/20 valid 640x480 JPEGs, wait avg 72.9 ms, 7525 bytes avg, 1 buffer(s) held 2+ pictures and were cut to the first
+I (7489) s3 ll_cam: DMA Channel=0
+I (7489) cam_hal: cam init ok
+I (7489) sccb-ng: pin_sda 40 pin_scl 39
+I (7489) sccb-ng: sccb_i2c_port=0
+I (7499) ov3640: Mismatch PID=0x3660
+I (7499) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (7499) camera: Detected OV3660 camera
+I (7499) camera: Detected camera at address=0x3c
+I (7809) cam_hal: PSRAM DMA mode disabled
+I (7809) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 93
+I (7809) cam_hal: Allocating 96000 Byte frame buffer in PSRAM
+I (7809) cam_hal: Allocating 96000 Byte frame buffer in PSRAM
+I (7809) cam_hal: cam config ok
+I (7819) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM start_SVGA     PASS  init 353.3 ms (attempt 1)
+CAM SVGA shot  1: 11850 bytes, 800x600, start=1 end=1 one_picture=1, wait 37.1 ms
+CAM SVGA shot  2: 11887 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.2 ms
+CAM SVGA shot  3: 11766 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.3 ms
+CAM SVGA shot  4: 11810 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.4 ms
+CAM SVGA shot  5: 11337 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.6 ms
+CAM SVGA shot  6: 11808 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.4 ms
+CAM SVGA shot  7: 12199 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.4 ms
+CAM SVGA shot  8: 12304 bytes, 800x600, start=1 end=1 one_picture=1 (cut: 2+ pictures in the buffer, first kept), wait 71.8 ms
+CAM SVGA shot  9: 12426 bytes, 800x600, start=1 end=1 one_picture=1, wait 33.4 ms
+CAM SVGA shot 10: 12036 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.1 ms
+CAM SVGA shot 11: 11265 bytes, 800x600, start=1 end=1 one_picture=1 (cut: 2+ pictures in the buffer, first kept), wait 71.6 ms
+CAM SVGA shot 12: 11405 bytes, 800x600, start=1 end=1 one_picture=1, wait 33.4 ms
+CAM SVGA shot 13: 11589 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.5 ms
+CAM SVGA shot 14: 11274 bytes, 800x600, start=1 end=1 one_picture=1 (cut: 2+ pictures in the buffer, first kept), wait 71.4 ms
+CAM SVGA shot 15: 11614 bytes, 800x600, start=1 end=1 one_picture=1, wait 33.6 ms
+CAM SVGA shot 16: 11308 bytes, 800x600, start=1 end=1 one_picture=1 (cut: 2+ pictures in the buffer, first kept), wait 71.2 ms
+CAM SVGA shot 17: 11126 bytes, 800x600, start=1 end=1 one_picture=1, wait 33.5 ms
+CAM SVGA shot 18: 12020 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.5 ms
+CAM SVGA shot 19: 11640 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.7 ms
+CAM SVGA shot 20: 13548 bytes, 800x600, start=1 end=1 one_picture=1, wait 34.8 ms
+CAMSTAT res=SVGA width=800 height=600 fb_count=2 shots=20 valid=20 no_frame=0 bad_jpeg=0 stuck=0 cut=4 wrong_size=0 too_small=0 init_ms=353.3 get_ms_min=33.4 get_ms_avg=41.8 get_ms_max=71.8 frame_gap_ms_avg=43.6 fps=22.9 bytes_min=11126 bytes_avg=11810 bytes_max=13548 sensor=OV3660 lighting="lens covered"
+CAMSTAT mem when=running_SVGA internal_free=342151 internal_largest=262144 psram_free=8192924 heap_min_ever=8503044
+CAM capture_SVGA   PASS  20/20 valid 800x600 JPEGs, wait avg 41.8 ms, 11810 bytes avg, 4 buffer(s) held 2+ pictures and were cut to the first
+
+>>> STEP 4/6: memory after the camera is stopped
+CAMSTAT mem when=after_capture internal_free=364163 internal_largest=270336 psram_free=8386192 heap_min_ever=8503044
+
+>>> STEP 5/6: failure cases and recovery
+CAM fail_stopped   PASS  capture with camera stopped returned no frame, handled
+I (8929) s3 ll_cam: DMA Channel=0
+I (8929) cam_hal: cam init ok
+I (8929) sccb-ng: pin_sda 40 pin_scl 39
+I (8929) sccb-ng: sccb_i2c_port=0
+I (8939) ov3640: Mismatch PID=0x3660
+I (8939) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (8939) camera: Detected OV3660 camera
+I (8939) camera: Detected camera at address=0x3c
+I (9249) cam_hal: PSRAM DMA mode disabled
+I (9249) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 614
+I (9249) cam_hal: Allocating 629145 Byte frame buffer in OnBoard RAM
+E (9249) cam_hal: cam_dma_config(537): frame buffer malloc failed
+E (9249) cam_hal: cam_config(631): cam_dma_config failed
+E (9249) camera: Camera config failed with error 0xffffffff
+CAM init attempt 1/1 failed: ESP_FAIL (0xffffffff)
+CAM fail_init      PASS  start refused: ESP_FAIL (0xffffffff) after 315.1 ms, largest internal block 270336 < needed 629145: frame buffer refused, as expected
+I (9749) s3 ll_cam: DMA Channel=0
+I (9749) cam_hal: cam init ok
+I (9749) sccb-ng: pin_sda 40 pin_scl 39
+I (9749) sccb-ng: sccb_i2c_port=0
+I (9759) ov3640: Mismatch PID=0x3660
+I (9759) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (9759) camera: Detected OV3660 camera
+I (9759) camera: Detected camera at address=0x3c
+I (10069) cam_hal: PSRAM DMA mode disabled
+I (10069) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 15
+I (10069) cam_hal: Allocating 15360 Byte frame buffer in PSRAM
+I (10069) cam_hal: cam config ok
+I (10079) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM recover        PASS  camera started again after the failed start, frame valid 320x240 (2217 bytes)
+CAMSTAT mem when=after_all_tests internal_free=364163 internal_largest=270336 psram_free=8386192 heap_min_ever=8503044
+CAM memory_back    PASS  after all tests: internal 392 bytes, PSRAM 0 bytes less than before the camera started (limit 4096)
+
+>>> STEP 6/6: finished: all passed
+CAM RESULT pass=13 fail=0
+LED: slow blink = all passed

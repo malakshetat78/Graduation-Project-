@@ -1,0 +1,5 @@
+# T-016 BLE test firmware (layer on top of sdkconfig.defaults). Bluetooth LE with the NimBLE host, no Wi-Fi.
+CONFIG_ICVSP_APP_BLE=y
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_LOG_LEVEL_WARNING=y

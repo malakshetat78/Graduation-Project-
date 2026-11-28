@@ -1,0 +1,76 @@
+I (823) esp_psram: SPI SRAM memory test OK
+I (832) cpu_start: Pro cpu start user code
+I (832) cpu_start: cpu freq: 160000000 Hz
+I (832) app_init: Application information:
+I (832) app_init: Project name:     icvsp_ecu
+I (833) app_init: App version:      16ad91a-dirty
+I (833) app_init: Compile time:     Nov 25 2026 01:00:04
+I (833) app_init: ELF file SHA256:  3b8a20459...
+I (833) app_init: ESP-IDF:          v5.5.5
+I (833) efuse_init: Min chip rev:     v0.0
+I (833) efuse_init: Max chip rev:     v0.99 
+I (833) efuse_init: Chip rev:         v0.2
+I (834) heap_init: Initializing. RAM available for dynamic allocation:
+I (834) heap_init: At 3FC98628 len 000510E8 (324 KiB): RAM
+I (834) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (834) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (835) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (835) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (836) spi_flash: detected chip: gd
+I (836) spi_flash: flash io: dio
+I (837) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (837) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (838) main_task: Started on CPU0
+I (838) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (838) main_task: Calling app_main()
+
+IMU BEGIN MPU6050 test (ESP-IDF build): SDA=GPIO5 SCL=GPIO6 I2C port 1, +-2 g, +-250 deg/s
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 5.5 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 7.2 deg/s > 2.0). Keep it still
+IMU GYROSCOPE CALIBRATION FAILED (sensor stopped answering)
+IMU accel calibration loaded: offset x=+0.013 y=+0.019 z=+0.048 g, scale x=1.001 y=1.001 z=1.015
+IMU not found, retrying every second
+IMU keys: C = 6-side accelerometer calibration, R = remove the saved calibration
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU GYROSCOPE CALIBRATION FAILED (sensor stopped answering)
+IMU NOT FOUND: no I2C answer at 0x68/0x69. Check SDA=D4 SCL=D5 VCC=3V3 GND
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU gyroscope bias x=0.00 y=0.00 z=0.00 deg/s (spread 0.0 deg/s)
+IMU DETECTED
+IMU LOST: reading was all zeros (|a| < 0.2 g), wire loose?. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU gyroscope bias x=0.00 y=0.00 z=0.00 deg/s (spread 0.0 deg/s)
+IMU BACK
+IMU LOST: reading was all zeros (|a| < 0.2 g), wire loose?. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU gyroscope bias x=0.00 y=0.00 z=0.00 deg/s (spread 0.0 deg/s)
+IMU BACK
+IMU LOST: reading was all zeros (|a| < 0.2 g), wire loose?. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU gyroscope bias x=0.00 y=0.00 z=0.02 deg/s (spread 1.9 deg/s)
+IMU BACK
+IMU LOST: reading was all zeros (|a| < 0.2 g), wire loose?. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU gyroscope bias x=0.00 y=0.00 z=0.00 deg/s (spread 0.0 deg/s)
+IMU BACK
+IMU LOST: reading was all zeros (|a| < 0.2 g), wire loose?. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU gyroscope bias x=0.00 y=0.02 z=0.04 deg/s (spread 2.0 deg/s)
+IMU BACK
+IMU LOST: reading was all zeros (|a| < 0.2 g), wire loose?. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 250.1 deg/s > 2.0). Keep it still
+IMU GYROSCOPE CALIBRATION FAILED (sensor stopped answering)
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s

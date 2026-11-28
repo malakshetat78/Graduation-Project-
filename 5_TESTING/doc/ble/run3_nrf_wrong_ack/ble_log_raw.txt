@@ -1,0 +1,320 @@
+
+=== port opened 02:48:27 ===
+BLE central connected address=5f:a3:b3:90:a0:6c
+BLE central disconnected reason=0x208, advertising again
+I (444895) NimBLE: ogf=0x08, ocf=0x0016, hci_err=0x202 : BLE_ERR_UNK_CONN_ID (Unknown Connection Identifier)
+
+I (450165) NimBLE: ogf=0x08, ocf=0x0016, hci_err=0x202 : BLE_ERR_UNK_CONN_ID (Unknown Connection Identifier)
+
+BLE central connected address=5f:a3:b3:90:a0:6c
+BLE central disconnected reason=0x208, advertising again
+I (509655) NimBLE: ogf=0x08, ocf=0x0016, hci_err=0x202 : BLE_ERR_UNK_CONN_ID (Unknown Connection Identifier)
+
+I (535845) NimBLE: ogf=0x08, ocf=0x0016, hci_err=0x202 : BLE_ERR_UNK_CONN_ID (Unknown Connection Identifier)
+
+
+=== port opened 02:52:22 ===
+BLE key loaded (per-device key, NVS)
+BLE device=ecu-68ee8f4f5ff8 boot_id=7 public_key=4e96a167479614d370a4a38cb84ddbe3887d4a1eddb8b131eb157df21e4eca6d
+BLE test reports: pothole, no position (gps_valid false), time = build time + uptime (not real)
+BLE starting BLE GATT server (ESP-IDF NimBLE, signed test reports, no pairing)
+[step 1/3] BLE: start the Bluetooth stack and the GATT service
+I (2989) BLE_INIT: BT controller compile version [51d9dfd]
+I (2989) BLE_INIT: Using main XTAL as clock source
+I (2989) BLE_INIT: Feature Config, ADV:1, BLE_50:1, DTM:1, SCAN:1, CCA:0, SMP:1, CONNECT:1
+I (2989) BLE_INIT: Bluetooth MAC: 68:ee:8f:4f:5f:fa
+I (2989) phy_init: phy_version 712,87e8c20e,Apr 13 2026,18:51:10
+[step 2/3] BLE: advertise as ICVSP-001 with the ICVSP service UUID
+BLE advertising as ICVSP-001, address 68:ee:8f:4f:5f:fa
+[step 3/3] BLE: waiting for a phone to connect and subscribe
+I (3039) main_task: Returned from app_main()
+I (19539) NimBLE: ogf=0x08, ocf=0x0016, hci_err=0x202 : BLE_ERR_UNK_CONN_ID (Unknown Connection Identifier)
+
+BLE central connected address=5f:a3:b3:90:a0:6c
+BLE central disconnected reason=0x208, advertising again
+BLE central connected address=5f:a3:b3:90:a0:6c
+BLE MTU 256 (used from the next report or restart)
+BLE central disconnected reason=0x208, advertising again
+I (105479) NimBLE: ogf=0x08, ocf=0x0016, hci_err=0x202 : BLE_ERR_UNK_CONN_ID (Unknown Connection Identifier)
+
+BLE central connected address=6f:e4:2d:2b:3b:25
+BLE central disconnected reason=0x208, advertising again
+I (127799) NimBLE: ogf=0x08, ocf=0x0016, hci_err=0x202 : BLE_ERR_UNK_CONN_ID (Unknown Connection Identifier)
+
+BLE central connected address=6f:e4:2d:2b:3b:25
+BLE central subscribed, starting report transport
+BLE signed report ecu-68ee8f4f5ff8-7-1 (683 bytes)
+BLE new report transport_id=1 fragments=43 bytes=683 chunk=16
+BLE notify transport_id=1 fragment=1/43 attempt=1
+BLE notify transport_id=1 fragment=2/43 attempt=1
+BLE notify transport_id=1 fragment=3/43 attempt=1
+BLE notify transport_id=1 fragment=4/43 attempt=1
+BLE notify transport_id=1 fragment=5/43 attempt=1
+BLE notify transport_id=1 fragment=6/43 attempt=1
+BLE notify transport_id=1 fragment=7/43 attempt=1
+BLE notify transport_id=1 fragment=8/43 attempt=1
+BLE notify transport_id=1 fragment=9/43 attempt=1
+BLE notify transport_id=1 fragment=10/43 attempt=1
+BLE notify transport_id=1 fragment=11/43 attempt=1
+BLE notify transport_id=1 fragment=12/43 attempt=1
+BLE notify transport_id=1 fragment=13/43 attempt=1
+BLE notify transport_id=1 fragment=14/43 attempt=1
+BLE notify transport_id=1 fragment=15/43 attempt=1
+BLE notify transport_id=1 fragment=16/43 attempt=1
+BLE notify transport_id=1 fragment=17/43 attempt=1
+BLE notify transport_id=1 fragment=18/43 attempt=1
+BLE notify transport_id=1 fragment=19/43 attempt=1
+BLE notify transport_id=1 fragment=20/43 attempt=1
+BLE notify transport_id=1 fragment=21/43 attempt=1
+BLE notify transport_id=1 fragment=22/43 attempt=1
+BLE notify transport_id=1 fragment=23/43 attempt=1
+BLE notify transport_id=1 fragment=24/43 attempt=1
+BLE notify transport_id=1 fragment=25/43 attempt=1
+BLE notify transport_id=1 fragment=26/43 attempt=1
+BLE notify transport_id=1 fragment=27/43 attempt=1
+BLE notify transport_id=1 fragment=28/43 attempt=1
+BLE notify transport_id=1 fragment=29/43 attempt=1
+BLE notify transport_id=1 fragment=30/43 attempt=1
+BLE notify transport_id=1 fragment=31/43 attempt=1
+BLE notify transport_id=1 fragment=32/43 attempt=1
+BLE notify transport_id=1 fragment=33/43 attempt=1
+BLE notify transport_id=1 fragment=34/43 attempt=1
+BLE notify transport_id=1 fragment=35/43 attempt=1
+BLE notify transport_id=1 fragment=36/43 attempt=1
+BLE notify transport_id=1 fragment=37/43 attempt=1
+BLE notify transport_id=1 fragment=38/43 attempt=1
+BLE notify transport_id=1 fragment=39/43 attempt=1
+BLE notify transport_id=1 fragment=40/43 attempt=1
+BLE notify transport_id=1 fragment=41/43 attempt=1
+BLE notify transport_id=1 fragment=42/43 attempt=1
+BLE notify transport_id=1 fragment=43/43 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=1 again (attempt 2/3)
+BLE notify transport_id=1 fragment=1/43 attempt=2
+BLE notify transport_id=1 fragment=2/43 attempt=2
+BLE notify transport_id=1 fragment=3/43 attempt=2
+BLE notify transport_id=1 fragment=4/43 attempt=2
+BLE notify transport_id=1 fragment=5/43 attempt=2
+BLE notify transport_id=1 fragment=6/43 attempt=2
+BLE notify transport_id=1 fragment=7/43 attempt=2
+BLE notify transport_id=1 fragment=8/43 attempt=2
+BLE notify transport_id=1 fragment=9/43 attempt=2
+BLE notify transport_id=1 fragment=10/43 attempt=2
+BLE notify transport_id=1 fragment=11/43 attempt=2
+BLE notify transport_id=1 fragment=12/43 attempt=2
+BLE notify transport_id=1 fragment=13/43 attempt=2
+BLE notify transport_id=1 fragment=14/43 attempt=2
+BLE notify transport_id=1 fragment=15/43 attempt=2
+BLE notify transport_id=1 fragment=16/43 attempt=2
+BLE notify transport_id=1 fragment=17/43 attempt=2
+BLE notify transport_id=1 fragment=18/43 attempt=2
+BLE notify transport_id=1 fragment=19/43 attempt=2
+BLE notify transport_id=1 fragment=20/43 attempt=2
+BLE notify transport_id=1 fragment=21/43 attempt=2
+BLE notify transport_id=1 fragment=22/43 attempt=2
+BLE notify transport_id=1 fragment=23/43 attempt=2
+BLE notify transport_id=1 fragment=24/43 attempt=2
+BLE notify transport_id=1 fragment=25/43 attempt=2
+BLE notify transport_id=1 fragment=26/43 attempt=2
+BLE notify transport_id=1 fragment=27/43 attempt=2
+BLE notify transport_id=1 fragment=28/43 attempt=2
+BLE notify transport_id=1 fragment=29/43 attempt=2
+BLE notify transport_id=1 fragment=30/43 attempt=2
+BLE notify transport_id=1 fragment=31/43 attempt=2
+BLE notify transport_id=1 fragment=32/43 attempt=2
+BLE notify transport_id=1 fragment=33/43 attempt=2
+BLE notify transport_id=1 fragment=34/43 attempt=2
+BLE notify transport_id=1 fragment=35/43 attempt=2
+BLE notify transport_id=1 fragment=36/43 attempt=2
+BLE notify transport_id=1 fragment=37/43 attempt=2
+BLE notify transport_id=1 fragment=38/43 attempt=2
+BLE notify transport_id=1 fragment=39/43 attempt=2
+BLE notify transport_id=1 fragment=40/43 attempt=2
+BLE notify transport_id=1 fragment=41/43 attempt=2
+BLE notify transport_id=1 fragment=42/43 attempt=2
+BLE notify transport_id=1 fragment=43/43 attempt=2
+BLE WARN ACK id=99 does not match in-flight transport_id=1, refused
+BLE no ACK after 2000 ms, sending transport_id=1 again (attempt 3/3)
+BLE notify transport_id=1 fragment=1/43 attempt=3
+BLE notify transport_id=1 fragment=2/43 attempt=3
+BLE notify transport_id=1 fragment=3/43 attempt=3
+BLE notify transport_id=1 fragment=4/43 attempt=3
+BLE notify transport_id=1 fragment=5/43 attempt=3
+BLE notify transport_id=1 fragment=6/43 attempt=3
+BLE notify transport_id=1 fragment=7/43 attempt=3
+BLE notify transport_id=1 fragment=8/43 attempt=3
+BLE notify transport_id=1 fragment=9/43 attempt=3
+BLE notify transport_id=1 fragment=10/43 attempt=3
+BLE notify transport_id=1 fragment=11/43 attempt=3
+BLE notify transport_id=1 fragment=12/43 attempt=3
+BLE notify transport_id=1 fragment=13/43 attempt=3
+BLE notify transport_id=1 fragment=14/43 attempt=3
+BLE notify transport_id=1 fragment=15/43 attempt=3
+BLE notify transport_id=1 fragment=16/43 attempt=3
+BLE notify transport_id=1 fragment=17/43 attempt=3
+BLE notify transport_id=1 fragment=18/43 attempt=3
+BLE notify transport_id=1 fragment=19/43 attempt=3
+BLE notify transport_id=1 fragment=20/43 attempt=3
+BLE notify transport_id=1 fragment=21/43 attempt=3
+BLE notify transport_id=1 fragment=22/43 attempt=3
+BLE notify transport_id=1 fragment=23/43 attempt=3
+BLE notify transport_id=1 fragment=24/43 attempt=3
+BLE notify transport_id=1 fragment=25/43 attempt=3
+BLE notify transport_id=1 fragment=26/43 attempt=3
+BLE notify transport_id=1 fragment=27/43 attempt=3
+BLE notify transport_id=1 fragment=28/43 attempt=3
+BLE notify transport_id=1 fragment=29/43 attempt=3
+BLE notify transport_id=1 fragment=30/43 attempt=3
+BLE notify transport_id=1 fragment=31/43 attempt=3
+BLE notify transport_id=1 fragment=32/43 attempt=3
+BLE notify transport_id=1 fragment=33/43 attempt=3
+BLE notify transport_id=1 fragment=34/43 attempt=3
+BLE notify transport_id=1 fragment=35/43 attempt=3
+BLE notify transport_id=1 fragment=36/43 attempt=3
+BLE notify transport_id=1 fragment=37/43 attempt=3
+BLE notify transport_id=1 fragment=38/43 attempt=3
+BLE notify transport_id=1 fragment=39/43 attempt=3
+BLE notify transport_id=1 fragment=40/43 attempt=3
+BLE notify transport_id=1 fragment=41/43 attempt=3
+BLE notify transport_id=1 fragment=42/43 attempt=3
+BLE notify transport_id=1 fragment=43/43 attempt=3
+BLE WARN transport_id=1 stalled after 3 attempts (a late ACK is still accepted)
+BLE WARN ACK write with bad length=1 (want 2), refused
+BLE ACK accepted transport_id=1 (1 acknowledged so far)
+BLE WARN ACK id=2 does not match in-flight transport_id=0, refused
+BLE WARN ACK id=3 does not match in-flight transport_id=0, refused
+BLE signed report ecu-68ee8f4f5ff8-7-2 (683 bytes)
+BLE new report transport_id=2 fragments=43 bytes=683 chunk=16
+BLE notify transport_id=2 fragment=1/43 attempt=1
+BLE notify transport_id=2 fragment=2/43 attempt=1
+BLE notify transport_id=2 fragment=3/43 attempt=1
+BLE notify transport_id=2 fragment=4/43 attempt=1
+BLE notify transport_id=2 fragment=5/43 attempt=1
+BLE notify transport_id=2 fragment=6/43 attempt=1
+BLE notify transport_id=2 fragment=7/43 attempt=1
+BLE notify transport_id=2 fragment=8/43 attempt=1
+BLE notify transport_id=2 fragment=9/43 attempt=1
+BLE notify transport_id=2 fragment=10/43 attempt=1
+BLE notify transport_id=2 fragment=11/43 attempt=1
+BLE notify transport_id=2 fragment=12/43 attempt=1
+BLE notify transport_id=2 fragment=13/43 attempt=1
+BLE notify transport_id=2 fragment=14/43 attempt=1
+BLE notify transport_id=2 fragment=15/43 attempt=1
+BLE notify transport_id=2 fragment=16/43 attempt=1
+BLE notify transport_id=2 fragment=17/43 attempt=1
+BLE notify transport_id=2 fragment=18/43 attempt=1
+BLE notify transport_id=2 fragment=19/43 attempt=1
+BLE notify transport_id=2 fragment=20/43 attempt=1
+BLE notify transport_id=2 fragment=21/43 attempt=1
+BLE notify transport_id=2 fragment=22/43 attempt=1
+BLE notify transport_id=2 fragment=23/43 attempt=1
+BLE notify transport_id=2 fragment=24/43 attempt=1
+BLE notify transport_id=2 fragment=25/43 attempt=1
+BLE notify transport_id=2 fragment=26/43 attempt=1
+BLE notify transport_id=2 fragment=27/43 attempt=1
+BLE notify transport_id=2 fragment=28/43 attempt=1
+BLE notify transport_id=2 fragment=29/43 attempt=1
+BLE notify transport_id=2 fragment=30/43 attempt=1
+BLE notify transport_id=2 fragment=31/43 attempt=1
+BLE notify transport_id=2 fragment=32/43 attempt=1
+BLE notify transport_id=2 fragment=33/43 attempt=1
+BLE notify transport_id=2 fragment=34/43 attempt=1
+BLE notify transport_id=2 fragment=35/43 attempt=1
+BLE notify transport_id=2 fragment=36/43 attempt=1
+BLE notify transport_id=2 fragment=37/43 attempt=1
+BLE notify transport_id=2 fragment=38/43 attempt=1
+BLE notify transport_id=2 fragment=39/43 attempt=1
+BLE notify transport_id=2 fragment=40/43 attempt=1
+BLE notify transport_id=2 fragment=41/43 attempt=1
+BLE notify transport_id=2 fragment=42/43 attempt=1
+BLE notify transport_id=2 fragment=43/43 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=2 again (attempt 2/3)
+BLE notify transport_id=2 fragment=1/43 attempt=2
+BLE notify transport_id=2 fragment=2/43 attempt=2
+BLE notify transport_id=2 fragment=3/43 attempt=2
+BLE notify transport_id=2 fragment=4/43 attempt=2
+BLE notify transport_id=2 fragment=5/43 attempt=2
+BLE notify transport_id=2 fragment=6/43 attempt=2
+BLE notify transport_id=2 fragment=7/43 attempt=2
+BLE notify transport_id=2 fragment=8/43 attempt=2
+BLE notify transport_id=2 fragment=9/43 attempt=2
+BLE notify transport_id=2 fragment=10/43 attempt=2
+BLE notify transport_id=2 fragment=11/43 attempt=2
+BLE notify transport_id=2 fragment=12/43 attempt=2
+BLE notify transport_id=2 fragment=13/43 attempt=2
+BLE notify transport_id=2 fragment=14/43 attempt=2
+BLE notify transport_id=2 fragment=15/43 attempt=2
+BLE notify transport_id=2 fragment=16/43 attempt=2
+BLE notify transport_id=2 fragment=17/43 attempt=2
+BLE notify transport_id=2 fragment=18/43 attempt=2
+BLE notify transport_id=2 fragment=19/43 attempt=2
+BLE notify transport_id=2 fragment=20/43 attempt=2
+BLE notify transport_id=2 fragment=21/43 attempt=2
+BLE notify transport_id=2 fragment=22/43 attempt=2
+BLE notify transport_id=2 fragment=23/43 attempt=2
+BLE notify transport_id=2 fragment=24/43 attempt=2
+BLE notify transport_id=2 fragment=25/43 attempt=2
+BLE notify transport_id=2 fragment=26/43 attempt=2
+BLE notify transport_id=2 fragment=27/43 attempt=2
+BLE notify transport_id=2 fragment=28/43 attempt=2
+BLE notify transport_id=2 fragment=29/43 attempt=2
+BLE notify transport_id=2 fragment=30/43 attempt=2
+BLE notify transport_id=2 fragment=31/43 attempt=2
+BLE notify transport_id=2 fragment=32/43 attempt=2
+BLE notify transport_id=2 fragment=33/43 attempt=2
+BLE notify transport_id=2 fragment=34/43 attempt=2
+BLE notify transport_id=2 fragment=35/43 attempt=2
+BLE notify transport_id=2 fragment=36/43 attempt=2
+BLE notify transport_id=2 fragment=37/43 attempt=2
+BLE notify transport_id=2 fragment=38/43 attempt=2
+BLE notify transport_id=2 fragment=39/43 attempt=2
+BLE notify transport_id=2 fragment=40/43 attempt=2
+BLE notify transport_id=2 fragment=41/43 attempt=2
+BLE notify transport_id=2 fragment=42/43 attempt=2
+BLE notify transport_id=2 fragment=43/43 attempt=2
+BLE no ACK after 2000 ms, sending transport_id=2 again (attempt 3/3)
+BLE notify transport_id=2 fragment=1/43 attempt=3
+BLE notify transport_id=2 fragment=2/43 attempt=3
+BLE notify transport_id=2 fragment=3/43 attempt=3
+BLE notify transport_id=2 fragment=4/43 attempt=3
+BLE notify transport_id=2 fragment=5/43 attempt=3
+BLE notify transport_id=2 fragment=6/43 attempt=3
+BLE notify transport_id=2 fragment=7/43 attempt=3
+BLE notify transport_id=2 fragment=8/43 attempt=3
+BLE notify transport_id=2 fragment=9/43 attempt=3
+BLE notify transport_id=2 fragment=10/43 attempt=3
+BLE notify transport_id=2 fragment=11/43 attempt=3
+BLE notify transport_id=2 fragment=12/43 attempt=3
+BLE notify transport_id=2 fragment=13/43 attempt=3
+BLE notify transport_id=2 fragment=14/43 attempt=3
+BLE notify transport_id=2 fragment=15/43 attempt=3
+BLE notify transport_id=2 fragment=16/43 attempt=3
+BLE notify transport_id=2 fragment=17/43 attempt=3
+BLE notify transport_id=2 fragment=18/43 attempt=3
+BLE notify transport_id=2 fragment=19/43 attempt=3
+BLE notify transport_id=2 fragment=20/43 attempt=3
+BLE notify transport_id=2 fragment=21/43 attempt=3
+BLE notify transport_id=2 fragment=22/43 attempt=3
+BLE notify transport_id=2 fragment=23/43 attempt=3
+BLE notify transport_id=2 fragment=24/43 attempt=3
+BLE notify transport_id=2 fragment=25/43 attempt=3
+BLE notify transport_id=2 fragment=26/43 attempt=3
+BLE notify transport_id=2 fragment=27/43 attempt=3
+BLE notify transport_id=2 fragment=28/43 attempt=3
+BLE notify transport_id=2 fragment=29/43 attempt=3
+BLE notify transport_id=2 fragment=30/43 attempt=3
+BLE notify transport_id=2 fragment=31/43 attempt=3
+BLE notify transport_id=2 fragment=32/43 attempt=3
+BLE notify transport_id=2 fragment=33/43 attempt=3
+BLE notify transport_id=2 fragment=34/43 attempt=3
+BLE notify transport_id=2 fragment=35/43 attempt=3
+BLE notify transport_id=2 fragment=36/43 attempt=3
+BLE notify transport_id=2 fragment=37/43 attempt=3
+BLE notify transport_id=2 fragment=38/43 attempt=3
+BLE notify transport_id=2 fragment=39/43 attempt=3
+BLE notify transport_id=2 fragment=40/43 attempt=3
+BLE notify transport_id=2 fragment=41/43 attempt=3
+BLE notify transport_id=2 fragment=42/43 attempt=3
+BLE notify transport_id=2 fragment=43/43 attempt=3
+BLE WARN transport_id=2 stalled after 3 attempts (a late ACK is still accepted)
+BLE central unsubscribed
+BLE central disconnected reason=0x208, advertising again

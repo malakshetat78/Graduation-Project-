@@ -1,0 +1,853 @@
+^DExecuting action: flash
+Running ninja in directory '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu'
+Executing "ninja flash"...
+[1/5] cd "/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu/esp-idf/esptool_py" && /Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python /Users/shahy/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/shahy/Desktop/University\ Graduation\ Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu/partition_table/partition-table.bin /Users/shahy/Desktop/University\ Graduation\ Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu/icvsp_ecu.bin[K
+icvsp_ecu.bin binary size 0x37e00 bytes. Smallest app partition is 0x177000 bytes. 0x13f200 bytes (85%) free.
+[2/5] Performing build step for 'bootloader'[K[1/1] cd "/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu/bootloader/esp-idf/esptool_py" && /Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python /Users/shahy/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /Users/shahy/Desktop/University\ Graduation\ Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu/bootloader/bootloader.bin[K
+Bootloader binary size 0x5170 bytes. 0x2e90 bytes (36%) free.
+[3/5] No install step for 'bootloader'[K[4/5] Completed 'bootloader'[K[4/5] cd /Users/shahy/esp/esp-idf/components/esptool_py && /opt/homebrew/bin/cmake -D IDF_PATH=/Users/shahy/esp/esp-idf -D "SERIAL_TOOL=/Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python;;/Users/shahy/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32s3" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D "WORKING_DIRECTORY=/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu" -P /Users/shahy/esp/esp-idf/components/esptool_py/run_serial_tool.cmake[K
+esptool.py --chip esp32s3 -p /dev/cu.usbmodem1101 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 8MB 0x0 bootloader/bootloader.bin 0x10000 icvsp_ecu.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.12.0
+Serial port /dev/cu.usbmodem1101
+Connecting...
+Chip is ESP32-S3 (QFN56) (revision v0.2)
+Features: WiFi, BLE, Embedded PSRAM 8MB (AP_3v3)
+Crystal is 40MHz
+USB mode: USB-Serial/JTAG
+MAC: 68:ee:8f:4f:5f:f8
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x00047fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 20848 bytes to 13355...
+Writing at 0x00000000... (100 %)[K
+Wrote 20848 bytes (13355 compressed) at 0x00000000 in 0.3 seconds (effective 505.2 kbit/s)...
+Hash of data verified.
+Compressed 228864 bytes to 120608...
+Writing at 0x00010000... (12 %)[KWriting at 0x0001bb0c... (25 %)[KWriting at 0x00023739... (37 %)[KWriting at 0x0002a2aa... (50 %)[KWriting at 0x00031054... (62 %)[KWriting at 0x0003903c... (75 %)[KWriting at 0x0003f0ab... (87 %)[KWriting at 0x000454f4... (100 %)[K
+Wrote 228864 bytes (120608 compressed) at 0x00010000 in 1.6 seconds (effective 1111.6 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 105...
+Writing at 0x00008000... (100 %)[K
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 566.2 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+Executing action: monitor
+Running idf_monitor in directory '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu'
+Executing "/Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python /Users/shahy/esp/esp-idf/tools/idf_monitor.py -p /dev/cu.usbmodem1101 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu/icvsp_ecu.elf' '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_imu/bootloader/bootloader.elf' -m '/Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python' '/Users/shahy/esp/esp-idf/tools/idf.py' '-B' 'build_imu' '-D' 'SDKCONFIG=build_imu/sdkconfig' '-D' 'SDKCONFIG_DEFAULTS=sdkconfig.defaults;sdkconfig.imu' '-p' '/dev/cu.usbmodem1101'"...
+--- esp-idf-monitor 1.10.0 on /dev/cu.usbmodem1101 115200
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0x2a (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40377f42
+--- 0x40377f42: esp_cpu_wait_for_intr at /Users/shahy/esp/esp-idf/components/esp_hw_support/cpu.c:64
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x1530
+load:0x403c8700,len:0xcec
+--- 0x403c8700: _stext at ??:?
+load:0x403cb700,len:0x2ef8
+entry 0x403c8920
+--- 0x403c8920: call_start_cpu0 at /Users/shahy/esp/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+I (24) boot: ESP-IDF v5.5.5 2nd stage bootloader
+I (24) boot: compile time Nov 24 2026 23:24:15
+I (25) boot: Multicore bootloader
+I (25) boot: chip revision: v0.2
+I (25) boot: efuse block revision: v1.4
+I (25) boot.esp32s3: Boot SPI Speed : 80MHz
+I (25) boot.esp32s3: SPI Mode       : DIO
+I (26) boot.esp32s3: SPI Flash Size : 8MB
+I (26) boot: Enabling RNG early entropy source...
+I (26) boot: Partition Table:
+I (26) boot: ## Label            Usage          Type ST Offset   Length
+I (26) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (27) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (27) boot:  2 factory          factory app      00 00 00010000 00177000
+I (28) boot: End of partition table
+I (28) esp_image: segment 0: paddr=00010020 vaddr=3c020020 size=0b658h ( 46680) map
+I (37) esp_image: segment 1: paddr=0001b680 vaddr=3fc93b00 size=0324ch ( 12876) load
+I (40) esp_image: segment 2: paddr=0001e8d4 vaddr=40374000 size=01744h (  5956) load
+I (42) esp_image: segment 3: paddr=00020020 vaddr=42000020 size=19a1ch (104988) map
+I (61) esp_image: segment 4: paddr=00039a44 vaddr=40375744 size=0e364h ( 58212) load
+I (75) esp_image: segment 5: paddr=00047db0 vaddr=50000000 size=00020h (    32) load
+I (82) boot: Loaded app from partition at offset 0x10000
+I (82) boot: Disabling RNG early entropy source...
+I (83) octal_psram: vendor id    : 0x0d (AP)
+I (83) octal_psram: dev id       : 0x02 (generation 3)
+I (83) octal_psram: density      : 0x03 (64 Mbit)
+I (83) octal_psram: good-die     : 0x01 (Pass)
+I (83) octal_psram: Latency      : 0x01 (Fixed)
+I (84) octal_psram: VCC          : 0x01 (3V)
+I (84) octal_psram: SRF          : 0x01 (Fast Refresh)
+I (84) octal_psram: BurstType    : 0x01 (Hybrid Wrap)
+I (84) octal_psram: BurstLen     : 0x01 (32 Byte)
+I (85) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)
+I (85) octal_psram: DriveStrength: 0x00 (1/1)
+I (85) MSPI Timing: Enter psram timing tuning
+I (86) esp_psram: Found 8MB PSRAM device
+I (86) esp_psram: Speed: 80MHz
+I (86) cpu_start: Multicore app
+I (519) esp_psram: SPI SRAM memory test OK
+I (528) cpu_start: Pro cpu start user code
+I (528) cpu_start: cpu freq: 160000000 Hz
+I (528) app_init: Application information:
+I (528) app_init: Project name:     icvsp_ecu
+I (529) app_init: App version:      16ad91a-dirty
+I (529) app_init: Compile time:     Nov 24 2026 23:23:43
+I (529) app_init: ELF file SHA256:  97d0a4161...
+I (529) app_init: ESP-IDF:          v5.5.5
+I (529) efuse_init: Min chip rev:     v0.0
+I (529) efuse_init: Max chip rev:     v0.99 
+I (529) efuse_init: Chip rev:         v0.2
+I (530) heap_init: Initializing. RAM available for dynamic allocation:
+I (530) heap_init: At 3FC976D0 len 00052040 (328 KiB): RAM
+I (530) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (530) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (531) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (531) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (532) spi_flash: detected chip: gd
+I (532) spi_flash: flash io: dio
+I (532) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (533) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (534) main_task: Started on CPU0
+I (534) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (534) main_task: Calling app_main()
+
+IMU BEGIN MPU6050 test (ESP-IDF build): SDA=GPIO5 SCL=GPIO6 I2C port 1, +-2 g, +-250 deg/s
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 3.3 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 3.2 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 4.2 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 3.2 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 4.7 deg/s > 2.0). Keep it still
+IMU WARN calibration skipped after 5 attempts (sensor kept moving): gyro values are uncorrected
+IMU DETECTED
+IMU reading every 200 ms
+IMU #1 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.4 gy=+1.9 gz=-0.3 deg/s
+IMU #2 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.1 gy=+2.1 gz=-0.2 deg/s
+IMU #3 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.3 gz=+0.0 deg/s
+IMU #4 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+2.0 gz=-0.0 deg/s
+IMU #5 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.3 gy=+2.3 gz=-0.2 deg/s
+IMU #6 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.0 gz=-0.2 deg/s
+IMU #7 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-1.9 gy=+2.3 gz=+0.0 deg/s
+IMU #8 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.1 deg/s
+IMU #9 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+1.7 gz=-0.3 deg/s
+IMU #10 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.1 gy=+2.4 gz=-0.2 deg/s
+IMU #11 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+1.9 gz=-0.0 deg/s
+IMU #12 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+1.9 gz=+0.1 deg/s
+IMU #13 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.1 gy=+2.0 gz=+0.0 deg/s
+IMU #14 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=-0.2 deg/s
+IMU #15 ax=+0.07 ay=+0.21 az=-0.94 g |a|=0.97 g  gx=-2.0 gy=+2.0 gz=-0.2 deg/s
+IMU #16 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.3 gz=-0.3 deg/s
+IMU #17 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=-0.2 deg/s
+IMU #18 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=-0.2 deg/s
+IMU #19 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.2 gz=-0.0 deg/s
+IMU #20 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.4 gy=+1.9 gz=-0.1 deg/s
+IMU #21 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.1 gy=+1.9 gz=+0.3 deg/s
+IMU #22 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=-0.1 deg/s
+IMU #23 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.2 gy=+1.8 gz=-0.1 deg/s
+IMU #24 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.3 gy=+1.9 gz=-0.2 deg/s
+IMU #25 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+1.8 gz=-0.0 deg/s
+IMU #26 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.3 gy=+1.9 gz=-0.0 deg/s
+IMU #27 ax=+0.07 ay=+0.21 az=-0.94 g |a|=0.97 g  gx=-2.5 gy=+2.1 gz=-0.1 deg/s
+IMU #28 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-1.8 gy=+1.4 gz=-0.1 deg/s
+IMU #29 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.1 gy=+0.4 gz=+0.6 deg/s
+IMU #30 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-0.8 gy=-0.5 gz=+0.3 deg/s
+IMU #31 ax=+0.06 ay=+0.20 az=-0.95 g |a|=0.97 g  gx=-3.4 gy=+5.4 gz=+0.4 deg/s
+IMU #32 ax=+0.07 ay=+0.20 az=-0.95 g |a|=0.97 g  gx=-2.0 gy=+3.3 gz=-0.5 deg/s
+IMU #33 ax=+0.07 ay=+0.20 az=-0.95 g |a|=0.98 g  gx=-2.8 gy=+3.4 gz=-0.4 deg/s
+IMU #34 ax=+0.07 ay=+0.20 az=-0.95 g |a|=0.98 g  gx=-2.3 gy=+2.3 gz=-0.0 deg/s
+IMU #35 ax=+0.07 ay=+0.20 az=-0.94 g |a|=0.96 g  gx=-2.5 gy=+2.4 gz=+0.1 deg/s
+IMU #36 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.6 gy=+2.4 gz=-0.2 deg/s
+IMU #37 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.5 gz=-0.5 deg/s
+IMU #38 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.0 gz=+0.1 deg/s
+IMU #39 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.7 gy=+1.9 gz=+0.2 deg/s
+IMU #40 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.1 deg/s
+IMU #41 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.3 gz=-0.2 deg/s
+IMU #42 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.0 gy=+2.3 gz=-0.1 deg/s
+IMU #43 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.3 deg/s
+IMU #44 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.0 deg/s
+IMU #45 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=-0.2 deg/s
+IMU #46 ax=+0.08 ay=+0.20 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+2.2 gz=-0.2 deg/s
+IMU #47 ax=+0.07 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+2.4 gz=+0.1 deg/s
+IMU #48 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.3 gy=+2.0 gz=-0.1 deg/s
+IMU #49 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.2 gy=+2.1 gz=-0.0 deg/s
+IMU #50 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.0 gy=+1.9 gz=-0.4 deg/s
+IMU #51 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.4 gz=-0.4 deg/s
+IMU #52 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-1.9 gy=+2.0 gz=-0.1 deg/s
+IMU #53 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=-0.3 deg/s
+IMU #54 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+2.1 gz=+0.1 deg/s
+IMU #55 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.1 gy=+2.2 gz=-0.6 deg/s
+IMU #56 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.1 gy=+2.0 gz=-0.3 deg/s
+IMU #57 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-3.1 gy=+1.5 gz=+0.1 deg/s
+IMU #58 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-1.4 gy=+3.2 gz=-0.9 deg/s
+IMU #59 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.0 gy=+2.3 gz=-2.3 deg/s
+IMU #60 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-3.0 gy=+3.1 gz=-0.4 deg/s
+IMU #61 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.3 gy=+1.8 gz=-0.1 deg/s
+IMU #62 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.0 gy=+2.1 gz=-0.1 deg/s
+IMU #63 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+2.1 gz=+0.2 deg/s
+IMU #64 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-1.9 gy=+2.0 gz=+0.0 deg/s
+IMU #65 ax=+0.07 ay=+0.21 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.1 gz=-0.2 deg/s
+IMU #66 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-1.9 gy=+2.1 gz=-0.2 deg/s
+IMU #67 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=+0.1 deg/s
+IMU #68 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-1.9 gy=+2.6 gz=-0.3 deg/s
+IMU #69 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+2.3 gz=-0.1 deg/s
+IMU #70 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.2 gy=+2.0 gz=-0.2 deg/s
+IMU #71 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-3.0 gy=+1.9 gz=+0.3 deg/s
+IMU #72 ax=+0.08 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-3.3 gy=+2.7 gz=+0.3 deg/s
+IMU #73 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.97 g  gx=-3.0 gy=+2.4 gz=+0.1 deg/s
+IMU #74 ax=+0.08 ay=+0.21 az=-0.94 g |a|=0.97 g  gx=-1.8 gy=+2.0 gz=-0.3 deg/s
+IMU #75 ax=+0.08 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.8 gz=-0.3 deg/s
+IMU #76 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.1 gy=+2.5 gz=+0.1 deg/s
+IMU #77 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.2 gy=+2.3 gz=-0.1 deg/s
+IMU #78 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+1.8 gz=-0.2 deg/s
+IMU #79 ax=+0.08 ay=+0.21 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.5 gz=-0.3 deg/s
+IMU #80 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.0 gy=+2.0 gz=-0.1 deg/s
+IMU #81 ax=+0.09 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.0 gz=-0.1 deg/s
+IMU #82 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.2 gz=+0.0 deg/s
+IMU #83 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.97 g  gx=-2.0 gy=+1.7 gz=-0.2 deg/s
+IMU #84 ax=+0.08 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.0 gy=+1.9 gz=-0.1 deg/s
+IMU #85 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.2 gz=-0.2 deg/s
+IMU #86 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.6 gy=+2.4 gz=-0.3 deg/s
+IMU #87 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+1.9 gz=-0.3 deg/s
+IMU #88 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.0 gz=+0.1 deg/s
+IMU #89 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.2 gy=+1.8 gz=-0.2 deg/s
+IMU #90 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.97 g  gx=-2.0 gy=+2.4 gz=-0.1 deg/s
+IMU #91 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.0 gz=-0.2 deg/s
+IMU #92 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.1 gy=+2.1 gz=-0.2 deg/s
+IMU #93 ax=+0.08 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=+0.0 deg/s
+IMU #94 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.3 gz=-0.3 deg/s
+IMU #95 ax=+0.08 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.1 deg/s
+IMU #96 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+2.2 gz=-0.3 deg/s
+IMU #97 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.3 gz=-0.2 deg/s
+IMU #98 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.5 gz=-0.1 deg/s
+IMU #99 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=+0.1 deg/s
+IMU #100 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.6 gy=+2.3 gz=-0.2 deg/s
+IMU #101 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.5 gy=+2.1 gz=+0.1 deg/s
+IMU #102 ax=+0.08 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-1.8 gy=+1.5 gz=-0.1 deg/s
+IMU #103 ax=+0.08 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.2 gz=-0.2 deg/s
+IMU #104 ax=+0.07 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+3.0 gz=-0.4 deg/s
+IMU #105 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+2.3 gz=-0.0 deg/s
+IMU #106 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.97 g  gx=-2.1 gy=+1.8 gz=-0.1 deg/s
+IMU #107 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+1.8 gz=-0.1 deg/s
+IMU #108 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=+0.1 deg/s
+IMU #109 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+2.0 gz=-0.2 deg/s
+IMU #110 ax=+0.08 ay=+0.22 az=-0.95 g |a|=0.97 g  gx=-2.4 gy=+2.2 gz=-0.1 deg/s
+IMU #111 ax=+0.08 ay=+0.21 az=-0.95 g |a|=0.97 g  gx=-1.9 gy=+0.9 gz=+0.0 deg/s
+IMU #112 ax=+0.11 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-5.5 gy=+6.9 gz=+8.0 deg/s
+IMU #113 ax=+0.12 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.5 gy=+2.2 gz=+0.7 deg/s
+IMU #114 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-3.4 gy=+8.4 gz=-0.3 deg/s
+IMU #115 ax=+0.14 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=-0.6 deg/s
+IMU #116 ax=+0.14 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+1.4 gz=-0.3 deg/s
+IMU #117 ax=+0.14 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.0 gz=-0.7 deg/s
+IMU #118 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.5 gy=+2.3 gz=-0.2 deg/s
+IMU #119 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.0 gz=-0.2 deg/s
+IMU #120 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.0 gy=+2.0 gz=-0.3 deg/s
+IMU #121 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.5 gy=+2.0 gz=-0.4 deg/s
+IMU #122 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+1.6 gz=-0.2 deg/s
+IMU #123 ax=+0.13 ay=+0.22 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.6 gz=-0.3 deg/s
+IMU #124 ax=+0.13 ay=+0.22 az=-0.95 g |a|=0.98 g  gx=-2.2 gy=+1.7 gz=-0.5 deg/s
+IMU #125 ax=+0.13 ay=+0.22 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+1.9 gz=-0.1 deg/s
+IMU #126 ax=+0.13 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.0 gz=-0.1 deg/s
+IMU #127 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=-0.4 deg/s
+IMU #128 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.2 gz=-0.2 deg/s
+IMU #129 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+1.8 gz=-0.0 deg/s
+IMU #130 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=-0.2 deg/s
+IMU #131 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.2 deg/s
+IMU #132 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.3 gz=-0.2 deg/s
+IMU #133 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.3 gz=-0.1 deg/s
+IMU #134 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+1.9 gz=+0.1 deg/s
+IMU #135 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=-0.2 deg/s
+IMU #136 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.3 gz=-0.0 deg/s
+IMU #137 ax=+0.13 ay=+0.23 az=-0.95 g |a|=0.98 g  gx=-2.6 gy=+2.1 gz=-0.1 deg/s
+IMU #138 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=-0.2 deg/s
+IMU #139 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=-0.2 deg/s
+IMU #140 ax=+0.12 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-1.9 gy=+1.9 gz=-0.1 deg/s
+IMU #141 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.2 gz=+0.0 deg/s
+IMU #142 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+2.3 gz=-0.3 deg/s
+IMU #143 ax=+0.13 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+1.9 gz=-0.2 deg/s
+IMU #144 ax=+0.13 ay=+0.22 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+2.3 gz=-0.1 deg/s
+IMU #145 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+1.8 gz=-0.0 deg/s
+IMU #146 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.0 gz=-0.3 deg/s
+IMU #147 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.5 gy=+2.0 gz=+0.0 deg/s
+IMU #148 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.5 gy=+2.3 gz=-0.0 deg/s
+IMU #149 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.5 gy=+2.3 gz=-0.2 deg/s
+IMU #150 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.0 gz=-0.2 deg/s
+IMU #151 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+1.8 gz=-0.1 deg/s
+IMU #152 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.4 gz=-0.2 deg/s
+IMU #153 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.6 gy=+2.2 gz=-0.0 deg/s
+IMU #154 ax=+0.12 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.2 gz=-0.3 deg/s
+IMU #155 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=-0.0 deg/s
+IMU #156 ax=+0.12 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.3 gz=-0.1 deg/s
+IMU #157 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+1.9 gz=-0.4 deg/s
+IMU #158 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+2.4 gz=-0.2 deg/s
+IMU #159 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.6 gy=+2.8 gz=-0.2 deg/s
+IMU #160 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.7 gy=+2.7 gz=+0.1 deg/s
+IMU #161 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.5 gy=+2.2 gz=+0.0 deg/s
+IMU #162 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.2 gy=+2.0 gz=-0.2 deg/s
+IMU #163 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.2 gz=+0.1 deg/s
+IMU #164 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.2 gz=-0.4 deg/s
+IMU #165 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.3 gz=+0.2 deg/s
+IMU #166 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.3 gz=-0.2 deg/s
+IMU #167 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.2 gz=-0.2 deg/s
+IMU #168 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.1 deg/s
+IMU #169 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.5 gy=+2.1 gz=-0.2 deg/s
+IMU #170 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.0 gz=-0.2 deg/s
+IMU #171 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.0 gz=-0.2 deg/s
+IMU #172 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=-0.7 deg/s
+IMU #173 ax=+0.13 ay=+0.23 az=-0.95 g |a|=0.98 g  gx=-2.2 gy=+2.2 gz=-0.3 deg/s
+IMU #174 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=+0.0 deg/s
+IMU #175 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=-0.1 deg/s
+IMU #176 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.0 gz=-0.1 deg/s
+IMU #177 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.7 gy=+1.9 gz=-0.1 deg/s
+IMU #178 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.0 gz=-0.1 deg/s
+IMU #179 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.3 gz=-0.1 deg/s
+IMU #180 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.6 gy=+2.1 gz=-0.3 deg/s
+IMU #181 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.7 gy=+1.9 gz=-0.0 deg/s
+IMU #182 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.2 gz=-0.1 deg/s
+IMU #183 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.7 gy=+2.2 gz=+0.1 deg/s
+IMU #184 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.2 gz=-0.1 deg/s
+IMU #185 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+1.9 gz=-0.2 deg/s
+IMU #186 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.3 gy=+2.5 gz=-0.3 deg/s
+IMU #187 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.1 gz=-0.3 deg/s
+IMU #188 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=+0.3 deg/s
+IMU #189 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=-0.3 deg/s
+IMU #190 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.1 gy=+2.1 gz=-0.3 deg/s
+IMU #191 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.1 deg/s
+IMU #192 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.3 gz=-0.1 deg/s
+IMU #193 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.3 gz=-0.1 deg/s
+IMU #194 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+2.0 gz=-0.2 deg/s
+IMU #195 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.2 gz=-0.1 deg/s
+IMU #196 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=-0.4 deg/s
+IMU #197 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.1 gz=-0.1 deg/s
+IMU #198 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.0 gz=-0.3 deg/s
+IMU #199 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=-0.1 deg/s
+IMU #200 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.1 gz=-0.1 deg/s
+IMU #201 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.3 gz=-0.2 deg/s
+IMU #202 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+2.4 gz=-0.1 deg/s
+IMU #203 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=-0.2 deg/s
+IMU #204 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.4 gz=-0.3 deg/s
+IMU #205 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.3 gz=-0.1 deg/s
+IMU #206 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.4 gy=+2.3 gz=-0.3 deg/s
+IMU #207 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.2 gz=-0.0 deg/s
+IMU #208 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.1 deg/s
+IMU #209 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.4 gz=-0.3 deg/s
+IMU #210 ax=+0.14 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.1 gz=-0.1 deg/s
+IMU #211 ax=+0.14 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.3 gz=-0.3 deg/s
+IMU #212 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.1 gz=-0.0 deg/s
+IMU #213 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.1 gz=-0.2 deg/s
+IMU #214 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.5 gz=-0.2 deg/s
+IMU #215 ax=+0.13 ay=+0.23 az=-0.95 g |a|=0.98 g  gx=-2.4 gy=+2.5 gz=-0.1 deg/s
+IMU #216 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.5 gy=+2.3 gz=+0.1 deg/s
+IMU #217 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.0 gy=+2.2 gz=-0.1 deg/s
+IMU #218 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.0 gz=-0.2 deg/s
+IMU #219 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.2 gy=+1.9 gz=-0.3 deg/s
+IMU #220 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.5 gy=+2.1 gz=-0.1 deg/s
+IMU #221 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.0 gz=+0.1 deg/s
+IMU #222 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.3 gz=-0.0 deg/s
+IMU #223 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.1 gy=+2.0 gz=-0.3 deg/s
+IMU #224 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.1 gz=-0.1 deg/s
+IMU #225 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.2 gz=-0.3 deg/s
+IMU #226 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+1.9 gz=-0.2 deg/s
+IMU #227 ax=+0.13 ay=+0.23 az=-0.95 g |a|=0.98 g  gx=-2.5 gy=+2.2 gz=-0.1 deg/s
+IMU #228 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.0 gz=-0.2 deg/s
+IMU #229 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.1 gz=-0.0 deg/s
+IMU #230 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.1 gz=-0.1 deg/s
+IMU #231 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.3 deg/s
+IMU #232 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.3 gz=-0.3 deg/s
+IMU #233 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+1.7 gz=-0.1 deg/s
+IMU #234 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.2 gy=+2.3 gz=-0.2 deg/s
+IMU #235 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.5 gy=+2.3 gz=-0.1 deg/s
+IMU #236 ax=+0.13 ay=+0.24 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.0 gz=+0.1 deg/s
+IMU #237 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+1.9 gz=-0.2 deg/s
+IMU #238 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.3 deg/s
+IMU #239 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=-0.2 deg/s
+IMU #240 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=+0.0 deg/s
+IMU #241 ax=+0.13 ay=+0.24 az=-0.94 g |a|=0.97 g  gx=-2.0 gy=+2.1 gz=+0.0 deg/s
+IMU #242 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.2 gz=-0.0 deg/s
+IMU #243 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.2 gy=+2.4 gz=-0.0 deg/s
+IMU #244 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.5 gy=+2.1 gz=+0.2 deg/s
+IMU #245 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.3 deg/s
+IMU #246 ax=+0.13 ay=+0.23 az=-0.93 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=-0.3 deg/s
+IMU #247 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+2.1 gz=-0.2 deg/s
+IMU #248 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-1.7 gy=+2.0 gz=-0.3 deg/s
+IMU #249 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.5 gy=+2.0 gz=-0.3 deg/s
+IMU #250 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.4 gy=+2.0 gz=-0.1 deg/s
+IMU #251 ax=+0.13 ay=+0.24 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=+0.0 deg/s
+IMU #252 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.3 deg/s
+IMU #253 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+2.5 gz=-0.1 deg/s
+IMU #254 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.4 gy=+2.3 gz=-0.3 deg/s
+IMU #255 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.2 gy=+1.7 gz=-0.4 deg/s
+IMU #256 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.5 gy=+2.1 gz=-0.3 deg/s
+IMU #257 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.1 gy=+2.1 gz=-0.3 deg/s
+IMU #258 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-2.3 gy=+2.2 gz=-0.2 deg/s
+IMU #259 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-1.9 gy=+2.1 gz=-0.1 deg/s
+IMU #260 ax=+0.13 ay=+0.23 az=-0.94 g |a|=0.98 g  gx=-1.9 gy=+1.6 gz=-0.5 deg/s
+IMU #261 ax=+0.12 ay=+0.23 az=-0.95 g |a|=0.98 g  gx=-1.3 gy=-0.2 gz=-1.1 deg/s
+IMU #262 ax=+0.11 ay=+0.23 az=-0.95 g |a|=0.98 g  gx=-1.1 gy=+1.3 gz=-0.6 deg/s
+IMU #263 ax=+0.11 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-2.1 gy=+3.0 gz=-0.5 deg/s
+IMU #264 ax=+0.11 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-1.6 gy=+0.8 gz=-0.1 deg/s
+IMU #265 ax=+0.12 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-2.2 gy=+2.6 gz=-0.2 deg/s
+IMU #266 ax=+0.11 ay=+0.22 az=-0.94 g |a|=0.97 g  gx=-1.3 gy=+1.6 gz=-3.3 deg/s
+IMU #267 ax=+0.12 ay=+0.24 az=-0.93 g |a|=0.97 g  gx=-5.4 gy=+4.5 gz=-18.0 deg/s
+IMU #268 ax=+0.17 ay=+0.27 az=-0.91 g |a|=0.96 g  gx=-36.8 gy=+25.6 gz=+3.6 deg/s
+IMU #269 ax=+0.20 ay=+0.22 az=-0.97 g |a|=1.01 g  gx=+11.0 gy=-7.7 gz=-15.2 deg/s
+IMU #270 ax=+0.02 ay=+0.27 az=-0.96 g |a|=0.99 g  gx=+25.0 gy=+0.8 gz=+3.6 deg/s
+IMU #271 ax=-0.15 ay=+0.15 az=-1.03 g |a|=1.05 g  gx=+11.6 gy=-2.6 gz=-30.8 deg/s
+IMU #272 ax=-0.01 ay=+0.05 az=-0.96 g |a|=0.96 g  gx=+25.6 gy=-24.6 gz=+17.5 deg/s
+IMU #273 ax=-0.04 ay=+0.01 az=-0.98 g |a|=0.98 g  gx=-21.3 gy=-80.8 gz=+31.5 deg/s
+IMU #274 ax=-0.15 ay=+0.01 az=-0.99 g |a|=1.00 g  gx=-9.4 gy=-57.1 gz=+29.7 deg/s
+IMU #275 ax=-0.24 ay=+0.07 az=-0.88 g |a|=0.92 g  gx=-1.1 gy=+0.6 gz=+5.5 deg/s
+IMU #276 ax=-0.30 ay=+0.13 az=-0.88 g |a|=0.93 g  gx=-26.4 gy=-24.5 gz=-16.2 deg/s
+IMU #277 ax=-0.17 ay=-0.19 az=-1.15 g |a|=1.17 g  gx=+32.7 gy=+71.7 gz=-6.0 deg/s
+IMU #278 ax=+0.02 ay=-0.12 az=-0.87 g |a|=0.88 g  gx=-14.6 gy=+55.6 gz=-13.8 deg/s
+IMU #279 ax=+0.26 ay=+0.09 az=-0.98 g |a|=1.01 g  gx=-17.5 gy=-2.2 gz=+1.5 deg/s
+IMU #280 ax=+0.12 ay=+0.17 az=-0.95 g |a|=0.97 g  gx=-39.2 gy=+0.7 gz=+5.6 deg/s
+IMU #281 ax=+0.24 ay=+0.22 az=-0.96 g |a|=1.02 g  gx=+34.7 gy=+45.8 gz=+6.7 deg/s
+IMU #282 ax=+0.26 ay=+0.06 az=-0.88 g |a|=0.92 g  gx=+6.4 gy=-8.5 gz=+23.9 deg/s
+IMU #283 ax=+0.16 ay=+0.16 az=-0.96 g |a|=0.99 g  gx=+4.7 gy=+2.2 gz=-41.3 deg/s
+IMU #284 ax=+0.13 ay=+0.13 az=-0.96 g |a|=0.98 g  gx=+70.8 gy=-8.7 gz=-64.9 deg/s
+IMU #285 ax=+0.01 ay=-0.14 az=-0.93 g |a|=0.94 g  gx=+4.5 gy=-4.1 gz=+28.8 deg/s
+IMU #286 ax=+0.06 ay=-0.06 az=-0.98 g |a|=0.98 g  gx=+0.5 gy=-1.3 gz=-2.4 deg/s
+IMU #287 ax=+0.11 ay=-0.02 az=-0.97 g |a|=0.97 g  gx=-20.0 gy=+29.5 gz=-14.0 deg/s
+IMU #288 ax=+0.05 ay=-0.02 az=-1.03 g |a|=1.03 g  gx=-74.4 gy=+20.5 gz=-28.0 deg/s
+IMU #289 ax=+0.11 ay=+0.15 az=-0.94 g |a|=0.96 g  gx=+15.6 gy=+3.2 gz=-45.6 deg/s
+IMU #290 ax=+0.18 ay=+0.34 az=-0.99 g |a|=1.06 g  gx=-32.1 gy=-29.5 gz=+2.1 deg/s
+IMU #291 ax=+0.09 ay=+0.30 az=-0.98 g |a|=1.03 g  gx=-3.3 gy=+2.9 gz=+0.2 deg/s
+IMU #292 ax=+0.20 ay=+0.29 az=-0.97 g |a|=1.03 g  gx=+24.4 gy=-76.2 gz=-41.1 deg/s
+IMU #293 ax=+0.26 ay=+0.17 az=-0.99 g |a|=1.04 g  gx=+139.5 gy=+46.7 gz=+94.0 deg/s
+IMU #294 ax=+0.06 ay=+0.05 az=-0.96 g |a|=0.97 g  gx=+74.6 gy=+21.9 gz=-39.2 deg/s
+IMU #295 ax=-0.40 ay=-0.40 az=-1.01 g |a|=1.15 g  gx=-22.4 gy=-104.5 gz=-62.4 deg/s
+IMU #296 ax=-0.20 ay=+0.01 az=-0.97 g |a|=0.99 g  gx=-18.4 gy=-1.8 gz=+5.7 deg/s
+IMU #297 ax=+0.20 ay=+0.11 az=-0.92 g |a|=0.95 g  gx=+22.9 gy=+26.0 gz=+0.8 deg/s
+IMU #298 ax=-0.01 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=+8.8 gy=+0.3 gz=-0.2 deg/s
+IMU #299 ax=-0.00 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=-5.0 gy=+7.4 gz=+3.7 deg/s
+IMU #300 ax=+0.34 ay=+0.01 az=-0.89 g |a|=0.96 g  gx=+19.4 gy=+46.1 gz=-11.0 deg/s
+IMU #301 ax=-0.03 ay=+0.12 az=-0.98 g |a|=0.99 g  gx=-1.1 gy=+8.9 gz=-1.8 deg/s
+IMU #302 ax=+0.08 ay=+0.29 az=-0.95 g |a|=1.00 g  gx=-0.0 gy=+31.4 gz=+3.1 deg/s
+IMU #303 ax=+0.08 ay=+0.11 az=-0.97 g |a|=0.98 g  gx=-2.9 gy=+11.0 gz=+0.6 deg/s
+IMU #304 ax=+0.11 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-6.1 gy=+3.6 gz=+15.3 deg/s
+IMU #305 ax=+0.13 ay=+0.10 az=-0.95 g |a|=0.96 g  gx=-9.5 gy=+23.7 gz=+5.0 deg/s
+IMU #306 ax=+0.13 ay=+0.18 az=-0.95 g |a|=0.97 g  gx=-4.4 gy=+1.7 gz=+7.7 deg/s
+IMU #307 ax=+0.09 ay=+0.17 az=-0.95 g |a|=0.97 g  gx=+37.3 gy=-6.2 gz=-24.0 deg/s
+IMU #308 ax=+0.09 ay=+0.09 az=-0.98 g |a|=0.99 g  gx=-6.9 gy=-0.5 gz=-7.1 deg/s
+IMU #309 ax=+0.08 ay=+0.06 az=-0.99 g |a|=1.00 g  gx=+21.0 gy=+3.1 gz=-10.6 deg/s
+IMU #310 ax=+0.05 ay=+0.05 az=-0.97 g |a|=0.97 g  gx=-29.7 gy=-17.2 gz=+11.2 deg/s
+IMU #311 ax=+0.14 ay=+0.03 az=-1.08 g |a|=1.09 g  gx=-3.0 gy=+4.9 gz=+6.8 deg/s
+IMU #312 ax=+0.11 ay=+0.05 az=-0.98 g |a|=0.99 g  gx=+18.5 gy=+2.5 gz=+2.1 deg/s
+IMU #313 ax=+0.14 ay=+0.05 az=-0.85 g |a|=0.87 g  gx=+18.3 gy=-38.5 gz=-9.2 deg/s
+IMU #314 ax=+0.09 ay=+0.02 az=-0.97 g |a|=0.97 g  gx=+2.5 gy=-1.5 gz=+9.2 deg/s
+IMU #315 ax=-0.30 ay=-0.09 az=-1.13 g |a|=1.17 g  gx=+7.5 gy=+10.4 gz=+17.3 deg/s
+IMU #316 ax=-0.08 ay=-0.13 az=-0.90 g |a|=0.92 g  gx=-39.3 gy=-11.6 gz=-1.6 deg/s
+IMU #317 ax=-0.07 ay=+0.10 az=-1.21 g |a|=1.22 g  gx=-6.3 gy=+77.4 gz=-50.8 deg/s
+IMU #318 ax=-0.09 ay=-0.05 az=-0.90 g |a|=0.91 g  gx=-12.2 gy=-7.5 gz=-2.6 deg/s
+IMU #319 ax=-0.09 ay=-0.26 az=-0.87 g |a|=0.92 g  gx=-3.5 gy=-1.0 gz=-4.4 deg/s
+IMU #320 ax=-0.12 ay=+0.26 az=-0.72 g |a|=0.78 g  gx=-12.1 gy=+20.8 gz=+22.8 deg/s
+IMU #321 ax=-0.17 ay=+0.43 az=-1.17 g |a|=1.26 g  gx=+108.0 gy=+250.1 gz=-90.2 deg/s
+IMU #322 ax=+0.13 ay=-0.12 az=-0.96 g |a|=0.97 g  gx=-36.3 gy=-21.8 gz=+24.7 deg/s
+IMU #323 ax=+0.14 ay=-0.02 az=-1.19 g |a|=1.20 g  gx=+5.6 gy=+6.2 gz=+34.9 deg/s
+IMU #324 ax=+0.11 ay=+0.00 az=-0.97 g |a|=0.97 g  gx=-3.3 gy=+0.8 gz=-0.9 deg/s
+IMU #325 ax=+0.06 ay=+0.01 az=-0.95 g |a|=0.95 g  gx=-4.5 gy=+2.0 gz=+4.4 deg/s
+IMU #326 ax=+0.20 ay=+0.03 az=-0.96 g |a|=0.98 g  gx=+21.8 gy=+14.4 gz=-16.8 deg/s
+IMU #327 ax=+0.14 ay=-0.03 az=-0.89 g |a|=0.90 g  gx=-7.5 gy=-30.1 gz=+7.6 deg/s
+IMU #328 ax=+0.00 ay=+0.13 az=-0.83 g |a|=0.84 g  gx=-29.1 gy=-4.7 gz=+16.0 deg/s
+IMU #329 ax=+0.07 ay=+0.06 az=-0.85 g |a|=0.86 g  gx=+36.0 gy=+9.1 gz=-24.4 deg/s
+IMU #330 ax=+0.10 ay=+0.09 az=-0.94 g |a|=0.95 g  gx=-4.2 gy=+1.4 gz=+2.5 deg/s
+IMU #331 ax=+0.12 ay=+0.04 az=-0.93 g |a|=0.93 g  gx=-21.3 gy=-23.3 gz=-25.1 deg/s
+IMU #332 ax=+0.25 ay=-0.16 az=-1.00 g |a|=1.04 g  gx=-9.4 gy=+8.0 gz=-162.1 deg/s
+IMU #333 ax=+0.04 ay=-0.00 az=-0.69 g |a|=0.69 g  gx=-6.6 gy=+30.2 gz=+7.0 deg/s
+IMU #334 ax=+0.17 ay=-0.01 az=-0.86 g |a|=0.88 g  gx=+4.4 gy=+33.1 gz=-43.0 deg/s
+IMU #335 ax=+0.10 ay=-0.13 az=-0.99 g |a|=1.00 g  gx=-10.1 gy=+3.7 gz=-4.9 deg/s
+IMU #336 ax=+0.08 ay=+0.04 az=-0.94 g |a|=0.94 g  gx=-21.7 gy=-5.2 gz=-2.2 deg/s
+IMU #337 ax=+0.03 ay=+0.06 az=-0.97 g |a|=0.97 g  gx=-2.6 gy=+2.4 gz=-6.8 deg/s
+IMU #338 ax=+0.06 ay=+0.08 az=-0.94 g |a|=0.95 g  gx=-17.8 gy=+2.6 gz=+0.8 deg/s
+IMU #339 ax=+0.03 ay=+0.19 az=-0.94 g |a|=0.96 g  gx=-13.7 gy=+1.0 gz=+0.1 deg/s
+IMU #340 ax=+0.19 ay=+0.19 az=-0.98 g |a|=1.02 g  gx=-6.1 gy=+2.6 gz=+5.2 deg/s
+IMU #341 ax=+0.13 ay=+0.15 az=-0.97 g |a|=0.99 g  gx=+3.9 gy=+3.4 gz=+0.9 deg/s
+IMU #342 ax=+0.16 ay=+0.20 az=-0.96 g |a|=1.00 g  gx=+8.7 gy=+2.5 gz=+4.5 deg/s
+IMU #343 ax=+0.07 ay=+0.11 az=-0.97 g |a|=0.98 g  gx=+3.2 gy=+2.0 gz=-0.4 deg/s
+IMU #344 ax=+0.06 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=+4.3 gy=+1.6 gz=-8.5 deg/s
+IMU #345 ax=+0.06 ay=+0.10 az=-0.94 g |a|=0.95 g  gx=-1.6 gy=+2.0 gz=+0.6 deg/s
+IMU #346 ax=+0.06 ay=+0.10 az=-0.97 g |a|=0.97 g  gx=-0.5 gy=+1.7 gz=-0.2 deg/s
+IMU #347 ax=+0.06 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-0.9 gy=+2.2 gz=-0.2 deg/s
+IMU #348 ax=+0.07 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-3.6 gy=+2.1 gz=-0.8 deg/s
+IMU #349 ax=+0.07 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.4 gy=+2.3 gz=-2.5 deg/s
+IMU #350 ax=+0.06 ay=+0.09 az=-0.96 g |a|=0.96 g  gx=-4.2 gy=+2.4 gz=-0.1 deg/s
+IMU #351 ax=+0.07 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-0.7 gy=+2.1 gz=-0.3 deg/s
+IMU #352 ax=+0.06 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-6.3 gy=+2.1 gz=+1.3 deg/s
+IMU #353 ax=+0.06 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=+2.0 gy=+1.8 gz=+0.0 deg/s
+IMU #354 ax=+0.07 ay=+0.06 az=-0.95 g |a|=0.96 g  gx=-9.9 gy=+1.9 gz=-0.5 deg/s
+IMU #355 ax=+0.06 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-1.9 gy=+2.3 gz=-0.2 deg/s
+IMU #356 ax=+0.06 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-2.0 gy=+2.2 gz=-0.3 deg/s
+IMU #357 ax=+0.06 ay=+0.08 az=-0.96 g |a|=0.96 g  gx=-3.3 gy=+1.5 gz=-0.5 deg/s
+IMU #358 ax=+0.06 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-3.4 gy=+2.0 gz=+0.3 deg/s
+IMU #359 ax=+0.06 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-6.7 gy=+2.5 gz=+0.0 deg/s
+IMU #360 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-10.3 gy=+2.9 gz=+0.8 deg/s
+IMU #361 ax=+0.06 ay=+0.13 az=-0.95 g |a|=0.96 g  gx=-7.9 gy=+2.9 gz=+0.1 deg/s
+IMU #362 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-1.1 gy=+2.0 gz=-0.3 deg/s
+IMU #363 ax=+0.06 ay=+0.13 az=-0.95 g |a|=0.97 g  gx=+1.5 gy=+2.0 gz=-0.1 deg/s
+IMU #364 ax=+0.06 ay=+0.13 az=-0.98 g |a|=0.99 g  gx=+3.0 gy=+2.5 gz=-4.3 deg/s
+IMU #365 ax=+0.06 ay=+0.11 az=-0.97 g |a|=0.98 g  gx=-1.7 gy=+2.0 gz=-0.5 deg/s
+IMU #366 ax=+0.07 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-0.2 gy=+2.0 gz=-0.2 deg/s
+IMU #367 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-2.5 gy=+1.9 gz=+0.0 deg/s
+IMU #368 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-3.3 gy=+2.1 gz=-0.2 deg/s
+IMU #369 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-1.0 gy=+2.3 gz=-0.1 deg/s
+IMU #370 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-4.4 gy=+1.6 gz=+0.0 deg/s
+IMU #371 ax=+0.05 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-1.4 gy=+2.3 gz=-0.4 deg/s
+IMU #372 ax=+0.06 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-4.8 gy=+1.9 gz=+0.1 deg/s
+IMU #373 ax=+0.07 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-3.4 gy=+2.3 gz=+0.0 deg/s
+IMU #374 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-2.7 gy=+2.0 gz=-0.0 deg/s
+IMU #375 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-2.9 gy=+2.1 gz=+0.4 deg/s
+IMU #376 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-3.3 gy=+2.3 gz=-0.1 deg/s
+IMU #377 ax=+0.07 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=+0.2 gy=+3.2 gz=+0.1 deg/s
+IMU #378 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-1.8 gy=+2.0 gz=+0.1 deg/s
+IMU #379 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-2.1 gy=+2.0 gz=-0.1 deg/s
+IMU #380 ax=+0.06 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-1.4 gy=+1.9 gz=-0.1 deg/s
+IMU #381 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-2.0 gy=+2.0 gz=-2.1 deg/s
+IMU #382 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-3.3 gy=+1.8 gz=-0.1 deg/s
+IMU #383 ax=+0.06 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-1.2 gy=+2.1 gz=-0.3 deg/s
+IMU #384 ax=+0.07 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-2.4 gy=+2.2 gz=-0.2 deg/s
+IMU #385 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.96 g  gx=-2.6 gy=+2.1 gz=+0.1 deg/s
+IMU #386 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-2.0 gy=+2.1 gz=-0.1 deg/s
+IMU #387 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.96 g  gx=-2.3 gy=+1.9 gz=-0.3 deg/s
+IMU #388 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-1.6 gy=+2.1 gz=-0.2 deg/s
+IMU #389 ax=+0.06 ay=+0.11 az=-0.97 g |a|=0.98 g  gx=-2.3 gy=+2.0 gz=-0.0 deg/s
+IMU #390 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-2.5 gy=+2.0 gz=+0.6 deg/s
+IMU #391 ax=+0.06 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=+1.1 gy=+2.0 gz=-0.5 deg/s
+IMU #392 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-4.5 gy=+2.2 gz=+0.4 deg/s
+IMU #393 ax=+0.06 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-3.9 gy=+2.2 gz=-0.5 deg/s
+IMU #394 ax=+0.07 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-4.4 gy=+1.9 gz=-0.1 deg/s
+IMU #395 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-2.9 gy=+2.2 gz=-0.2 deg/s
+IMU #396 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-1.0 gy=+2.2 gz=-0.1 deg/s
+IMU #397 ax=+0.06 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=+2.7 gy=+2.1 gz=-8.9 deg/s
+IMU #398 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-4.1 gy=+2.0 gz=+0.0 deg/s
+IMU #399 ax=-0.03 ay=+0.09 az=-0.95 g |a|=0.95 g  gx=+0.6 gy=+1.8 gz=-8.8 deg/s
+IMU #400 ax=+0.05 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-0.6 gy=+2.0 gz=-0.1 deg/s
+IMU #401 ax=+0.07 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-2.0 gy=+1.8 gz=+2.7 deg/s
+IMU #402 ax=+0.07 ay=+0.14 az=-0.97 g |a|=0.98 g  gx=-3.6 gy=+2.4 gz=+6.5 deg/s
+IMU #403 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-5.6 gy=+2.4 gz=+0.5 deg/s
+IMU #404 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=+0.1 gy=+2.2 gz=-0.2 deg/s
+IMU #405 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-1.8 gy=+2.3 gz=+0.1 deg/s
+IMU #406 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+2.0 gz=-0.1 deg/s
+IMU #407 ax=+0.06 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=+0.1 gy=+2.3 gz=-0.4 deg/s
+IMU #408 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-1.1 gy=+2.1 gz=-0.1 deg/s
+IMU #409 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-2.2 gy=+2.5 gz=-0.8 deg/s
+IMU #410 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-5.9 gy=+1.8 gz=+0.7 deg/s
+IMU #411 ax=+0.07 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-3.5 gy=+1.9 gz=-0.2 deg/s
+IMU #412 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-1.7 gy=+1.9 gz=+0.1 deg/s
+IMU #413 ax=+0.06 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-2.1 gy=+1.6 gz=-0.4 deg/s
+IMU #414 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-2.6 gy=+1.6 gz=+0.3 deg/s
+IMU #415 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-5.2 gy=+2.3 gz=+0.3 deg/s
+IMU #416 ax=+0.06 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+2.7 gz=+0.8 deg/s
+IMU #417 ax=+0.07 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-9.3 gy=-0.2 gz=+2.1 deg/s
+IMU #418 ax=+0.06 ay=+0.11 az=-0.98 g |a|=0.98 g  gx=-3.6 gy=+1.0 gz=+0.7 deg/s
+IMU #419 ax=+0.04 ay=+0.16 az=-0.93 g |a|=0.95 g  gx=-4.2 gy=+1.9 gz=-0.9 deg/s
+IMU #420 ax=+0.05 ay=+0.11 az=-0.97 g |a|=0.98 g  gx=-7.1 gy=+0.8 gz=-13.5 deg/s
+IMU #421 ax=+0.06 ay=+0.14 az=-0.95 g |a|=0.96 g  gx=-9.9 gy=+0.6 gz=+17.4 deg/s
+IMU #422 ax=+0.05 ay=+0.13 az=-1.00 g |a|=1.01 g  gx=+13.6 gy=+6.9 gz=-3.1 deg/s
+IMU #423 ax=+0.03 ay=+0.15 az=-0.87 g |a|=0.88 g  gx=-11.6 gy=-0.7 gz=-1.6 deg/s
+IMU #424 ax=+0.06 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-2.7 gy=+1.6 gz=-0.1 deg/s
+IMU #425 ax=+0.06 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-2.0 gy=+3.2 gz=+0.6 deg/s
+IMU #426 ax=+0.07 ay=+0.13 az=-0.94 g |a|=0.95 g  gx=-1.8 gy=+2.4 gz=-0.1 deg/s
+IMU #427 ax=+0.06 ay=+0.13 az=-0.97 g |a|=0.98 g  gx=-5.1 gy=+1.6 gz=+0.1 deg/s
+IMU #428 ax=+0.07 ay=+0.14 az=-0.99 g |a|=1.00 g  gx=-0.5 gy=-1.3 gz=-11.9 deg/s
+IMU #429 ax=+0.08 ay=+0.13 az=-0.98 g |a|=1.00 g  gx=-6.0 gy=+0.6 gz=-4.3 deg/s
+IMU #430 ax=+0.06 ay=+0.16 az=-0.98 g |a|=0.99 g  gx=-6.3 gy=+1.9 gz=-0.1 deg/s
+IMU #431 ax=+0.02 ay=+0.12 az=-0.97 g |a|=0.97 g  gx=-1.8 gy=+2.1 gz=+10.2 deg/s
+IMU #432 ax=+0.08 ay=+0.17 az=-0.97 g |a|=0.98 g  gx=-4.4 gy=+7.1 gz=-1.9 deg/s
+IMU #433 ax=+0.08 ay=+0.14 az=-1.01 g |a|=1.02 g  gx=+1.4 gy=+2.0 gz=-2.2 deg/s
+IMU #434 ax=+0.05 ay=+0.14 az=-0.97 g |a|=0.98 g  gx=-9.6 gy=+3.3 gz=+5.3 deg/s
+IMU #435 ax=+0.11 ay=+0.11 az=-0.86 g |a|=0.87 g  gx=-15.1 gy=-5.6 gz=-73.9 deg/s
+IMU #436 ax=+0.05 ay=+0.13 az=-0.94 g |a|=0.95 g  gx=+11.9 gy=+9.0 gz=-4.3 deg/s
+IMU #437 ax=+0.05 ay=+0.13 az=-0.98 g |a|=0.98 g  gx=+0.9 gy=+1.5 gz=-8.0 deg/s
+IMU #438 ax=+0.08 ay=+0.11 az=-0.90 g |a|=0.91 g  gx=+0.4 gy=-1.7 gz=-8.3 deg/s
+IMU #439 ax=+0.07 ay=+0.13 az=-0.94 g |a|=0.95 g  gx=+0.8 gy=-0.2 gz=-1.4 deg/s
+IMU #440 ax=+0.04 ay=+0.17 az=-0.96 g |a|=0.97 g  gx=-9.6 gy=+2.8 gz=-23.7 deg/s
+IMU #441 ax=+0.05 ay=+0.18 az=-0.97 g |a|=0.99 g  gx=+8.2 gy=+1.8 gz=+2.1 deg/s
+IMU #442 ax=+0.02 ay=+0.21 az=-1.03 g |a|=1.05 g  gx=+12.1 gy=-29.1 gz=+8.7 deg/s
+IMU #443 ax=+0.03 ay=+0.24 az=-0.88 g |a|=0.91 g  gx=-28.3 gy=+9.4 gz=-9.5 deg/s
+IMU #444 ax=-0.02 ay=+0.24 az=-0.95 g |a|=0.98 g  gx=+9.8 gy=-1.4 gz=+11.2 deg/s
+IMU #445 ax=+0.09 ay=+0.18 az=-0.98 g |a|=1.00 g  gx=+7.1 gy=-2.4 gz=+16.4 deg/s
+IMU #446 ax=+0.02 ay=+0.14 az=-1.01 g |a|=1.02 g  gx=-3.4 gy=-0.5 gz=+0.5 deg/s
+IMU #447 ax=-0.01 ay=+0.35 az=-0.87 g |a|=0.94 g  gx=-24.3 gy=+0.9 gz=-9.6 deg/s
+IMU #448 ax=+0.14 ay=+0.36 az=-0.85 g |a|=0.93 g  gx=-10.7 gy=+4.9 gz=-7.8 deg/s
+IMU #449 ax=-0.07 ay=+0.12 az=-1.00 g |a|=1.01 g  gx=-26.9 gy=+3.6 gz=+47.7 deg/s
+IMU #450 ax=-0.05 ay=+0.03 az=-1.09 g |a|=1.09 g  gx=-12.3 gy=+8.2 gz=-0.6 deg/s
+IMU #451 ax=-0.06 ay=+0.04 az=-1.06 g |a|=1.06 g  gx=+9.3 gy=-0.8 gz=-1.2 deg/s
+IMU #452 ax=+0.07 ay=+0.02 az=-0.97 g |a|=0.97 g  gx=+25.1 gy=-3.6 gz=-13.0 deg/s
+IMU #453 ax=+0.02 ay=+0.03 az=-0.96 g |a|=0.96 g  gx=-1.6 gy=+1.7 gz=+0.2 deg/s
+IMU #454 ax=+0.01 ay=+0.03 az=-0.96 g |a|=0.96 g  gx=-3.3 gy=+1.9 gz=+0.8 deg/s
+IMU #455 ax=+0.02 ay=+0.04 az=-0.97 g |a|=0.97 g  gx=-10.3 gy=+2.7 gz=+2.1 deg/s
+IMU #456 ax=+0.02 ay=+0.06 az=-0.97 g |a|=0.97 g  gx=-7.4 gy=+3.5 gz=+1.8 deg/s
+IMU #457 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.98 g  gx=-10.8 gy=+4.8 gz=+0.6 deg/s
+IMU #458 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=-2.0 gy=+1.9 gz=-0.0 deg/s
+IMU #459 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-3.3 gy=+2.4 gz=-0.4 deg/s
+IMU #460 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.1 gy=+2.3 gz=+0.4 deg/s
+IMU #461 ax=+0.03 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=-8.6 gy=+3.3 gz=-0.0 deg/s
+IMU #462 ax=+0.04 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=+0.3 gy=+1.1 gz=+0.5 deg/s
+IMU #463 ax=+0.03 ay=+0.13 az=-0.97 g |a|=0.98 g  gx=-7.1 gy=+2.7 gz=-0.1 deg/s
+IMU #464 ax=+0.03 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-0.2 gy=+1.3 gz=-0.6 deg/s
+IMU #465 ax=+0.03 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=+1.5 gy=+1.3 gz=-0.1 deg/s
+IMU #466 ax=+0.04 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-1.7 gy=+2.1 gz=-0.3 deg/s
+IMU #467 ax=+0.04 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-1.3 gy=+1.8 gz=-0.5 deg/s
+IMU #468 ax=+0.04 ay=+0.13 az=-0.95 g |a|=0.96 g  gx=-3.3 gy=+2.2 gz=-0.2 deg/s
+IMU #469 ax=+0.04 ay=+0.13 az=-0.97 g |a|=0.98 g  gx=-1.6 gy=+2.0 gz=-0.1 deg/s
+IMU #470 ax=+0.04 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-1.7 gy=+2.0 gz=+0.1 deg/s
+IMU #471 ax=+0.03 ay=+0.13 az=-0.96 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=+0.1 deg/s
+IMU #472 ax=+0.04 ay=+0.12 az=-0.96 g |a|=0.97 g  gx=-1.6 gy=+1.8 gz=-0.3 deg/s
+IMU #473 ax=+0.03 ay=+0.11 az=-0.96 g |a|=0.97 g  gx=+5.0 gy=+0.1 gz=-0.4 deg/s
+IMU #474 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=+1.8 gy=+0.9 gz=-0.1 deg/s
+IMU #475 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-2.8 gy=+2.5 gz=+0.0 deg/s
+IMU #476 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-3.6 gy=+2.4 gz=+0.2 deg/s
+IMU #477 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.97 g  gx=-2.5 gy=+1.9 gz=-0.0 deg/s
+IMU #478 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-0.6 gy=+1.6 gz=-0.0 deg/s
+IMU #479 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=+0.5 gy=+1.3 gz=+0.3 deg/s
+IMU #480 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.97 g  gx=-4.3 gy=+2.7 gz=+0.0 deg/s
+IMU #481 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=+0.0 gy=+1.1 gz=-0.7 deg/s
+IMU #482 ax=+0.02 ay=+0.10 az=-0.96 g |a|=0.96 g  gx=+0.8 gy=+1.3 gz=-0.5 deg/s
+IMU #483 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-1.9 gy=+1.5 gz=+0.6 deg/s
+IMU #484 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-5.4 gy=+3.1 gz=+0.0 deg/s
+IMU #485 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-4.2 gy=+2.7 gz=-0.0 deg/s
+IMU #486 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-3.8 gy=+2.5 gz=-0.0 deg/s
+IMU #487 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.6 gy=+2.4 gz=-0.2 deg/s
+IMU #488 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.8 gy=+2.6 gz=-0.2 deg/s
+IMU #489 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.98 g  gx=-3.1 gy=+2.0 gz=-0.1 deg/s
+IMU #490 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-3.1 gy=+2.4 gz=+0.1 deg/s
+IMU #491 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-3.1 gy=+2.2 gz=-0.0 deg/s
+IMU #492 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.96 g  gx=-2.4 gy=+2.1 gz=+0.1 deg/s
+IMU #493 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.7 gy=+2.3 gz=+0.0 deg/s
+IMU #494 ax=+0.02 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-3.8 gy=+2.3 gz=+0.1 deg/s
+IMU #495 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-1.5 gy=+1.8 gz=+0.2 deg/s
+IMU #496 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.96 g  gx=+0.1 gy=+1.4 gz=+0.1 deg/s
+IMU #497 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.3 deg/s
+IMU #498 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.6 gy=+2.4 gz=-0.2 deg/s
+IMU #499 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-4.1 gy=+2.6 gz=+0.7 deg/s
+IMU #500 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-4.2 gy=+2.7 gz=+0.1 deg/s
+IMU #501 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+2.1 gz=+0.5 deg/s
+IMU #502 ax=+0.03 ay=+0.10 az=-0.95 g |a|=0.96 g  gx=-1.8 gy=+1.7 gz=+0.0 deg/s
+IMU #503 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-1.5 gy=+1.9 gz=-0.0 deg/s
+IMU #504 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.6 gy=+1.9 gz=-0.0 deg/s
+IMU #505 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-5.3 gy=+2.9 gz=+0.5 deg/s
+IMU #506 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-3.4 gy=+2.3 gz=+0.0 deg/s
+IMU #507 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-0.6 gy=+2.2 gz=-0.4 deg/s
+IMU #508 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-3.1 gy=+2.3 gz=-0.1 deg/s
+IMU #509 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.3 gy=+2.2 gz=+0.1 deg/s
+IMU #510 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=+0.7 gy=+1.5 gz=+0.1 deg/s
+IMU #511 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-1.8 gy=+2.1 gz=+0.4 deg/s
+IMU #512 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.7 gy=+2.1 gz=+0.0 deg/s
+IMU #513 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.96 g  gx=-2.8 gy=+2.6 gz=-0.1 deg/s
+IMU #514 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.98 g  gx=-2.3 gy=+2.0 gz=+0.1 deg/s
+IMU #515 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=+0.0 deg/s
+IMU #516 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.96 g  gx=-0.2 gy=+1.4 gz=-0.1 deg/s
+IMU #517 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.2 gy=+1.8 gz=-0.2 deg/s
+IMU #518 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.2 gy=+2.1 gz=-0.1 deg/s
+IMU #519 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-2.9 gy=+2.1 gz=-0.2 deg/s
+IMU #520 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-4.0 gy=+2.9 gz=+0.1 deg/s
+IMU #521 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-1.7 gy=+2.1 gz=-0.0 deg/s
+IMU #522 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-3.1 gy=+2.4 gz=-0.2 deg/s
+IMU #523 ax=+0.02 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-3.6 gy=+2.5 gz=+0.1 deg/s
+IMU #524 ax=+0.02 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-3.5 gy=+2.4 gz=-0.2 deg/s
+IMU #525 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=-2.8 gy=+2.1 gz=+0.1 deg/s
+IMU #526 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+1.9 gz=-0.1 deg/s
+IMU #527 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-1.8 gy=+2.1 gz=-0.2 deg/s
+IMU #528 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=+0.0 deg/s
+IMU #529 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.7 gy=+2.2 gz=-0.4 deg/s
+IMU #530 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=-0.1 deg/s
+IMU #531 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-4.0 gy=+2.4 gz=-0.0 deg/s
+IMU #532 ax=+0.03 ay=+0.09 az=-0.93 g |a|=0.94 g  gx=-3.8 gy=+1.9 gz=-0.1 deg/s
+IMU #533 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-3.5 gy=+2.3 gz=+0.0 deg/s
+IMU #534 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.4 gy=+2.1 gz=-0.4 deg/s
+IMU #535 ax=+0.03 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-2.1 gy=+2.5 gz=-0.1 deg/s
+IMU #536 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.96 g  gx=-0.7 gy=+1.8 gz=-0.9 deg/s
+IMU #537 ax=+0.02 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-3.4 gy=+0.4 gz=-0.8 deg/s
+IMU #538 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=-2.8 gy=+1.2 gz=+0.1 deg/s
+IMU #539 ax=+0.02 ay=+0.10 az=-0.98 g |a|=0.98 g  gx=-1.4 gy=+2.4 gz=+0.0 deg/s
+IMU #540 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.97 g  gx=-1.6 gy=+1.8 gz=+0.1 deg/s
+IMU #541 ax=+0.02 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-1.9 gy=+1.8 gz=-0.0 deg/s
+IMU #542 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.96 g  gx=-1.2 gy=+1.5 gz=-0.3 deg/s
+IMU #543 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+1.9 gz=-0.1 deg/s
+IMU #544 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=+0.2 deg/s
+IMU #545 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.1 gy=+1.9 gz=+0.1 deg/s
+IMU #546 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.4 gy=+1.9 gz=-0.1 deg/s
+IMU #547 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.98 g  gx=-1.8 gy=+2.2 gz=-0.1 deg/s
+IMU #548 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-1.7 gy=+2.1 gz=-0.1 deg/s
+IMU #549 ax=+0.02 ay=+0.09 az=-0.95 g |a|=0.96 g  gx=-2.3 gy=+2.2 gz=+0.2 deg/s
+IMU #550 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-3.1 gy=+2.3 gz=-0.1 deg/s
+IMU #551 ax=+0.02 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=-2.5 gy=+2.1 gz=+0.1 deg/s
+IMU #552 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-2.8 gy=+2.1 gz=+0.1 deg/s
+IMU #553 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.98 g  gx=-2.3 gy=+1.9 gz=-0.1 deg/s
+IMU #554 ax=+0.03 ay=+0.10 az=-0.97 g |a|=0.97 g  gx=-1.6 gy=+2.0 gz=-0.1 deg/s
+IMU #555 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-1.8 gy=+1.8 gz=-0.1 deg/s
+IMU #556 ax=+0.03 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-2.2 gy=+2.2 gz=-0.1 deg/s
+IMU #557 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-1.0 gy=+1.9 gz=-0.1 deg/s
+IMU #558 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-1.1 gy=+1.7 gz=+0.1 deg/s
+IMU #559 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.8 gy=+2.1 gz=+0.1 deg/s
+IMU #560 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.9 gy=+2.1 gz=-0.4 deg/s
+IMU #561 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-0.3 gy=+1.6 gz=-0.0 deg/s
+IMU #562 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-0.7 gy=+1.7 gz=-0.3 deg/s
+IMU #563 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-3.2 gy=+2.0 gz=-0.1 deg/s
+IMU #564 ax=+0.03 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.9 gy=+2.5 gz=+0.2 deg/s
+IMU #565 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.96 g  gx=-2.3 gy=+2.0 gz=-0.4 deg/s
+IMU #566 ax=+0.03 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-2.7 gy=+2.0 gz=+0.2 deg/s
+IMU #567 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+2.3 gz=-0.1 deg/s
+IMU #568 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-4.1 gy=+2.5 gz=+0.0 deg/s
+IMU #569 ax=+0.02 ay=+0.09 az=-0.97 g |a|=0.97 g  gx=-0.2 gy=+1.5 gz=-0.3 deg/s
+IMU #570 ax=+0.02 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-0.6 gy=+1.7 gz=-0.1 deg/s
+IMU #571 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-2.5 gy=+2.1 gz=-0.2 deg/s
+IMU #572 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-1.3 gy=+1.6 gz=-0.1 deg/s
+IMU #573 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-2.1 gy=+1.8 gz=+0.1 deg/s
+IMU #574 ax=+0.03 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-2.3 gy=+1.9 gz=-0.2 deg/s
+IMU #575 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-3.2 gy=+2.2 gz=-0.1 deg/s
+IMU #576 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-3.3 gy=+2.2 gz=+0.1 deg/s
+IMU #577 ax=+0.02 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-3.1 gy=+2.0 gz=-0.2 deg/s
+IMU #578 ax=+0.02 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-2.3 gy=+2.0 gz=+0.0 deg/s
+IMU #579 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.98 g  gx=-1.4 gy=+1.9 gz=+0.2 deg/s
+IMU #580 ax=+0.02 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-3.9 gy=+2.6 gz=-0.1 deg/s
+IMU #581 ax=+0.02 ay=+0.08 az=-0.97 g |a|=0.97 g  gx=-3.4 gy=+2.5 gz=-0.0 deg/s
+IMU #582 ax=+0.02 ay=+0.08 az=-0.96 g |a|=0.97 g  gx=-0.8 gy=+1.7 gz=-0.2 deg/s
+IMU #583 ax=+0.03 ay=+0.05 az=-1.02 g |a|=1.02 g  gx=+1.5 gy=+1.5 gz=+0.9 deg/s
+IMU #584 ax=-0.02 ay=+0.06 az=-0.97 g |a|=0.97 g  gx=-2.8 gy=+3.0 gz=+1.5 deg/s
+IMU #585 ax=+0.02 ay=+0.06 az=-0.96 g |a|=0.96 g  gx=-1.9 gy=+2.0 gz=+1.2 deg/s
+IMU #586 ax=+0.01 ay=+0.07 az=-0.96 g |a|=0.97 g  gx=+1.8 gy=-0.2 gz=+0.8 deg/s
+IMU #587 ax=+0.02 ay=+0.05 az=-0.98 g |a|=0.98 g  gx=-2.7 gy=+1.4 gz=+1.2 deg/s
+IMU #588 ax=+0.03 ay=+0.07 az=-0.98 g |a|=0.98 g  gx=-6.6 gy=+2.0 gz=+1.5 deg/s
+IMU #589 ax=-0.03 ay=+0.06 az=-0.98 g |a|=0.98 g  gx=+3.4 gy=+0.1 gz=+0.5 deg/s
+IMU #590 ax=+0.03 ay=+0.08 az=-1.08 g |a|=1.09 g  gx=-4.3 gy=+1.8 gz=+0.9 deg/s
+IMU #591 ax=+0.01 ay=+0.06 az=-0.98 g |a|=0.98 g  gx=-3.1 gy=+1.4 gz=-0.2 deg/s
+IMU #592 ax=+0.02 ay=+0.04 az=-0.97 g |a|=0.97 g  gx=-10.7 gy=+2.9 gz=+0.5 deg/s
+IMU #593 ax=+0.02 ay=+0.00 az=-0.94 g |a|=0.94 g  gx=-4.0 gy=+2.6 gz=+16.7 deg/s
+IMU #594 ax=+0.02 ay=+0.05 az=-0.96 g |a|=0.96 g  gx=-9.3 gy=+3.8 gz=+6.3 deg/s
+IMU #595 ax=-0.05 ay=+0.09 az=-0.95 g |a|=0.96 g  gx=-5.9 gy=+1.9 gz=+0.9 deg/s
+IMU #596 ax=-0.00 ay=+0.06 az=-0.96 g |a|=0.96 g  gx=+6.3 gy=-0.3 gz=+1.1 deg/s
+IMU #597 ax=+0.00 ay=+0.01 az=-0.95 g |a|=0.95 g  gx=-4.1 gy=+4.2 gz=-2.2 deg/s
+IMU #598 ax=+0.00 ay=+0.04 az=-0.97 g |a|=0.97 g  gx=-3.9 gy=-0.6 gz=-1.6 deg/s
+IMU #599 ax=-0.01 ay=+0.04 az=-0.96 g |a|=0.96 g  gx=-3.0 gy=-0.1 gz=-0.7 deg/s
+IMU #600 ax=-0.01 ay=+0.04 az=-0.96 g |a|=0.96 g  gx=-3.7 gy=+0.5 gz=-0.7 deg/s
+IMU #601 ax=+0.03 ay=+0.06 az=-0.97 g |a|=0.98 g  gx=-1.7 gy=-2.0 gz=+5.2 deg/s
+IMU #602 ax=-0.08 ay=-0.01 az=-0.97 g |a|=0.97 g  gx=-0.8 gy=-0.4 gz=-2.1 deg/s
+--- ERROR: read failed: [Errno 6] Device not configured
+--- Waiting for the device to reconnect...............
+
+IMU BEGIN MPU6050 test (ESP-IDF build): SDA=GPIO5 SCL=GPIO6 I2C port 1, +-2 g, +-250 deg/s
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 53.8 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 45.3 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 75.8 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 72.0 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 41.5 deg/s > 2.0). Keep it still
+IMU WARN calibration skipped after 5 attempts (sensor kept moving): gyro values are uncorrected
+IMU DETECTED
+IMU reading every 200 ms
+IMU #1 ax=-0.09 ay=+0.09 az=-0.96 g |a|=0.97 g  gx=-0.3 gy=-12.8 gz=-15.9 deg/s
+IMU #2 ax=-0.13 ay=+0.09 az=-0.99 g |a|=1.00 g  gx=-4.0 gy=+2.7 gz=-2.0 deg/s
+IMU #3 ax=-0.10 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=+1.5 gy=+8.5 gz=-3.3 deg/s
+IMU #4 ax=-0.10 ay=+0.07 az=-0.96 g |a|=0.97 g  gx=-2.7 gy=+4.5 gz=+1.3 deg/s
+IMU #5 ax=-0.11 ay=+0.09 az=-0.93 g |a|=0.94 g  gx=+4.6 gy=+0.6 gz=-6.9 deg/s
+IMU #6 ax=-0.10 ay=+0.10 az=-0.96 g |a|=0.97 g  gx=-0.2 gy=+0.1 gz=-1.1 deg/s
+IMU #7 ax=-0.04 ay=+0.08 az=-1.00 g |a|=1.01 g  gx=-15.4 gy=+1.7 gz=+1.7 deg/s
+IMU #8 ax=-0.10 ay=+0.12 az=-0.97 g |a|=0.98 g  gx=-5.9 gy=+16.0 gz=+9.7 deg/s
+IMU #9 ax=-0.04 ay=+0.12 az=-0.95 g |a|=0.96 g  gx=-15.2 gy=+2.1 gz=+5.7 deg/s
+IMU #10 ax=-0.13 ay=+0.10 az=-0.93 g |a|=0.95 g  gx=-13.5 gy=-0.0 gz=+8.7 deg/s
+IMU #11 ax=-0.05 ay=+0.21 az=-0.96 g |a|=0.99 g  gx=-1.4 gy=+6.3 gz=+11.5 deg/s
+IMU #12 ax=+0.10 ay=+0.31 az=-0.86 g |a|=0.92 g  gx=-0.9 gy=-1.3 gz=+0.9 deg/s
+IMU #13 ax=-0.12 ay=+0.20 az=-0.94 g |a|=0.97 g  gx=+0.2 gy=+1.4 gz=+0.4 deg/s
+IMU #14 ax=-0.12 ay=+0.19 az=-0.94 g |a|=0.97 g  gx=-4.6 gy=+2.9 gz=+0.2 deg/s
+IMU #15 ax=-0.12 ay=+0.19 az=-0.94 g |a|=0.97 g  gx=-3.6 gy=+2.6 gz=-0.0 deg/s
+IMU #16 ax=-0.12 ay=+0.19 az=-0.94 g |a|=0.97 g  gx=-3.6 gy=+2.0 gz=+0.8 deg/s
+IMU #17 ax=-0.11 ay=+0.20 az=-0.95 g |a|=0.97 g  gx=-5.6 gy=+1.7 gz=+3.3 deg/s
+IMU #18 ax=-0.11 ay=+0.19 az=-0.94 g |a|=0.96 g  gx=+0.1 gy=+1.6 gz=-2.8 deg/s
+IMU #19 ax=-0.11 ay=+0.19 az=-0.95 g |a|=0.97 g  gx=-6.4 gy=+2.6 gz=+6.4 deg/s
+IMU #20 ax=-0.13 ay=+0.13 az=-0.94 g |a|=0.96 g  gx=+4.0 gy=+3.2 gz=-12.3 deg/s
+IMU #21 ax=-0.12 ay=+0.20 az=-0.91 g |a|=0.94 g  gx=+6.4 gy=+1.6 gz=-0.0 deg/s
+IMU #22 ax=-0.12 ay=+0.18 az=-0.94 g |a|=0.96 g  gx=-4.5 gy=+0.9 gz=-0.1 deg/s
+IMU #23 ax=-0.13 ay=+0.17 az=-0.95 g |a|=0.97 g  gx=+2.0 gy=+1.2 gz=-0.5 deg/s
+IMU #24 ax=-0.13 ay=+0.17 az=-0.96 g |a|=0.98 g  gx=-15.6 gy=+5.8 gz=+12.8 deg/s
+IMU #25 ax=-0.13 ay=+0.19 az=-0.96 g |a|=0.98 g  gx=-5.5 gy=+3.0 gz=+0.7 deg/s
+IMU #26 ax=-0.11 ay=+0.21 az=-0.91 g |a|=0.94 g  gx=+0.3 gy=+2.2 gz=+21.3 deg/s
+IMU #27 ax=-0.11 ay=+0.23 az=-0.87 g |a|=0.91 g  gx=+2.1 gy=+3.3 gz=+2.4 deg/s
+IMU #28 ax=-0.12 ay=+0.21 az=-0.90 g |a|=0.93 g  gx=-18.2 gy=+7.0 gz=+1.4 deg/s
+IMU #29 ax=-0.11 ay=+0.20 az=-0.94 g |a|=0.97 g  gx=+0.2 gy=+1.8 gz=-1.1 deg/s
+IMU #30 ax=-0.12 ay=+0.21 az=-0.93 g |a|=0.96 g  gx=-4.2 gy=+2.1 gz=-0.1 deg/s
+IMU #31 ax=-0.20 ay=+0.16 az=-0.97 g |a|=1.01 g  gx=-11.2 gy=-10.4 gz=+8.8 deg/s
+IMU #32 ax=-0.11 ay=+0.20 az=-0.85 g |a|=0.88 g  gx=+12.2 gy=-1.6 gz=+0.3 deg/s
+IMU #33 ax=-0.10 ay=+0.22 az=-0.93 g |a|=0.96 g  gx=-6.4 gy=+0.1 gz=+7.0 deg/s
+IMU #34 ax=-0.21 ay=+0.20 az=-0.94 g |a|=0.98 g  gx=-1.4 gy=-6.2 gz=+74.4 deg/s
+IMU #35 ax=-0.10 ay=+0.23 az=-0.92 g |a|=0.96 g  gx=-2.1 gy=+3.8 gz=-0.3 deg/s
+IMU #36 ax=-0.11 ay=+0.21 az=-0.92 g |a|=0.95 g  gx=-11.1 gy=+3.6 gz=+0.3 deg/s
+IMU #37 ax=-0.09 ay=+0.17 az=-0.71 g |a|=0.74 g  gx=-1.0 gy=-2.6 gz=+3.4 deg/s
+IMU #38 ax=-0.09 ay=+0.21 az=-0.94 g |a|=0.97 g  gx=-5.2 gy=-1.4 gz=+9.7 deg/s
+IMU #39 ax=-0.10 ay=+0.23 az=-0.92 g |a|=0.95 g  gx=+2.9 gy=+1.4 gz=+0.0 deg/s
+IMU #40 ax=-0.12 ay=+0.23 az=-0.92 g |a|=0.95 g  gx=+8.1 gy=+1.1 gz=+1.1 deg/s
+IMU #41 ax=-0.13 ay=+0.19 az=-0.94 g |a|=0.96 g  gx=+0.9 gy=+1.4 gz=+1.1 deg/s
+IMU #42 ax=-0.12 ay=+0.20 az=-0.94 g |a|=0.97 g  gx=+3.6 gy=-0.4 gz=-0.4 deg/s
+IMU #43 ax=-0.11 ay=+0.19 az=-0.96 g |a|=0.99 g  gx=-5.4 gy=+2.8 gz=-0.1 deg/s
+IMU #44 ax=-0.12 ay=+0.17 az=-0.87 g |a|=0.89 g  gx=-17.1 gy=-6.4 gz=+6.3 deg/s
+IMU #45 ax=-0.16 ay=+0.17 az=-0.85 g |a|=0.88 g  gx=+9.2 gy=+0.6 gz=-0.6 deg/s
+IMU #46 ax=-0.06 ay=+0.23 az=-0.94 g |a|=0.97 g  gx=-10.2 gy=+3.4 gz=-1.6 deg/s
+IMU #47 ax=-0.11 ay=+0.19 az=-0.94 g |a|=0.96 g  gx=-19.2 gy=+0.3 gz=+4.7 deg/s
+IMU #48 ax=-0.13 ay=+0.19 az=-0.95 g |a|=0.98 g  gx=+12.6 gy=-0.4 gz=-15.5 deg/s
+IMU #49 ax=-0.13 ay=+0.18 az=-0.95 g |a|=0.98 g  gx=-3.7 gy=+2.0 gz=-0.1 deg/s
+IMU #50 ax=-0.14 ay=+0.17 az=-0.93 g |a|=0.96 g  gx=+2.2 gy=+1.5 gz=+2.4 deg/s
+IMU #51 ax=-0.10 ay=+0.22 az=-0.89 g |a|=0.92 g  gx=+10.1 gy=-1.4 gz=-1.5 deg/s
+IMU #52 ax=-0.12 ay=+0.19 az=-0.99 g |a|=1.01 g  gx=-17.8 gy=+6.0 gz=-1.8 deg/s
+IMU #53 ax=-0.14 ay=+0.17 az=-0.97 g |a|=1.00 g  gx=-5.7 gy=+1.5 gz=-0.0 deg/s
+IMU #54 ax=-0.13 ay=+0.17 az=-0.98 g |a|=1.00 g  gx=-1.3 gy=+2.4 gz=-1.7 deg/s
+IMU #55 ax=-0.12 ay=+0.18 az=-0.94 g |a|=0.97 g  gx=-4.4 gy=+2.8 gz=-0.3 deg/s
+IMU #56 ax=-0.12 ay=+0.18 az=-0.94 g |a|=0.96 g  gx=-6.4 gy=+3.7 gz=-0.2 deg/s
+IMU #57 ax=-0.13 ay=+0.17 az=-0.93 g |a|=0.95 g  gx=-7.0 gy=+3.5 gz=+1.1 deg/s
+IMU #58 ax=-0.14 ay=+0.16 az=-0.92 g |a|=0.94 g  gx=-7.5 gy=+3.9 gz=+0.6 deg/s
+IMU #59 ax=-0.14 ay=+0.17 az=-0.93 g |a|=0.96 g  gx=+3.0 gy=+0.6 gz=+6.4 deg/s
+IMU #60 ax=-0.10 ay=+0.13 az=-0.97 g |a|=0.98 g  gx=-9.7 gy=+35.6 gz=+19.7 deg/s
+IMU #61 ax=-0.25 ay=+0.05 az=-0.88 g |a|=0.92 g  gx=+8.0 gy=-9.1 gz=-11.0 deg/s
+IMU #62 ax=+0.33 ay=+0.17 az=-1.19 g |a|=1.25 g  gx=+56.7 gy=-39.0 gz=-22.9 deg/s
+IMU #63 ax=-0.04 ay=+0.11 az=-0.97 g |a|=0.98 g  gx=-22.5 gy=+17.2 gz=-6.1 deg/s
+IMU #64 ax=-0.03 ay=+0.09 az=-0.95 g |a|=0.96 g  gx=+13.7 gy=+25.3 gz=-9.7 deg/s
+IMU #65 ax=-0.13 ay=+0.12 az=-0.90 g |a|=0.92 g  gx=+7.6 gy=-2.6 gz=+8.0 deg/s
+IMU #66 ax=-0.09 ay=+0.14 az=-0.96 g |a|=0.97 g  gx=-16.4 gy=-25.6 gz=+5.7 deg/s
+IMU #67 ax=-0.10 ay=+0.15 az=-0.97 g |a|=0.99 g  gx=-8.8 gy=+10.0 gz=+8.8 deg/s
+IMU #68 ax=-0.13 ay=+0.16 az=-0.96 g |a|=0.98 g  gx=+3.2 gy=+6.7 gz=+5.0 deg/s
+IMU #69 ax=-0.13 ay=+0.13 az=-0.97 g |a|=0.99 g  gx=-3.4 gy=+10.0 gz=+11.0 deg/s
+IMU #70 ax=-0.09 ay=+0.14 az=-0.91 g |a|=0.93 g  gx=-9.3 gy=+1.6 gz=+3.0 deg/s
+IMU #71 ax=-0.10 ay=+0.15 az=-0.94 g |a|=0.96 g  gx=-7.4 gy=+4.7 gz=+5.6 deg/s
+IMU #72 ax=-0.11 ay=+0.15 az=-0.96 g |a|=0.97 g  gx=-2.9 gy=+10.3 gz=+11.9 deg/s
+IMU #73 ax=-0.08 ay=+0.15 az=-0.97 g |a|=0.98 g  gx=-1.5 gy=+3.9 gz=+3.4 deg/s
+IMU #74 ax=-0.08 ay=+0.15 az=-1.01 g |a|=1.02 g  gx=+3.8 gy=-2.9 gz=-11.3 deg/s
+IMU #75 ax=-0.08 ay=+0.14 az=-0.94 g |a|=0.96 g  gx=-5.1 gy=-0.9 gz=-3.2 deg/s
+IMU #76 ax=-0.08 ay=+0.14 az=-0.96 g |a|=0.97 g  gx=+3.4 gy=+2.9 gz=-2.7 deg/s
+IMU #77 ax=-0.09 ay=+0.14 az=-0.97 g |a|=0.98 g  gx=-8.1 gy=+0.4 gz=+5.9 deg/s
+IMU #78 ax=-0.09 ay=+0.15 az=-0.97 g |a|=0.98 g  gx=-8.0 gy=+11.5 gz=+4.3 deg/s
+IMU #79 ax=-0.10 ay=+0.16 az=-0.96 g |a|=0.98 g  gx=-8.2 gy=-6.5 gz=-0.2 deg/s
+IMU #80 ax=-0.12 ay=+0.18 az=-0.95 g |a|=0.97 g  gx=-8.8 gy=-7.0 gz=+0.1 deg/s
+IMU #81 ax=+0.00 ay=+0.13 az=-0.95 g |a|=0.96 g  gx=-3.2 gy=+1.4 gz=-7.0 deg/s
+IMU #82 ax=+0.03 ay=+0.03 az=-0.96 g |a|=0.96 g  gx=+26.2 gy=-3.9 gz=+4.7 deg/s
+IMU #83 ax=-0.13 ay=+0.16 az=-0.93 g |a|=0.96 g  gx=+4.9 gy=+1.9 gz=-1.4 deg/s
+IMU #84 ax=-0.14 ay=+0.14 az=-0.96 g |a|=0.98 g  gx=+0.8 gy=+2.0 gz=-0.3 deg/s
+IMU #85 ax=-0.14 ay=+0.14 az=-0.95 g |a|=0.97 g  gx=-2.2 gy=+2.0 gz=-0.0 deg/s
+IMU #86 ax=-0.14 ay=+0.14 az=-0.95 g |a|=0.97 g  gx=-3.1 gy=+2.2 gz=-0.1 deg/s
+IMU #87 ax=-0.14 ay=+0.14 az=-0.93 g |a|=0.95 g  gx=-4.7 gy=+2.3 gz=-0.2 deg/s
+IMU #88 ax=-0.14 ay=+0.14 az=-0.96 g |a|=0.98 g  gx=-0.7 gy=+2.0 gz=-0.1 deg/s
+IMU #89 ax=-0.14 ay=+0.15 az=-0.96 g |a|=0.98 g  gx=-1.4 gy=+2.2 gz=-0.3 deg/s
+IMU #90 ax=-0.14 ay=+0.15 az=-0.96 g |a|=0.98 g  gx=-1.2 gy=+2.1 gz=-0.3 deg/s
+IMU #91 ax=-0.14 ay=+0.15 az=-0.95 g |a|=0.97 g  gx=-2.7 gy=+2.1 gz=+0.2 deg/s
+IMU #92 ax=-0.14 ay=+0.14 az=-0.95 g |a|=0.97 g  gx=-3.3 gy=+2.3 gz=-0.1 deg/s
+IMU #93 ax=-0.13 ay=+0.15 az=-0.95 g |a|=0.97 g  gx=-0.9 gy=+1.9 gz=-0.4 deg/s
+IMU #94 ax=-0.14 ay=+0.15 az=-0.95 g |a|=0.97 g  gx=-3.2 gy=+2.2 gz=+0.8 deg/s
+IMU #95 ax=-0.13 ay=+0.15 az=-0.94 g |a|=0.96 g  gx=-2.2 gy=+5.0 gz=+3.3 deg/s
+IMU #96 ax=-0.13 ay=+0.14 az=-0.97 g |a|=0.99 g  gx=+1.0 gy=+0.7 gz=-2.1 deg/s
+IMU #97 ax=-0.13 ay=+0.15 az=-0.95 g |a|=0.97 g  gx=-3.0 gy=+3.5 gz=+1.2 deg/s
+IMU #98 ax=-0.12 ay=+0.15 az=-0.94 g |a|=0.96 g  gx=-1.8 gy=+0.6 gz=-0.7 deg/s
+IMU #99 ax=-0.12 ay=+0.15 az=-0.94 g |a|=0.96 g  gx=-1.6 gy=+0.2 gz=-1.9 deg/s
+IMU #100 ax=-0.13 ay=+0.15 az=-0.96 g |a|=0.98 g  gx=+0.1 gy=+2.1 gz=-1.4 deg/s
+IMU #101 ax=-0.12 ay=+0.14 az=-0.94 g |a|=0.96 g  gx=-4.3 gy=-3.7 gz=-0.3 deg/s
+IMU #102 ax=-0.13 ay=+0.

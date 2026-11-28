@@ -1,0 +1,22 @@
+menu "ICVSP BLE test (T-016)"
+
+config ICVSP_BLE_DEVICE_NAME
+    string "Advertised name"
+    default "ICVSP-001"
+
+config ICVSP_BLE_RETRY_MS
+    int "Milliseconds without ACK before the report is sent again"
+    default 2000
+    range 500 30000
+
+config ICVSP_BLE_MAX_ATTEMPTS
+    int "Attempts per report before it stalls (a late ACK is still accepted)"
+    default 3
+    range 1 10
+
+config ICVSP_BLE_REPORT_GAP_MS
+    int "Milliseconds between an ACK and the next test report"
+    default 10000
+    range 0 600000
+
+endmenu
