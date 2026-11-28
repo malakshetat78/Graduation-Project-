@@ -1,3 +1,5 @@
-# 4_AI_SW
+# 4_AI_SW / doc
 
-Placeholder for the organized project structure. Existing source files remain in their original locations; no code has been moved or modified.
+- [LABELLING_POLICY.md](LABELLING_POLICY.md): how data is labelled and which datasets may be used
+
+Training, models and results: [../code/README.md](../code/README.md).

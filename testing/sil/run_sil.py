@@ -28,7 +28,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "backend_sw"))
+sys.path.insert(0, str(ROOT / "3_WEB_SW" / "code" / "backend_sw"))
 from fastapi.testclient import TestClient  # noqa: E402
 
 from ble_link import BleConfig, BleLink  # noqa: E402

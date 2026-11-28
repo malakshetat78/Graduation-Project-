@@ -162,7 +162,7 @@ fine-tunes v2 on Egyptian frames instead of merging more foreign datasets.
 
 ## Labelling rules
 
-Everyone labelling data, and every decision to use a public dataset, follows [`LABELLING_POLICY.md`](LABELLING_POLICY.md):
+Everyone labelling data, and every decision to use a public dataset, follows [`LABELLING_POLICY.md`](../doc/LABELLING_POLICY.md):
 vehicle-camera view only, hazards big enough to make a driver stop, slow down or swerve, no unboxed hazards in kept
 frames, splits by video.
 

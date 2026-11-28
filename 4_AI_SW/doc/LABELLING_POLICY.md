@@ -104,4 +104,4 @@ with speed bumps only. Decisions so far:
 
 - A second person checks a random 10% of each batch.
 - Every disagreement is settled and, if needed, added to this policy as an example.
-- Use the existing tools: CVAT for boxes, `tools/review.html` for tagging events in video. Export in YOLO format.
+- Use the existing tools: CVAT for boxes, `4_AI_SW/code/tools/review.html` for tagging events in video. Export in YOLO format.

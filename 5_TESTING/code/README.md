@@ -1,3 +1,4 @@
-# 5_TESTING
+# 5_TESTING / code
 
-Placeholder for the organized project structure. Existing source files remain in their original locations; no code has been moved or modified.
+- [`verification/`](verification/): requirements list, requirement → test traceability, golden device reports and
+  the CI check that links every test to a requirement.

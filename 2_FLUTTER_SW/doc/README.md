@@ -1,3 +1,5 @@
-# 2_FLUTTER_SW
+# 2_FLUTTER_SW / doc
 
-Placeholder for the organized project structure. Existing source files remain in their original locations; no code has been moved or modified.
+- [ble-manual-test.md](ble-manual-test.md): manual BLE test steps with the ECU
+
+The app itself and how to build it: [../code/README.md](../code/README.md).

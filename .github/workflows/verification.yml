@@ -38,21 +38,21 @@ jobs:
           path: ~/.platformio
           key: platformio-${{ runner.os }}-${{ hashFiles('xaio_sw/platformio.ini') }}
       - name: Install tools
-        run: pip install platformio coverage -r backend_sw/requirements.txt
+        run: pip install platformio coverage -r 3_WEB_SW/code/backend_sw/requirements.txt
 
       - name: Trust engine tests (unit, integration, system scenarios)
-        working-directory: engine
-        run: coverage run -m unittest -v 2>&1 | tee ../engine.log
+        working-directory: 3_WEB_SW/code/engine
+        run: coverage run -m unittest -v 2>&1 | tee ../../../engine.log
 
       - name: Engine coverage
-        working-directory: engine
+        working-directory: 3_WEB_SW/code/engine
         run: coverage report -m --include="icvsp/*" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Backend API tests (SQLite and Supabase PostgreSQL + PostGIS, RLS, concurrency, restarts)
-        working-directory: backend_sw
+        working-directory: 3_WEB_SW/code/backend_sw
         env:
           ICVSP_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54329/postgres
-        run: python -m unittest -v 2>&1 | tee ../backend.log
+        run: python -m unittest -v 2>&1 | tee ../../../backend.log
 
       - name: ESP-IDF persistent anti-replay tests (native C, reboot and storage failures)
         run: python xaio_sw/espidf_security/tools/run_replay_identity_tests.py | tee replay_identity.log
@@ -70,8 +70,8 @@ jobs:
 
       - name: Requirement traceability
         run: |
-          python testing/verification/check_traceability.py --unittest-log engine=engine.log \
-            --unittest-log backend_sw=backend.log --unittest-log testing/sil=sil.log --firmware-log firmware.log \
+          python 5_TESTING/code/verification/check_traceability.py --unittest-log 3_WEB_SW/code/engine=engine.log \
+            --unittest-log 3_WEB_SW/code/backend_sw=backend.log --unittest-log testing/sil=sil.log --firmware-log firmware.log \
             --integration-log integration.log --out traceability_report.md
           cat traceability_report.md >> "$GITHUB_STEP_SUMMARY"
 
@@ -99,8 +99,8 @@ jobs:
       - name: Python (ruff, pyflakes rules)
         run: |
           pip install ruff
-          ruff check --select F engine backend_sw testing/sil xaio_sw/tools testing/verification
-          ruff check --select E9,F63,F7,F82 ai_sw/scripts
+          ruff check --select F 3_WEB_SW/code/engine 3_WEB_SW/code/backend_sw testing/sil xaio_sw/tools 5_TESTING/code/verification
+          ruff check --select E9,F63,F7,F82 4_AI_SW/code/scripts
       - name: C++ (cppcheck)
         # reported but not yet blocking: switched to blocking once the first report is clean
         continue-on-error: true

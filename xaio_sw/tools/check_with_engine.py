@@ -16,7 +16,7 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 FW = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(FW.parent / 'engine'))
+sys.path.insert(0, str(FW.parent / '3_WEB_SW' / 'code' / 'engine'))
 from icvsp.validation import schema_errors  # noqa: E402
 
 

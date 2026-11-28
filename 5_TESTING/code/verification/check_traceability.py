@@ -7,11 +7,12 @@ list in requirements.csv, and
   3. fails if a test names a requirement ID that is not in requirements.csv,
   4. writes a report: every requirement with its tests and an overall result.
 
-    (cd engine && python3 -m unittest -v 2> ../engine.log)
-    (cd backend_sw && python3 -m unittest -v 2> ../backend.log)
+    (cd 3_WEB_SW/code/engine && python3 -m unittest -v 2> ../../../engine.log)
+    (cd 3_WEB_SW/code/backend_sw && python3 -m unittest -v 2> ../../../backend.log)
     python3 -m unittest testing/sil/test_sil.py -v 2> sil.log
     (cd xaio_sw && pio test -e native -v > ../firmware.log && python3 tools/check_with_engine.py > ../integration.log)
-    python3 testing/verification/check_traceability.py --unittest-log engine=engine.log --unittest-log backend_sw=backend.log \
+    python3 5_TESTING/code/verification/check_traceability.py --unittest-log 3_WEB_SW/code/engine=engine.log \
+        --unittest-log 3_WEB_SW/code/backend_sw=backend.log \
         --unittest-log testing/sil=sil.log --firmware-log firmware.log --integration-log integration.log
 
 Experiments (E-) are long or need private data, and inspections (I-) are done by a person, so they are not
@@ -24,14 +25,14 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]   # repository root
 HERE = Path(__file__).resolve().parent
 
 
 def code_tests() -> set[tuple[str, str]]:
     """(file, test) pairs that exist in the code."""
     found = set()
-    py = [*(ROOT / 'engine/tests').glob('test_*.py'), *(ROOT / 'backend_sw/tests').glob('test_*.py'),
+    py = [*(ROOT / '3_WEB_SW/code/engine/tests').glob('test_*.py'), *(ROOT / '3_WEB_SW/code/backend_sw/tests').glob('test_*.py'),
           *(ROOT / 'testing/sil').glob('test_*.py')]
     for f in sorted(py):
         cls = None

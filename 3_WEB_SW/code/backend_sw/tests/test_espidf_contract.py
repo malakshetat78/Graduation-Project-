@@ -19,7 +19,7 @@ from fastapi.testclient import TestClient
 from icvsp_backend.app import create_app
 from icvsp_backend.store import Store
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[4]   # repository root
 FIRMWARE = ROOT / "xaio_sw" / "espidf_security"
 SRC = FIRMWARE / "main"
 MONO = FIRMWARE / "components" / "monocypher"
