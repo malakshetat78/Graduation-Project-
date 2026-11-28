@@ -38,7 +38,7 @@ same on all three.
 | Phone | the ROVO app (`2_FLUTTER_SW`) over Bluetooth LE: shows the warning and forwards each signed report |
 | Backend | FastAPI on AWS Lambda with the Supabase database (`3_WEB_SW`), over Wi-Fi and HTTPS (optional on the ECU) |
 | Power | USB-C, 5 V (a laptop on the bench, a 5 V USB car adapter in the car) |
-| Toolchain | **ESP-IDF v5.5** (tested with v5.5.5), VS Code with the ESP-IDF extension, Python 3. Windows, macOS or Linux |
+| Toolchain | **ESP-IDF v5.5.6**, VS Code with the ESP-IDF extension, Python 3. Windows, macOS or Linux |
 
 Wiring and pins: [README.md, section 4](README.md#4-wiring). Every pin is defined only in `main/board_pins.h`.
 
@@ -68,7 +68,8 @@ test        = sdkconfig.defaults + sdkconfig.<part>
 - `sdkconfig.local` is your own Wi-Fi name, password and backend URL. It is git-ignored and optional: without it the
   ECU sends reports to the phone only.
 
-**Status, said plainly:** each test firmware has been run on the physical board (results in `5_TESTING/doc`).
+**Status, said plainly:** the camera, IMU, GNSS and BLE test firmware have been run on the physical board
+(results in `5_TESTING/doc`). The `report` firmware was tested on the ESP32-S3 emulator against the live backend.
 The production firmware builds with 0 warnings and was code-reviewed, but it **has not yet run on the board**. Its
 test cases are in [5_TESTING/doc/ecu_all_in_one](../../5_TESTING/doc/ecu_all_in_one/ECU-all-in-one-test-cases.md).
 It should not go in a car until TC-ECU-01 to TC-ECU-10 pass.
@@ -76,9 +77,9 @@ It should not go in a car until TC-ECU-01 to TC-ECU-10 pass.
 ## 3. First time: install and clone (once per computer)
 
 1. Install **VS Code**, then the **ESP-IDF** extension by Espressif Systems (Extensions, search "ESP-IDF").
-2. The extension opens the **ESP-IDF Installation Manager (EIM)**. Install **v5.5**. Do not install 6.x: this
-   project does not build with it. If 6.x is already installed, add v5.5 next to it.
-3. In VS Code open the command palette (`Ctrl+Shift+P`, macOS `Cmd+Shift+P`) > **ESP-IDF: Select Current ESP-IDF Version** > **v5.5**.
+2. The extension opens the **ESP-IDF Installation Manager (EIM)**. Install **v5.5.6**. Do not install 6.x: this
+   project does not build with it. If 6.x is already installed, add v5.5.6 next to it.
+3. In VS Code open the command palette (`Ctrl+Shift+P`, macOS `Cmd+Shift+P`) > **ESP-IDF: Select Current ESP-IDF Version** > **v5.5.6**.
 4. Clone and open the firmware folder:
    ```bash
    git clone https://github.com/malakshetat78/Rovo.git
@@ -99,6 +100,9 @@ The first build takes a few minutes, because it downloads the camera driver and 
 seconds. The output ends with the **memory table** and `Project build complete`. The firmware file is
 `build_prod/icvsp_ecu.bin`.
 
+If you built before 28 November 2026 (when the app space grew from 1.5 MB to 3 MB), clear the old build folder once:
+`python build.py prod fullclean`, then build again. Otherwise the old build folder keeps the old 1.5 MB layout.
+
 From VS Code instead: command palette > **ESP-IDF: Select Project Configuration** > "PRODUCTION: ...", then click
 the **Build** (wrench) icon in the bottom bar.
 
@@ -116,7 +120,7 @@ What gets written:
 | Address | File | What |
 |---|---|---|
 | `0x0` | `bootloader/bootloader.bin` | ESP-IDF bootloader |
-| `0x8000` | `partition_table/partition-table.bin` | partition table: `nvs` 24 KB at `0x9000`, `phy_init` at `0xf000`, app 1.5 MB at `0x10000` |
+| `0x8000` | `partition_table/partition-table.bin` | partition table: `nvs` 24 KB at `0x9000`, `phy_init` at `0xf000`, app 3 MB at `0x10000` (from `partitions.csv`) |
 | `0x10000` | `icvsp_ecu.bin` | the firmware |
 
 Flashing does **not** touch `nvs`. That area holds the ECU's signing key, the IMU calibration and the BLE counter,
@@ -135,7 +139,7 @@ python build.py prod monitor -p <PORT>          # Ctrl+] to leave
 The ECU starts by itself about 2 seconds after it gets power. Nothing has to be pressed. What it prints:
 
 ```
-ECU BEGIN all-in-one firmware <version> (production build), ESP-IDF v5.5.5: IMU + GNSS + camera + BLE ...
+ECU BEGIN all-in-one firmware <version> (production build), ESP-IDF v5.5.6: IMU + GNSS + camera + BLE ...
 ECU device=ecu-<MAC> boot_id=<n> key=loaded public_key=<64 hex>
 IMU DETECTED: MPU6050 at 0x68, ... 100 Hz, ... calibration loaded
 GNSS UART1 ready ...

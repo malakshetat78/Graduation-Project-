@@ -4,7 +4,7 @@ One firmware where every part of the ECU runs at the same time: IMU, GNSS, camer
 up, Wi-Fi to the backend. It is the **production** build (`python build.py prod`; in VS Code "PRODUCTION: ..."), and the **development** build (`python build.py dev`) is the same firmware with debug checks. See [BUILD_AND_FLASH.md](BUILD_AND_FLASH.md).
 Main file: `1_XAIO_SW/code/main/ecu_main.cpp`.
 
-**Status:** builds with ESP-IDF v5.5.5 with 0 warnings and was reviewed twice (Codex). It has **not been run on
+**Status:** builds with ESP-IDF v5.5.6 with 0 warnings and was reviewed twice (Codex). It has **not been run on
 the board yet**. Each part was tested alone (T-010, T-012, T-014, T-016); running them together is what the
 test cases in [5_TESTING/doc/ecu_all_in_one](../../5_TESTING/doc/ecu_all_in_one/ECU-all-in-one-test-cases.md)
 must show.

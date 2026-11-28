@@ -41,8 +41,14 @@ def idf_command(name: str, preset: dict, actions: list[str], compile_check: bool
         else:
             print(f"note: no {LOCAL}, so this build has no Wi-Fi: reports go to the phone only")
             layers.remove(LOCAL)
+    build_dir, sdkconfig = preset["binaryDir"], cache["SDKCONFIG"]
+    if compile_check:
+        # 'all' builds in its own folders (build_check_prod, ...), so its placeholder Wi-Fi values never end up in
+        # the real build folders: ESP-IDF keeps the settings of an existing build folder.
+        build_dir = build_dir.replace("build", "build_check", 1)
+        sdkconfig = sdkconfig.replace("build", "build_check", 1)
     idf = Path(os.environ["IDF_PATH"]) / "tools" / "idf.py"
-    return [sys.executable, str(idf), "-B", preset["binaryDir"], "-D", f"SDKCONFIG={cache['SDKCONFIG']}",
+    return [sys.executable, str(idf), "-B", build_dir, "-D", f"SDKCONFIG={sdkconfig}",
             "-D", f"SDKCONFIG_DEFAULTS={';'.join(layers)}", *actions]
 
 

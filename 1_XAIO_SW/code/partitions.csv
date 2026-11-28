@@ -1,0 +1,8 @@
+# ICVSP ECU flash layout (8 MB flash). nvs and phy_init are at the same place as ESP-IDF's
+# "single app large" table we used before, so re-flashing keeps the device key, the IMU calibration
+# and the BLE boot counter. Only the app grows: 1.5 MB -> 3 MB. The rest (about 4.9 MB) is free for
+# later (for example two app slots for updates over the air).
+# Name,   Type, SubType, Offset,   Size,   Flags
+nvs,      data, nvs,     0x9000,   0x6000,
+phy_init, data, phy,     0xf000,   0x1000,
+factory,  app,  factory, 0x10000,  3M,

@@ -26,7 +26,7 @@ All results below are from the **physical board** and a real phone.
 
 ## How to run it
 
-1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.x), open `1_XAIO_SW/code`.
+1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.6), open `1_XAIO_SW/code`.
 2. `Cmd/Ctrl+Shift+P` > **ESP-IDF: Select Project Configuration** > **T-016 BLE test**.
 3. Click **Build, Flash and Monitor** (flame icon). Wait for `BLE advertising as ICVSP-001, address ...`.
 4. On the phone, in nRF Connect: Scanner > **ICVSP-001** > CONNECT > service `7b100001-...`.
