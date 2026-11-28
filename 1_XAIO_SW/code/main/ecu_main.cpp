@@ -296,8 +296,15 @@ void app_task(void* arg)
 extern "C" void app_main(void)
 {
     vTaskDelay(pdMS_TO_TICKS(2000));  // time to open the monitor after a reset
-    std::printf("\nECU BEGIN all-in-one firmware %s, ESP-IDF %s: IMU + GNSS + camera + BLE%s, nothing simulated\n",
-                esp_app_get_description()->version, esp_get_idf_version(), kWifiEnabled ? " + Wi-Fi" : "");
+#if CONFIG_ICVSP_BUILD_PRODUCTION
+    const char* build_type = "production";
+#elif CONFIG_ICVSP_BUILD_DEV
+    const char* build_type = "development";
+#else
+    const char* build_type = "test";
+#endif
+    std::printf("\nECU BEGIN all-in-one firmware %s (%s build), ESP-IDF %s: IMU + GNSS + camera + BLE%s, nothing simulated\n",
+                esp_app_get_description()->version, build_type, esp_get_idf_version(), kWifiEnabled ? " + Wi-Fi" : "");
 
     // NVS holds the signing key, the IMU calibration, the boot counter and the radio calibration. It is never
     // erased here: erasing would replace the key (a new identity under the same device ID).

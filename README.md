@@ -97,7 +97,9 @@ The full experiment log, updated after every run, is in [`4_AI_SW/code/results/e
 [`1_XAIO_SW/code`](1_XAIO_SW/code/) is one ESP-IDF v5.5 project for the XIAO ESP32-S3 Sense (OV3660 camera, L76K GNSS,
 MPU6050 IMU). In VS Code with the ESP-IDF extension, pick a firmware with **ESP-IDF: Select Project Configuration**:
 `camera`, `imu`, `gnss`, `ble` (one part each, the board tests), `report` (signed report to the backend over Wi-Fi) or
-`ecu` (every part at once; not yet run on the board). Install, build, flash and wiring:
+`prod` and `dev` (every part at once: the production build for the car and its debug version; not yet run on the board).
+One line to build, flash and run: `python build.py prod flash monitor -p <PORT>`, explained step by step in
+[`1_XAIO_SW/doc/BUILD_AND_FLASH.md`](1_XAIO_SW/doc/BUILD_AND_FLASH.md). Install, build, flash and wiring:
 [`1_XAIO_SW/doc/README.md`](1_XAIO_SW/doc/README.md).
 
 - **IMU hazard detector** (proposed FR-27): removes gravity, adapts its threshold to the road's vibration, and tells

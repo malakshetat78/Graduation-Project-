@@ -3,6 +3,9 @@
 One ESP-IDF project for the Seeed **XIAO ESP32-S3 Sense**, in `1_XAIO_SW/code`. Every part of the ECU lives
 there, and you pick which firmware to build from a list in VS Code. There is no Arduino code.
 
+**Start here: [BUILD_AND_FLASH.md](BUILD_AND_FLASH.md)**: the one-line build (`python build.py prod flash monitor -p <PORT>`),
+the build types (production, development, test), flashing, bring-up and running in the car.
+
 - ESP-IDF **v5.5** (tested with v5.5.5). Everyone must use the same version: v6.x will not build this project.
 - Target chip: **esp32s3**.
 
@@ -11,9 +14,11 @@ there, and you pick which firmware to build from a list in VS Code. There is no 
 ```
 1_XAIO_SW/code/
   CMakeLists.txt          project file
-  CMakePresets.json       the firmware list shown in VS Code
+  build.py                one line to build / flash / monitor any firmware (python build.py prod ...)
+  CMakePresets.json       the firmware list shown in VS Code (and used by build.py)
   sdkconfig.defaults      board settings shared by every firmware (8 MB flash, PSRAM, USB console)
   sdkconfig.<name>        one small file per firmware (camera, imu, gnss, ble, report, ecu)
+  sdkconfig.prod / .dev   production and development settings, on top of sdkconfig.ecu
   sdkconfig.local.example copy to sdkconfig.local for Wi-Fi name/password (never commit it)
   dependencies.lock       pins the camera driver version (espressif/esp32-camera)
   main/
@@ -47,18 +52,18 @@ there, and you pick which firmware to build from a list in VS Code. There is no 
 | T-014 GNSS test | T-014 | Ahmed | `gnss_main.cpp` | `icvsp_gnss` |
 | T-016 BLE test | T-016 | Mariam | `ble_main.cpp` | `icvsp_ble` |
 | Signed report to the backend over Wi-Fi | - | Shahesta | `report_demo_main.cpp` | `icvsp_core`, `icvsp_board` |
-| All-in-one ECU (not tested yet) | - | Shahesta | `ecu_main.cpp` | all |
+| PRODUCTION / DEVELOPMENT: all-in-one ECU (not tested on the board yet) | - | Shahesta | `ecu_main.cpp` | all |
 
 ## 2. Install (once)
 
-### Windows and Mac
+### Windows, macOS and Linux
 
 1. Install **VS Code**: https://code.visualstudio.com
 2. In VS Code open **Extensions** (the four squares on the left), search **ESP-IDF** and install the one by
    **Espressif Systems**.
 3. The extension asks for the **ESP-IDF Installation Manager (EIM)**. Let it download EIM, then in EIM choose
    **version v5.5** (not 6.x). This downloads about 2 GB.
-4. Back in VS Code: `Ctrl+Shift+P` (Mac: `Cmd+Shift+P`) and run **ESP-IDF: Select Current ESP-IDF Version**,
+4. Back in VS Code: `Ctrl+Shift+P` (macOS `Cmd+Shift+P`) and run **ESP-IDF: Select Current ESP-IDF Version**,
    pick **v5.5**.
 
 Extra for Windows: if the board does not show a COM port, install the USB driver from Windows Update
@@ -67,25 +72,24 @@ Extra for Windows: if the board does not show a COM port, install the USB driver
 ## 3. Open, build, flash, monitor
 
 1. **File > Open Folder** and open `1_XAIO_SW/code` (this folder, not the repo root).
-2. `Ctrl/Cmd+Shift+P` > **ESP-IDF: Set Espressif Device Target** > **esp32s3** >
+2. `Ctrl+Shift+P` > **ESP-IDF: Set Espressif Device Target** > **esp32s3** >
    "ESP32-S3 chip (via builtin USB-JTAG)".
-3. `Ctrl/Cmd+Shift+P` > **ESP-IDF: Select Project Configuration** > pick the firmware from the table above.
+3. `Ctrl+Shift+P` > **ESP-IDF: Select Project Configuration** > pick the firmware from the table above.
 4. Plug in the XIAO with a **data** USB-C cable. In the blue bar at the bottom, click the plug icon and pick
-   the port: Mac `/dev/cu.usbmodem...`, Windows `COMx`.
+   the port: Windows `COMx`, macOS `/dev/cu.usbmodem...`, Linux `/dev/ttyACM0`.
 5. Click the **flame icon (Build, Flash and Monitor)** in the bottom bar. The first build takes a few minutes.
 6. To stop the monitor: `Ctrl+]`.
 
 Each firmware builds in its own folder (`build`, `build_camera`, `build_imu`, ...), so switching between them
 does not rebuild everything.
 
-Same thing from a terminal (after running ESP-IDF's `export.sh` / `export.ps1`):
+Same thing from a terminal (VS Code: **ESP-IDF: Open ESP-IDF Terminal**), one line:
 
 ```bash
-idf.py --preset camera build                       # names: smoke, camera, imu, gnss, ble, report, ecu
-idf.py --preset camera -p /dev/cu.usbmodem1101 flash monitor
+python build.py camera flash monitor -p <PORT>    # types: prod, dev, smoke, camera, imu, gnss, ble, report
 ```
 
-If your `idf.py` has no `--preset`, use the folder and files from `CMakePresets.json` directly, for example:
+`build.py` only fills in the folder and settings files from `CMakePresets.json`, for example
 `idf.py -B build_camera -D SDKCONFIG=build_camera/sdkconfig -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.camera" build`.
 
 ### Board stuck or no port?
@@ -135,7 +139,7 @@ it deletes the key, the IMU calibration and the BLE counter, and the board gets 
 
 ## 6. Laptop tests (no board)
 
-These check the code around the hardware on a computer (macOS or Linux, C++17 compiler, Python 3).
+These check the code around the hardware on a computer (C++17 compiler, Python 3; macOS / Linux terminal, or Git Bash on Windows).
 They are not hardware evidence.
 
 ```bash

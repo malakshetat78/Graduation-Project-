@@ -1,0 +1,10 @@
+# PRODUCTION build: the firmware that goes in the car. Layer on top of sdkconfig.defaults and sdkconfig.ecu.
+# Build it with:  python build.py prod        (see 1_XAIO_SW/doc/BUILD_AND_FLASH.md)
+CONFIG_ICVSP_BUILD_PRODUCTION=y
+# Smaller, faster code than the debug default (-Os instead of -Og)
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y
+# A crash prints its reason and restarts the ECU at once (no waiting for a debugger in the car)
+CONFIG_ESP_SYSTEM_PANIC_PRINT_REBOOT=y
+# Quieter boot: the bootloader prints only warnings and errors
+CONFIG_BOOTLOADER_LOG_LEVEL_WARN=y
+# The demo signing seed cannot be chosen in this build (Kconfig): every ECU uses its own key made on the chip.

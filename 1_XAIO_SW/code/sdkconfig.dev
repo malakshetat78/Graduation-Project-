@@ -1,0 +1,13 @@
+# DEVELOPMENT build: the same all-in-one firmware as production, with extra checks for finding bugs on the bench.
+# Layer on top of sdkconfig.defaults and sdkconfig.ecu. Build it with:  python build.py dev
+# Never put this build in a car.
+CONFIG_ICVSP_BUILD_DEV=y
+# Debug-friendly code (-Og): backtraces and the debugger match the source lines
+CONFIG_COMPILER_OPTIMIZATION_DEBUG=y
+# Stop on a crash and keep the backtrace on the screen instead of restarting
+CONFIG_ESP_SYSTEM_PANIC_PRINT_HALT=y
+# Catch memory bugs: stack-smashing check in every function that has a buffer, and heap corruption checks
+CONFIG_COMPILER_STACK_CHECK_MODE_NORM=y
+CONFIG_HEAP_POISONING_LIGHT=y
+# Debug log messages are compiled in, so a component's level can be raised at run time (esp_log_level_set)
+CONFIG_LOG_MAXIMUM_LEVEL_DEBUG=y

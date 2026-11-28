@@ -1,7 +1,7 @@
 # All-in-one ECU firmware (NOT YET TESTED ON THE BOARD)
 
 One firmware where every part of the ECU runs at the same time: IMU, GNSS, camera, BLE to the phone and, if set
-up, Wi-Fi to the backend. In VS Code pick **"All-in-one ECU (IMU, GNSS, camera, BLE, Wi-Fi)"** (preset `ecu`).
+up, Wi-Fi to the backend. It is the **production** build (`python build.py prod`; in VS Code "PRODUCTION: ..."), and the **development** build (`python build.py dev`) is the same firmware with debug checks. See [BUILD_AND_FLASH.md](BUILD_AND_FLASH.md).
 Main file: `1_XAIO_SW/code/main/ecu_main.cpp`.
 
 **Status:** builds with ESP-IDF v5.5.5 with 0 warnings and was reviewed twice (Codex). It has **not been run on
