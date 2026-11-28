@@ -6,7 +6,7 @@ there, and you pick which firmware to build from a list in VS Code. There is no 
 **Start here: [BUILD_AND_FLASH.md](BUILD_AND_FLASH.md)**: the one-line build (`python build.py prod flash monitor -p <PORT>`),
 the build types (production, development, test), flashing, bring-up and running in the car.
 
-- ESP-IDF **v5.5** (tested with v5.5.5). Everyone must use the same version: v6.x will not build this project.
+- ESP-IDF **v5.5.6**. Everyone must use the same version: v6.x will not build this project.
 - Target chip: **esp32s3**.
 
 ## 1. Folder layout
@@ -62,9 +62,9 @@ the build types (production, development, test), flashing, bring-up and running 
 2. In VS Code open **Extensions** (the four squares on the left), search **ESP-IDF** and install the one by
    **Espressif Systems**.
 3. The extension asks for the **ESP-IDF Installation Manager (EIM)**. Let it download EIM, then in EIM choose
-   **version v5.5** (not 6.x). This downloads about 2 GB.
+   **version v5.5.6** (not 6.x). This downloads about 2 GB.
 4. Back in VS Code: `Ctrl+Shift+P` (macOS `Cmd+Shift+P`) and run **ESP-IDF: Select Current ESP-IDF Version**,
-   pick **v5.5**.
+   pick **v5.5.6**.
 
 Extra for Windows: if the board does not show a COM port, install the USB driver from Windows Update
 (the XIAO ESP32-S3 uses the chip's built-in USB, no CP210x driver is needed).
@@ -154,8 +154,8 @@ c++ -std=c++17 -I 1_XAIO_SW/code/components/icvsp_imu 5_TESTING/code/imu/test_ac
 
 | Error | Fix |
 |---|---|
-| `idf.py` or `cmake` not found | ESP-IDF is not selected: run **ESP-IDF: Select Current ESP-IDF Version** > v5.5 |
-| Build errors right after a v6.x install | wrong version; install v5.5 in EIM and select it |
+| `idf.py` or `cmake` not found | ESP-IDF is not selected: run **ESP-IDF: Select Current ESP-IDF Version** > v5.5.6 |
+| Build errors right after a v6.x install | wrong version; install v5.5.6 in EIM and select it |
 | No port / `Failed to connect to ESP32-S3` | use a data cable; boot mode: hold B, tap R, release B |
 | Monitor shows nothing after flashing | press **R** on the board |
 | Camera: `camera not supported` on the first start | press R; the test retries 3 times by itself |

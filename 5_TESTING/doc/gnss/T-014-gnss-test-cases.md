@@ -20,7 +20,7 @@ They test the ECU state handling, not a real cable or module loss. The real modu
 
 ## How to run it
 
-1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.x), open `1_XAIO_SW/code`.
+1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.6), open `1_XAIO_SW/code`.
 2. `Cmd/Ctrl+Shift+P` > **ESP-IDF: Select Project Configuration** > **T-014 GNSS test**.
 3. Click **Build, Flash and Monitor** (flame icon). Take the board and laptop outside, antenna (flat square side)
    facing the sky. Indoors the module only reports NO_FIX.

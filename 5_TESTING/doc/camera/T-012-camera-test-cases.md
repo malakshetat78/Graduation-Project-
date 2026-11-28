@@ -13,7 +13,7 @@ evidence.
 
 ## How to run it
 
-1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.x), open `1_XAIO_SW/code`.
+1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.6), open `1_XAIO_SW/code`.
 2. `Cmd/Ctrl+Shift+P` > **ESP-IDF: Select Project Configuration** > **T-012 camera test**.
 3. Write the light of the run: **ESP-IDF: SDK Configuration Editor** > search `Light` > for example `dim room` > Save.
 4. Board still, pointing at the scene. Click **Build, Flash and Monitor** (flame icon).

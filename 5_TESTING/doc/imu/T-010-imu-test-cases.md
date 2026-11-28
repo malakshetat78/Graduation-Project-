@@ -12,7 +12,7 @@ Every result states its setup. All results below are from the **physical board**
 
 ## How to run it
 
-1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.x), open `1_XAIO_SW/code`.
+1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.6), open `1_XAIO_SW/code`.
 2. `Cmd/Ctrl+Shift+P` > **ESP-IDF: Select Project Configuration** > **T-010 IMU test**.
 3. Put the board flat on the table and do not touch it for the first 3 s after it starts (gyro calibration).
 4. Click **Build, Flash and Monitor** (flame icon).
