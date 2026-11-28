@@ -1,6 +1,6 @@
 # All-in-one ECU firmware: test cases (not run yet)
 
-Firmware: preset `ecu`, `1_XAIO_SW/code/main/ecu_main.cpp`. Setup: physical XIAO ESP32-S3 Sense with the camera,
+Firmware: the production build (`python build.py prod`), `1_XAIO_SW/code/main/ecu_main.cpp`. Setup: physical XIAO ESP32-S3 Sense with the camera,
 L76K on D6/D7, MPU6050 on D4/D5, BLE antenna clipped on; phone with the ROVO app. Save the whole monitor output of
 each run in a `runN_.../` folder here. Never save coordinates (the firmware does not print them).
 

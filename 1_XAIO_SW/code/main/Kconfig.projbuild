@@ -1,5 +1,19 @@
 menu "ICVSP ECU"
 
+choice ICVSP_BUILD_TYPE
+    prompt "Build type"
+    default ICVSP_BUILD_TEST
+    help
+        Set by the build type's sdkconfig layer (sdkconfig.prod, sdkconfig.dev); the one-part test firmwares are
+        "test". See 1_XAIO_SW/doc/BUILD_AND_FLASH.md.
+    config ICVSP_BUILD_PRODUCTION
+        bool "Production: the all-in-one firmware that goes in the car"
+    config ICVSP_BUILD_DEV
+        bool "Development: the same firmware with extra debug checks"
+    config ICVSP_BUILD_TEST
+        bool "Test: one part at a time, for the board test cases"
+endchoice
+
 choice ICVSP_APP
     prompt "Firmware to build"
     default ICVSP_APP_SMOKE
@@ -91,6 +105,7 @@ choice ICVSP_KEY_SOURCE
         bool "Per device: made on the chip at first boot (hardware RNG), kept in NVS"
     config ICVSP_KEY_DEMO_SEED
         bool "Demo seed from sdkconfig.local (same key on every board; demos only)"
+        depends on !ICVSP_BUILD_PRODUCTION
 endchoice
 
 config ICVSP_DEMO_SEED_HEX
