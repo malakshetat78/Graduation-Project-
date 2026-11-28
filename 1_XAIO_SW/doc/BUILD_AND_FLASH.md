@@ -81,9 +81,9 @@ It should not go in a car until TC-ECU-01 to TC-ECU-10 pass.
 3. In VS Code open the command palette (`Ctrl+Shift+P`, macOS `Cmd+Shift+P`) > **ESP-IDF: Select Current ESP-IDF Version** > **v5.5**.
 4. Clone and open the firmware folder:
    ```bash
-   git clone https://github.com/malakshetat78/Graduation-Project-.git
+   git clone https://github.com/malakshetat78/Rovo.git
    ```
-   Then in VS Code go to **File > Open Folder** > `Graduation-Project-/1_XAIO_SW/code`.
+   Then in VS Code go to **File > Open Folder** > `Rovo/1_XAIO_SW/code`.
 5. Command palette > **ESP-IDF: Open ESP-IDF Terminal**. Every `python build.py ...` command runs in this
    terminal.
 6. Optional, only for Wi-Fi to the backend: copy `sdkconfig.local.example` to `sdkconfig.local` and fill it in.
