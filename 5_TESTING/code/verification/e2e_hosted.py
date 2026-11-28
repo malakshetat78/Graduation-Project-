@@ -4,13 +4,13 @@ if the project holds real devices, or any reports or hazards, because the evalua
 Test rows are left in place for inspection; they are named e2etest-* so they can be removed afterwards.
 
 The settings file (.env.hosted at the repository root, never committed) holds:
-    DATABASE_URL               role icvsp_backend, see database/README.md
+    DATABASE_URL               role icvsp_backend, see 3_WEB_SW/code/database/README.md
     SUPABASE_URL               https://<project-ref>.supabase.co
     SUPABASE_ANON_KEY          the public (anon / publishable) key
     SUPABASE_SERVICE_ROLE_KEY  used only to create the two confirmed test users
 
 Run:
-    pip install -r backend/requirements.txt
+    pip install -r 3_WEB_SW/code/backend_sw/requirements.txt
     python verification/e2e_hosted.py
 """
 import os, secrets, signal, subprocess, sys, time
@@ -18,8 +18,9 @@ from pathlib import Path
 
 import httpx, psycopg
 
-R = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(R / "backend"))
+R = Path(__file__).resolve().parents[3]   # repository root
+BACKEND = R / "3_WEB_SW" / "code" / "backend_sw"
+sys.path.insert(0, str(BACKEND))
 import icvsp_backend  # noqa: F401,E402  (puts the engine on the import path)
 from icvsp.geo import offset  # noqa: E402
 from tests.test_api import Car  # noqa: E402
@@ -64,12 +65,12 @@ for schema in LEGACY_SCHEMAS:
 
 admin_token = secrets.token_hex(16)
 env = {**os.environ, "DATABASE_URL": DB, "SUPABASE_URL": BASE, "ICVSP_ADMIN_TOKEN": admin_token,
-       "ICVSP_WORKER_INTERVAL_S": "3", "PYTHONPATH": str(R / "backend")}
+       "ICVSP_WORKER_INTERVAL_S": "3", "PYTHONPATH": str(BACKEND)}
 ADM = {"X-Admin-Token": admin_token}
 
 
 def start():
-    p = subprocess.Popen([sys.executable, "-m", "uvicorn", "--factory", "icvsp_backend.app:create_app", "--port", "8124", "--log-level", "warning"], cwd=R / "backend", env=env)
+    p = subprocess.Popen([sys.executable, "-m", "uvicorn", "--factory", "icvsp_backend.app:create_app", "--port", "8124", "--log-level", "warning"], cwd=BACKEND, env=env)
     for _ in range(150):
         try:
             if http.get(API + "/ready").status_code == 200:

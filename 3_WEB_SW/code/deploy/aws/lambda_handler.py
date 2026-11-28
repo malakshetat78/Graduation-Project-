@@ -1,4 +1,4 @@
-"""AWS Lambda entry point for the ICVSP backend (backend/icvsp_backend, unchanged).
+"""AWS Lambda entry point for the ICVSP backend (backend_sw/icvsp_backend, unchanged).
 
 Two kinds of call arrive here:
 - HTTPS requests through the function URL (the ECU's POST /reports, phones, the dashboard): passed to the
