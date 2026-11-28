@@ -1,7 +1,0 @@
-# Overlay for the QEMU build (applied after sdkconfig.defaults, see README).
-# QEMU has no USB-Serial/JTAG: console on UART0. No camera, I2C sensor or GPS: those probes are skipped.
-CONFIG_ESP_CONSOLE_UART_DEFAULT=y
-CONFIG_ICVSP_SMOKE_EMULATOR=y
-# QEMU 9.2.2 (esp_develop_9.2.2_20260417) has no octal PSRAM: with the board's octal mode the boot aborts
-# ("PSRAM chip is not connected, or wrong PSRAM line mode"). Quad mode for the emulator only.
-CONFIG_SPIRAM_MODE_QUAD=y

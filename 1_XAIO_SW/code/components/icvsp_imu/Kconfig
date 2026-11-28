@@ -1,0 +1,17 @@
+menu "ICVSP IMU test (T-010)"
+
+config ICVSP_IMU_PERIOD_MS
+    int "Milliseconds between readings"
+    default 200
+    range 10 5000
+
+config ICVSP_IMU_RETRY_MS
+    int "Milliseconds between retries while the sensor is lost or missing"
+    default 1000
+    range 100 10000
+
+config ICVSP_IMU_PRINT_EVERY_READING
+    bool "Print every reading (off: one short line every 25 readings)"
+    default y
+
+endmenu

@@ -51,6 +51,17 @@ public:
     bool has_time() const { return have_utc_; }
     uint8_t satellites() const { return sats_; }
     const Stats& stats() const { return stats_; }
+    float hdop() const { return hdop_; }           // 99 means unknown/invalid
+    int fix_quality() const { return quality_; }   // GGA 0 = no fix
+    bool has_position_sentences() const { return have_rmc_ && have_gga_; }
+    // True when both RMC and GGA arrived within kStaleMs: tells stale data apart from a fresh "no fix".
+    bool position_sentences_fresh(uint32_t now_ms) const {
+        const uint64_t now = clock64(now_ms);
+        if (!have_rmc_ || !have_gga_) return false;
+        const int64_t rmc_age = static_cast<int64_t>(now) - static_cast<int64_t>(rmc_rx_);
+        const int64_t gga_age = static_cast<int64_t>(now) - static_cast<int64_t>(gga_rx_);
+        return rmc_age <= kStaleMs && gga_age <= kStaleMs;
+    }
 
 private:
     uint64_t clock64(uint32_t now_ms) const;  // 64-bit device time; see the class comment

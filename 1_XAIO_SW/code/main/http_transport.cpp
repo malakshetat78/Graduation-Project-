@@ -7,10 +7,6 @@
 #include "esp_http_client.h"
 #include "sdkconfig.h"
 
-#if CONFIG_ICVSP_TLS_TEST_CA
-extern const char kTestCa[] asm("_binary_ca_pem_start");
-#endif
-
 int EspHttpTransport::post_report(const char* line, size_t len, char* reply, size_t reply_cap) {
     if (reply_cap > 0) reply[0] = '\0';
     esp_http_client_config_t cfg = {};
@@ -21,11 +17,7 @@ int EspHttpTransport::post_report(const char* line, size_t len, char* reply, siz
 #if CONFIG_ICVSP_TLS_REQUIRE_1_3
         cfg.tls_version = ESP_HTTP_CLIENT_TLS_VER_TLS_1_3;  // ECU design choice (matches FR-SEC-08): no fallback to TLS 1.2
 #endif
-#if CONFIG_ICVSP_TLS_TEST_CA
-        cfg.cert_pem = kTestCa;  // test build: only the test CA is trusted
-#else
         cfg.crt_bundle_attach = esp_crt_bundle_attach;  // public root certificates (hosted backend on AWS)
-#endif
     }
 
     esp_http_client_handle_t c = esp_http_client_init(&cfg);

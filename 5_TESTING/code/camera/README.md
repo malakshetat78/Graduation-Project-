@@ -1,22 +1,22 @@
 # T-012 camera bring-up tools
 
-Tools for the camera bring-up test in the [Arduino sketch](../../../../xaio_sw/arduino/ICVSP_ECU/START_HERE.md#camera-bring-up-test-t-012-no-wi-fi-needed).
-Test cases and results: [T-012 camera test cases](../T-012-camera-test-cases.md).
+Tools for the T-012 camera test in the ESP-IDF project ([1_XAIO_SW/code](../../../1_XAIO_SW/doc/README.md), component `icvsp_camera`).
+Test cases and results: [T-012 camera test cases](../../doc/camera/T-012-camera-test-cases.md).
 
 | File | What it does | Runs on |
 | --- | --- | --- |
 | [extract_jpegs.py](extract_jpegs.py) | Turns a saved camera test log into `.jpg` files, checks each image (structure, and a full decode if Pillow is installed), checks the run is complete and passed, and prints Markdown result tables | Computer, Python 3 (Pillow optional) |
 | [run_host_tests.sh](run_host_tests.sh) | Builds and runs the C++ unit tests for the firmware's JPEG check and Base64 encoder, runs the Python tests, and round-trips a real JPEG through the firmware's log format | Computer (macOS or Linux), needs a C++17 compiler and Python 3 |
-| [test_jpeg_check.cpp](test_jpeg_check.cpp) | C++ unit tests for `xaio_sw/arduino/ICVSP_ECU/src/core/jpeg_check.cpp` | Computer |
+| [test_jpeg_check.cpp](test_jpeg_check.cpp) | C++ unit tests for `1_XAIO_SW/code/components/icvsp_camera/jpeg_check.cpp` | Computer |
 | [test_extract_jpegs.py](test_extract_jpegs.py) | Python unit tests for `extract_jpegs.py` | Computer |
 | [sample_log.cpp](sample_log.cpp) | Prints a `.jpg` the way the firmware prints a sample photo (used by the round trip) | Computer |
 
 ## Run
 
 ```text
-cd testing/hardware/camera/tools
+cd 5_TESTING/code/camera
 ./run_host_tests.sh                 # optional: ./run_host_tests.sh some_photo.jpg
-python3 extract_jpegs.py T-012_run1_bright.txt --out T-012_run1_bright
+python3 extract_jpegs.py camera_log.txt --out photos
 ```
 
 `extract_jpegs.py` exits with 0 only if the log holds one complete run that passed: a `CAM RESULT` line with

@@ -27,6 +27,9 @@ public:
     void on_imu(const ImuSample& s, const GnssFix& fix);                                // ~100 Hz
     void on_frame(uint32_t t_ms, const CamDetection* dets, size_t n, const GnssFix& fix);  // each camera frame
     void flush(uint32_t now_ms) { emit(now_ms, true); }                                  // e.g. at shutdown
+    // After a gap in the IMU data (sensor lost and back): the detector starts again, so its gravity and vibration
+    // estimates and any half-finished jolt from before the gap are not mixed with the new samples.
+    void reset_imu() { imu_detector_ = BumpDetector(); }
 
     const uint8_t* public_key() const { return pk_; }
 

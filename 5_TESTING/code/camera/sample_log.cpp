@@ -7,7 +7,7 @@
 #include <iterator>
 #include <vector>
 
-#include "core/jpeg_check.h"
+#include "jpeg_check.h"
 
 int main(int argc, char** argv)
 {

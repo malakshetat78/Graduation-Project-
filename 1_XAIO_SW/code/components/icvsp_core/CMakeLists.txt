@@ -1,7 +1,6 @@
-# Hardware-free device logic from ../lib/icvsp_core (detection, fusion, events, signing), unchanged.
-# The same sources are unit-tested on the laptop with `pio test -e native`.
+# Device logic with no hardware calls: hazard detection, fusion, events, Ed25519 signing.
 idf_component_register(
-    SRC_DIRS "../../../lib/icvsp_core/src"
-    INCLUDE_DIRS "../../../lib/icvsp_core/src"
+    SRC_DIRS "."
+    INCLUDE_DIRS "."
     REQUIRES icvsp_monocypher)
 target_compile_options(${COMPONENT_LIB} PRIVATE -Wall -Wextra)

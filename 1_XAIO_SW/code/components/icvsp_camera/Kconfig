@@ -1,0 +1,41 @@
+menu "ICVSP camera test (T-012)"
+
+config ICVSP_CAM_LIGHTING
+    string "Light during this run (printed in the log and the photo headers)"
+    default "not recorded"
+    help
+        Write the light before each run, for example "bright room", "dim room", "lens covered".
+        Easiest: idf.py menuconfig, or add CONFIG_ICVSP_CAM_LIGHTING="dim room" to sdkconfig.local.
+
+config ICVSP_CAM_SHOTS
+    int "Photos per resolution"
+    default 20
+    range 1 200
+
+config ICVSP_CAM_WARMUP_FRAMES
+    int "Frames thrown away after each start (exposure settling)"
+    default 3
+    range 0 20
+
+config ICVSP_CAM_INIT_ATTEMPTS
+    int "Camera start attempts before the start counts as failed"
+    default 3
+    range 1 10
+
+config ICVSP_CAM_MIN_JPEG_BYTES
+    int "Smaller frames count as broken (bytes)"
+    default 512
+
+config ICVSP_CAM_LEAK_TOLERANCE
+    int "Bytes of RAM allowed to be missing after the camera stops"
+    default 4096
+
+config ICVSP_CAM_DUMP_JPEG
+    bool "Print one QVGA and one VGA photo as Base64 (for extract_jpegs.py)"
+    default y
+
+config ICVSP_CAM_PRINT_EVERY_SHOT
+    bool "Print one line per photo (size, markers, wait time)"
+    default y
+
+endmenu

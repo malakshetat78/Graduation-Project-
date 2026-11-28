@@ -1,0 +1,30 @@
+menu "ICVSP GNSS test (T-014)"
+
+config ICVSP_GNSS_PRINT_EVERY_MS
+    int "Milliseconds between status or fix lines"
+    default 1000
+    range 200 10000
+
+config ICVSP_GNSS_PRINT_COORDS
+    bool "Print latitude and longitude (private: off for logs that are saved or shared)"
+    default n
+    help
+        Off: FIX lines show lat=hidden lon=hidden, so saved logs never show where the test was done.
+        Turn it on only for a private check, and do not save or share that log.
+
+config ICVSP_GNSS_COORD_DECIMALS
+    int "Decimals printed for latitude and longitude"
+    depends on ICVSP_GNSS_PRINT_COORDS
+    default 7
+    range 0 7
+
+config ICVSP_GNSS_SOFTWARE_TESTS
+    bool "Keys S and D in the monitor simulate stale data and a lost UART for 6 s"
+    default y
+
+config ICVSP_GNSS_DEBUG_EVERY_S
+    int "Seconds between GNSS DEBUG lines (byte and sentence counters); 0 = off"
+    default 10
+    range 0 600
+
+endmenu

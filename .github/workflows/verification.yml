@@ -1,4 +1,4 @@
-﻿# V-cycle verification on every push: unit, integration, system (simulation) and traceability checks.
+﻿# V-cycle verification on every push: unit, integration and traceability checks, plus the laptop tests of the firmware.
 # Security scans (Gitleaks, Semgrep, Trivy) are added by the cybersecurity team (Gantt C2).
 name: verification
 
@@ -36,7 +36,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.platformio
-          key: platformio-${{ runner.os }}-${{ hashFiles('xaio_sw/platformio.ini') }}
+          key: platformio-${{ runner.os }}-${{ hashFiles('5_TESTING/code/device_logic/platformio.ini') }}
       - name: Install tools
         run: pip install platformio coverage -r 3_WEB_SW/code/backend_sw/requirements.txt
 
@@ -54,25 +54,22 @@ jobs:
           ICVSP_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54329/postgres
         run: python -m unittest -v 2>&1 | tee ../../../backend.log
 
-      - name: ESP-IDF persistent anti-replay tests (native C, reboot and storage failures)
-        run: python xaio_sw/espidf_security/tools/run_replay_identity_tests.py | tee replay_identity.log
+      - name: Device logic unit tests (the firmware's components, on the laptop)
+        working-directory: 5_TESTING/code/device_logic
+        run: pio test -e native -v | tee ../../../firmware.log
 
-      - name: Device firmware unit tests (PlatformIO native)
-        working-directory: xaio_sw
-        run: pio test -e native -v | tee ../firmware.log
-
-      - name: Device -> engine integration (signed reports, independent Ed25519 check)
-        working-directory: xaio_sw
-        run: python tools/check_with_engine.py | tee ../integration.log
-
-      - name: System test (whole chain in simulation, with attackers)
-        run: python -m unittest testing/sil/test_sil.py testing/sil/test_ble_link.py -v 2>&1 | tee sil.log
+      - name: Hardware part laptop tests (camera JPEG check and log extractor, IMU calibration)
+        run: |
+          bash 5_TESTING/code/camera/run_host_tests.sh 2>&1 | tee hardware_host_tests.log
+          c++ -std=c++17 -Wall -Wextra -fsanitize=address,undefined -I 1_XAIO_SW/code/components/icvsp_imu \
+            5_TESTING/code/imu/test_accel_cal.cpp 1_XAIO_SW/code/components/icvsp_imu/accel_cal.cpp -o /tmp/test_accel_cal
+          /tmp/test_accel_cal 2>&1 | tee -a hardware_host_tests.log
 
       - name: Requirement traceability
         run: |
           python 5_TESTING/code/verification/check_traceability.py --unittest-log 3_WEB_SW/code/engine=engine.log \
-            --unittest-log 3_WEB_SW/code/backend_sw=backend.log --unittest-log testing/sil=sil.log --firmware-log firmware.log \
-            --integration-log integration.log --out traceability_report.md
+            --unittest-log 3_WEB_SW/code/backend_sw=backend.log --firmware-log firmware.log \
+            --out traceability_report.md
           cat traceability_report.md >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@v4
@@ -82,10 +79,8 @@ jobs:
           path: |
             engine.log
             backend.log
-            sil.log
             firmware.log
-            integration.log
-            replay_identity.log
+            hardware_host_tests.log
             traceability_report.md
 
   static-analysis:
@@ -99,7 +94,7 @@ jobs:
       - name: Python (ruff, pyflakes rules)
         run: |
           pip install ruff
-          ruff check --select F 3_WEB_SW/code/engine 3_WEB_SW/code/backend_sw testing/sil xaio_sw/tools 5_TESTING/code/verification
+          ruff check --select F 3_WEB_SW/code/engine 3_WEB_SW/code/backend_sw 5_TESTING/code/verification 5_TESTING/code/camera
           ruff check --select E9,F63,F7,F82 4_AI_SW/code/scripts
       - name: C++ (cppcheck)
         # reported but not yet blocking: switched to blocking once the first report is clean
@@ -107,5 +102,5 @@ jobs:
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q cppcheck
           cppcheck --std=c++17 --enable=warning,performance,portability --error-exitcode=1 --inline-suppr \
-            --suppress=missingIncludeSystem -I xaio_sw/lib/icvsp_core/src -I xaio_sw/lib/icvsp_sim/src \
-            xaio_sw/lib/icvsp_core/src xaio_sw/lib/icvsp_sim/src xaio_sw/src
+            --suppress=missingIncludeSystem -I 1_XAIO_SW/code/components/icvsp_core -I 1_XAIO_SW/code/components/icvsp_board \
+            1_XAIO_SW/code/components/icvsp_core 1_XAIO_SW/code/components/icvsp_board

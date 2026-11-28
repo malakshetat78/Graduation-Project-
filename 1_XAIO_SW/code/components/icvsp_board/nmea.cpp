@@ -201,7 +201,11 @@ void NmeaParser::handle_rmc(char** f, size_t n, uint64_t now) {
     have_rmc_ = true;
     rmc_rx_ = now;
     double lat, lon;
-    active_ = f[2][0] == 'A' && f[2][1] == '\0' && parse_coord(f[3], f[4], true, lat) &&
+    // Mode (NMEA 2.3 and later, field 12): A autonomous, D differential are measured. E estimated (dead
+    // reckoning), M manual input, S simulator and N no fix are not a measured position; a receiver can send
+    // status A together with mode E. Older receivers have no mode field: then the status alone decides.
+    const bool measured_mode = n <= 12 || f[12][0] == '\0' || f[12][0] == 'A' || f[12][0] == 'D';
+    active_ = f[2][0] == 'A' && f[2][1] == '\0' && measured_mode && parse_coord(f[3], f[4], true, lat) &&
               parse_coord(f[5], f[6], false, lon);
     if (active_) {
         lat_ = lat;
@@ -215,8 +219,12 @@ void NmeaParser::handle_rmc(char** f, size_t n, uint64_t now) {
 
     // Time: trusted only once the module has had a real fix this boot (before that its clock may be a
     // leftover or a default date). Afterwards a time-only RMC (fix lost) still keeps the clock right.
+    // Simulator (S) and manual (M) sentences carry a time somebody typed or replayed, never the receiver's own
+    // clock: they never set the time. E and N still do (the receiver keeps its clock while it estimates or
+    // has lost the fix).
+    const bool own_clock = n <= 12 || (f[12][0] != 'S' && f[12][0] != 'M');
     int64_t ms_of_day, days;
-    if (ever_active_ && parse_time(f[1], ms_of_day) && parse_date(f[9], days)) {
+    if (ever_active_ && own_clock && parse_time(f[1], ms_of_day) && parse_date(f[9], days)) {
         utc_base_ms_ = days * 86400000LL + ms_of_day;
         utc_base_rx_ = now;
         have_utc_ = true;
@@ -243,7 +251,10 @@ GnssFix NmeaParser::fix(uint32_t now_ms) const {
     const int64_t gga_age = static_cast<int64_t>(now) - static_cast<int64_t>(gga_rx_);
     const bool rmc_fresh = have_rmc_ && rmc_age <= kStaleMs;
     const bool gga_fresh = have_gga_ && gga_age <= kStaleMs;
-    r.valid = rmc_fresh && gga_fresh && active_ && quality_ > 0;
+    // GGA quality 1 (GPS) and 2 (differential) are measured fixes. 6 is estimated (dead reckoning), 7 manual
+    // input, 8 simulation: never a position for a report. 3-5 (PPS, RTK) are not sent by the L76K or NEO-6M.
+    const bool measured_quality = quality_ == 1 || quality_ == 2;
+    r.valid = rmc_fresh && gga_fresh && active_ && measured_quality;
     if (r.valid) {
         r.lat = lat_;
         r.lon = lon_;

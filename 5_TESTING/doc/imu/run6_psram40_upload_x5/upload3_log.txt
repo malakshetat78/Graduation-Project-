@@ -1,0 +1,68 @@
+I (816) esp_psram: SPI SRAM memory test OK
+I (825) cpu_start: Pro cpu start user code
+I (825) cpu_start: cpu freq: 160000000 Hz
+I (825) app_init: Application information:
+I (825) app_init: Project name:     icvsp_ecu
+I (825) app_init: App version:      16ad91a-dirty
+I (825) app_init: Compile time:     Nov 24 2026 23:47:03
+I (825) app_init: ELF file SHA256:  f18f84b92...
+I (826) app_init: ESP-IDF:          v5.5.5
+I (826) efuse_init: Min chip rev:     v0.0
+I (826) efuse_init: Max chip rev:     v0.99 
+I (826) efuse_init: Chip rev:         v0.2
+I (826) heap_init: Initializing. RAM available for dynamic allocation:
+I (827) heap_init: At 3FC96C40 len 00052AD0 (330 KiB): RAM
+I (827) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (827) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (827) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (828) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (829) spi_flash: detected chip: gd
+I (829) spi_flash: flash io: dio
+I (829) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (830) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (830) main_task: Started on CPU0
+I (830) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (830) main_task: Calling app_main()
+
+IMU BEGIN MPU6050 test (ESP-IDF build): SDA=GPIO5 SCL=GPIO6 I2C port 1, +-2 g, +-250 deg/s
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU gyroscope bias x=-2.76 y=2.47 z=0.05 deg/s (spread 1.6 deg/s)
+IMU DETECTED
+IMU reading every 200 ms
+IMU #1 t=2458 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.4 gy=-0.5 gz=-0.2 deg/s
+IMU #2 t=2658 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.3 gz=-0.3 deg/s
+IMU #3 t=2858 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.5 gy=-0.4 gz=-0.1 deg/s
+IMU #4 t=3058 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.4 gy=-0.7 gz=-0.1 deg/s
+IMU #5 t=3258 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.7 gy=-0.4 gz=-0.2 deg/s
+IMU #6 t=3458 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.5 gy=-0.6 gz=-0.1 deg/s
+IMU #7 t=3658 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.7 gy=-0.6 gz=-0.1 deg/s
+IMU #8 t=3858 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.4 gy=-0.7 gz=-0.2 deg/s
+IMU #9 t=4058 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.4 gy=-0.4 gz=-0.1 deg/s
+IMU #10 t=4258 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.6 gz=-0.1 deg/s
+IMU #11 t=4458 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.5 gy=-0.2 gz=-0.3 deg/s
+IMU #12 t=4658 ms ax=+0.20 ay=+0.38 az=+0.99 g |a|=1.08 g  gx=+0.5 gy=-0.5 gz=-0.3 deg/s
+IMU #13 t=4858 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.5 gz=-0.2 deg/s
+IMU #14 t=5058 ms ax=+0.20 ay=+0.38 az=+0.99 g |a|=1.08 g  gx=+0.7 gy=-0.2 gz=-0.2 deg/s
+IMU #15 t=5258 ms ax=+0.20 ay=+0.38 az=+0.99 g |a|=1.08 g  gx=+0.6 gy=-0.4 gz=-0.3 deg/s
+IMU #16 t=5458 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.7 gy=-0.4 gz=-0.2 deg/s
+IMU #17 t=5658 ms ax=+0.20 ay=+0.38 az=+0.97 g |a|=1.07 g  gx=+0.6 gy=-0.5 gz=-0.3 deg/s
+IMU #18 t=5858 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.7 gy=-0.4 gz=-0.2 deg/s
+IMU #19 t=6058 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.7 gy=-0.4 gz=-0.3 deg/s
+IMU #20 t=6258 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.4 gy=+0.0 gz=-0.4 deg/s
+IMU #21 t=6458 ms ax=+0.20 ay=+0.37 az=+0.97 g |a|=1.06 g  gx=+0.6 gy=-0.6 gz=-0.2 deg/s
+IMU #22 t=6658 ms ax=+0.20 ay=+0.38 az=+0.97 g |a|=1.07 g  gx=+0.7 gy=-0.4 gz=-0.4 deg/s
+IMU #23 t=6858 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.5 gy=-0.3 gz=-0.2 deg/s
+IMU #24 t=7058 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.3 gz=-0.2 deg/s
+IMU #25 t=7258 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.3 gz=-0.2 deg/s
+IMU #26 t=7458 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.2 gz=-0.2 deg/s
+IMU #27 t=7658 ms ax=+0.20 ay=+0.38 az=+0.97 g |a|=1.07 g  gx=+0.4 gy=-0.6 gz=-0.1 deg/s
+IMU #28 t=7858 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.5 gz=-0.2 deg/s
+IMU #29 t=8058 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.5 gy=-0.4 gz=-0.3 deg/s
+IMU #30 t=8258 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.6 gy=-0.4 gz=-0.0 deg/s
+IMU #31 t=8458 ms ax=+0.21 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.7 gy=-0.2 gz=-0.5 deg/s
+IMU #32 t=8658 ms ax=+0.20 ay=+0.38 az=+0.97 g |a|=1.06 g  gx=+0.5 gy=-0.8 gz=-0.2 deg/s
+IMU #33 t=8858 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.4 gy=-0.7 gz=-0.1 deg/s
+IMU #34 t=9058 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.06 g  gx=+0.5 gy=-0.4 gz=-0.2 deg/s
+IMU #35 t=9258 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.8 gy=-0.1 gz=-0.2 deg/s
+IMU #36 t=9458 ms ax=+0.20 ay=+0.38 az=+0.98 g |a|=1.07 g  gx=+0.7 gy=+0.1 gz=-0.4 deg/s

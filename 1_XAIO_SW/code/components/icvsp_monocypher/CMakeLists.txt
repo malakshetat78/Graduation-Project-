@@ -1,4 +1,4 @@
-# Monocypher (Ed25519) from ../lib/monocypher, unchanged.
+# Monocypher (Ed25519), third-party, unchanged. Licence: LICENCE.md
 idf_component_register(
-    SRC_DIRS "../../../lib/monocypher/src"
-    INCLUDE_DIRS "../../../lib/monocypher/src")
+    SRC_DIRS "."
+    INCLUDE_DIRS ".")

@@ -1,0 +1,2 @@
+# T-014 GNSS test firmware (L76K on UART1, D6/D7). Build preset "T-014 GNSS test".
+CONFIG_ICVSP_APP_GNSS=y

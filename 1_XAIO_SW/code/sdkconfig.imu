@@ -1,0 +1,2 @@
+# T-010 MPU6050 IMU bring-up test firmware (layer on top of sdkconfig.defaults). No Wi-Fi needed.
+CONFIG_ICVSP_APP_IMU=y

@@ -1,0 +1,118 @@
+I (823) esp_psram: SPI SRAM memory test OK
+I (832) cpu_start: Pro cpu start user code
+I (832) cpu_start: cpu freq: 160000000 Hz
+I (832) app_init: Application information:
+I (832) app_init: Project name:     icvsp_ecu
+I (832) app_init: App version:      16ad91a-dirty
+I (832) app_init: Compile time:     Nov 25 2026 01:00:04
+I (833) app_init: ELF file SHA256:  18bf88b61...
+I (833) app_init: ESP-IDF:          v5.5.5
+I (833) efuse_init: Min chip rev:     v0.0
+I (833) efuse_init: Max chip rev:     v0.99 
+I (833) efuse_init: Chip rev:         v0.2
+I (833) heap_init: Initializing. RAM available for dynamic allocation:
+I (834) heap_init: At 3FC98628 len 000510E8 (324 KiB): RAM
+I (834) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (834) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (834) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (835) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (836) spi_flash: detected chip: gd
+I (836) spi_flash: flash io: dio
+I (836) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (837) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (838) main_task: Started on CPU0
+I (838) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (838) main_task: Calling app_main()
+
+IMU BEGIN MPU6050 test (ESP-IDF build): SDA=GPIO5 SCL=GPIO6 I2C port 1, +-2 g, +-250 deg/s
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 22.5 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 10.6 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 121.0 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 254.7 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 60.8 deg/s > 2.0). Keep it still
+IMU WARN calibration skipped after 5 attempts (sensor kept moving): gyro values are uncorrected
+IMU DETECTED
+IMU accel calibration: none saved, readings are uncorrected (type C in the monitor to calibrate)
+IMU reading every 200 ms
+IMU keys: C = 6-side accelerometer calibration, R = remove the saved calibration
+IMU #1 t=7418 ms ax=-0.00 ay=-0.97 az=+0.02 g |a|=0.97 g  gx=+9.7 gy=+16.2 gz=-66.9 deg/s
+IMU #2 t=7618 ms ax=+0.10 ay=-0.99 az=+0.02 g |a|=1.00 g  gx=+1.9 gy=+0.6 gz=+6.4 deg/s
+IMU #3 t=7818 ms ax=+0.11 ay=-0.98 az=-0.02 g |a|=0.99 g  gx=-5.7 gy=+0.3 gz=+2.0 deg/s
+IMU #4 t=8018 ms ax=+0.09 ay=-1.00 az=-0.01 g |a|=1.00 g  gx=-0.8 gy=+2.4 gz=+0.2 deg/s
+IMU CAL BEGIN 6-side accelerometer calibration (readings paused, 5 minutes max)
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: +X -X +Y -Y +Z -Z
+IMU CAL side -Z captured (1/6): x=-0.024 y=-0.135 z=-0.957 g
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: +X -X +Y -Y +Z
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: +X -X +Y -Y +Z
+IMU CAL side +Z captured (2/6): x=-0.112 y=+0.213 z=+1.039 g
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: +X -X +Y -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: +X -X +Y -Y
+IMU CAL side +X captured (3/6): x=+0.980 y=-0.226 z=+0.163 g
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X +Y -Y
+IMU CAL side +Y captured (4/6): x=-0.155 y=+0.798 z=+0.662 g
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU LOST: I2C read failed. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 38.9 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 20.9 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 5.9 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 8.0 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 8.0 deg/s > 2.0). Keep it still
+IMU WARN calibration skipped after 5 attempts (sensor kept moving): gyro values are uncorrected
+IMU BACK
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU LOST: I2C read failed. Retrying every 1000 ms
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 419.0 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 395.0 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 271.6 deg/s > 2.0). Keep it still
+IMU GYROSCOPE CALIBRATION FAILED (sensor stopped answering)
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU found at 0x68, WHO_AM_I=0x70 MPU6500 (clone): record this value
+IMU gyroscope calibration: keep the sensor still for 1 s
+IMU calibration rejected: the sensor moved (spread 323.7 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 24.9 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 252.7 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 269.4 deg/s > 2.0). Keep it still
+IMU calibration rejected: the sensor moved (spread 348.1 deg/s > 2.0). Keep it still
+IMU WARN calibration skipped after 5 attempts (sensor kept moving): gyro values are uncorrected
+IMU BACK
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL turn the board so each side faces up and hold it still 2 s; still needed: -X -Y
+IMU CAL TIMED OUT after 300 s: nothing saved, type C to retry
+IMU #5 t=308418 ms ax=-0.13 ay=+0.40 az=+0.98 g |a|=1.07 g  gx=-2.0 gy=+1.6 gz=+0.4 deg/s
+IMU #6 t=308618 ms ax=-0.14 ay=+0.40 az=+0.98 g |a|=1.06 g  gx=-2.6 gy=+2.8 gz=-0.5 deg/s
+IMU #7 t=308818 ms ax=-0.14 ay=+0.40 az=+0.98 g |a|=1.07 g  gx=-1.9 gy=+0.9 gz=+0.7 deg/s
+IMU #8 t=309018 ms ax=-0.14 ay=+0.40 az=+0.98 g |a|=1.07 g  gx=-2.5 gy=+1.7 gz=+0.2 deg/s
+IMU #9 t=309218 ms ax=-0.15 ay=+0.40 az=+0.98 g |a|=1.06 g  gx=-2.0 gy=+3.3 gz=-0.5 deg/s
+IMU #10 t=309418 ms ax=-0.14 ay=+0.40 az=+0.96 g |a|=1.05 g  gx=-1.7 gy=+2.5 gz=-0.6 deg/s
+IMU #11 t=309618 ms ax=-0.14 ay=+0.40 az=+0.97 g |a|=1.06 g  gx=-2.2 gy=+0.6 gz=+0.6 deg/s
+IMU #12 t=309818 ms ax=-0.14 ay=+0.40 az=+0.98 g |a|=1.07 g  gx=-1.9 gy=+1.5 gz=-0.2 deg/s
+IMU #13 t=310018 ms ax=-0.14 ay=+0.40 az=+0.97 g |a|=1.06 g  gx=-

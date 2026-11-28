@@ -1,0 +1,73 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "smoke",
+      "displayName": "Smoke test (board check)",
+      "binaryDir": "build",
+      "cacheVariables": {
+        "SDKCONFIG_DEFAULTS": "sdkconfig.defaults",
+        "SDKCONFIG": "./build/sdkconfig"
+      }
+    },
+    {
+      "name": "camera",
+      "displayName": "T-012 camera test",
+      "binaryDir": "build_camera",
+      "cacheVariables": {
+        "SDKCONFIG_DEFAULTS": "sdkconfig.defaults;sdkconfig.camera",
+        "SDKCONFIG": "./build_camera/sdkconfig"
+      }
+    },
+    {
+      "name": "imu",
+      "displayName": "T-010 IMU test",
+      "binaryDir": "build_imu",
+      "cacheVariables": {
+        "SDKCONFIG_DEFAULTS": "sdkconfig.defaults;sdkconfig.imu",
+        "SDKCONFIG": "./build_imu/sdkconfig"
+      }
+    },
+    {
+      "name": "gnss",
+      "displayName": "T-014 GNSS test",
+      "binaryDir": "build_gnss",
+      "cacheVariables": {
+        "SDKCONFIG_DEFAULTS": "sdkconfig.defaults;sdkconfig.gnss",
+        "SDKCONFIG": "./build_gnss/sdkconfig"
+      }
+    },
+    {
+      "name": "ble",
+      "displayName": "T-016 BLE test",
+      "binaryDir": "build_ble",
+      "cacheVariables": {
+        "SDKCONFIG_DEFAULTS": "sdkconfig.defaults;sdkconfig.ble",
+        "SDKCONFIG": "./build_ble/sdkconfig"
+      }
+    },
+    {
+      "name": "report",
+      "displayName": "Signed report to the backend over Wi-Fi",
+      "binaryDir": "build_report",
+      "cacheVariables": {
+        "SDKCONFIG_DEFAULTS": "sdkconfig.defaults;sdkconfig.report;sdkconfig.local",
+        "SDKCONFIG": "./build_report/sdkconfig"
+      }
+    },
+    {
+      "name": "ecu",
+      "displayName": "All-in-one ECU (IMU, GNSS, camera, BLE, Wi-Fi)",
+      "binaryDir": "build_ecu",
+      "cacheVariables": {
+        "SDKCONFIG_DEFAULTS": "sdkconfig.defaults;sdkconfig.ecu;sdkconfig.local",
+        "SDKCONFIG": "./build_ecu/sdkconfig"
+      }
+    }
+  ]
+}

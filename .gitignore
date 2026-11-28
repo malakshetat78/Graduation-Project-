@@ -37,8 +37,8 @@ __pycache__/
 4_AI_SW/code/models/espdet_pico_224.pt
 4_AI_SW/code/models/espdet_pico_224_v5*
 
-# PlatformIO build output
-firmware/.pio/
+# PlatformIO build output (laptop unit tests)
+.pio/
 4_AI_SW/code/models/*.espdl
 4_AI_SW/code/models/*_esp32s3.info
 4_AI_SW/code/models/*_esp32s3.json
@@ -55,8 +55,6 @@ firmware/.pio/
 # deploy packages (3_WEB_SW/code/deploy/aws/build.sh)
 build/
 
-# Arduino sketch Wi-Fi settings: copy secrets.example.h to secrets.h, never commit it
-xaio_sw/arduino/ICVSP_ECU/secrets.h
 
 # old folder names: after pulling the new layout, local files that git does not track (datasets, private models,
 # Flutter build output) stay behind in these folders. Ignore them so they are never committed by accident.

@@ -4,8 +4,6 @@
 //
 //   board     Wi-Fi station (esp_wifi), network name and password from CONFIG_ICVSP_WIFI_SSID / _PASSWORD,
 //             which belong in the git-ignored sdkconfig.local, never in git.
-//   emulator  QEMU's emulated Ethernet port (OpenCores MAC, CONFIG_ICVSP_NET_QEMU_ETH). QEMU has no Wi-Fi
-//             radio; everything above the link (IP, DNS, SNTP, HTTP, the report delivery) is the same code.
 //   later     a 4G modem over PPP (esp_modem) would be a third class with the same three calls.
 #include <atomic>
 
@@ -15,9 +13,9 @@ class EspNetDriver : public icvsp::WifiDriver {
 public:
     void begin() override;       // first call sets the link up; later calls ask it to join again
     bool connected() override { return got_ip_.load(); }
-    void disconnect() override;  // give up the current join attempt (Wi-Fi only; Ethernet has no join)
+    void disconnect() override;  // give up the current join attempt
 
-    static const char* kind();   // "wifi" or "qemu-ethernet"
+    static const char* kind();   // "wifi"
 
 private:
     void init_once();

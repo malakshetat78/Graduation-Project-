@@ -1,11 +1,11 @@
-// Host unit test for xaio_sw/arduino/ICVSP_ECU/src/core/jpeg_check.cpp (the JPEG check and Base64 encoder the
+// Host unit test for 1_XAIO_SW/code/components/icvsp_camera/jpeg_check.cpp (the JPEG check and Base64 encoder the
 // camera bring-up test runs on the board). Runs on a computer, not on the XIAO. See README.md.
 #include <cstdio>
 #include <cstring>
 #include <string>
 #include <vector>
 
-#include "core/jpeg_check.h"
+#include "jpeg_check.h"
 
 namespace {
 
@@ -49,6 +49,22 @@ int main()
 {
     const auto qvga = fake_jpeg(320, 240);
     const auto info = icvsp::inspect_jpeg(qvga.data(), qvga.size());
+    {
+        // A frame header too short to hold its fields, at the very end of the buffer: must be rejected without
+        // reading past the end (run with AddressSanitizer in run_host_tests.sh).
+        const std::vector<uint8_t> short_sof = {0xFF, 0xD8, 0xFF, 0xC0, 0x00, 0x02};
+        const auto sinfo = icvsp::inspect_jpeg(short_sof.data(), short_sof.size());
+        check(!sinfo.valid() && sinfo.width == 0, "frame header shorter than its fields is rejected");
+        // Every cut-off length of a good frame, each in a buffer of exactly that size: no read past the end.
+        bool none_valid = true;
+        for (size_t cut = 0; cut < qvga.size(); ++cut) {
+            const std::vector<uint8_t> part(qvga.begin(), qvga.begin() + static_cast<long>(cut));
+            const uint8_t* bytes = part.empty() ? nullptr : part.data();
+            if (bytes != nullptr && icvsp::inspect_jpeg(bytes, part.size()).valid()) none_valid = false;
+            if (bytes != nullptr) (void)icvsp::first_picture_length(bytes, part.size());
+        }
+        check(none_valid, "every cut-off frame is rejected, no read past the end");
+    }
     check(info.valid(), "QVGA frame is valid");
     check(info.width == 320 && info.height == 240, "QVGA size read from the frame header");
     check(info.end_offset == qvga.size(), "end marker position");
@@ -99,6 +115,43 @@ int main()
     auto two_bit = qvga;  // precision must be 8 bits
     two_bit[24] = 0x0C;
     check(!icvsp::inspect_jpeg(two_bit.data(), two_bit.size()).valid(), "12-bit precision frame header is invalid");
+
+    // Image data may hold FF 00 (a stuffed FF byte) and restart markers FF D0-D7.
+    auto stuffed = fake_jpeg(320, 240);
+    const std::vector<uint8_t> legal = {0xFF, 0x00, 0x77, 0xFF, 0xD3, 0x88};
+    stuffed.insert(stuffed.end() - 2, legal.begin(), legal.end());
+    const auto stinfo = icvsp::inspect_jpeg(stuffed.data(), stuffed.size());
+    check(stinfo.valid() && stinfo.stray_marker_offset == 0, "stuffed FF 00 and restart markers in the image data are accepted");
+
+    // Two pictures in one buffer (seen on the board at SVGA after the driver dropped frames, FB-OVF).
+    auto doubled = fake_jpeg(800, 600);
+    const auto second = fake_jpeg(800, 600);
+    doubled.insert(doubled.end(), second.begin(), second.end());
+    const auto dinfo = icvsp::inspect_jpeg(doubled.data(), doubled.size());
+    check(!dinfo.valid() && dinfo.has_start && dinfo.has_end && dinfo.width == 800 &&
+              dinfo.stray_marker_offset == fake_jpeg(800, 600).size() - 2,
+          "two pictures stuck together in one buffer are invalid (end marker of the first found)");
+
+    check(icvsp::first_picture_length(doubled.data(), doubled.size()) == fake_jpeg(800, 600).size(),
+          "first picture of two is found and its length is right");
+    const size_t cut = icvsp::first_picture_length(doubled.data(), doubled.size());
+    check(icvsp::inspect_jpeg(doubled.data(), cut).valid(), "the first picture on its own is valid");
+    check(icvsp::first_picture_length(qvga.data(), qvga.size()) == 0, "nothing to cut in a single picture");
+    auto broken = fake_jpeg(800, 600);
+    broken.insert(broken.end() - 2, {0xFF, 0xC4});  // a header marker inside the image data: broken, not stuck
+    check(!icvsp::inspect_jpeg(broken.data(), broken.size()).valid() &&
+              icvsp::first_picture_length(broken.data(), broken.size()) == 0,
+          "broken image data is not cut, it stays invalid");
+    auto first_broken = fake_jpeg(800, 600);
+    first_broken[21] = 0xC9;  // first picture's frame header unknown, then a second picture
+    first_broken.insert(first_broken.end(), second.begin(), second.end());
+    check(icvsp::first_picture_length(first_broken.data(), first_broken.size()) == 0,
+          "no cut when the first picture is not valid on its own");
+
+    // Two pictures with padding between them, as a frame buffer can hold.
+    auto gap = fake_jpeg(800, 600, 30);
+    gap.insert(gap.end(), second.begin(), second.end());
+    check(!icvsp::inspect_jpeg(gap.data(), gap.size()).valid(), "two pictures with padding between them are invalid");
 
     check(!icvsp::inspect_jpeg(nullptr, 0).valid(), "empty buffer is invalid");
     std::vector<uint8_t> zeros(1000, 0);

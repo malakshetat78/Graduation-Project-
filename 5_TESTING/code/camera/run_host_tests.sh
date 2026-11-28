@@ -4,13 +4,15 @@
 # the camera itself can only be tested on the physical XIAO ESP32-S3 Sense.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
-src="$here/../../../../xaio_sw/arduino/ICVSP_ECU/src"
+src="$here/../../../1_XAIO_SW/code/components/icvsp_camera"
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 cxx="${CXX:-c++}"
 
 echo "== 1. JPEG check and Base64 unit tests (C++)"
-"$cxx" -std=c++17 -Wall -Wextra -Werror -I"$src" "$here/test_jpeg_check.cpp" "$src/core/jpeg_check.cpp" -o "$work/test_jpeg_check"
+# AddressSanitizer and UBSan: a read past the end of a buffer stops the test with an error.
+"$cxx" -std=c++17 -Wall -Wextra -Werror -g -fsanitize=address,undefined -fno-omit-frame-pointer -I"$src" \
+    "$here/test_jpeg_check.cpp" "$src/jpeg_check.cpp" -o "$work/test_jpeg_check"
 "$work/test_jpeg_check"
 
 echo "== 2. Log extractor unit tests (Python)"
@@ -29,7 +31,7 @@ fi
 if [ -z "$sample" ]; then
     echo "SKIP  no sample JPEG (pass one as the first argument: ./run_host_tests.sh photo.jpg)"
 else
-    "$cxx" -std=c++17 -Wall -Wextra -Werror -I"$src" "$here/sample_log.cpp" "$src/core/jpeg_check.cpp" -o "$work/sample_log"
+    "$cxx" -std=c++17 -Wall -Wextra -Werror -I"$src" "$here/sample_log.cpp" "$src/jpeg_check.cpp" -o "$work/sample_log"
     "$work/sample_log" "$sample" > "$work/log.txt"
     python3 "$here/extract_jpegs.py" "$work/log.txt" --out "$work/out" > "$work/summary.md"
     if cmp -s "$sample" "$work/out/01_HOST_sample.jpg"; then

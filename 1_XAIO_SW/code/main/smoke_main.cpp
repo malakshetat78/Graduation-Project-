@@ -52,13 +52,6 @@ const char* text(Result r) { return r == Result::Pass ? "PASS" : r == Result::Fa
 
 uint32_t now_ms() { return static_cast<uint32_t>(esp_timer_get_time() / 1000); }
 
-constexpr bool kEmulator =
-#if CONFIG_ICVSP_SMOKE_EMULATOR
-    true;
-#else
-    false;
-#endif
-
 const char* reset_reason_text(esp_reset_reason_t r) {
     switch (r) {
         case ESP_RST_POWERON: return "power-on";
@@ -165,10 +158,6 @@ struct GpsMonitor {
 GpsMonitor g_gps;
 
 void check_gps(Check& c) {
-    if (kEmulator) {
-        set(c, Result::Skip, "no GPS receiver in the emulator");
-        return;
-    }
     uart_config_t cfg = {};
     cfg.baud_rate = GPS_BAUD;
     cfg.data_bits = UART_DATA_8_BITS;
@@ -220,10 +209,6 @@ void check_gps(Check& c) {
 
 // ---- 4. IMU: MPU6050 identity and readings --------------------------------------------------------------
 void check_imu(Check& c) {
-    if (kEmulator) {
-        set(c, Result::Skip, "no I2C sensors in the emulator");
-        return;
-    }
     i2c_master_bus_config_t bc = {};
     bc.i2c_port = IMU_I2C_PORT;
     bc.sda_io_num = static_cast<gpio_num_t>(IMU_SDA_GPIO);
@@ -293,20 +278,25 @@ void check_imu(Check& c) {
         return;
     }
     const double mean_g = sum_g / samples;
-    const bool is_mpu6050 = who == 0x68;
+    // Boards sold as "MPU6050" often carry a register-compatible clone with another WHO_AM_I (ours reads 0x70).
+    const char* name = nullptr;
+    switch (who) {
+        case 0x68: name = "MPU6050"; break;
+        case 0x70: name = "MPU6500 (clone)"; break;
+        case 0x71: name = "MPU9250 (clone)"; break;
+        case 0x72: name = "MPU6050 clone (0x72)"; break;
+        case 0x73: name = "MPU9255 (clone)"; break;
+        case 0x98: name = "MPU6050 clone (0x98)"; break;
+        default: break;
+    }
     const bool gravity_ok = std::fabs(mean_g - 1.0) < 0.15;
-    set(c, is_mpu6050 && gravity_ok ? Result::Pass : Result::Fail,
-        "addr=0x%02X WHO_AM_I=0x%02X (MPU6050 = 0x68%s) samples=%d |a| mean=%.3f g min=%.3f max=%.3f "
-        "(expect ~1.000 g at rest)",
-        addr, who, is_mpu6050 ? "" : ", different chip or clone", samples, mean_g, min_g, max_g);
+    set(c, name && gravity_ok ? Result::Pass : Result::Fail,
+        "addr=0x%02X WHO_AM_I=0x%02X %s samples=%d |a| mean=%.3f g min=%.3f max=%.3f (expect ~1.000 g at rest)",
+        addr, who, name ? name : "(unknown chip, not an MPU6050)", samples, mean_g, min_g, max_g);
 }
 
 // ---- 5. Camera: OV3660 identity and one frame -----------------------------------------------------------
 void check_camera(Check& c) {
-    if (kEmulator) {
-        set(c, Result::Skip, "no camera in the emulator");
-        return;
-    }
     camera_config_t cfg = {};
     cfg.pin_pwdn = CAM_PWDN;
     cfg.pin_reset = CAM_RESET;
@@ -386,7 +376,7 @@ void blink_task(void* arg) {
 extern "C" void app_main(void) {
     const esp_app_desc_t* app = esp_app_get_description();
     printf("\nSMOKE BEGIN ICVSP ECU smoke test, app %s built %s %s, ESP-IDF %s, %s build, reset reason: %s\n",
-           app->version, app->date, app->time, esp_get_idf_version(), kEmulator ? "EMULATOR (QEMU)" : "BOARD",
+           app->version, app->date, app->time, esp_get_idf_version(), "BOARD",
            reset_reason_text(esp_reset_reason()));
 
     Check checks[] = {{"chip"}, {"signing"}, {"gps"}, {"imu"}, {"camera"}};
@@ -401,8 +391,7 @@ extern "C" void app_main(void) {
         printf("SMOKE %-8s %s %s\n", c.name, text(c.result), c.detail);
         (c.result == Result::Pass ? pass : c.result == Result::Fail ? fail : skip)++;
     }
-    printf("SMOKE RESULT pass=%d fail=%d skip=%d (%s)\n", pass, fail, skip,
-           kEmulator ? "emulator: hardware checks skipped" : "board");
+    printf("SMOKE RESULT pass=%d fail=%d skip=%d (%s)\n", pass, fail, skip, "board");
     fflush(stdout);
     // LED: slow blink = nothing failed, fast = something failed
     if (xTaskCreate(blink_task, "led", 2048, fail == 0 ? reinterpret_cast<void*>(1) : nullptr, 1, nullptr) != pdPASS)

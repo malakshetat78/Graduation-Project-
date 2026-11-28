@@ -1,0 +1,23 @@
+# All-in-one ECU firmware (layer on top of sdkconfig.defaults): IMU, GNSS, camera, BLE and Wi-Fi together.
+# Wi-Fi name/password and the backend URL go in the git-ignored sdkconfig.local (copy sdkconfig.local.example).
+# With no Wi-Fi name, reports go to the phone only.
+CONFIG_ICVSP_APP_ECU=y
+# 1 ms scheduler tick: the app loop runs every 5 ms (the default 100 Hz tick cannot wait less than 10 ms).
+CONFIG_FREERTOS_HZ=1000
+# Bluetooth LE (NimBLE), as in sdkconfig.ble
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_LOG_LEVEL_WARNING=y
+# Wi-Fi and Bluetooth share the radio (software coexistence). Espressif advises the two stacks on different cores:
+# Bluetooth (controller and NimBLE host) on core 1, Wi-Fi on core 0.
+CONFIG_ESP_COEX_SW_COEXIST_ENABLE=y
+CONFIG_BT_CTRL_PINNED_TO_CORE_1=y
+CONFIG_BT_NIMBLE_PINNED_TO_CORE_1=y
+CONFIG_ESP_WIFI_TASK_PINNED_TO_CORE_0=y
+# Internal RAM is the tight resource with Wi-Fi + Bluetooth + camera: Wi-Fi/lwIP and NimBLE buffers may use PSRAM.
+CONFIG_SPIRAM_TRY_ALLOCATE_WIFI_LWIP=y
+CONFIG_BT_NIMBLE_MEM_ALLOC_MODE_EXTERNAL=y
+# HTTPS to the backend, as in sdkconfig.report: check certificate dates (the clock comes from GNSS), TLS 1.3 only.
+CONFIG_MBEDTLS_HAVE_TIME_DATE=y
+CONFIG_MBEDTLS_SSL_PROTO_TLS1_3=y
+CONFIG_MBEDTLS_SSL_TLS1_3_KEXM_PSK=n

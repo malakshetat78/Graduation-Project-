@@ -1,0 +1,31 @@
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS DEBUG bytes=7888 valid_NMEA=280 bad_checksum=0 overflow=0 uptime=30s
+GNSS SKY GP: in_view=1 with_signal=1 best_SNR=31 BD: in_view=0 with_signal=0 best_SNR=0
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS DEBUG bytes=10728 valid_NMEA=380 bad_checksum=0 overflow=0 uptime=40s
+GNSS SKY GP: in_view=1 with_signal=1 best_SNR=35 BD: in_view=0 with_signal=0 best_SNR=0
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS DEBUG bytes=14130 valid_NMEA=480 bad_checksum=0 overflow=0 uptime=50s
+GNSS SKY GP: in_view=1 with_signal=1 best_SNR=34 BD: in_view=0 with_signal=0 best_SNR=0
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)

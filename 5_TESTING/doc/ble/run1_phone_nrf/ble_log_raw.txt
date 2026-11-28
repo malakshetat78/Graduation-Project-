@@ -1,0 +1,192 @@
+I (872) esp_psram: SPI SRAM memory test OK
+I (881) cpu_start: Pro cpu start user code
+I (881) cpu_start: cpu freq: 160000000 Hz
+I (881) app_init: Application information:
+I (882) app_init: Project name:     icvsp_ecu
+I (882) app_init: App version:      16ad91a-dirty
+I (882) app_init: Compile time:     Nov 25 2026 00:46:13
+I (882) app_init: ELF file SHA256:  007df7c73...
+I (882) app_init: ESP-IDF:          v5.5.5
+I (882) efuse_init: Min chip rev:     v0.0
+I (882) efuse_init: Max chip rev:     v0.99 
+I (883) efuse_init: Chip rev:         v0.2
+I (883) heap_init: Initializing. RAM available for dynamic allocation:
+I (883) heap_init: At 3FC9FD20 len 000499F0 (294 KiB): RAM
+I (883) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (883) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (884) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (884) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (885) spi_flash: detected chip: gd
+I (885) spi_flash: flash io: dio
+I (886) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (886) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (888) main_task: Started on CPU0
+I (888) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (888) main_task: Calling app_main()
+BLE starting BLE GATT server (ESP-IDF NimBLE, simulated report payload, no pairing)
+[step 1/3] BLE: start the Bluetooth stack and the GATT service
+I (2908) BLE_INIT: BT controller compile version [51d9dfd]
+I (2908) BLE_INIT: Using main XTAL as clock source
+I (2908) BLE_INIT: Feature Config, ADV:1, BLE_50:1, DTM:1, SCAN:1, CCA:0, SMP:1, CONNECT:1
+I (2908) BLE_INIT: Bluetooth MAC: 68:ee:8f:4f:5f:fa
+I (2908) phy_init: phy_version 712,87e8c20e,Apr 13 2026,18:51:10
+[step 2/3] BLE: advertise as ICVSP-001 with the ICVSP service UUID
+BLE advertising as ICVSP-001, address 68:ee:8f:4f:5f:fa
+[step 3/3] BLE: waiting for a phone to connect and subscribe
+I (2958) main_task: Returned from app_main()
+BLE central connected address=7f:e0:17:f9:f9:e1
+BLE central subscribed, starting report transport
+BLE new report transport_id=1 fragments=4 bytes=51
+BLE notify transport_id=1 fragment=1/4 attempt=1
+BLE notify transport_id=1 fragment=2/4 attempt=1
+BLE notify transport_id=1 fragment=3/4 attempt=1
+BLE notify transport_id=1 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=1 again (attempt 2/3)
+BLE notify transport_id=1 fragment=1/4 attempt=2
+BLE notify transport_id=1 fragment=2/4 attempt=2
+BLE notify transport_id=1 fragment=3/4 attempt=2
+BLE notify transport_id=1 fragment=4/4 attempt=2
+BLE no ACK after 2000 ms, sending transport_id=1 again (attempt 3/3)
+BLE notify transport_id=1 fragment=1/4 attempt=3
+BLE notify transport_id=1 fragment=2/4 attempt=3
+BLE notify transport_id=1 fragment=3/4 attempt=3
+BLE notify transport_id=1 fragment=4/4 attempt=3
+BLE WARN transport_id=1 stalled after 3 attempts (a late ACK is still accepted)
+BLE central unsubscribed
+BLE central disconnected reason=0x208, advertising again
+BLE central connected address=7f:e0:17:f9:f9:e1
+BLE central subscribed, starting report transport
+BLE restarting unacknowledged report transport_id=1 from fragment 1 (fresh attempts)
+BLE notify transport_id=1 fragment=1/4 attempt=1
+BLE notify transport_id=1 fragment=2/4 attempt=1
+BLE notify transport_id=1 fragment=3/4 attempt=1
+BLE notify transport_id=1 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=1 again (attempt 2/3)
+BLE notify transport_id=1 fragment=1/4 attempt=2
+BLE notify transport_id=1 fragment=2/4 attempt=2
+BLE notify transport_id=1 fragment=3/4 attempt=2
+BLE notify transport_id=1 fragment=4/4 attempt=2
+BLE no ACK after 2000 ms, sending transport_id=1 again (attempt 3/3)
+BLE notify transport_id=1 fragment=1/4 attempt=3
+BLE notify transport_id=1 fragment=2/4 attempt=3
+BLE notify transport_id=1 fragment=3/4 attempt=3
+BLE notify transport_id=1 fragment=4/4 attempt=3
+BLE WARN transport_id=1 stalled after 3 attempts (a late ACK is still accepted)
+BLE WARN ACK id=99 does not match in-flight transport_id=1, ignored
+BLE WARN ACK write with bad length=1 (want 2), ignored
+BLE ACK accepted transport_id=1 (1 acknowledged so far)
+BLE new report transport_id=2 fragments=4 bytes=52
+BLE notify transport_id=2 fragment=1/4 attempt=1
+BLE notify transport_id=2 fragment=2/4 attempt=1
+BLE notify transport_id=2 fragment=3/4 attempt=1
+BLE notify transport_id=2 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=2 again (attempt 2/3)
+BLE notify transport_id=2 fragment=1/4 attempt=2
+BLE notify transport_id=2 fragment=2/4 attempt=2
+BLE notify transport_id=2 fragment=3/4 attempt=2
+BLE notify transport_id=2 fragment=4/4 attempt=2
+BLE no ACK after 2000 ms, sending transport_id=2 again (attempt 3/3)
+BLE notify transport_id=2 fragment=1/4 attempt=3
+BLE notify transport_id=2 fragment=2/4 attempt=3
+BLE notify transport_id=2 fragment=3/4 attempt=3
+BLE notify transport_id=2 fragment=4/4 attempt=3
+BLE WARN transport_id=2 stalled after 3 attempts (a late ACK is still accepted)
+BLE central unsubscribed
+BLE central disconnected reason=0x208, advertising again
+BLE central connected address=7f:e0:17:f9:f9:e1
+BLE central disconnected reason=0x208, advertising again
+BLE central connected address=7f:e0:17:f9:f9:e1
+BLE central subscribed, starting report transport
+BLE restarting unacknowledged report transport_id=2 from fragment 1 (fresh attempts)
+BLE notify transport_id=2 fragment=1/4 attempt=1
+BLE notify transport_id=2 fragment=2/4 attempt=1
+BLE notify transport_id=2 fragment=3/4 attempt=1
+BLE notify transport_id=2 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=2 again (attempt 2/3)
+BLE notify transport_id=2 fragment=1/4 attempt=2
+BLE notify transport_id=2 fragment=2/4 attempt=2
+BLE notify transport_id=2 fragment=3/4 attempt=2
+BLE notify transport_id=2 fragment=4/4 attempt=2
+BLE no ACK after 2000 ms, sending transport_id=2 again (attempt 3/3)
+BLE notify transport_id=2 fragment=1/4 attempt=3
+BLE notify transport_id=2 fragment=2/4 attempt=3
+BLE notify transport_id=2 fragment=3/4 attempt=3
+BLE notify transport_id=2 fragment=4/4 attempt=3
+BLE WARN transport_id=2 stalled after 3 attempts (a late ACK is still accepted)
+BLE ACK accepted transport_id=2 (2 acknowledged so far)
+BLE new report transport_id=3 fragments=4 bytes=52
+BLE notify transport_id=3 fragment=1/4 attempt=1
+BLE notify transport_id=3 fragment=2/4 attempt=1
+BLE notify transport_id=3 fragment=3/4 attempt=1
+BLE notify transport_id=3 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=3 again (attempt 2/3)
+BLE notify transport_id=3 fragment=1/4 attempt=2
+BLE notify transport_id=3 fragment=2/4 attempt=2
+BLE notify transport_id=3 fragment=3/4 attempt=2
+BLE notify transport_id=3 fragment=4/4 attempt=2
+BLE no ACK after 2000 ms, sending transport_id=3 again (attempt 3/3)
+BLE notify transport_id=3 fragment=1/4 attempt=3
+BLE notify transport_id=3 fragment=2/4 attempt=3
+BLE notify transport_id=3 fragment=3/4 attempt=3
+BLE notify transport_id=3 fragment=4/4 attempt=3
+BLE WARN transport_id=3 stalled after 3 attempts (a late ACK is still accepted)
+BLE ACK accepted transport_id=3 (3 acknowledged so far)
+BLE new report transport_id=4 fragments=4 bytes=52
+BLE notify transport_id=4 fragment=1/4 attempt=1
+BLE notify transport_id=4 fragment=2/4 attempt=1
+BLE notify transport_id=4 fragment=3/4 attempt=1
+BLE notify transport_id=4 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=4 again (attempt 2/3)
+BLE notify transport_id=4 fragment=1/4 attempt=2
+BLE notify transport_id=4 fragment=2/4 attempt=2
+BLE notify transport_id=4 fragment=3/4 attempt=2
+BLE notify transport_id=4 fragment=4/4 attempt=2
+BLE WARN ACK id=2 does not match in-flight transport_id=4, ignored
+BLE no ACK after 2000 ms, sending transport_id=4 again (attempt 3/3)
+BLE notify transport_id=4 fragment=1/4 attempt=3
+BLE notify transport_id=4 fragment=2/4 attempt=3
+BLE notify transport_id=4 fragment=3/4 attempt=3
+BLE notify transport_id=4 fragment=4/4 attempt=3
+BLE WARN transport_id=4 stalled after 3 attempts (a late ACK is still accepted)
+BLE WARN ACK id=3 does not match in-flight transport_id=4, ignored
+BLE central unsubscribed
+BLE central disconnected reason=0x213, advertising again
+BLE central connected address=7f:e0:17:f9:f9:e1
+BLE central subscribed, starting report transport
+BLE restarting unacknowledged report transport_id=4 from fragment 1 (fresh attempts)
+BLE notify transport_id=4 fragment=1/4 attempt=1
+BLE notify transport_id=4 fragment=2/4 attempt=1
+BLE notify transport_id=4 fragment=3/4 attempt=1
+BLE notify transport_id=4 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=4 again (attempt 2/3)
+BLE notify transport_id=4 fragment=1/4 attempt=2
+BLE notify transport_id=4 fragment=2/4 attempt=2
+BLE notify transport_id=4 fragment=3/4 attempt=2
+BLE notify transport_id=4 fragment=4/4 attempt=2
+BLE WARN ACK id=3 does not match in-flight transport_id=4, ignored
+BLE no ACK after 2000 ms, sending transport_id=4 again (attempt 3/3)
+BLE notify transport_id=4 fragment=1/4 attempt=3
+BLE notify transport_id=4 fragment=2/4 attempt=3
+BLE notify transport_id=4 fragment=3/4 attempt=3
+BLE notify transport_id=4 fragment=4/4 attempt=3
+BLE WARN transport_id=4 stalled after 3 attempts (a late ACK is still accepted)
+BLE central unsubscribed
+BLE central subscribed, starting report transport
+BLE restarting unacknowledged report transport_id=4 from fragment 1 (fresh attempts)
+BLE notify transport_id=4 fragment=1/4 attempt=1
+BLE notify transport_id=4 fragment=2/4 attempt=1
+BLE notify transport_id=4 fragment=3/4 attempt=1
+BLE notify transport_id=4 fragment=4/4 attempt=1
+BLE no ACK after 2000 ms, sending transport_id=4 again (attempt 2/3)
+BLE notify transport_id=4 fragment=1/4 attempt=2
+BLE notify transport_id=4 fragment=2/4 attempt=2
+BLE notify transport_id=4 fragment=3/4 attempt=2
+BLE notify transport_id=4 fragment=4/4 attempt=2
+BLE no ACK after 2000 ms, sending transport_id=4 again (attempt 3/3)
+BLE notify transport_id=4 fragment=1/4 attempt=3
+BLE notify transport_id=4 fragment=2/4 attempt=3
+BLE notify transport_id=4 fragment=3/4 attempt=3
+BLE notify transport_id=4 fragment=4/4 attempt=3
+BLE WARN transport_id=4 stalled after 3 attempts (a late ACK is still accepted)
+BLE central unsubscribed
+BLE central disconnected reason=0x213, advertising again

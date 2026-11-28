@@ -88,7 +88,7 @@ Scheduler invocations                               = 43,200         (free: 14,0
 
 Legend: ✅ validated (documentation and/or project evidence) · 🔶 expected but needs a practical test · ⏳ not started · ⚠️ risk
 
-Project evidence = `deploy/aws/` (template and handler), the project README, `testing/hardware/ecu/TEST_CASES.md` and `screenshots/aws_console/`, and the work done by Nourseen (T-004).
+Project evidence = `deploy/aws/` (template and handler), the project README, `5_TESTING/doc/ecu_aws/README.md` and `screenshots/aws_console/`, and the work done by Nourseen (T-004).
 
 | # | Requirement | Result | Evidence / note |
 |---|---|---|---|

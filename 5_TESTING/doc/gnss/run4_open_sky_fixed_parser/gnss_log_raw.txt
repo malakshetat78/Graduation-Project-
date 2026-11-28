@@ -1,0 +1,445 @@
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS DEBUG bytes=18338 valid_NMEA=580 bad_checksum=0 overflow=0 uptime=60s
+GNSS SKY GP: in_view=4 with_signal=4 best_SNR=37 BD: in_view=2 with_signal=2 best_SNR=37
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS DEBUG bytes=22382 valid_NMEA=688 bad_checksum=0 overflow=0 uptime=70s
+GNSS SKY GP: in_view=5 with_signal=5 best_SNR=37 BD: in_view=2 with_signal=2 best_SNR=37
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS DEBUG bytes=26562 valid_NMEA=798 bad_checksum=0 overflow=0 uptime=80s
+GNSS SKY GP: in_view=5 with_signal=5 best_SNR=37 BD: in_view=3 with_signal=3 best_SNR=38
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS DEBUG bytes=30742 valid_NMEA=908 bad_checksum=0 overflow=0 uptime=90s
+GNSS SKY GP: in_view=5 with_signal=5 best_SNR=39 BD: in_view=3 with_signal=3 best_SNR=38
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+GNSS EVENT NO_FIX -> VALID_FIX
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:01Z sats=7 HDOP=2.40 quality=1 speed=0.1km/h
+GNSS EVENT VALID_FIX -> NO_FIX
+GNSS STATUS NO_FIX sats=7 HDOP=2.40 quality=6 (no usable coordinates)
+GNSS STATUS NO_FIX sats=7 HDOP=2.40 quality=6 (no usable coordinates)
+GNSS EVENT NO_FIX -> VALID_FIX
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:04Z sats=7 HDOP=2.40 quality=1 speed=0.1km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:05Z sats=7 HDOP=2.40 quality=1 speed=0.1km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:06Z sats=7 HDOP=2.40 quality=1 speed=0.1km/h
+GNSS DEBUG bytes=35709 valid_NMEA=1015 bad_checksum=0 overflow=0 uptime=100s
+GNSS SKY GP: in_view=5 with_signal=5 best_SNR=40 BD: in_view=3 with_signal=3 best_SNR=38
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:07Z sats=7 HDOP=2.40 quality=1 speed=0.1km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:08Z sats=7 HDOP=2.40 quality=1 speed=0.2km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:09Z sats=8 HDOP=2.20 quality=1 speed=0.3km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:10Z sats=8 HDOP=2.20 quality=1 speed=0.3km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:11Z sats=8 HDOP=2.20 quality=1 speed=0.1km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:12Z sats=8 HDOP=2.20 quality=1 speed=0.2km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:13Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:14Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:15Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:15Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=41429 valid_NMEA=1124 bad_checksum=0 overflow=0 uptime=110s
+GNSS SKY GP: in_view=6 with_signal=5 best_SNR=39 BD: in_view=4 with_signal=4 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:16Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:17Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:18Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:19Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:20Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:21Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:22Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:23Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+
+# recorder: sending key S
+GNSS TEST S BEGIN software simulation 6000ms
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:24Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:25Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=47319 valid_NMEA=1216 bad_checksum=0 overflow=0 uptime=120s
+GNSS SKY GP: in_view=6 with_signal=5 best_SNR=38 BD: in_view=4 with_signal=4 best_SNR=37
+GNSS EVENT VALID_FIX -> STALE
+GNSS STATUS STALE sats=8 HDOP=2.20 quality=1 (no usable coordinates)
+GNSS STATUS STALE sats=8 HDOP=2.20 quality=1 (no usable coordinates)
+GNSS STATUS STALE sats=8 HDOP=2.20 quality=1 (no usable coordinates)
+GNSS STATUS STALE sats=8 HDOP=2.20 quality=1 (no usable coordinates)
+GNSS TEST timeout PASS; waiting for fresh RMC+GGA
+GNSS STATUS STALE sats=8 HDOP=2.20 quality=1 (no usable coordinates)
+GNSS TEST S PASS: fresh fix recovered
+GNSS EVENT STALE -> VALID_FIX
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:31Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:32Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:33Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:34Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:35Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=53377 valid_NMEA=1284 bad_checksum=0 overflow=0 uptime=130s
+GNSS SKY GP: in_view=6 with_signal=5 best_SNR=36 BD: in_view=5 with_signal=5 best_SNR=39
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:36Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:37Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:38Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:39Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:40Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:41Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:42Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:43Z sats=8 HDOP=2.20 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:44Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:45Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=59620 valid_NMEA=1404 bad_checksum=0 overflow=0 uptime=140s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:46Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:47Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:48Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:49Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:50Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+
+# recorder: sending key D
+GNSS TEST D BEGIN software simulation 6000ms
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:51Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:52Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS EVENT VALID_FIX -> STALE
+GNSS STATUS STALE sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS EVENT STALE -> DISCONNECTED
+GNSS STATUS DISCONNECTED sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS STATUS DISCONNECTED sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS DEBUG bytes=63016 valid_NMEA=1468 bad_checksum=0 overflow=0 uptime=150s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS STATUS DISCONNECTED sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS TEST timeout PASS; waiting for fresh RMC+GGA
+GNSS EVENT DISCONNECTED -> STALE
+GNSS STATUS STALE sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS TEST D PASS: fresh fix recovered
+GNSS EVENT STALE -> VALID_FIX
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:58Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:44:59Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:00Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:01Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:02Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:03Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:04Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:05Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=68664 valid_NMEA=1572 bad_checksum=0 overflow=0 uptime=160s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=40 BD: in_view=5 with_signal=5 best_SNR=36
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:06Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:07Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:08Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:09Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:10Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:11Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:12Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:13Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:14Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:15Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=75124 valid_NMEA=1692 bad_checksum=0 overflow=0 uptime=170s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=39 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:16Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:17Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+
+# recorder: sending key D
+GNSS TEST D BEGIN software simulation 6000ms
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:18Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:19Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS EVENT VALID_FIX -> STALE
+GNSS STATUS STALE sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS EVENT STALE -> DISCONNECTED
+GNSS STATUS DISCONNECTED sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS STATUS DISCONNECTED sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS STATUS DISCONNECTED sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS TEST timeout PASS; waiting for fresh RMC+GGA
+GNSS EVENT DISCONNECTED -> STALE
+GNSS STATUS STALE sats=9 HDOP=2.10 quality=1 (no usable coordinates)
+GNSS TEST D PASS: fresh fix recovered
+GNSS EVENT STALE -> VALID_FIX
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:25Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=77708 valid_NMEA=1740 bad_checksum=0 overflow=0 uptime=180s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:26Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:27Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:28Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:29Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:30Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:31Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:32Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:33Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:34Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:35Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=84168 valid_NMEA=1860 bad_checksum=0 overflow=0 uptime=190s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=37 BD: in_view=5 with_signal=5 best_SNR=36
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:36Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:37Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:38Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:39Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:40Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:41Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:42Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:43Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:44Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:45Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=90628 valid_NMEA=1980 bad_checksum=0 overflow=0 uptime=200s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=36 BD: in_view=5 with_signal=5 best_SNR=36
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:46Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:47Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:48Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:49Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:50Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:51Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:52Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:53Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:54Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:55Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=97088 valid_NMEA=2100 bad_checksum=0 overflow=0 uptime=210s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:56Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:57Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:58Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:45:59Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:00Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:01Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:02Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:03Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:04Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:05Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=103548 valid_NMEA=2220 bad_checksum=0 overflow=0 uptime=220s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:06Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:07Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:08Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:09Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:10Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:11Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:12Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:13Z sats=9 HDOP=2.10 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:14Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:15Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=110015 valid_NMEA=2340 bad_checksum=0 overflow=0 uptime=230s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=37 BD: in_view=5 with_signal=5 best_SNR=36
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:16Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:17Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:18Z sats=10 HDOP=2.00 quality=1 speed=3.4km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:19Z sats=10 HDOP=2.00 quality=1 speed=3.2km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:20Z sats=10 HDOP=2.00 quality=1 speed=1.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:21Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:22Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:23Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:24Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:25Z sats=10 HDOP=2.00 quality=1 speed=3.0km/h
+GNSS DEBUG bytes=116545 valid_NMEA=2460 bad_checksum=0 overflow=0 uptime=240s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:26Z sats=10 HDOP=2.00 quality=1 speed=2.3km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:27Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:28Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:29Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:30Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:31Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:32Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:33Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:34Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:35Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=123075 valid_NMEA=2580 bad_checksum=0 overflow=0 uptime=250s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:36Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:37Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:38Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:39Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:40Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:41Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:42Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:43Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:44Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:45Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=129605 valid_NMEA=2700 bad_checksum=0 overflow=0 uptime=260s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=36
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:46Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:47Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:48Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:49Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:50Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:51Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:52Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:53Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:54Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:55Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=136135 valid_NMEA=2820 bad_checksum=0 overflow=0 uptime=270s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=36
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:56Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:57Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:58Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:46:59Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:00Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:01Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:02Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:03Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:04Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:05Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=142665 valid_NMEA=2940 bad_checksum=0 overflow=0 uptime=280s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=36
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:06Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:07Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:08Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:09Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:10Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:11Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:12Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:13Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:14Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:15Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=149195 valid_NMEA=3060 bad_checksum=0 overflow=0 uptime=290s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:16Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:17Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:18Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:19Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:20Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:21Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:22Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:23Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:24Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:25Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=155725 valid_NMEA=3180 bad_checksum=0 overflow=0 uptime=300s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:26Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:27Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:28Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:29Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:30Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:31Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:32Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:33Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:34Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:35Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=162255 valid_NMEA=3300 bad_checksum=0 overflow=0 uptime=310s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=39 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:36Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:37Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:38Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:39Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:40Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:41Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:42Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:43Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:44Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:45Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=168785 valid_NMEA=3420 bad_checksum=0 overflow=0 uptime=320s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=39 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:46Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:47Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:48Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:49Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:50Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:51Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:52Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:53Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:54Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:55Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=175315 valid_NMEA=3540 bad_checksum=0 overflow=0 uptime=330s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:56Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:57Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:58Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:47:59Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:00Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:01Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:02Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:03Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:04Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:05Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=181845 valid_NMEA=3660 bad_checksum=0 overflow=0 uptime=340s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:06Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:07Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:08Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:09Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:10Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:11Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:12Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:13Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:14Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:15Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=188375 valid_NMEA=3780 bad_checksum=0 overflow=0 uptime=350s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:16Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:17Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:18Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:19Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:20Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:21Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:22Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:23Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:24Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:25Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=194905 valid_NMEA=3900 bad_checksum=0 overflow=0 uptime=360s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:26Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:27Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:28Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:29Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:30Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:31Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:32Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:33Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:34Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:35Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=201435 valid_NMEA=4020 bad_checksum=0 overflow=0 uptime=370s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:36Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:37Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:38Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:39Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:40Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:41Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:42Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:43Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:44Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:45Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS DEBUG bytes=207965 valid_NMEA=4140 bad_checksum=0 overflow=0 uptime=380s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=37
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:46Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:47Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:48Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:49Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:50Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:51Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:52Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:53Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:54Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:55Z sats=10 HDOP=2.00 quality=1 speed=1.8km/h
+GNSS DEBUG bytes=214495 valid_NMEA=4260 bad_checksum=0 overflow=0 uptime=390s
+GNSS SKY GP: in_view=8 with_signal=5 best_SNR=38 BD: in_view=5 with_signal=5 best_SNR=38
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:56Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:57Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:58Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:48:59Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+GNSS FIX lat=hidden lon=hidden UTC=2026-11-24T23:49:00Z sats=10 HDOP=2.00 quality=1 speed=0.0km/h
+
+# recorder: all tests done, 5 minutes of fix recorded
+
+# recorder: stopped after 344 s

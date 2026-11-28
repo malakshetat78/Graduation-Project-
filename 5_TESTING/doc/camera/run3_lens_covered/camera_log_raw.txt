@@ -1,0 +1,580 @@
+^DExecuting action: flash
+Running ninja in directory '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera'
+Executing "ninja flash"...
+[1/5] cd "/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera/esp-idf/esptool_py" && /Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python /Users/shahy/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/shahy/Desktop/University\ Graduation\ Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera/partition_table/partition-table.bin /Users/shahy/Desktop/University\ Graduation\ Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera/icvsp_ecu.bin[K
+icvsp_ecu.bin binary size 0x4faa0 bytes. Smallest app partition is 0x177000 bytes. 0x127560 bytes (79%) free.
+[2/5] Performing build step for 'bootloader'[K[1/1] cd "/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera/bootloader/esp-idf/esptool_py" && /Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python /Users/shahy/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /Users/shahy/Desktop/University\ Graduation\ Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera/bootloader/bootloader.bin[K
+Bootloader binary size 0x5170 bytes. 0x2e90 bytes (36%) free.
+[3/5] No install step for 'bootloader'[K[4/5] Completed 'bootloader'[K[4/5] cd /Users/shahy/esp/esp-idf/components/esptool_py && /opt/homebrew/bin/cmake -D IDF_PATH=/Users/shahy/esp/esp-idf -D "SERIAL_TOOL=/Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python;;/Users/shahy/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32s3" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D "WORKING_DIRECTORY=/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera" -P /Users/shahy/esp/esp-idf/components/esptool_py/run_serial_tool.cmake[K
+esptool.py --chip esp32s3 -p /dev/cu.usbmodem1101 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 8MB 0x0 bootloader/bootloader.bin 0x10000 icvsp_ecu.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.12.0
+Serial port /dev/cu.usbmodem1101
+Connecting...
+Chip is ESP32-S3 (QFN56) (revision v0.2)
+Features: WiFi, BLE, Embedded PSRAM 8MB (AP_3v3)
+Crystal is 40MHz
+USB mode: USB-Serial/JTAG
+MAC: 68:ee:8f:4f:5f:f8
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x0005ffff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 20848 bytes to 13358...
+Writing at 0x00000000... (100 %)[K
+Wrote 20848 bytes (13358 compressed) at 0x00000000 in 0.3 seconds (effective 500.9 kbit/s)...
+Hash of data verified.
+Compressed 326304 bytes to 174960...
+Writing at 0x00010000... (9 %)[KWriting at 0x0001b764... (18 %)[KWriting at 0x00023147... (27 %)[KWriting at 0x00029587... (36 %)[KWriting at 0x0002fc4f... (45 %)[KWriting at 0x00037976... (54 %)[KWriting at 0x0003de90... (63 %)[KWriting at 0x00046d17... (72 %)[KWriting at 0x0004e2c3... (81 %)[KWriting at 0x00054c77... (90 %)[KWriting at 0x0005b59c... (100 %)[K
+Wrote 326304 bytes (174960 compressed) at 0x00010000 in 2.2 seconds (effective 1181.0 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 105...
+Writing at 0x00008000... (100 %)[K
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 560.7 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+Executing action: monitor
+Running idf_monitor in directory '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu'
+Executing "/Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python /Users/shahy/esp/esp-idf/tools/idf_monitor.py -p /dev/cu.usbmodem1101 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera/icvsp_ecu.elf' '/Users/shahy/Desktop/University Graduation Project/Graduation-Project-/.worktrees/espidf/xaio_sw/ecu/build_camera/bootloader/bootloader.elf' -m '/Users/shahy/.espressif/python_env/idf5.5_py3.13_env/bin/python' '/Users/shahy/esp/esp-idf/tools/idf.py' '-B' 'build_camera' '-D' 'SDKCONFIG=build_camera/sdkconfig' '-D' 'SDKCONFIG_DEFAULTS=sdkconfig.defaults;sdkconfig.camera' '-p' '/dev/cu.usbmodem1101'"...
+--- esp-idf-monitor 1.10.0 on /dev/cu.usbmodem1101 115200
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0x2a (SPI_FAST_FLASH_BOOT)
+Saved PC:0x42007771
+--- 0x42007771: s_test_psram at /Users/shahy/esp/esp-idf/components/esp_psram/system_layer/esp_psram.c:707
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x1530
+load:0x403c8700,len:0xcec
+--- 0x403c8700: _stext at ??:?
+load:0x403cb700,len:0x2ef8
+entry 0x403c8920
+--- 0x403c8920: call_start_cpu0 at /Users/shahy/esp/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+I (24) boot: ESP-IDF v5.5.5 2nd stage bootloader
+I (24) boot: compile time Nov 24 2026 22:45:13
+I (25) boot: Multicore bootloader
+I (25) boot: chip revision: v0.2
+I (25) boot: efuse block revision: v1.4
+I (25) boot.esp32s3: Boot SPI Speed : 80MHz
+I (25) boot.esp32s3: SPI Mode       : DIO
+I (26) boot.esp32s3: SPI Flash Size : 8MB
+I (26) boot: Enabling RNG early entropy source...
+I (26) boot: Partition Table:
+I (26) boot: ## Label            Usage          Type ST Offset   Length
+I (26) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (27) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (27) boot:  2 factory          factory app      00 00 00010000 00177000
+I (28) boot: End of partition table
+I (28) esp_image: segment 0: paddr=00010020 vaddr=3c030020 size=0f590h ( 62864) map
+I (40) esp_image: segment 1: paddr=0001f5b8 vaddr=3fc94300 size=00a60h (  2656) load
+I (41) esp_image: segment 2: paddr=00020020 vaddr=42000020 size=2a5ech (173548) map
+I (73) esp_image: segment 3: paddr=0004a614 vaddr=3fc94d60 size=051a4h ( 20900) load
+I (78) esp_image: segment 4: paddr=0004f7c0 vaddr=40374000 size=10294h ( 66196) load
+I (93) esp_image: segment 5: paddr=0005fa5c vaddr=50000000 size=00020h (    32) load
+I (100) boot: Loaded app from partition at offset 0x10000
+I (100) boot: Disabling RNG early entropy source...
+I (101) octal_psram: vendor id    : 0x0d (AP)
+I (102) octal_psram: dev id       : 0x02 (generation 3)
+I (102) octal_psram: density      : 0x03 (64 Mbit)
+I (102) octal_psram: good-die     : 0x01 (Pass)
+I (102) octal_psram: Latency      : 0x01 (Fixed)
+I (102) octal_psram: VCC          : 0x01 (3V)
+I (103) octal_psram: SRF          : 0x01 (Fast Refresh)
+I (103) octal_psram: BurstType    : 0x01 (Hybrid Wrap)
+I (103) octal_psram: BurstLen     : 0x01 (32 Byte)
+I (103) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)
+I (103) octal_psram: DriveStrength: 0x00 (1/1)
+I (104) MSPI Timing: Enter psram timing tuning
+I (105) esp_psram: Found 8MB PSRAM device
+I (105) esp_psram: Speed: 80MHz
+I (105) cpu_start: Multicore app
+I (538) esp_psram: SPI SRAM memory test OK
+I (547) cpu_start: Pro cpu start user code
+I (547) cpu_start: cpu freq: 160000000 Hz
+I (547) app_init: Application information:
+I (547) app_init: Project name:     icvsp_ecu
+I (547) app_init: App version:      16ad91a-dirty
+I (547) app_init: Compile time:     Nov 24 2026 23:05:30
+I (548) app_init: ELF file SHA256:  723105e40...
+I (548) app_init: ESP-IDF:          v5.5.5
+I (548) efuse_init: Min chip rev:     v0.0
+I (548) efuse_init: Max chip rev:     v0.99 
+I (548) efuse_init: Chip rev:         v0.2
+I (549) heap_init: Initializing. RAM available for dynamic allocation:
+I (549) heap_init: At 3FC9B100 len 0004E610 (313 KiB): RAM
+I (549) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (549) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (549) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (550) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+I (551) spi_flash: detected chip: gd
+I (551) spi_flash: flash io: dio
+I (551) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (552) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (552) main_task: Started on CPU0
+I (552) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+I (552) main_task: Calling app_main()
+
+CAM BEGIN T-012 camera bring-up test (ESP-IDF build)
+CAMSTAT build firmware=16ad91a-dirty idf=v5.5.5 compiled="Nov 24 2026 23:05:30" shots=20 lighting="lens covered"
+
+>>> STEP 1/6: memory before the camera starts
+CAM psram          PASS  8192 KB
+CAMSTAT mem when=before_camera internal_free=361835 internal_largest=262144 psram_free=8386192 heap_min_ever=8715996
+
+>>> STEP 2/6: start the camera and read the sensor model
+I (2552) s3 ll_cam: DMA Channel=0
+I (2552) cam_hal: cam init ok
+I (2552) sccb-ng: pin_sda 40 pin_scl 39
+I (2552) sccb-ng: sccb_i2c_port=0
+I (2562) ov3640: Mismatch PID=0x3660
+I (2562) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (2562) camera: Detected OV3660 camera
+I (2562) camera: Detected camera at address=0x3c
+I (2872) cam_hal: PSRAM DMA mode disabled
+I (2872) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 15
+I (2872) cam_hal: Allocating 15360 Byte frame buffer in PSRAM
+I (2872) cam_hal: cam config ok
+I (2882) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM startup        PASS  init 352.1 ms (attempt 1)
+CAM sensor         PASS  OV3660 PID=0x3660 VER=0x00 MIDH=0x00 MIDL=0x00 (expected OV3660)
+
+>>> STEP 3/6: repeated capture at QVGA, VGA and SVGA (keep the scene and light the same)
+I (2902) s3 ll_cam: DMA Channel=0
+I (2902) cam_hal: cam init ok
+I (2902) sccb-ng: pin_sda 40 pin_scl 39
+I (2902) sccb-ng: sccb_i2c_port=0
+I (2912) ov3640: Mismatch PID=0x3660
+I (2912) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (2912) camera: Detected OV3660 camera
+I (2912) camera: Detected camera at address=0x3c
+I (3222) cam_hal: PSRAM DMA mode disabled
+I (3222) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 15
+I (3222) cam_hal: Allocating 15360 Byte frame buffer in PSRAM
+I (3222) cam_hal: cam config ok
+I (3232) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM start_QVGA     PASS  init 348.0 ms (attempt 1)
+cam_hal: NO-SOI - JPEG start marker missing
+cam_hal: NO-SOI - JPEG start marker missing
+CAM QVGA shot  1: 2838 bytes, 320x240, start=1 end=1, wait 72.0 ms
+-----BEGIN ICVSP JPEG name=QVGA_shot01 width=320 height=240 bytes=2838 lighting="lens covered"-----
+/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUaHBYeLCYuLSsm
+KikwNkU7MDNBNCkqPFI9QUdKTU5NLzpVW1RLWkVMTUr/2wBDAQ0ODhIQEiMUFCNKMioySkpKSkpK
+SkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkr/xAAfAAABBQEBAQEB
+AQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEH
+InEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFla
+Y2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbH
+yMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQID
+BAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJ
+IzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY
+2dri4+Tl5ufo6ery8/T19vf4+fr/wAARCADwAUADASEAAhEBAxEB/9oADAMBAAIRAxEAPwDzMUm6
+gAoqQCigBDS0AIDS5oEJS5oGFJTAdRSEFFMBRRSAKdQAvakoAWlpCCkpjClFIQU7rQAUUwE/Cn8U
+AFJTQhf60tILlP8AGjtTLEooASloEFFABRSAWkpgLQaQhRRQMWkoAdRSEH1opjFFHNAhRRzSAWg0
+wDp3paA3Fo5pCFNHNABiigA5paAF60fjQIqYNJVGgUUAJzS0gEpaBBigUwClpALSUALS0AAFFAC4
+o7UAFLQAUtIkWgCgoKXFMQe9FKwC9aUcUCDvR2oAUCjFAwxRzQAtLSEU/wAaMVZYlJigQtFIApaY
+xKXFIQlLigBcUYoAKWgQuKKAFxRigBcUYoGAoxQIdR2pCFo68UDFpcUAJiloEAFOxSASjrTAMUoo
+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
+-----END ICVSP JPEG-----
+CAM QVGA shot  2: 2885 bytes, 320x240, start=1 end=1, wait 58.3 ms
+CAM QVGA shot  3: 2837 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot  4: 2870 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot  5: 2862 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot  6: 2903 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot  7: 2945 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot  8: 2919 bytes, 320x240, start=1 end=1, wait 71.7 ms
+CAM QVGA shot  9: 2866 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot 10: 2869 bytes, 320x240, start=1 end=1, wait 71.7 ms
+CAM QVGA shot 11: 2837 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot 12: 2944 bytes, 320x240, start=1 end=1, wait 71.5 ms
+CAM QVGA shot 13: 2956 bytes, 320x240, start=1 end=1, wait 71.5 ms
+CAM QVGA shot 14: 2976 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot 15: 2950 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot 16: 2903 bytes, 320x240, start=1 end=1, wait 71.7 ms
+CAM QVGA shot 17: 2852 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot 18: 2944 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot 19: 2920 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAM QVGA shot 20: 3019 bytes, 320x240, start=1 end=1, wait 71.6 ms
+CAMSTAT res=QVGA width=320 height=240 shots=20 valid=20 no_frame=0 bad_jpeg=0 wrong_size=0 too_small=0 init_ms=348.0 get_ms_min=58.3 get_ms_avg=71.0 get_ms_max=72.0 frame_gap_ms_avg=72.0 fps=13.9 bytes_min=2837 bytes_avg=2904 bytes_max=3019 sensor=OV3660 lighting="lens covered"
+CAMSTAT mem when=running_QVGA internal_free=339495 internal_largest=262144 psram_free=8369624 heap_min_ever=8673244
+CAM capture_QVGA   PASS  20/20 valid 320x240 JPEGs, wait avg 71.0 ms, 2904 bytes avg
+I (4992) s3 ll_cam: DMA Channel=0
+I (4992) cam_hal: cam init ok
+I (4992) sccb-ng: pin_sda 40 pin_scl 39
+I (4992) sccb-ng: sccb_i2c_port=0
+I (5002) ov3640: Mismatch PID=0x3660
+I (5002) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (5002) camera: Detected OV3660 camera
+I (5002) camera: Detected camera at address=0x3c
+I (5312) cam_hal: PSRAM DMA mode disabled
+I (5312) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 60
+I (5312) cam_hal: Allocating 61440 Byte frame buffer in PSRAM
+I (5312) cam_hal: cam config ok
+I (5322) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM start_VGA      PASS  init 353.0 ms (attempt 1)
+CAM VGA shot  1: 12626 bytes, 640x480, start=1 end=1, wait 72.1 ms
+-----BEGIN ICVSP JPEG name=VGA_shot01 width=640 height=480 bytes=12626 lighting="lens covered"-----
+/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUaHBYeLCYuLSsm
+KikwNkU7MDNBNCkqPFI9QUdKTU5NLzpVW1RLWkVMTUr/2wBDAQ0ODhIQEiMUFCNKMioySkpKSkpK
+SkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkr/xAAfAAABBQEBAQEB
+AQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEH
+InEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFla
+Y2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbH
+yMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQID
+BAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJ
+IzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1
+dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY
+2dri4+Tl5ufo6ery8/T19vf4+fr/wAARCAHgAoADASEAAhEBAxEB/9oADAMBAAIRAxEAPwDzHJNB
+4oATtSUAGeKWkISl60AHU0EYpXASkpgL15ooEFGaBhRQIKXtQMSigApelAgopAJQKYxaKBBSGgYt
+FAgFFAwpe1IQCigANApgLSGkIdikBzQAtHakA2n1QB0zTfrQAvagUgHd+aOC1IA70GgQLQfpTAMG
+nD3pXGJ0owaLgwyQaU4piE60o5+lSITmlPSgoQcZo71RLQvvS5NSAmeKTGaYAKk7Y9aY2NA/KhvT
+k0tBFfNJVmoUdKBCUUgCloASl+tACUlAC0Z4oGGaKBCU7pQAd6SgAopgLSUgFoNAgzRQMKKQgzzS
+55oGFLupCsJmjNUAGikAZpTQAlLmgBaKACjtSEJR9KoAp+6kMAab3pCHcYpKaGLnPeg0hB+NKOKd
+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
+-----END ICVSP JPEG-----
+CAM VGA shot  2: 12374 bytes, 640x480, start=1 end=1, wait 50.7 ms
+CAM VGA shot  3: 12711 bytes, 640x480, start=1 end=1, wait 107.4 ms
+CAM VGA shot  4: 12488 bytes, 640x480, start=1 end=1, wait 71.7 ms
+CAM VGA shot  5: 12614 bytes, 640x480, start=1 end=1, wait 71.6 ms
+CAM VGA shot  6: 12518 bytes, 640x480, start=1 end=1, wait 71.7 ms
+CAM VGA shot  7: 12722 bytes, 640x480, start=1 end=1, wait 71.6 ms
+CAM VGA shot  8: 30573 bytes, 640x480, start=1 end=1, wait 107.2 ms
+CAM VGA shot  9: 14698 bytes, 640x480, start=1 end=1, wait 180.1 ms
+CAM VGA shot 10: 14669 bytes, 640x480, start=1 end=1, wait 71.7 ms
+CAM VGA shot 11: 14608 bytes, 640x480, start=1 end=1, wait 71.6 ms
+CAM VGA shot 12: 14598 bytes, 640x480, start=1 end=1, wait 107.6 ms
+CAM VGA shot 13: 14450 bytes, 640x480, start=1 end=1, wait 71.6 ms
+CAM VGA shot 14: 14585 bytes, 640x480, start=1 end=1, wait 71.5 ms
+CAM VGA shot 15: 30900 bytes, 640x480, start=1 end=1, wait 107.4 ms
+CAM VGA shot 16: 30693 bytes, 640x480, start=1 end=1, wait 107.7 ms
+CAM VGA shot 17: 14476 bytes, 640x480, start=1 end=1, wait 71.8 ms
+CAM VGA shot 18: 14661 bytes, 640x480, start=1 end=1, wait 71.6 ms
+CAM VGA shot 19: 14258 bytes, 640x480, start=1 end=1, wait 71.4 ms
+CAM VGA shot 20: 14574 bytes, 640x480, start=1 end=1, wait 107.9 ms
+CAMSTAT res=VGA width=640 height=480 shots=20 valid=20 no_frame=0 bad_jpeg=0 wrong_size=0 too_small=0 init_ms=353.0 get_ms_min=50.7 get_ms_avg=86.8 get_ms_max=180.1 frame_gap_ms_avg=90.0 fps=11.1 bytes_min=12374 bytes_avg=16289 bytes_max=30900 sensor=OV3660 lighting="lens covered"
+CAMSTAT mem when=running_VGA internal_free=339495 internal_largest=262144 psram_free=8323544 heap_min_ever=8614108
+CAM capture_VGA    PASS  20/20 valid 640x480 JPEGs, wait avg 86.8 ms, 16289 bytes avg
+I (7442) s3 ll_cam: DMA Channel=0
+I (7442) cam_hal: cam init ok
+I (7442) sccb-ng: pin_sda 40 pin_scl 39
+I (7442) sccb-ng: sccb_i2c_port=0
+I (7452) ov3640: Mismatch PID=0x3660
+I (7452) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (7452) camera: Detected OV3660 camera
+I (7452) camera: Detected camera at address=0x3c
+I (7762) cam_hal: PSRAM DMA mode disabled
+I (7762) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 93
+I (7762) cam_hal: Allocating 96000 Byte frame buffer in PSRAM
+I (7762) cam_hal: cam config ok
+I (7772) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM start_SVGA     PASS  init 352.4 ms (attempt 1)
+CAM SVGA shot  1: 25182 bytes, 800x600, start=1 end=1, wait 108.2 ms
+CAM SVGA shot  2: 77293 bytes, 800x600, start=1 end=1, wait 179.7 ms
+CAM SVGA shot  3: 24902 bytes, 800x600, start=1 end=1, wait 71.7 ms
+CAM SVGA shot  4: 24893 bytes, 800x600, start=1 end=1, wait 107.6 ms
+CAM SVGA shot  5: 24958 bytes, 800x600, start=1 end=1, wait 71.6 ms
+CAM SVGA shot  6: 50514 bytes, 800x600, start=1 end=1, wait 143.4 ms
+CAM SVGA shot  7: 24863 bytes, 800x600, start=1 end=1, wait 72.0 ms
+CAM SVGA shot  8: 50546 bytes, 800x600, start=1 end=1, wait 107.3 ms
+CAM SVGA shot  9: 24133 bytes, 800x600, start=1 end=1, wait 71.9 ms
+CAM SVGA shot 10: 50384 bytes, 800x600, start=1 end=1, wait 107.4 ms
+CAM SVGA shot 11: 24362 bytes, 800x600, start=1 end=1, wait 143.8 ms
+CAM SVGA shot 12: 24800 bytes, 800x600, start=1 end=1, wait 71.7 ms
+CAM SVGA shot 13: 24798 bytes, 800x600, start=1 end=1, wait 179.6 ms
+CAM SVGA shot 14: 24829 bytes, 800x600, start=1 end=1, wait 71.6 ms
+CAM SVGA shot 15: 24892 bytes, 800x600, start=1 end=1, wait 71.6 ms
+CAM SVGA shot 16: 24004 bytes, 800x600, start=1 end=1, wait 107.6 ms
+CAM SVGA shot 17: 24949 bytes, 800x600, start=1 end=1, wait 107.7 ms
+CAM SVGA shot 18: 25090 bytes, 800x600, start=1 end=1, wait 71.5 ms
+CAM SVGA shot 19: 24514 bytes, 800x600, start=1 end=1, wait 71.4 ms
+CAM SVGA shot 20: 50880 bytes, 800x600, start=1 end=1, wait 107.8 ms
+CAMSTAT res=SVGA width=800 height=600 shots=20 valid=20 no_frame=0 bad_jpeg=0 wrong_size=0 too_small=0 init_ms=352.4 get_ms_min=71.4 get_ms_avg=102.2 get_ms_max=179.7 frame_gap_ms_avg=102.4 fps=9.8 bytes_min=24004 bytes_avg=32539 bytes_max=77293 sensor=OV3660 lighting="lens covered"
+CAMSTAT mem when=running_SVGA internal_free=339495 internal_largest=262144 psram_free=8288984 heap_min_ever=8596448
+CAM capture_SVGA   PASS  20/20 valid 800x600 JPEGs, wait avg 102.2 ms, 32539 bytes avg
+
+>>> STEP 4/6: memory after the camera is stopped
+CAMSTAT mem when=after_capture internal_free=361507 internal_largest=262144 psram_free=8386192 heap_min_ever=8596448
+
+>>> STEP 5/6: failure cases and recovery
+CAM fail_stopped   PASS  capture with camera stopped returned no frame, handled
+I (10142) s3 ll_cam: DMA Channel=0
+I (10142) cam_hal: cam init ok
+I (10142) sccb-ng: pin_sda 40 pin_scl 39
+I (10142) sccb-ng: sccb_i2c_port=0
+I (10152) ov3640: Mismatch PID=0x3660
+I (10152) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (10152) camera: Detected OV3660 camera
+I (10152) camera: Detected camera at address=0x3c
+I (10462) cam_hal: PSRAM DMA mode disabled
+I (10462) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 614
+I (10462) cam_hal: Allocating 629145 Byte frame buffer in OnBoard RAM
+E (10462) cam_hal: cam_dma_config(537): frame buffer malloc failed
+E (10462) cam_hal: cam_config(631): cam_dma_config failed
+E (10462) camera: Camera config failed with error 0xffffffff
+CAM init attempt 1/1 failed: ESP_FAIL (0xffffffff)
+CAM fail_init      PASS  start refused: ESP_FAIL (0xffffffff) after 317.5 ms, largest internal block 262144 < needed 629145: frame buffer refused, as expected
+I (10962) s3 ll_cam: DMA Channel=0
+I (10962) cam_hal: cam init ok
+I (10962) sccb-ng: pin_sda 40 pin_scl 39
+I (10962) sccb-ng: sccb_i2c_port=0
+I (10972) ov3640: Mismatch PID=0x3660
+I (10972) camera: Camera PID=0x3660 VER=0x00 MIDL=0x00 MIDH=0x00
+I (10972) camera: Detected OV3660 camera
+I (10972) camera: Detected camera at address=0x3c
+I (11282) cam_hal: PSRAM DMA mode disabled
+I (11282) cam_hal: buffer_size: 16384, half_buffer_size: 1024, node_buffer_size: 1024, node_cnt: 16, total_cnt: 15
+I (11282) cam_hal: Allocating 15360 Byte frame buffer in PSRAM
+I (11282) cam_hal: cam config ok
+I (11292) ov3660: Calculated VCO: 200000000 Hz, PLLCLK: 200000000 Hz, SYSCLK: 50000000 Hz, PCLK: 10000000 Hz
+CAM recover        PASS  camera started again after the failed start, frame valid 320x240 (2992 bytes)
+CAMSTAT mem when=after_all_tests internal_free=361507 internal_largest=262144 psram_free=8386192 heap_min_ever=8596448
+CAM memory_back    PASS  after all tests: internal 328 bytes, PSRAM 0 bytes less than before the camera started (limit 4096)
+
+>>> STEP 6/6: finished: all passed
+CAM RESULT pass=13 fail=0
+LED: slow blink = all passed

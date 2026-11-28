@@ -1,0 +1,403 @@
+   29.80 I (822) esp_psram: SPI SRAM memory test OK
+   29.80 I (830) cpu_start: Pro cpu start user code
+   29.80 I (830) cpu_start: cpu freq: 160000000 Hz
+   29.80 I (831) app_init: Application information:
+   29.80 I (831) app_init: Project name:     icvsp_ecu
+   29.80 I (831) app_init: App version:      16ad91a-dirty
+   29.80 I (831) app_init: Compile time:     Nov 25 2026 00:48:18
+   29.80 I (831) app_init: ELF file SHA256:  7bffd25ca...
+   29.80 I (831) app_init: ESP-IDF:          v5.5.5
+   29.80 I (832) efuse_init: Min chip rev:     v0.0
+   29.80 I (832) efuse_init: Max chip rev:     v0.99
+   29.80 I (832) efuse_init: Chip rev:         v0.2
+   29.80 I (832) heap_init: Initializing. RAM available for dynamic allocation:
+   29.80 I (832) heap_init: At 3FC97C60 len 00051AB0 (326 KiB): RAM
+   29.80 I (833) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+   29.80 I (833) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+   29.80 I (833) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+   29.80 I (833) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+   29.80 I (834) spi_flash: detected chip: gd
+   29.80 I (835) spi_flash: flash io: dio
+   29.80 I (835) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+   29.80 I (835) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+   29.80 I (836) main_task: Started on CPU0
+   29.80 I (836) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+   29.80 I (836) main_task: Calling app_main()
+   31.85 
+   31.85 GNSS BEGIN T-014: Seeed L76K bring-up (ESP-IDF build)
+   31.85 GNSS UART1 baud=9600 RX=GPIO44(D7) TX=GPIO43(D6)
+   31.85 GNSS INFO module TX -> ECU RX, module RX <- ECU TX; NO WIFI / NO CLOUD
+   31.85 GNSS INFO indoor NO_FIX is expected; test outdoors or at a window with clear sky
+   31.85 GNSS INFO coordinates hidden (lat=hidden lon=hidden)
+   31.85 GNSS TEST enabled: S=stale, D=disconnect; start from VALID_FIX
+   31.85 GNSS EVENT STARTING -> WAITING_UART
+   31.85 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   32.25 GNSS EVENT WAITING_UART -> WAITING_RMC_GGA
+   32.46 GNSS EVENT WAITING_RMC_GGA -> NO_FIX
+   32.46 GNSS MODULE TXT ANTENNA OK
+   32.86 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   33.88 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   34.71 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   35.72 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   36.75 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   37.77 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   38.79 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   39.81 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   39.81 GNSS DEBUG bytes=2208 valid_NMEA=80 bad_checksum=0 overflow=0 uptime=10s
+   39.81 GNSS SKY GP: in_view=0 with_signal=0 best_SNR=0 BD: in_view=0 with_signal=0 best_SNR=0
+   40.83 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   41.85 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   42.88 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   43.69 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   44.71 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   45.73 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   46.75 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   47.77 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   48.79 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   49.81 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   49.81 GNSS DEBUG bytes=4968 valid_NMEA=180 bad_checksum=0 overflow=0 uptime=20s
+   49.81 GNSS SKY GP: in_view=0 with_signal=0 best_SNR=0 BD: in_view=0 with_signal=0 best_SNR=0
+   50.84 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   51.85 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   52.88 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   53.69 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   54.71 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   55.73 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   56.74 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   57.77 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   58.79 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   59.81 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   59.81 GNSS DEBUG bytes=7728 valid_NMEA=280 bad_checksum=0 overflow=0 uptime=30s
+   59.81 GNSS SKY GP: in_view=0 with_signal=0 best_SNR=0 BD: in_view=0 with_signal=0 best_SNR=0
+   60.84 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   61.86 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   62.89 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   63.70 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   64.72 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   65.74 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   66.75 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   67.77 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   68.79 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   69.81 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   69.81 GNSS DEBUG bytes=10488 valid_NMEA=380 bad_checksum=0 overflow=0 uptime=40s
+   69.81 GNSS SKY GP: in_view=0 with_signal=0 best_SNR=0 BD: in_view=0 with_signal=0 best_SNR=0
+   70.83 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   71.85 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   72.86 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   73.89 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   74.70 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   75.72 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   76.74 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   77.76 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   78.79 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   79.81 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   79.81 GNSS DEBUG bytes=13272 valid_NMEA=480 bad_checksum=0 overflow=0 uptime=50s
+   79.81 GNSS SKY GP: in_view=1 with_signal=1 best_SNR=22 BD: in_view=0 with_signal=0 best_SNR=0
+   80.83 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   81.85 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   82.86 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   83.88 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   84.70 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   85.72 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   86.73 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   87.75 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   88.77 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   89.79 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   89.79 GNSS DEBUG bytes=16112 valid_NMEA=580 bad_checksum=0 overflow=0 uptime=60s
+   89.79 GNSS SKY GP: in_view=1 with_signal=1 best_SNR=25 BD: in_view=0 with_signal=0 best_SNR=0
+   90.81 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   91.83 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   92.85 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   93.87 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   94.69 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   95.71 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   96.73 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   97.75 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   98.77 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   99.80 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+   99.80 GNSS DEBUG bytes=18952 valid_NMEA=680 bad_checksum=0 overflow=0 uptime=70s
+   99.80 GNSS SKY GP: in_view=1 with_signal=1 best_SNR=27 BD: in_view=0 with_signal=0 best_SNR=0
+  100.82 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+  101.84 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+  102.86 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+  103.88 GNSS STATUS NO_FIX sats=0 HDOP=25.50 quality=0 (no usable coordinates)
+  104.97 I (821) esp_psram: SPI SRAM memory test OK
+  104.97 I (830) cpu_start: Pro cpu start user code
+  104.97 I (830) cpu_start: cpu freq: 160000000 Hz
+  104.97 I (831) app_init: Application information:
+  104.97 I (831) app_init: Project name:     icvsp_ecu
+  104.97 I (831) app_init: App version:      16ad91a-dirty
+  104.97 I (831) app_init: Compile time:     Nov 25 2026 00:48:18
+  104.97 I (831) app_init: ELF file SHA256:  7bffd25ca...
+  104.97 I (831) app_init: ESP-IDF:          v5.5.5
+  104.97 I (831) efuse_init: Min chip rev:     v0.0
+  104.97 I (832) efuse_init: Max chip rev:     v0.99
+  104.97 I (832) efuse_init: Chip rev:         v0.2
+  104.97 I (832) heap_init: Initializing. RAM available for dynamic allocation:
+  104.97 I (832) heap_init: At 3FC97C60 len 00051AB0 (326 KiB): RAM
+  104.97 I (832) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+  104.97 I (833) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+  104.97 I (833) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+  104.97 I (833) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+  104.97 I (834) spi_flash: detected chip: gd
+  104.97 I (834) spi_flash: flash io: dio
+  104.97 I (835) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+  104.97 I (835) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+  104.97 I (836) main_task: Started on CPU0
+  104.97 I (836) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+  104.97 I (836) main_task: Calling app_main()
+  107.01 
+  107.01 GNSS BEGIN T-014: Seeed L76K bring-up (ESP-IDF build)
+  107.01 GNSS UART1 baud=9600 RX=GPIO44(D7) TX=GPIO43(D6)
+  107.01 GNSS INFO module TX -> ECU RX, module RX <- ECU TX; NO WIFI / NO CLOUD
+  107.01 GNSS INFO indoor NO_FIX is expected; test outdoors or at a window with clear sky
+  107.01 GNSS INFO coordinates hidden (lat=hidden lon=hidden)
+  107.01 GNSS TEST enabled: S=stale, D=disconnect; start from VALID_FIX
+  107.01 GNSS EVENT STARTING -> WAITING_UART
+  107.01 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  108.03 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  108.85 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  109.87 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  110.89 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  111.91 GNSS EVENT WAITING_UART -> DISCONNECTED
+  111.91 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  112.94 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  113.96 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  114.98 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  114.99 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=10s
+  114.99 GNSS SKY no GSV sentences yet
+  116.01 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  117.03 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  117.84 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  118.87 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  119.89 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  120.90 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  121.92 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  122.94 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  123.95 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  124.97 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  124.97 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=20s
+  124.97 GNSS SKY no GSV sentences yet
+  125.99 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  127.01 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  128.03 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  128.84 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  129.86 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  130.88 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  131.90 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  132.91 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  133.94 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  134.96 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  134.96 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=30s
+  134.96 GNSS SKY no GSV sentences yet
+  135.98 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  137.00 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  138.02 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  139.04 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  143.44 I (821) esp_psram: SPI SRAM memory test OK
+  143.44 I (830) cpu_start: Pro cpu start user code
+  143.44 I (830) cpu_start: cpu freq: 160000000 Hz
+  143.44 I (831) app_init: Application information:
+  143.44 I (831) app_init: Project name:     icvsp_ecu
+  143.44 I (831) app_init: App version:      16ad91a-dirty
+  143.44 I (831) app_init: Compile time:     Nov 25 2026 00:48:18
+  143.44 I (831) app_init: ELF file SHA256:  7bffd25ca...
+  143.44 I (831) app_init: ESP-IDF:          v5.5.5
+  143.44 I (832) efuse_init: Min chip rev:     v0.0
+  143.44 I (832) efuse_init: Max chip rev:     v0.99
+  143.44 I (832) efuse_init: Chip rev:         v0.2
+  143.44 I (832) heap_init: Initializing. RAM available for dynamic allocation:
+  143.44 I (832) heap_init: At 3FC97C60 len 00051AB0 (326 KiB): RAM
+  143.44 I (833) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+  143.44 I (833) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+  143.44 I (833) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+  143.44 I (833) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+  143.44 I (834) spi_flash: detected chip: gd
+  143.44 I (835) spi_flash: flash io: dio
+  143.44 I (835) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+  143.44 I (835) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+  143.44 I (836) main_task: Started on CPU0
+  143.44 I (836) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+  143.44 I (836) main_task: Calling app_main()
+  145.27 
+  145.27 GNSS BEGIN T-014: Seeed L76K bring-up (ESP-IDF build)
+  145.27 GNSS UART1 baud=9600 RX=GPIO44(D7) TX=GPIO43(D6)
+  145.27 GNSS INFO module TX -> ECU RX, module RX <- ECU TX; NO WIFI / NO CLOUD
+  145.28 GNSS INFO indoor NO_FIX is expected; test outdoors or at a window with clear sky
+  145.28 GNSS INFO coordinates hidden (lat=hidden lon=hidden)
+  145.28 GNSS TEST enabled: S=stale, D=disconnect; start from VALID_FIX
+  145.28 GNSS EVENT STARTING -> WAITING_UART
+  145.28 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  146.29 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  147.31 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  148.33 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  149.35 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  150.37 GNSS EVENT WAITING_UART -> DISCONNECTED
+  150.37 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  151.39 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  152.41 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  153.43 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  153.43 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=10s
+  153.43 GNSS SKY no GSV sentences yet
+  154.45 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  155.47 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  156.29 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  157.31 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  158.33 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  159.35 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  160.37 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  161.39 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  162.41 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  163.43 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  163.43 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=20s
+  163.43 GNSS SKY no GSV sentences yet
+  164.45 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  165.47 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  166.29 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  167.31 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  168.33 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  169.34 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  170.36 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  171.38 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  172.39 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  173.41 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  173.41 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=30s
+  173.41 GNSS SKY no GSV sentences yet
+  174.43 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  175.45 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  176.27 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  177.29 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  178.31 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  179.32 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  180.34 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  181.36 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  182.38 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  183.40 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  183.40 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=40s
+  183.40 GNSS SKY no GSV sentences yet
+  184.42 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  185.44 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  186.46 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  187.27 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  188.30 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  189.31 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  190.33 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  191.36 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  192.37 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  193.40 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  193.40 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=50s
+  193.40 GNSS SKY no GSV sentences yet
+  194.41 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  195.44 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  196.47 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  197.29 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  198.31 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  199.33 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  200.35 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  201.37 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  202.40 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  203.42 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  203.42 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=60s
+  203.42 GNSS SKY no GSV sentences yet
+  204.44 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  205.47 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  206.28 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  207.30 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  208.32 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  209.34 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  210.36 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  211.39 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  212.40 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  213.43 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  213.43 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=70s
+  213.43 GNSS SKY no GSV sentences yet
+  214.45 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  215.46 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  216.28 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  217.30 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  218.33 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  219.35 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  220.37 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  221.40 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  222.42 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  223.44 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  223.44 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=80s
+  223.45 GNSS SKY no GSV sentences yet
+  224.46 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  225.28 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  226.30 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  227.32 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  228.34 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  229.36 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  230.38 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  231.39 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  232.41 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  233.44 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+  233.44 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=90s
+  233.44 GNSS SKY no GSV sentences yet
+  234.46 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    0.41 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    0.41 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=110s
+    0.41 GNSS SKY no GSV sentences yet
+    1.43 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    2.45 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    3.26 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    4.29 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    5.30 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    6.32 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    7.33 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    8.35 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+    9.37 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   10.38 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   10.38 GNSS DEBUG bytes=0 valid_NMEA=0 bad_checksum=0 overflow=0 uptime=120s
+   10.38 GNSS SKY no GSV sentences yet
+   11.41 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   12.43 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   13.45 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   14.27 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   15.29 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   16.31 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   17.34 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   18.36 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   19.38 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   76.82 I (821) esp_psram: SPI SRAM memory test OK
+   76.82 I (830) cpu_start: Pro cpu start user code
+   76.82 I (830) cpu_start: cpu freq: 160000000 Hz
+   76.82 I (831) app_init: Application information:
+   76.82 I (831) app_init: Project name:     icvsp_ecu
+   76.82 I (831) app_init: App version:      16ad91a-dirty
+   76.82 I (831) app_init: Compile time:     Nov 25 2026 00:48:18
+   76.82 I (831) app_init: ELF file SHA256:  7bffd25ca...
+   76.82 I (831) app_init: ESP-IDF:          v5.5.5
+   76.82 I (831) efuse_init: Min chip rev:     v0.0
+   76.82 I (832) efuse_init: Max chip rev:     v0.99
+   76.82 I (832) efuse_init: Chip rev:         v0.2
+   76.82 I (832) heap_init: Initializing. RAM available for dynamic allocation:
+   76.82 I (832) heap_init: At 3FC97C60 len 00051AB0 (326 KiB): RAM
+   76.82 I (832) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+   76.82 I (833) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+   76.82 I (833) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+   76.82 I (833) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator
+   76.82 I (834) spi_flash: detected chip: gd
+   76.82 I (834) spi_flash: flash io: dio
+   76.82 I (835) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+   76.82 I (835) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+   76.82 I (836) main_task: Started on CPU0
+   76.82 I (836) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations
+   76.82 I (836) main_task: Calling app_main()
+   78.85 
+   78.85 GNSS BEGIN T-014: Seeed L76K bring-up (ESP-IDF build)
+   78.85 GNSS UART1 baud=9600 RX=GPIO44(D7) TX=GPIO43(D6)
+   78.85 GNSS INFO module TX -> ECU RX, module RX <- ECU TX; NO WIFI / NO CLOUD
+   78.85 GNSS INFO indoor NO_FIX is expected; test outdoors or at a window with clear sky
+   78.85 GNSS INFO coordinates hidden (lat=hidden lon=hidden)
+   78.85 GNSS TEST enabled: S=stale, D=disconnect; start from VALID_FIX
+   78.85 GNSS EVENT STARTING -> WAITING_UART
+   78.85 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   79.87 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   80.89 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   81.70 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   82.72 GNSS STATUS WAITING_UART sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   83.75 GNSS EVENT WAITING_UART -> DISCONNECTED
+   83.75 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)
+   84.77 GNSS STATUS DISCONNECTED sats=0 HDOP=unknown quality=0 (no usable coordinates)

@@ -1,99 +1,165 @@
-# T-012 Camera bring-up: test cases and results
+# T-012 Camera bring-up (ESP-IDF): test cases and results
 
 - Ticket: T-012 Camera bring-up (development). Verification follows in T-013.
-- Procedure: [Arduino sketch guide, camera section](../../../xaio_sw/arduino/ICVSP_ECU/START_HERE.md#camera-bring-up-test-t-012-no-wi-fi-needed)
-- Firmware: [camera_test.cpp](../../../xaio_sw/arduino/ICVSP_ECU/src/app/camera_test.cpp), selected with `#define ICVSP_APP ICVSP_APP_CAMERA` in [config.h](../../../xaio_sw/arduino/ICVSP_ECU/config.h)
-- Tools: [testing/hardware/camera/tools](tools/README.md)
+- Firmware: [components/icvsp_camera](../../../1_XAIO_SW/code/components/icvsp_camera) in the ESP-IDF project
+  `1_XAIO_SW/code`, started by [main/camera_main.cpp](../../../1_XAIO_SW/code/main/camera_main.cpp). Selected with the
+  build preset **T-012 camera test** (`sdkconfig.camera`).
+- Tools: [extract_jpegs.py](../../code/camera/extract_jpegs.py) turns a saved log into photos and a summary;
+  [run_host_tests.sh](../../code/camera/run_host_tests.sh) runs the host checks.
 - Out of scope: hazard-detection accuracy. These tests only show that the camera produces valid images.
 
-Every result below states its setup: **physical board**, **emulator** or **host**. Only physical-board results
-count as camera evidence.
+Every result states its setup: **physical board** or **host**. Only physical-board results count as camera
+evidence.
+
+## How to run it
+
+1. VS Code with the ESP-IDF extension (ESP-IDF v5.5.x), open `1_XAIO_SW/code`.
+2. `Cmd/Ctrl+Shift+P` > **ESP-IDF: Select Project Configuration** > **T-012 camera test**.
+3. Write the light of the run: **ESP-IDF: SDK Configuration Editor** > search `Light` > for example `dim room` > Save.
+4. Board still, pointing at the scene. Click **Build, Flash and Monitor** (flame icon).
+5. Wait for `CAM RESULT pass=.. fail=..` (about 30 s). LED: slow blink = all passed, fast blink = a FAIL line.
+6. Save everything the monitor printed to `camera_log_raw.txt`, then:
+   `python3 5_TESTING/code/camera/extract_jpegs.py camera_log_raw.txt --out photos > extractor_summary.md`
+
+Command line instead of VS Code:
+
+```bash
+. ~/esp/esp-idf/export.sh
+cd 1_XAIO_SW/code
+idf.py -B build_camera -D SDKCONFIG=build_camera/sdkconfig -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.camera" set-target esp32s3 build
+idf.py -B build_camera -p PORT flash monitor
+```
 
 ## Test record
 
-All runs: Shahesta, physical board, XIAO ESP32-S3 Sense, camera sensor OV3660 (PID 0x3660), same place and scene
-(room ceiling, wall, lights). Each log is Serial Monitor output from the `CAM BEGIN` line on (the lines of the
-previous run that were still in the monitor are cut off), with the extractor summary and the two sample photos.
+All runs: 2026-11-24, tester Shahesta, **physical board** XIAO ESP32-S3 Sense, camera OV3660 (PID 0x3660),
+ESP-IDF v5.5.5, 20 photos per resolution, same board and USB cable. `firmware=16ad91a-dirty` in every log: the
+code was not committed yet, so the version below says which code each run used.
 
-| Run | Date | Purpose | Lighting (`CONFIG_ICVSP_CAM_LIGHTING`) | Build (`CAMSTAT build`) | `CAM RESULT` | Evidence |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | 2026-11-22 | first run (TC-CAM-01 to 12) | bright room, ceiling lights on (log says "not recorded": no lighting setting in that build) | `arduino-3.3.13`, IDF v5.5.6-436-ga45de8ccca1, compiled Nov 22 2026 14:39:25 | `pass=13 fail=0` | [log](run1_bright/camera_log_raw.txt) (a Smoke run comes first), [summary](run1_bright/extractor_summary.md), [QVGA](run1_bright/photos/01_QVGA_shot01.jpg), [VGA](run1_bright/photos/02_VGA_shot01.jpg) |
-| 2 | 2026-11-24 | lighting (TC-CAM-13) | dim room (lens partly covered, the room could not be darkened) | `arduino-3.3.12`, IDF v5.5.5, compiled Nov 24 2026 18:19:17 | `pass=13 fail=0` | [log](run2_dim/camera_log_raw.txt), [summary](run2_dim/extractor_summary.md), [QVGA](run2_dim/photos/01_QVGA_shot01.jpg), [VGA](run2_dim/photos/02_VGA_shot01.jpg) |
-| 3 | 2026-11-24 | lighting (TC-CAM-13) | lens covered | same core, compiled Nov 24 2026 18:26:57 | `pass=13 fail=0` | [log](run3_lens_covered/camera_log_raw.txt), [summary](run3_lens_covered/extractor_summary.md), [QVGA](run3_lens_covered/photos/01_QVGA_shot01.jpg), [VGA](run3_lens_covered/photos/02_VGA_shot01.jpg) |
-| 4 | 2026-11-24 | repeatability (TC-CAM-14) | bright room | same core, compiled Nov 24 2026 18:29:57 | `pass=13 fail=0` | [log](run4_bright/camera_log_raw.txt), [summary](run4_bright/extractor_summary.md), [QVGA](run4_bright/photos/01_QVGA_shot01.jpg), [VGA](run4_bright/photos/02_VGA_shot01.jpg) |
-| 5 | 2026-11-24 | repeatability (TC-CAM-14), RESET only, same build as run 4 | bright room | same as run 4 | `pass=13 fail=0` | [log](run5_bright/camera_log_raw.txt), [summary](run5_bright/extractor_summary.md), [QVGA](run5_bright/photos/01_QVGA_shot01.jpg), [VGA](run5_bright/photos/02_VGA_shot01.jpg) |
-| 6 | 2026-11-24 | camera missing (TC-CAM-10): USB unplugged, camera removed, USB back in, RESET | (no camera) | same as run 4 | `pass=3 fail=4` (expected) | [log](run6_no_camera/camera_log_raw.txt), [summary](run6_no_camera/extractor_summary.md) |
-| 7 | 2026-11-24 | camera reconnected (TC-CAM-10): USB unplugged, camera back on, USB back in, RESET | label "bright room", but the photos show a dark close-up: the board was probably moved when the camera was put back | same as run 4 | `pass=13 fail=0` | [log](run7_camera_back/camera_log_raw.txt), [summary](run7_camera_back/extractor_summary.md), [QVGA](run7_camera_back/photos/01_QVGA_shot01.jpg), [VGA](run7_camera_back/photos/02_VGA_shot01.jpg) |
+| Run | Light / purpose | Firmware version | `CAM RESULT` | Folder |
+| --- | --- | --- | --- | --- |
+| 1 | bright room | A: first ESP-IDF port | pass=13 fail=0 | [run1_bright](run1_bright) |
+| 2 | dim room | A | pass=13 fail=0 | [run2_dim](run2_dim) |
+| 3 | lens covered | A | pass=13 fail=0 | [run3_lens_covered](run3_lens_covered) |
+| 4 | bright room, repeat | A | pass=13 fail=0 | [run4_bright](run4_bright) |
+| 5 | bright room, repeat (RESET only) | A | pass=13 fail=0 | [run5_bright](run5_bright) |
+| 6 | camera removed | A | pass=3 fail=4 (expected) | [run6_no_camera](run6_no_camera) |
+| 7 | camera put back, bright | B: stricter JPEG check, 2 SVGA buffers | pass=11 fail=2 | [run7_camera_back](run7_camera_back) |
+| 8 | bright room | C: B + stuck pictures cut to the first | pass=13 fail=0 | [run8_bright_fixed](run8_bright_fixed) |
+| 9 | bright room, repeat (RESET only) | C | pass=13 fail=0 | [run9_bright_fixed](run9_bright_fixed) |
+| 10 | bright room, after an upload | D: C + PSRAM at 40 MHz | pass=13 fail=0 | [run10_psram40](run10_psram40) |
+| 11 | dim room | E (final) | pass=13 fail=0, SVGA `cut=1` | [run11_dim_final](run11_dim_final) |
+| 12 | lens covered | E (final) | pass=13 fail=0, VGA `cut=1`, SVGA `cut=4` | [run12_covered_final](run12_covered_final) |
+
+Each folder has `camera_log_raw.txt` (unedited monitor output, colour codes removed), `extractor_summary.md` and
+`photos/` (one QVGA and one VGA photo). Run 6 has no photos (no camera).
+
+Firmware versions:
+
+- **A**: the T-012 test moved to ESP-IDF. Its JPEG check looked at the start marker, headers and end marker only.
+- **B**: the JPEG check also rejects a buffer that holds more than one picture (an end marker FF D9 inside the
+  image data). SVGA uses 2 frame buffers instead of 1.
+- **C**: `icvsp::get_photo()` cuts such a buffer to the first picture, which is complete on its own, and the test
+  counts how often (`cut=`).
+- **D**: same camera code as C. The board's memory chip (PSRAM) runs at 40 MHz instead of 80 MHz (problem 2).
+  Camera speed is unchanged: QVGA wait 70.7 ms, SVGA 34.4 ms, start 347-352 ms.
+- **E**: D + the JPEG check stops at a frame header too short to hold its fields, instead of reading past the end
+  of the buffer (found in a code review, covered by a host test with AddressSanitizer).
 
 ## Test cases
 
-| ID | Check | Steps | Expected | Actual | Pass/Fail | Evidence |
-| --- | --- | --- | --- | --- | --- | --- |
-| TC-CAM-01 | Startup | Flash the camera mode, open the monitor, press RESET | `CAM startup PASS` on attempt 1, start time printed. A start on attempt 2 or 3 prints `CAM startup FAIL ... started only after retries` | `CAM startup PASS init 358.7 ms (attempt 1)` | Pass | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-02 | Sensor identity | Same run | `CAM sensor PASS`, name OV3660, PID 0x3660 | `CAM sensor PASS OV3660 PID=0x3660` | Pass | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-03 | Repeated capture QVGA | Same run, board still, same scene | `CAM capture_QVGA PASS`, 20/20 valid 320x240 JPEGs | 20/20 valid 320x240, wait avg 71.6 ms, 5189 bytes avg | Pass | [run 1 log](run1_bright/camera_log_raw.txt), [QVGA photo](run1_bright/photos/01_QVGA_shot01.jpg) |
-| TC-CAM-04 | Repeated capture VGA | Same run | `CAM capture_VGA PASS`, 20/20 valid 640x480 JPEGs | 20/20 valid 640x480, wait avg 81.7 ms, 15418 bytes avg | Pass | [run 1 log](run1_bright/camera_log_raw.txt), [VGA photo](run1_bright/photos/02_VGA_shot01.jpg) |
-| TC-CAM-05 | Repeated capture SVGA | Same run | `CAM capture_SVGA PASS`, 20/20 valid 800x600 JPEGs | 20/20 valid 800x600, wait avg 93.6 ms, 27844 bytes avg. Driver printed `cam_hal: FB-OVF` twice (frame dropped by the driver, no invalid photo returned). No SVGA sample photo is printed by the firmware | Pass | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-06 | Image validity | Run `extract_jpegs.py` on the log (Pillow installed), open the `.jpg` files | Verdict line says one complete run, all checks passed, all photos OK; every image row says Decoded yes and OK; the photo shows the scene (not black, not garbled) | Verdict: one complete run, all checks passed, all photos OK. Both photos Decoded yes, OK. Photos show the room (ceiling lights, wall, plant, bins), not black or garbled | Pass | [extractor summary](run1_bright/extractor_summary.md), photos |
-| TC-CAM-07 | Capture timing | Read the `CAMSTAT res=` lines (or the extractor table) | Start time, wait per photo and FPS recorded for each resolution. No pass mark; the values are the result | Recorded in the measured results below (run 1) | Recorded | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-08 | Memory use | Read the `CAMSTAT mem` lines | Free internal RAM and PSRAM recorded before, while running and after. `CAM memory_back PASS` (no more than 4096 bytes missing) | Recorded below. `CAM memory_back PASS` internal 620 bytes, PSRAM 0 bytes less than before | Pass | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-09 | Capture while stopped | Same run, step 5 | `CAM fail_stopped PASS`: no photo returned, no crash or reboot | `CAM fail_stopped PASS` capture with camera stopped returned no frame, handled; no reboot | Pass | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-10 | Camera missing at power-on | **Unplug USB.** Remove the camera ribbon (or the Sense expansion board). Plug USB in, open the monitor, press RESET. Then unplug USB, reconnect the camera, plug in, RESET | Without camera: 3 start attempts, `CAM startup FAIL` with the error code (0x105 or 0x106), no crash, `CAM RESULT ... fail>0`, fast LED blink. After reconnecting: `CAM RESULT pass=13 fail=0` | Run 6 (no camera): 3 attempts, each `ESP_ERR_NOT_SUPPORTED (0x106)`, `CAM startup FAIL camera did not start after 3 attempts`, capture/fail_init/recover skipped, `CAM RESULT pass=3 fail=4`, `LED: fast blink`, no `Guru Meditation` or reboot. Run 7 (camera back): `CAM startup PASS init 348.5 ms (attempt 1)`, `CAM RESULT pass=13 fail=0` | Pass | [run 6 log](run6_no_camera/camera_log_raw.txt) lines 11-18, 34; [run 7 log](run7_camera_back/camera_log_raw.txt) lines 9, 322 |
-| TC-CAM-11 | Forced start failure | Same run as TC-CAM-01, step 5 | `CAM fail_init PASS`: start with a 2048x1536 buffer in internal RAM refused with `ESP_FAIL`, and the largest free internal block printed is smaller than the 629145 bytes needed | `CAM fail_init PASS` ESP_FAIL (0xffffffff) after 331.5 ms, largest internal block 278516 < 629145 needed | Pass | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-12 | Recovery | Same run, step 5 | `CAM recover PASS`: camera starts again and, after the warm-up frames, gives a complete 320x240 photo of at least 512 bytes | `CAM recover PASS` camera started again, frame valid 320x240 (5462 bytes) | Pass | [run 1 log](run1_bright/camera_log_raw.txt) |
-| TC-CAM-13 | Lighting | Runs 1 (or 4), 2, 3 of the test record | All capture checks pass in every light. Lens covered gives valid but dark photos. Record JPEG sizes per light | All 13 checks pass in bright (runs 1, 4, 5), dim (run 2) and lens covered (run 3). All photos decode. Dim photos are dark and blurry, lens-covered photos almost black. JPEG sizes in the measured results below: dim is 25-40 % smaller than bright (runs 4/5). Lens covered is the smallest at QVGA but larger than dim at VGA and SVGA, with large jumps at SVGA (up to 36416 bytes): in the dark the sensor turns its gain up and the noise makes the JPEG bigger | Pass | [run 2 summary](run2_dim/extractor_summary.md), [run 3 summary](run3_lens_covered/extractor_summary.md), [run 4 summary](run4_bright/extractor_summary.md), photos |
-| TC-CAM-14 | Repeatability | Compare runs 1 to 3 (and RESET twice more in bright light) | Same checks pass on every run. Timing within about 10 % between runs in the same light | All 13 checks pass on runs 1 to 5 and 7. Runs 4 and 5 (same build, same light, RESET only): camera start 348.2-349.2 ms in both; wait avg QVGA 71.6/71.6 ms, VGA 71.0/71.0 ms, SVGA 73.7/71.9 ms (2.4 %); JPEG size avg within 1 % at every resolution. Run 1 is slower at VGA/SVGA (81.7 and 93.6 ms) probably because the board moved during that run (see observations), and it used core 3.3.13 | Pass | [run 4 summary](run4_bright/extractor_summary.md), [run 5 summary](run5_bright/extractor_summary.md) |
+| ID | Check | Expected | Actual | Pass/Fail | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| TC-CAM-01 | Startup | `CAM startup PASS` on attempt 1, start time printed | 352.0-352.1 ms, attempt 1, in all 11 runs with a camera | Pass | every log, `CAM startup` |
+| TC-CAM-02 | Sensor identity | `CAM sensor PASS`, OV3660, PID 0x3660 | `OV3660 PID=0x3660` in all 11 runs with a camera | Pass | every log, `CAM sensor` |
+| TC-CAM-03 | Repeated capture QVGA | 20/20 valid 320x240 JPEGs | 20/20 in all 11 runs; no stuck pictures with the strict check (runs 7-12) | Pass | `CAM capture_QVGA` |
+| TC-CAM-04 | Repeated capture VGA | 20/20 valid 640x480 JPEGs | Runs 8-12 (firmware C, D, E): 20/20 each; `cut=0` in bright light, `cut=1` covered (run 12). Run 7: 18/20, 2 buffers held 2 pictures | Pass (final) | `CAM capture_VGA` |
+| TC-CAM-05 | Repeated capture SVGA | 20/20 valid 800x600 JPEGs | Runs 8-12: 20/20 each, no `FB-OVF`; `cut=0` in bright light, `cut=1` dim, `cut=4` covered (runs 11, 12). Run 7: 18/20, 2 stuck. Runs 1-5: see problem 1 | Pass (final) | `CAM capture_SVGA` |
+| TC-CAM-06 | Image validity | Extractor verdict: one complete run, all checks passed, all photos OK; photos show the scene | Runs 1-5 and 7-12: all photos decoded fully with Pillow and OK (runs 4, 5, 7, 8, 9 and 12 were first saved without Pillow and re-checked on 2026-11-25 from the same logs; the photos came out byte for byte the same). Photos show the room (door, wall, clothes), dark in run 2, almost black in run 3 | Pass | `extractor_summary.md`, `photos/` |
+| TC-CAM-07 | Capture timing | Start time, wait per photo and FPS recorded per resolution | Recorded below | Recorded | `CAMSTAT res=` |
+| TC-CAM-08 | Memory use | Free RAM and PSRAM recorded; `CAM memory_back PASS` (<= 4096 bytes missing) | Internal 108-480 bytes, PSRAM 0 bytes missing after all tests, every run | Pass | `CAMSTAT mem`, `CAM memory_back` |
+| TC-CAM-09 | Capture while stopped | `CAM fail_stopped PASS`, no crash | Pass in all 12 runs, also without a camera | Pass | `CAM fail_stopped` |
+| TC-CAM-10 | Camera missing at power-on | 3 start attempts, error code, no crash, fast blink; after putting it back: camera works | Run 6: 3 attempts, `ESP_ERR_NOT_SUPPORTED (0x106)`, no crash, `pass=3 fail=4`. Run 7: started on attempt 1 | Pass | run6 and run7 logs |
+| TC-CAM-11 | Forced start failure | `CAM fail_init PASS`: 2048x1536 buffer in internal RAM refused with `ESP_FAIL` | `ESP_FAIL (0xffffffff)`, largest internal block 262144 < 629145 needed, every run with a camera. The red `E (...) cam_hal ... frame buffer malloc failed` lines come from this case | Pass | `CAM fail_init` |
+| TC-CAM-12 | Recovery | `CAM recover PASS`: camera starts again, valid 320x240 photo | Pass in every run with a camera (2992-4384 bytes) | Pass | `CAM recover` |
+| TC-CAM-13 | Lighting | All capture checks pass in every light; lens covered gives valid but dark photos; sizes recorded | Final firmware: bright (runs 8-10), dim (run 11) and covered (run 12) all 13/13. Covered QVGA photo 2210 bytes, VGA 7578 bytes, almost black but valid. Firmware A runs 1-3 also passed, but its check missed stuck pictures (problem 1) | Pass | runs 8-12 |
+| TC-CAM-14 | Repeatability | Same checks pass every run; timing within about 10 % in the same light | Runs 8 and 9 (firmware C, same scene, RESET only between them): every check passed; wait time and FPS equal, JPEG sizes within 2 % | Pass | runs 8, 9 |
 
 ## Measured results (physical board)
 
-Run 1 (bright room, 2026-11-22) from the [extractor summary](run1_bright/extractor_summary.md). The dim, lens-covered and
-run 4/5 rows come from the summaries of runs 2 to 5.
+Wait per photo is the time `esp_camera_fb_get` took (min / avg / max). Sizes are JPEG bytes (min / avg / max).
 
-| Measurement | QVGA 320x240 | VGA 640x480 | SVGA 800x600 |
-| --- | --- | --- | --- |
-| Camera start run 1, ms | 358.5 | 357.9 | 358.5 |
-| Wait per photo run 1, ms (min / avg / max) | 63.6 / 71.6 / 72.1 | 50.8 / 81.7 / 108.3 | 70.0 / 93.6 / 218.5 |
-| Frames per second run 1 | 13.9 | 11.9 | 10.8 |
-| JPEG size bright run 1, bytes (min / avg / max) | 5137 / 5189 / 5237 | 10909 / 15418 / 30183 | 18003 / 27844 / 87283 |
-| JPEG size bright run 4, bytes (min / avg / max) | 4668 / 4696 / 4718 | 12979 / 13066 / 13188 | 18208 / 18296 / 18382 |
-| JPEG size bright run 5, bytes (min / avg / max) | 4714 / 4738 / 4760 | 12989 / 13026 / 13063 | 18258 / 18315 / 18379 |
-| JPEG size dim (run 2), bytes (min / avg / max) | 2849 / 2914 / 2991 | 8175 / 8652 / 9102 | 12941 / 13719 / 14287 |
-| JPEG size lens covered (run 3), bytes (min / avg / max) | 2229 / 2361 / 2612 | 8645 / 9847 / 10961 | 13566 / 20153 / 36416 |
-| Wait per photo runs 4 / 5, ms (avg) | 71.6 / 71.6 | 71.0 / 71.0 | 73.7 / 71.9 |
-| Wait per photo dim / lens covered, ms (avg) | 71.7 / 71.7 | 71.3 / 72.9 | 80.9 / 86.3 |
-| Valid photos / taken (every run with a camera) | 20 / 20 | 20 / 20 | 20 / 20 |
-| Free internal RAM while running run 1, bytes | 310884 | 310884 | 310884 |
-| Free PSRAM while running run 1, bytes | 8370164 | 8324084 | 8289524 |
+| Run | Res | Buffers | Valid | Wait ms | FPS | Bytes |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 bright | QVGA | 1 | 20 | 51.6 / 70.6 / 72.1 | 13.9 | 4340 / 4371 / 4405 |
+| 1 bright | VGA | 1 | 20 | 50.5 / 70.6 / 72.0 | 13.9 | 12464 / 12543 / 12619 |
+| 1 bright | SVGA | 1 | 20 | 71.4 / 91.5 / 179.5 | 10.8 | 18141 / 21328 / 38730 |
+| 2 dim | QVGA | 1 | 20 | 71.3 / 74.5 / 107.4 | 13.5 | 2998 / 3334 / 8151 |
+| 2 dim | VGA | 1 | 20 | 49.8 / 70.5 / 72.1 | 13.9 | 12462 / 12872 / 13247 |
+| 2 dim | SVGA | 1 | 20 | 71.4 / 77.0 / 107.6 | 12.9 | 20765 / 23423 / 44209 |
+| 3 covered | QVGA | 1 | 20 | 58.3 / 71.0 / 72.0 | 13.9 | 2837 / 2904 / 3019 |
+| 3 covered | VGA | 1 | 20 | 50.7 / 86.8 / 180.1 | 11.1 | 12374 / 16289 / 30900 |
+| 3 covered | SVGA | 1 | 20 | 71.4 / 102.2 / 179.7 | 9.8 | 24004 / 32539 / 77293 |
+| 4 bright | QVGA | 1 | 20 | 52.2 / 70.6 / 72.0 | 13.9 | 4225 / 4273 / 4321 |
+| 4 bright | VGA | 1 | 20 | 50.2 / 70.5 / 72.0 | 13.9 | 12538 / 12651 / 12783 |
+| 4 bright | SVGA | 1 | 20 | 71.5 / 78.8 / 143.4 | 12.9 | 18631 / 20811 / 59360 |
+| 5 bright | QVGA | 1 | 20 | 51.8 / 70.6 / 72.0 | 13.9 | 4182 / 4243 / 4347 |
+| 5 bright | VGA | 1 | 20 | 50.9 / 76.0 / 108.0 | 13.2 | 12468 / 12566 / 12699 |
+| 5 bright | SVGA | 1 | 20 | 71.4 / 163.5 / 323.8 | 6.3 | 18314 / 34699 / 79644 |
+| 7 camera back | QVGA | 1 | 20 | 51.6 / 72.1 / 107.3 | 13.5 | 4147 / 4216 / 4304 |
+| 7 camera back | VGA | 1 | 18 | 51.1 / 76.8 / 108.2 | 12.8 | 11970 / 13655 / 26504 |
+| 7 camera back | SVGA | 2 | 18 | 33.7 / 37.6 / 69.8 | 25.1 | 17553 / 19886 / 37300 |
+| **8 bright** | QVGA | 1 | 20 | 51.4 / 70.3 / 72.4 | 13.9 | 4201 / 4253 / 4297 |
+| **8 bright** | VGA | 1 | 20 | 48.8 / 69.5 / 73.1 | 13.9 | 12481 / 12585 / 12694 |
+| **8 bright** | SVGA | 2 | 20 | 33.6 / 35.8 / 70.0 | 26.4 | 18637 / 18758 / 18993 |
+| **9 bright** | QVGA | 1 | 20 | 51.7 / 70.3 / 72.4 | 13.9 | 4215 / 4248 / 4284 |
+| **9 bright** | VGA | 1 | 20 | 48.8 / 69.5 / 73.2 | 13.9 | 12640 / 12747 / 12865 |
+| **9 bright** | SVGA | 2 | 20 | 33.7 / 35.8 / 69.9 | 26.4 | 18744 / 18956 / 19107 |
 
-| Memory snapshot (run 1) | Internal free | PSRAM free |
+Camera start (`esp_camera_init`): 346-354 ms at every resolution and run.
+
+Memory (run 9; the same within a few hundred bytes in every run):
+
+| Snapshot | Internal free | PSRAM free |
 | --- | --- | --- |
-| before_camera | 335068 | 8386096 |
-| after_capture | 334664 | 8386096 |
-| after_all_tests | 334448 | 8386096 |
+| before_camera | 361835 | 8386192 |
+| running_QVGA | 339495 | 8369624 |
+| running_VGA | 339495 | 8323544 |
+| running_SVGA (2 buffers) | 339495 | 8192924 |
+| after_all_tests | 361507 | 8386192 |
 
-Observations:
+## Problems found and fixed
 
-- Run 1: the photos are tilted and the JPEG sizes vary a lot at VGA and SVGA, which suggests the board moved during
-  the run.
-- Run 1: during SVGA capture the driver printed `cam_hal: FB-OVF` twice: a frame did not fit the buffer and was dropped by
-  the driver. All 20 returned photos were valid. The 218.5 ms maximum wait at SVGA is probably one of those drops.
-- The firmware prints sample photos for QVGA and VGA only, so there is no SVGA photo to look at.
-- Runs 4 and 5 kept the board still: JPEG sizes changed by less than 1 % between shots, and SVGA ran at 13.5-13.9
-  FPS with no `cam_hal: FB-OVF` lines. The board moving in run 1 probably explains its slower VGA/SVGA numbers.
-- Waits of about 108 ms and 144 ms (one or two frames late) appear at VGA/SVGA in the dim, lens-covered and run 7
-  logs, together with bigger frames. No frame was invalid.
-- Memory is the same on every run: before the camera 336188 bytes internal free, `memory_back` 620 bytes less
-  (820 in run 7), PSRAM 0 bytes less.
-- Run 7's photos are a dark close-up although the label says bright room: the board was probably moved when the
-  camera was put back. Run 7 only counts for TC-CAM-10 (the camera works again), not for the lighting or timing comparisons.
+1. **Pictures stuck together in one buffer.** Sometimes the camera driver returns a buffer that holds two or four
+   pictures one after the other, so the photo is about 2x or 4x the normal size and took 2x or 4x as long. The
+   first check (firmware A) only looked at the start and the end of the buffer, so it counted these as valid.
+   The maximum sizes in runs 1-5 (VGA 30900, SVGA 38730-79644 bytes against about 12500 and 18700 normal) and
+   the `cam_hal: FB-OVF` lines in run 5 (4 times) show it happened there too; the Arduino build had the same
+   (SVGA photo of 87283 bytes, `FB-OVF` twice). Fixes:
+   - The JPEG check rejects an end marker inside the image data (firmware B). Run 7 then showed it at VGA
+     (2 of 20) and SVGA (2 of 20).
+   - SVGA uses 2 frame buffers: no more `FB-OVF`, and the wait at SVGA went from 78-163 ms to 36 ms (26 FPS).
+   - `icvsp::get_photo()` keeps only the first picture of such a buffer; it is complete and valid on its own.
+     The rest of the firmware (and later the AI model) should take photos through this function.
+   - Runs 8, 9 and 10 (bright light): no stuck buffers (`cut=0`, `stuck=0`). Runs 11 (dim) and 12 (lens
+     covered) did show them: 1 cut at SVGA when dim, 1 at VGA and 4 at SVGA when covered. Every cut photo was
+     valid and the runs passed 13/13, so the cutting works on the board. Dark photos are small, so two fit in one
+     buffer more easily. The cutting is also tested on the host (below).
+2. **Board stuck after an upload.** After one upload the board stopped while starting, just before it set up its
+   memory chip (PSRAM), and a reset from the laptop did not help; only unplugging USB fixed it. The same happened
+   once in the IMU tests, so 2 times in about 12 uploads. Change (firmware D): PSRAM speed 40 MHz instead of
+   80 MHz (`CONFIG_SPIRAM_SPEED_40M=y` in `sdkconfig.defaults`). After that 6 of 6 uploads started on their own
+   (run 10 here and 5 uploads in the IMU record, run 6), with the PSRAM memory test passing each time. This shows the change helped; it does not prove 80 MHz was
+   the cause, since the freeze came only 2 times in about 12 uploads before. Separate
+   from this, one smoke-test boot had a camera probe failure that worked after a reset; the start retries
+   (3 attempts) cover that.
 
 ## Host checks (not camera evidence)
 
-These run without the board. They check the code paths around the camera, not the camera.
-
 | Check | Setup | Command | Result | Date |
 | --- | --- | --- | --- | --- |
-| Sketch compiles for every program (smoke, report, camera, IMU, BLE) | host, Arduino CLI, esp32 core for XIAO_ESP32S3, PSRAM OPI, NimBLE-Arduino 2.5.2 | `arduino-cli compile` per `ICVSP_APP` value | Pass: all five compile (camera 371359 bytes, BLE 561950, report 1108482) | 2026-11-23 |
-| JPEG check and Base64 unit tests (22 cases, including malformed frame and scan headers) | host, Apple clang, C++17 | `testing/hardware/camera/tools/run_host_tests.sh` | Pass | 2026-11-23 |
-| Log extractor unit tests (19 cases: image structure, Pillow decode, run verdict) | host, Python 3.13, Pillow 12.2 | same script | Pass | 2026-11-23 |
-| Real JPEG through the firmware's Base64 format and back, byte for byte | host | same script | Pass | 2026-11-23 |
+| Camera firmware and smoke test build | host, ESP-IDF v5.5.5, target esp32s3 | `idf.py build` (both presets) | Pass, no warnings | 2026-11-24 |
+| JPEG check and Base64 unit tests (30 cases: stuck pictures, stuffed FF 00, restart markers, cut to the first picture) | host, Apple clang, C++17 | `5_TESTING/code/camera/run_host_tests.sh` | Pass | 2026-11-24 |
+| Log extractor unit tests (19 cases) | host, Python 3 | same script | Pass | 2026-11-24 |
+| Real JPEG through the firmware's Base64 format and back, byte for byte | host | same script | Pass | 2026-11-24 |
+| Strict JPEG check on every real photo from the board (22 photos, Arduino and ESP-IDF runs) | host | small test program | all valid, no stray markers | 2026-11-24 |
