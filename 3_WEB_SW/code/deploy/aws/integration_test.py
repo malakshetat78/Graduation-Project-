@@ -5,7 +5,7 @@ Part B (writes a few test rows):      one test device, a handful of signed repor
                                       then the device is revoked, also when a check fails.
 
 Part B is a dry run unless --execute is given: it prints every request it would send and the rows it would
-leave behind. Reports are signed with the team's device format (backend/tests/test_api.py `Car`) using a key
+leave behind. Reports are signed with the team's device format (backend_sw/tests/test_api.py `Car`) using a key
 generated in memory for this run only; no real ECU key is used and no private key is ever written anywhere.
 The admin token is read from SSM Parameter Store at run time, kept in memory, and never printed or saved.
 
@@ -28,7 +28,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "backend_sw"))
 import icvsp_backend  # noqa: F401,E402  (puts the trust engine on the import path)
 from tests.test_api import Car  # noqa: E402  (the team's signer: same signed bytes as the firmware)
 

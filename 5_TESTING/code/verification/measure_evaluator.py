@@ -13,7 +13,7 @@ import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "3_WEB_SW" / "code" / "backend_sw"))
 import icvsp_backend  # noqa: F401,E402  (puts the engine on the import path)
 from icvsp.geo import offset  # noqa: E402
 from icvsp_backend.pg_store import PgStore  # noqa: E402

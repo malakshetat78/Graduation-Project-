@@ -2,10 +2,10 @@
 right after an ACK, one-time alerts, and direct attacks on Supabase's public API. Needs Docker. Local stacks only.
 
 Run:
-    (cd database && supabase start)
-    pip install -r backend/requirements.txt
+    (cd 3_WEB_SW/code/database && supabase start)
+    pip install -r 3_WEB_SW/code/backend_sw/requirements.txt
     python verification/e2e_supabase.py
-    (cd database && supabase stop --no-backup)
+    (cd 3_WEB_SW/code/database && supabase stop --no-backup)
 """
 import json, os, re, signal, subprocess, sys, time, secrets
 from pathlib import Path
@@ -13,13 +13,14 @@ from urllib.parse import urlparse
 
 import httpx, psycopg
 
-R = str(Path(__file__).resolve().parents[1])
-sys.path.insert(0, R + "/backend")
+R = str(Path(__file__).resolve().parents[3])   # repository root
+BACKEND = R + "/3_WEB_SW/code/backend_sw"
+sys.path.insert(0, BACKEND)
 import icvsp_backend  # noqa: F401,E402  (puts the engine on the import path)
 from icvsp.geo import offset  # noqa: E402
 from tests.test_api import Car  # noqa: E402
 
-status = subprocess.run(["supabase", "status", "-o", "json"], cwd=R + "/database", capture_output=True, text=True, check=True)
+status = subprocess.run(["supabase", "status", "-o", "json"], cwd=R + "/3_WEB_SW/code/database", capture_output=True, text=True, check=True)
 cfg = json.loads(status.stdout[status.stdout.index("{"):])
 db_url = urlparse(cfg["DB_URL"])
 if db_url.hostname not in ("127.0.0.1", "localhost") or urlparse(cfg["API_URL"]).hostname not in ("127.0.0.1", "localhost"):
@@ -31,9 +32,9 @@ with psycopg.connect(cfg["DB_URL"], autocommit=True) as db:
     db.execute(f"alter role icvsp_backend login password '{pw}'")
 API = "http://127.0.0.1:8123"
 env = {**os.environ, "DATABASE_URL": f"postgresql://icvsp_backend:{pw}@127.0.0.1:{db_url.port}/postgres",
-       "SUPABASE_URL": cfg["API_URL"], "ICVSP_ADMIN_TOKEN": admin_token, "ICVSP_WORKER_INTERVAL_S": "3", "PYTHONPATH": R + "/backend"}
+       "SUPABASE_URL": cfg["API_URL"], "ICVSP_ADMIN_TOKEN": admin_token, "ICVSP_WORKER_INTERVAL_S": "3", "PYTHONPATH": BACKEND}
 def start():
-    p = subprocess.Popen([sys.executable, "-m", "uvicorn", "--factory", "icvsp_backend.app:create_app", "--port", "8123", "--log-level", "warning"], cwd=R + "/backend", env=env)
+    p = subprocess.Popen([sys.executable, "-m", "uvicorn", "--factory", "icvsp_backend.app:create_app", "--port", "8123", "--log-level", "warning"], cwd=BACKEND, env=env)
     for _ in range(50):
         try:
             if httpx.get(API + "/ready").status_code == 200: return p

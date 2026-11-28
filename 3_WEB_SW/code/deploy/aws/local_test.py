@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 def to_iso(t): return datetime.fromtimestamp(t, timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
-class Car:  # same signed layout as backend/tests/test_api.py Car
+class Car:  # same signed layout as backend_sw/tests/test_api.py Car
     def __init__(self, device_id, boot=1):
         self.id, self.boot, self.seq = device_id, boot, 0
         self.key = Ed25519PrivateKey.generate()

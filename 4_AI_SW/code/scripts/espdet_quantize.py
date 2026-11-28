@@ -13,7 +13,7 @@ Needs ESP-PPQ, which runs on Python 3.8-3.11 (see third_party/venv-ppq), and the
 Writes results/espdet_quantization.json and models/<name>_<target>.espdl.
 
 With --samples N it also exports N test images, letterboxed to the model input, as raw RGB888 files for the
-on-chip test (../firmware/espdet_qemu), with the detections of the float and the simulated 8-bit model on
+on-chip test (written to runs/espdet_samples; the old emulator test project was removed), with the detections of the float and the simulated 8-bit model on
 each as the reference the chip's output is compared with.
 """
 import argparse, json, random, shutil, sys, zipfile
@@ -57,7 +57,7 @@ def main():
     ap.add_argument('--target', default='esp32s3', choices=['esp32s3', 'esp32p4'])
     ap.add_argument('--calib', type=int, default=256, help='number of calibration images')
     ap.add_argument('--samples', type=int, default=0, help='export N test images + reference detections')
-    ap.add_argument('--samples-out', type=Path, default=ROOT.parent / 'firmware/espdet_qemu/main/samples')
+    ap.add_argument('--samples-out', type=Path, default=ROOT / 'runs' / 'espdet_samples')
     ap.add_argument('--skip-val', action='store_true', help='skip the test-set scoring (step 3)')
     ap.add_argument('--error-report', action='store_true',
                     help="ESP-PPQ's per-layer error report (slow: about 10 minutes on a laptop CPU)")
