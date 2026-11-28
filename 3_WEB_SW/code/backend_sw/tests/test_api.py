@@ -13,8 +13,8 @@ from icvsp_backend.app import create_app
 from icvsp_backend.store import Store
 from icvsp.model import to_iso
 
-ROOT = Path(__file__).resolve().parents[2]
-GOLDEN = (ROOT / "testing/verification/golden/device_reports_v2.jsonl").read_text().splitlines()
+ROOT = Path(__file__).resolve().parents[4]   # repository root
+GOLDEN = (ROOT / "5_TESTING/code/verification/golden/device_reports_v2.jsonl").read_text().splitlines()
 DEMO_KEY = json.loads(GOLDEN[0])["public_key"]
 T0 = 1790000000.0                  # 2026-09-21, the time of the golden reports
 ADMIN = {"X-Admin-Token": "test-admin"}

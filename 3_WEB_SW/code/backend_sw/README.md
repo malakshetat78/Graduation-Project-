@@ -3,7 +3,7 @@
 Receives the signed reports that phones forward from the in-vehicle devices, checks them, stores them, runs the trust
 engine (`engine/`) in the background and answers "which hazards are ahead of me?". FastAPI on Supabase (PostgreSQL +
 PostGIS + Auth); schema and access rules in `database/`. A SQLite store with the same methods (`store.py`) serves the
-system simulation and quick local runs. What the app must do with each answer: `docs/backend-mobile-contract.md`.
+system simulation and quick local runs. What the app must do with each answer: `3_WEB_SW/doc/backend-mobile-contract.md`.
 
 ```bash
 cd backend

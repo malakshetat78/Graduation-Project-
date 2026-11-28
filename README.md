@@ -5,16 +5,17 @@ Graduation project, 2026–2027. A low-cost, retrofit in-vehicle unit that detec
 warns approaching drivers. It keeps working when the cloud or network is unavailable.
 
 This repository holds the working prototypes:
-- **`engine/`: the trust & consensus engine**, the decision layer and the core of the project. It decides, with a
+- **`3_WEB_SW/code/engine/`: the trust & consensus engine**, the decision layer and the core of the project. It decides, with a
   written reason, whether reported hazards are real enough to warn anyone, and who.
-- **`ai_sw/`: the camera-based hazard detectors** that produce the reports: YOLO11n for the Pro unit and ESPDet-Pico
+- **`4_AI_SW/code/`: the camera-based hazard detectors** that produce the reports: YOLO11n for the Pro unit and ESPDet-Pico
   for a low-cost ESP32-S3 unit.
 - **`xaio_sw/`: the device firmware**: IMU hazard detection, signed reports and replay protection, unit-tested on a
   laptop, and the ESPDet-Pico model built for the ESP32-S3.
-- **`backend_sw/`: the server** (FastAPI): checks signed reports, runs the trust engine, answers "which hazards are ahead?"
+- **`3_WEB_SW/code/backend_sw/`: the server** (FastAPI): checks signed reports, runs the trust engine, answers "which hazards are ahead?"
   and has an operator dashboard.
+- **`2_FLUTTER_SW/code/`: the ROVO phone app** (Flutter): BLE link to the device, local warnings, map.
 - **`testing/sil/`: the system simulation**: the whole chain without hardware, with a live demo in the dashboard.
-- **`testing/verification/`: V-cycle evidence**: requirement → test → result traceability, checked on every push.
+- **`5_TESTING/code/verification/`: V-cycle evidence**: requirement → test → result traceability, checked on every push.
 
 ## Current status
 
@@ -27,7 +28,7 @@ This repository holds the working prototypes:
 | Device firmware (IMU detector, camera decision logic, camera + IMU fusion, signed reports, replay window, report queue, delivery) | ✅ 106 unit tests on a laptop (PlatformIO native); logic scored on held-out video; thresholds still to be tuned on real recordings |
 | ECU firmware on the chip (XIAO ESP32-S3 Sense) | 🟡 Runs in the ESP32-S3 emulator: signs a pothole report with its own key and the live AWS cloud backend stores it (HTTPS, TLS 1.3). **Not yet run on the real board.** [What is proven](#ecu-firmware-on-the-chip-what-is-proven) |
 | Camera detector, Lite unit (ESPDet-Pico on ESP32-S3) | 🟡 8-bit model 486 KB, speed-bump mAP50 0.72 in ESP-PPQ simulation; builds and runs in the ESP32-S3 emulator, on-chip accuracy needs a board |
-| Backend API (device registry, signed-report checks, replay defence, durable storage, background evaluation, hazards ahead, user sign-in and roles, reputation, operator dashboard) | ✅ FastAPI on Supabase (PostgreSQL, PostGIS, Auth, RLS), tested on a local Supabase stack; deployed on AWS Lambda with the team Supabase database (Nourseen's T-004, PR 18, 17/17 live checks). `backend_sw/README.md` |
+| Backend API (device registry, signed-report checks, replay defence, durable storage, background evaluation, hazards ahead, user sign-in and roles, reputation, operator dashboard) | ✅ FastAPI on Supabase (PostgreSQL, PostGIS, Auth, RLS), tested on a local Supabase stack; deployed on AWS Lambda with the team Supabase database (Nourseen's T-004, PR 18, 17/17 live checks). `3_WEB_SW/code/backend_sw/README.md` |
 | System simulation (real device code → backend → trust engine → warnings), with faults and attacks | ✅ 4 scenarios, 0 % false warnings; live demo with the dashboard |
 | Detector v4 (adds three public Kaggle pothole / road datasets) | 🟡 Training on Kaggle; compared with v3c when done |
 | V2V radio, in-vehicle hardware | ⏳ Planned (see roadmap) |
@@ -45,9 +46,9 @@ Detector assumptions: 85 % hit rate, 5 % false-alarm rate. Weights and threshold
 
 **Honest limits:** the engine fails its target against insiders with a good history (the open research problem we
 are working on), and packet loss raises missed hazards. These are simulated results, not real traffic. Full tables,
-charts and method: [`engine/results/summary.md`](engine/results/summary.md) and [`engine/README.md`](engine/README.md).
+charts and method: [`3_WEB_SW/code/engine/results/summary.md`](3_WEB_SW/code/engine/results/summary.md) and [`3_WEB_SW/code/engine/README.md`](3_WEB_SW/code/engine/README.md).
 
-Run it (plain Python 3.10+, no dependencies): `cd engine && python3 -m icvsp.demo all` for the seven scenarios
+Run it (plain Python 3.10+, no dependencies): `cd 3_WEB_SW/code/engine && python3 -m icvsp.demo all` for the seven scenarios
 (single report, duplicates, false report, Sybil, cloud outage, replay, GPS spoofing), and `python3 -m unittest` for the tests.
 
 ## Detector: results on a public test set (1,104 unseen images)
@@ -77,21 +78,21 @@ Best accuracy: `v2_e150_960` (150 epochs, 960 px). `v1_e150` (640 px) is about 2
   test images, so our test numbers are not inflated by leakage.
 - **Learning curve** (v0 setup): validation mAP50 0.695 → 0.744 → 0.764 → 0.784 at 25/50/75/100 % of the data.
 
-**Since then** (details in [`ai_sw/results/`](ai_sw/results/)):
+**Since then** (details in [`4_AI_SW/code/results/`](4_AI_SW/code/results/)):
 - **Egyptian fine-tuning (v3–v3c):** three labelling rounds on day and night Cairo footage, used privately for
   experiments only. v3c, with kerbs added as hard negatives, has the best public-test result so far (mAP50 0.846).
 - **Speed-bump filters:** a bump box is kept only if it lies on the road surface (SegFormer road segmentation) and
   moves towards the car like a fixed object across frames. Together they remove over 95 % of false bump flags while
-  keeping about 4 in 5 of the real bumps the model finds ([`road_filter.md`](ai_sw/results/road_filter.md),
-  [`motion_check.md`](ai_sw/results/motion_check.md)).
+  keeping about 4 in 5 of the real bumps the model finds ([`road_filter.md`](4_AI_SW/code/results/road_filter.md),
+  [`motion_check.md`](4_AI_SW/code/results/motion_check.md)).
 - **Less computation:** processing only the bottom 60 % of the frame cuts the detector from 8.3 to 5.4 GFLOPs at 960 px
-  (2.3 at 640 px) with no measurable loss ([`crop_test.md`](ai_sw/results/crop_test.md)).
+  (2.3 at 640 px) with no measurable loss ([`crop_test.md`](4_AI_SW/code/results/crop_test.md)).
 - **ESPDet-Pico for the ESP32-S3:** Espressif's 0.36 M-parameter model, trained on the same data. Weak on potholes
   (mAP50 0.27) but usable for speed bumps (0.78; 0.72 after 8-bit quantisation with ESP-PPQ), so we propose it as a
-  speed-bump camera for a low-cost Lite unit ([`espdet_pico.md`](ai_sw/results/espdet_pico.md)).
+  speed-bump camera for a low-cost Lite unit ([`espdet_pico.md`](4_AI_SW/code/results/espdet_pico.md)).
 
 Models trained on private video frames (v3–v3c, ESPDet-Pico) are kept local and are not in this repository.
-The full experiment log, updated after every run, is in [`ai_sw/results/experiments.md`](ai_sw/results/experiments.md).
+The full experiment log, updated after every run, is in [`4_AI_SW/code/results/experiments.md`](4_AI_SW/code/results/experiments.md).
 
 ## Device firmware
 
@@ -154,11 +155,11 @@ Pins: [`PIN_MAP.md`](testing/hardware/ecu/PIN_MAP.md).
 
 ## Backend and system simulation
 
-[`backend_sw/`](backend_sw/) is the server prototype (FastAPI): it registers and revokes devices, verifies each signed
+[`3_WEB_SW/code/backend_sw/`](3_WEB_SW/code/backend_sw/) is the server prototype (FastAPI): it registers and revokes devices, verifies each signed
 report against the registered key, rejects replays and malformed reports (and logs why), runs the trust engine,
 answers `GET /hazards` for cars approaching a hazard and updates device reputation from confirmed or contradicted
 reports. An operator dashboard (`/dashboard`) shows every hazard decision with the engine's reasons, device
-reliability, live vehicle positions and rejections. Endpoints: [`backend_sw/README.md`](backend_sw/README.md).
+reliability, live vehicle positions and rejections. Endpoints: [`3_WEB_SW/code/backend_sw/README.md`](3_WEB_SW/code/backend_sw/README.md).
 
 [`testing/sil/`](testing/sil/) simulates the whole chain without hardware: dozens of cars each run the real device code, their
 phones upload to the backend through lossy links, and following cars are warned or not. Scenarios: new devices,
@@ -176,7 +177,7 @@ Sensor hit rates and network behaviour are assumptions, so these numbers describ
 performance: [`testing/sil/results/summary.md`](testing/sil/results/summary.md).
 
 ```bash
-cd backend_sw && python3 -m unittest -v           # API tests (see backend_sw/README.md for the PostgreSQL run)
+cd 3_WEB_SW/code/backend_sw && python3 -m unittest -v   # API tests (see its README.md for the PostgreSQL run)
 python3 testing/sil/run_sil.py                         # whole-chain simulation, 4 scenarios
 python3 testing/sil/live_demo.py                       # live demo: simulation against the real backend, in the dashboard
 ```
@@ -190,50 +191,42 @@ backend and the trust engine answer.
 Every push runs the V-cycle checks on GitHub Actions: the device (106), engine, backend and system-simulation
 tests, the device → engine integration check, static analysis, and a traceability check that links every test to the
 requirement IDs of the team's V-cycle workbooks and fails if a test is unlisted or failing. The
-requirement → test → result report appears on each run's summary page. Details: [`testing/verification/`](testing/verification/).
+requirement → test → result report appears on each run's summary page. Details: [`5_TESTING/code/verification/`](5_TESTING/code/verification/).
 
 ## Try it
 
-- **Reproduce training:** [`ai_sw/ICVSP_train_kaggle.ipynb`](ai_sw/ICVSP_train_kaggle.ipynb) runs unattended on Kaggle (recommended for
-  long runs); [`ai_sw/ICVSP_train.ipynb`](ai_sw/ICVSP_train.ipynb) is the interactive Google Colab version. Neither needs Google Drive
+- **Reproduce training:** [`4_AI_SW/code/ICVSP_train_kaggle.ipynb`](4_AI_SW/code/ICVSP_train_kaggle.ipynb) runs unattended on Kaggle (recommended for
+  long runs); [`4_AI_SW/code/ICVSP_train.ipynb`](4_AI_SW/code/ICVSP_train.ipynb) is the interactive Google Colab version. Neither needs Google Drive
   access; both download the public dataset themselves.
-- **Use the trained models:** [`ai_sw/models/v2_e150_960.pt`](ai_sw/models/v2_e150_960.pt) (most accurate; run with `--imgsz 960`) or
-  [`ai_sw/models/v1_e150.pt`](ai_sw/models/v1_e150.pt) (faster), for example
-  `python ai_sw/scripts/predict_clips.py --weights ai_sw/models/v1_e150.pt` on your own dash-cam clips.
+- **Use the trained models:** [`4_AI_SW/code/models/v2_e150_960.pt`](4_AI_SW/code/models/v2_e150_960.pt) (most accurate; run with `--imgsz 960`) or
+  [`4_AI_SW/code/models/v1_e150.pt`](4_AI_SW/code/models/v1_e150.pt) (faster), for example
+  `python 4_AI_SW/code/scripts/predict_clips.py --weights 4_AI_SW/code/models/v1_e150.pt` on your own dash-cam clips.
 
-Details, including how to record and label the Egyptian test set, are in [`ai_sw/README.md`](ai_sw/README.md).
+Details, including how to record and label the Egyptian test set, are in [`4_AI_SW/code/README.md`](4_AI_SW/code/README.md).
 
 ## Repository layout
 
+Each part has a `code` folder and a `doc` folder:
+
 ```
-engine/
-├── icvsp/              decision engine: validation, trust, consensus, risk, simulator, experiments
-├── tests/              52 tests, including every scenario's expected outcome, cold start and severity scope
-├── schema/             Safety Event JSON schema
-└── results/            Stage 2 experiment results and charts
-ai_sw/
-├── ICVSP_train.ipynb   Colab notebook: download → merge → train → evaluate
-├── scripts/            dataset download and merge, training, evaluation, clip check, experiment log
-├── configs/            unified classes and dataset-specific mappings
-├── models/             trained weights (public-data models only)
-├── results/            experiment log, confusion matrices, filter, crop and ESPDet results
-└── data/               (not versioned) datasets and team recordings
-xaio_sw/
-├── lib/icvsp_core/     device logic: IMU detector, event builder, signer, replay guard
-├── lib/icvsp_board/    ECU logic: GPS parser, report queue, delivery, Wi-Fi link, device key, app loop
-├── lib/icvsp_sim/      simulated IMU and GNSS
-├── test/               106 unit tests (PlatformIO native)
-├── ecu/                ESP-IDF firmware for the XIAO ESP32-S3 Sense (smoke test, report firmware)
-├── arduino/ICVSP_ECU/  Arduino sketch: smoke, report, camera and GNSS programs (pick one in config.h)
-├── tools/              end-to-end check with the engine
-└── espdet_qemu/        ESPDet-Pico on the ESP32-S3 (ESP-IDF + ESP-DL), run in QEMU
-backend_sw/
-├── icvsp_backend/      API, report checks, storage (Supabase, SQLite), evaluator, operator dashboard
-└── tests/              API tests
-testing/
-├── sil/                whole-chain simulation, live demo, results
-├── verification/       requirements, traceability list, golden device reports, CI check
-└── hardware/           board test cases and evidence: camera (T-012), ECU bring-up, GNSS, BLE
+1_XAIO_SW/              device firmware (ECU): code + doc. The firmware still lives in xaio_sw/ until it moves here
+2_FLUTTER_SW/
+├── code/               ROVO phone app (Flutter): BLE link, local warnings, map
+└── doc/                BLE manual test steps
+3_WEB_SW/
+├── code/engine/        trust & consensus engine: validation, trust, consensus, risk, simulator, 52 tests, results
+├── code/backend_sw/    server (FastAPI): report checks, storage (Supabase, SQLite), evaluator, dashboard, tests
+├── code/database/      Supabase migrations and config
+├── code/deploy/        AWS Lambda deployment
+└── doc/                hand-off notes, backend-mobile contract, AWS hosting research
+4_AI_SW/
+├── code/               camera detectors: notebooks, scripts, configs, public-data models, results
+└── doc/                labelling policy
+5_TESTING/
+├── code/verification/  requirements, traceability list, golden device reports, CI check
+└── doc/                board test cases and evidence (still in testing/hardware/ until they move here)
+6_TOOLS/                shared scripts and utilities
+xaio_sw/, testing/      still being moved (firmware, hardware test evidence, simulation)
 ```
 
 ## Roadmap
